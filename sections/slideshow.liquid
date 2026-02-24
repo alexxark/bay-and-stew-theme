@@ -179,13 +179,13 @@
                 assign fetch_priority = 'high'
               endif
             -%}
-            {%- if block.settings.mobile_image != blank -%}
+            {%- if block.settings.image_mobile != blank -%}
               <picture>
                 <source
                   media="(max-width: 749px)"
-                  srcset="{{ block.settings.mobile_image | image_url: width: 375 }} 375w, {{ block.settings.mobile_image | image_url: width: 550 }} 550w, {{ block.settings.mobile_image | image_url: width: 750 }} 750w, {{ block.settings.mobile_image | image_url: width: 1100 }} 1100w"
-                  width="{{ block.settings.mobile_image.width }}"
-                  height="{{ block.settings.mobile_image.height }}"
+                  srcset="{{ block.settings.image_mobile | image_url: width: 375 }} 375w, {{ block.settings.image_mobile | image_url: width: 550 }} 550w, {{ block.settings.image_mobile | image_url: width: 750 }} 750w, {{ block.settings.image_mobile | image_url: width: 1100 }} 1100w"
+                  width="{{ block.settings.image_mobile.width }}"
+                  height="{{ block.settings.image_mobile.height }}"
                 >
                 {%- if forloop.first -%}
                   {{
@@ -848,9 +848,9 @@
         },
         {
           "type": "image_picker",
-          "id": "mobile_image",
-          "label": "t:global.image.mobile_image",
-          "info": "t:sections.slideshow.blocks.image.mobile_image_size_recommendation"
+          "id": "image_mobile",
+          "label": "Mobile image",
+          "info": "Use this for the slideshow image on small screens."
         },
         {
           "type": "video",
