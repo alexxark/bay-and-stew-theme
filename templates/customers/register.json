@@ -1,1 +1,68 @@
-{"sections":{"main":{"type":"main-register","disabled":true,"settings":{"padding_top":36,"padding_bottom":36}},"rich_text_a4rBTC":{"type":"rich-text","blocks":{"text_aJRazH":{"type":"text","settings":{"text":"<p><em>For retail buyers </em><a href=\"https://bayandstew.myshopify.com/pages/retail-customers\" title=\"https://bayandstew.myshopify.com/pages/retailcustomer\"><em>Retail Form</em></a></p>"}},"text_DQYzX8":{"type":"text","settings":{"text":"<p><em>For international buyers </em><a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" target=\"_blank\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><em>International Form</em></a></p>"}}},"block_order":["text_aJRazH","text_DQYzX8"],"settings":{"desktop_content_position":"center","content_alignment":"center","color_scheme":"","full_width":true,"padding_top":44,"padding_bottom":8}},"custom_liquid_6JPy4b":{"type":"custom-liquid","custom_css":["div.formFooter.branding21 {display: none !important;}"],"name":"t:sections.custom-liquid.presets.name","settings":{"custom_liquid":"<script type=\"text/javascript\" src=\"https://form.jotform.com/jsform/252956455857171\"></script>","color_scheme":"","padding_top":40,"padding_bottom":52}}},"order":["main","rich_text_a4rBTC","custom_liquid_6JPy4b"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-register",
+      "disabled": true,
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_a4rBTC": {
+      "type": "rich-text",
+      "blocks": {
+        "text_aJRazH": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For retail buyers </em><a href=\"https://bayandstew.myshopify.com/pages/retail-customers\" title=\"https://bayandstew.myshopify.com/pages/retailcustomer\"><em>Retail Form</em></a></p>"
+          }
+        },
+        "text_DQYzX8": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For international buyers </em><a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" target=\"_blank\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><em>International Form</em></a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_aJRazH",
+        "text_DQYzX8"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 44,
+        "padding_bottom": 8
+      }
+    },
+    "custom_liquid_6JPy4b": {
+      "type": "custom-liquid",
+      "custom_css": [
+        "div.formFooter.branding21 {display: none !important;}"
+      ],
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<script type=\"text/javascript\" src=\"https://form.jotform.com/jsform/252956455857171\"></script>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_a4rBTC",
+    "custom_liquid_6JPy4b"
+  ]
+}
