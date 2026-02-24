@@ -124,7 +124,10 @@
       >
         <div class="slideshow__media banner__media media{% if block.settings.image == blank and block.settings.video == blank %} placeholder{% endif %}{% if section.settings.image_behavior != 'none' %} animate--{{ section.settings.image_behavior }}{% endif %}">
           {%- if block.settings.video != blank -%}
-            {%- assign loop_video = section.settings.auto_rotate == false -%}
+            {%- assign loop_video = true -%}
+            {%- if section.settings.auto_rotate -%}
+              {%- assign loop_video = false -%}
+            {%- endif -%}
             <div class="slideshow__video-wrapper">
               {%- if block.settings.mobile_video != blank -%}
                 <div class="slideshow__media-video slideshow__media-video--desktop">
