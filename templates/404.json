@@ -1,0 +1,40 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-404",
+      "disabled": true,
+      "name": "International Wholesale Form",
+      "settings": {}
+    },
+    "17514045367e491339": {
+      "type": "apps",
+      "blocks": {
+        "bss_b2b_solution_form_8G9qaR": {
+          "type": "shopify://apps/bss-b2b-solution/blocks/form/451233f2-9631-4c49-8b6f-057e4ebcde7f",
+          "settings": {
+            "form_id": "30585"
+          }
+        }
+      },
+      "block_order": [
+        "bss_b2b_solution_form_8G9qaR"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "17514045367e491339"
+  ]
+}

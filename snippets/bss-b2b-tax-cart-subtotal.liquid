@@ -1,0 +1,9 @@
+{% if shop.metaobjects['app--4322869--bss_b2b__shop'].data.modules_enabled contains 'tax_display' %}
+    {% assign excluded_vat_text = "exc. VAT | " %}
+    {% assign included_vat_text = "inc. VAT" %}
+    
+    <div class="bss-b2b-cart-vat-subtotal" data-cart-total-price={{ cart.total_price }}>
+        <span class="bss-b2b-cart-no-vat-price" data-excluded-vat-text="{{ excluded_vat_text }}"></span>
+        <span class="bss-b2b-cart-with-vat-price" data-included-vat-text="{{ included_vat_text }}"></span>
+    </div>
+{% endif %}

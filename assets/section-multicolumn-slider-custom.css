@@ -1,0 +1,7 @@
+.grid--2-col-tablet.slider--everywhere .multicolumn-list__item {
+      margin-top: 0;
+  }
+
+.multicolumn .slider--everywhere+.slider-buttons {
+      display: flex;
+  }

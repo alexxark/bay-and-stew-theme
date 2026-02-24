@@ -1,0 +1,41 @@
+{% if shop.metaobjects['app--4322869--bss_b2b__shop'].data.modules_enabled contains 'tax_display' %}
+    {% assign excluded_vat_text = "exc. VAT | " %}
+    {% assign included_vat_text = "inc. VAT" %}
+
+    <div class="bss-b2b-collection-item-vat" {% if isFeatured %}data-collection-item-is-featured-product="true"{% else %} data-collection-item-is-featured-product="false"{% endif %} data-collection-item-id="{{ product.id }}" data-collection-item-variant-taxable="{{ product.selected_or_first_available_variant.taxable }}" data-collection-item-variant-price="{{ product.selected_or_first_available_variant.price }}" data-collection-item-variant-id="{{ product.selected_or_first_available_variant.id }}" data-collection-item-collections="{% for collection in product.collections %}{{ collection.id }}{% unless forloop.last %},{% endunless %}{% endfor %}" >
+        <span class="bss-b2b-product-vat-price-no-vat" data-excluded-vat-text="{{ excluded_vat_text }}">
+        </span>
+        <span class="bss-b2b-product-vat-price-has-vat" data-included-vat-text="{{ included_vat_text }}">
+        </span>
+        {% if isFeatured %}
+            <script id="bss-b2b-product-data" type="application/json">
+            {
+                "id": {{ product.id | json }},
+                "collections": [
+                    {% for collection in product.collections %}
+            {{ collection.id | json }}{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+                ],
+                "tags": [
+                    {% for tag in product.tags %}
+            {{ tag | json }}{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+                ],
+                "variantIdArrayMap": {
+                    {% for variant in product.variants %}
+                    "{{ variant.id }}": {
+                        "product_id": {{ product.id | json }},
+                        "taxable": {{ variant.taxable | json }},
+                        "price": {{ variant.price | json }},
+                        "price_formatted": {{ variant.price | money | json }},
+                        "price_formatted_without_trailing_zeros": {{ variant.price | money_without_trailing_zeros | json }},
+                        "compare_at_price_formatted": {{ variant.compare_at_price | money | json }},
+                        "compare_at_price_formatted_without_trailing_zeros": {{ variant.compare_at_price | money_without_trailing_zeros | json }}
+                    }{% unless forloop.last %},{% endunless %}
+                {% endfor %}
+                }
+            }
+            </script>
+        {% endif %}
+    </div>
+{% endif %}

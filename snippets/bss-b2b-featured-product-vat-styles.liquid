@@ -1,0 +1,15 @@
+{% if shop.metaobjects['app--4322869--bss_b2b__shop'].data.modules_enabled contains 'tax_display' %}
+    <style class="bss-b2b-collection-item-vat-style">
+        .featured-product__price,
+        .product-section[data-modal]:not([data-modal="true"]):not([data-modal="false"]) .product-block.product-block--price,
+        .product-item--price small,
+        #productPrice-product-template,
+        .price.price--sold-out .price__container,
+        .cart-item__totals.right.small-hide .cart-item__price-wrapper .price.price--end,
+        .cart-item__details .product-option .dualPrice,
+        .totals__total-value .dualPrice
+        {
+            display: none !important;
+        }
+    </style>
+{% endif %}

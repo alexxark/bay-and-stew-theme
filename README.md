@@ -1,1 +1,0 @@
-# bay-and-stew-theme

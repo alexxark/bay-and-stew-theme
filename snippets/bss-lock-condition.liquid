@@ -1,0 +1,147 @@
+
+{% capture content_for_query_string %}{{ content_for_header }}{% endcapture %}
+{% assign old_content_for_layout = content_for_layout %}
+{% assign page_url = content_for_query_string
+    | split: '"pageurl":"'
+    | last
+    | split: '"'
+    | first
+    | split: '.myshopify.com'
+    | last
+    | replace: '\\/', '/'
+    | replace: '%20', ' '
+    | replace: '\u0026', '&'
+    | replace: '\/', '/'
+%}
+{% assign page_url = 'https://' | append: page_url %}
+{% assign page_url_with_params = page_url | remove: shop.url %}
+{% assign bss_current_page = canonical_url | remove: shop.url %}
+{% assign bss_request_path_conver = request.path | split: '/' | join: '/' -%}
+{% assign is_authorized = false %}
+{% assign access_denied = is_authorized %}
+{% assign requires_passcode = is_authorized %}
+{% assign bss_lock_access_denied = is_authorized %}
+{% assign bss_lock_transparent = is_authorized %}
+{% assign hide_price_google = is_authorized %}
+{% assign hide_product_in_cart = is_authorized %}
+{% assign hide_header = is_authorized %}
+{% assign hide_navbar = is_authorized %}
+{% assign no_index = is_authorized %}
+{% assign date_time_now = 'now' | date: '%s' %}
+{% assign lock_ids = '' %}
+{% assign opened_lock_ids = '' %}
+{% assign passcode_condition_id = '' %}
+{% assign product_in_collection_scope = 'product_in_collection' %}
+{% assign resource_type_product = 'product' %}
+{% assign resource_type_collection = 'collection' %}
+{% assign current_template = template %}
+{% assign current_scope = current_template | split: '/' | first | split: '.' | first %}
+{% assign current_lock_element_id = '' %}
+{% assign condition_type = 'everyone_has_access' %}
+
+{% assign passcode_condition_ids = '' %}
+{% assign cart_attributes_success_names = '' %}
+{% assign cart_attributes_check_names = '' %}
+
+{{ bss_check_trail }}
+{% if scope == 'subject' %}
+    {% if subject %}
+        {% assign subject_object = subject %}
+    {% endif %}
+
+    {% if subject_parent %}
+        {% assign current_subject_parent = subject_parent %}
+    {% endif %}
+
+    {% if subject_object.price and subject_object.variants %}
+        {% assign product = subject_object %}
+        {% assign current_scope = resource_type_product %}
+    {% elsif subject_object.all_types and subject_object.products %}
+        {% assign collection = subject_object %}
+        {% assign current_scope = resource_type_collection %}
+    {% endif %}
+{% endif %}
+
+
+
+{% assign lock_ids = lock_ids | remove_first: ',' | replace: ',,', ',' | split: ',' %}
+{% assign opened_lock_ids = opened_lock_ids | remove_first: ',' | replace: ',,', ',' | split: ',' %}
+{% assign passcode_condition_id = passcode_condition_id | remove_first: ',' | replace: ',,', ',' | split: ',' %}
+
+{% assign passcode_condition_ids = passcode_condition_ids | split: ',' %}
+{% assign cart_attributes_success_names = cart_attributes_success_names | split: ',' %}
+{% assign cart_attributes_check_names = cart_attributes_check_names | split: ',' %}
+
+{% assign bss_lock_ids = lock_ids %}
+{% assign bss_opened_lock_ids = opened_lock_ids %}
+
+{% if bss_lock_ids.size > 0 %}
+    {% unless bss_lock_ids == bss_opened_lock_ids %}
+        {% unless is_authorized %}
+            {% assign access_denied = true %}
+        {% endunless %}
+    {% endunless %}
+{% endif %}
+
+{% assign bss_lock_access_denied = access_denied %}
+{% assign bss_lock_requires_passcode = requires_passcode %}
+{% assign bss_lock_requires_customer = requires_customer %}
+{% assign bss_lock_requires_customer_tag = requires_customer_tag %}
+{% assign bss_lock_requires_sl = requires_sl %}
+{% assign bss_lock_requires_age = requires_age %}
+
+{% assign bss_lock_requires_sntap = requires_sntap %}
+{% assign bss_lock_hide_header = hide_header %}
+{% assign bss_lock_hide_navbar = hide_navbar %}
+{% assign bss_lock_no_index = no_index %}
+{% assign bss_lock_force_open = force_open %}
+{% assign bss_lock_hide_price_google = hide_price_google %}
+{% assign bss_lock_invalid_ip = invalid_ip %}
+
+{% unless request.design_mode or request.visual_preview_mode %}
+{% if access_denied %}
+    {% if bss_lock_action == 'bss_hide_price' %}
+        {% render 'bss-lock-content-element',            
+            bss_lock_access_denied: bss_lock_access_denied,
+            bss_lock_requires_customer: bss_lock_requires_customer,
+            bss_lock_requires_passcode: bss_lock_requires_passcode,
+            bss_lock_requires_customer_tag: bss_lock_requires_customer_tag,
+            passcode_condition_id: passcode_condition_id,
+            current_lock_element_id: current_lock_element_id,
+            condition_type: condition_type,
+            passcode_condition_ids: passcode_condition_ids,
+            cart_attributes_success_names: cart_attributes_success_names,
+            cart_attributes_check_names: cart_attributes_check_names,
+            bss_lock_ltsp_redirect_url: bss-lock-ltsp-redirect-url,
+            bss_lock_ids: bss_lock_ids,
+            bss_opened_lock_ids: bss_opened_lock_ids,
+            
+        %}
+        {% break %}
+    {% endif %}
+    {% if bss_cv %}
+        true
+        {% break %}
+    {% endif %}
+{% endif %}
+{% endunless %}
+
+{% if access_denied %}
+    {% for lock_id in bss_lock_ids %}
+        {% if false %}{% endif %}
+    {% endfor %}
+{% endif %}
+
+{%- if variable != blank %}
+    {% capture bss_lock %}
+		{% case variable %}
+			{% when "transparent" %}
+				{{ bss_lock_transparent }}
+        {% when "cart" %}
+            {{ hide_product_in_cart }}
+      {% when "hpogg" %}
+        {{ bss_lock_hide_price_google }}
+		{% endcase %}
+		{% endcapture -%}
+    {{ bss_lock | strip }}
+{%- endif %}
