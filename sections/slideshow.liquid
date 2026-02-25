@@ -537,12 +537,25 @@
     object-fit: cover;
   }
 
+  #shopify-section-{{ section.id }} .slideshow__media-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  #shopify-section-{{ section.id }} .slideshow__media-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
   #shopify-section-{{ section.id }} .slideshow__media-video--mobile {
     display: none;
   }
 
   #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
-    display: none;
+    display: none !important;
   }
 
   #shopify-section-{{ section.id }} .slideshow__next-section-button {
@@ -570,11 +583,11 @@
     }
 
     #shopify-section-{{ section.id }} .slideshow__media-image--desktop {
-      display: none;
+      display: none !important;
     }
 
     #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
-      display: block;
+      display: block !important;
     }
 
     #shopify-section-{{ section.id }} .slideshow__subheading {
@@ -871,12 +884,12 @@
         {
           "type": "video",
           "id": "video",
-          "label": "t:global.video.video"
+          "label": "Video"
         },
         {
           "type": "video",
           "id": "mobile_video",
-          "label": "t:global.video.mobile_video"
+          "label": "Mobile video"
         },
         {
           "type": "checkbox",
