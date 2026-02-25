@@ -15,7 +15,7 @@
         "slide_QLwpGt": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Bay_and_Stew_Web_Banner-02.jpg",
+            "image": "shopify://shop_images/Bay_and_Stew_Web_Banner-03.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_MOBILE_Banner-02.jpg",
             "allow_sound": true,
             "heading": "Jewelry Supplies",
@@ -27,12 +27,12 @@
             "promo_details_text": "",
             "mobile_gap_before_subheading": 0,
             "gap_after_subheading": 10,
-            "gap_after_title": 18,
+            "gap_after_title": 4,
             "gap_before_buttons": 0,
             "gap_after_promo_note": 12,
             "button_label": "Shop All",
             "link": "shopify://collections/shop-all",
-            "button_style_secondary": true,
+            "button_style_secondary": false,
             "button_label_2": "",
             "link_2": "",
             "button_style_secondary_2": false,
