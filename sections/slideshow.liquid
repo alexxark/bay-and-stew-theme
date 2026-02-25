@@ -33,71 +33,6 @@
   aria-label="{{ section.settings.accessibility_info | escape }}"
   data-pause-on-video="{{ section.settings.autoplay_pause_on_video }}"
 >
-  {%- if section.settings.auto_rotate and section.blocks.size > 1 -%}
-    <div class="slideshow__controls slideshow__controls--top slider-buttons{% if section.settings.show_text_below %} slideshow__controls--border-radius-mobile{% endif %}">
-      <button
-        type="button"
-        class="slider-button slider-button--prev"
-        name="previous"
-        aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
-        aria-controls="Slider-{{ section.id }}"
-      >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-      <div class="slider-counter slider-counter--{{ section.settings.slider_visual }}{% if section.settings.slider_visual == 'counter' or section.settings.slider_visual == 'numbers' %} caption{% endif %}">
-        {%- if section.settings.slider_visual == 'counter' -%}
-          <span class="slider-counter--current">1</span>
-          <span aria-hidden="true"> / </span>
-          <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-          <span class="slider-counter--total">{{ section.blocks.size }}</span>
-        {%- else -%}
-          <div class="slideshow__control-wrapper">
-            {%- for block in section.blocks -%}
-              <button
-                class="slider-counter__link slider-counter__link--{{ section.settings.slider_visual }} link"
-                aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
-                aria-controls="Slider-{{ section.id }}"
-              >
-                {%- if section.settings.slider_visual == 'numbers' -%}
-                  {{ forloop.index -}}
-                {%- else -%}
-                  <span class="dot"></span>
-                {%- endif -%}
-              </button>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
-      </div>
-      <button
-        type="button"
-        class="slider-button slider-button--next"
-        name="next"
-        aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
-        aria-controls="Slider-{{ section.id }}"
-      >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-
-      {%- if section.settings.auto_rotate and section.settings.show_pause_toggle -%}
-        <button
-          type="button"
-          class="slideshow__autoplay slider-button"
-          aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-pause.svg' | inline_asset_content -}}
-          </span>
-          <span class="svg-wrapper">
-            {{- 'icon-play.svg' | inline_asset_content -}}
-          </span>
-        </button>
-      {%- endif -%}
-    </div>
-  {%- endif -%}
 
   <div
     class="slideshow banner banner--{{ section.settings.slide_height }} grid grid--1-col slider slider--everywhere{% if section.settings.show_text_below %} banner--mobile-bottom{% endif %}{% if section.blocks.first.settings.image == blank and section.blocks.first.settings.video == blank %} slideshow--placeholder{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}"
@@ -254,10 +189,10 @@
         <div class="slideshow__text-wrapper banner__content banner__content--{{ block.settings.box_align }} page-width{% if block.settings.show_text_box == false %} banner--desktop-transparent{% endif %}{% if settings.animations_reveal_on_scroll and forloop.index == 1 %} scroll-trigger animate--slide-in{% endif %}">
           <div
             class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient slideshow__text--{{ block.settings.text_alignment }} slideshow__text-mobile--{{ block.settings.text_alignment_mobile }}"
-            style="--slideshow-gap-subheading: {{ block.settings.gap_after_subheading }}px; --slideshow-gap-title: {{ block.settings.gap_after_title }}px; --slideshow-gap-before-buttons: {{ block.settings.gap_before_buttons }}px; --slideshow-mobile-gap-before-subheading: {{ block.settings.mobile_gap_before_subheading }}px; --slideshow-gap-after-promo: {{ block.settings.gap_after_promo_note }}px;"
+            style="--slideshow-gap-subheading: {{ block.settings.gap_after_subheading }}px; --slideshow-gap-title: {{ block.settings.gap_after_title }}px; --slideshow-gap-before-buttons: {{ block.settings.gap_before_buttons }}px; --slideshow-gap-before-subheading: {{ block.settings.gap_before_subheading }}px; --slideshow-mobile-gap-before-subheading: {{ block.settings.mobile_gap_before_subheading }}px; --slideshow-gap-after-promo: {{ block.settings.gap_after_promo_note }}px; --slideshow-heading-size: {{ block.settings.heading_size_desktop }}px; --slideshow-heading-size-mobile: {{ block.settings.heading_size_mobile }}px; --slideshow-subheading-size: {{ block.settings.subheading_size_desktop }}px; --slideshow-subheading-size-mobile: {{ block.settings.subheading_size_mobile }}px;"
           >
             {%- if processed_heading != blank -%}
-              <h2 class="banner__heading inline-richtext {{ block.settings.heading_size }}">
+              <h2 class="banner__heading inline-richtext slideshow__heading">
                 {{ processed_heading }}
               </h2>
             {%- endif -%}
@@ -366,54 +301,21 @@
     {%- endfor -%}
   </div>
 
-  {%- if section.blocks.size > 1 and section.settings.auto_rotate == false -%}
-    <div class="slideshow__controls slider-buttons{% if section.settings.show_text_below %} slideshow__controls--border-radius-mobile{% endif %}">
-      <button
-        type="button"
-        class="slider-button slider-button--prev"
-        name="previous"
-        aria-label="{{ 'sections.slideshow.previous_slideshow' | t }}"
-        aria-controls="Slider-{{ section.id }}"
-      >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
-      <div class="slider-counter slider-counter--{{ section.settings.slider_visual }}{% if section.settings.slider_visual == 'counter' or section.settings.slider_visual == 'numbers' %} caption{% endif %}">
-        {%- if section.settings.slider_visual == 'counter' -%}
-          <span class="slider-counter--current">1</span>
-          <span aria-hidden="true"> / </span>
-          <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-          <span class="slider-counter--total">{{ section.blocks.size }}</span>
-        {%- else -%}
-          <div class="slideshow__control-wrapper">
-            {%- for block in section.blocks -%}
-              <button
-                class="slider-counter__link slider-counter__link--{{ section.settings.slider_visual }} link"
-                aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
-                aria-controls="Slider-{{ section.id }}"
-              >
-                {%- if section.settings.slider_visual == 'numbers' -%}
-                  {{ forloop.index -}}
-                {%- else -%}
-                  <span class="dot"></span>
-                {%- endif -%}
-              </button>
-            {%- endfor -%}
-          </div>
-        {%- endif -%}
+  {%- if section.blocks.size > 1 -%}
+    <div class="slideshow__controls slideshow__controls--dots" aria-label="{{ 'sections.slideshow.carousel' | t }}">
+      <div class="slider-counter slider-counter--dots">
+        <div class="slideshow__control-wrapper">
+          {%- for block in section.blocks -%}
+            <button
+              class="slider-counter__link slider-counter__link--dots link"
+              aria-label="{{ 'sections.slideshow.load_slide' | t }} {{ forloop.index }} {{ 'general.slider.of' | t }} {{ forloop.length }}"
+              aria-controls="Slider-{{ section.id }}"
+            >
+              <span class="dot"></span>
+            </button>
+          {%- endfor -%}
+        </div>
       </div>
-      <button
-        type="button"
-        class="slider-button slider-button--next"
-        name="next"
-        aria-label="{{ 'sections.slideshow.next_slideshow' | t }}"
-        aria-controls="Slider-{{ section.id }}"
-      >
-        <span class="svg-wrapper">
-          {{- 'icon-caret.svg' | inline_asset_content -}}
-        </span>
-      </button>
     </div>
   {%- endif -%}
 
@@ -430,14 +332,16 @@
 {%- endif -%}
 
 <style>
-  #shopify-section-{{ section.id }} .slideshow__subheading {
-    margin-top: var(--slideshow-mobile-gap-before-subheading, 0px);
-    margin-bottom: var(--slideshow-gap-subheading, 10px);
-  }
-
-  #shopify-section-{{ section.id }} .slideshow__text .banner__heading {
+  #shopify-section-{{ section.id }} .slideshow__heading {
+    font-size: var(--slideshow-heading-size, inherit);
     margin-top: 0;
     margin-bottom: var(--slideshow-gap-title, 18px);
+  }
+
+  #shopify-section-{{ section.id }} .slideshow__subheading {
+    font-size: var(--slideshow-subheading-size, inherit);
+    margin-top: var(--slideshow-gap-before-subheading, 0px);
+    margin-bottom: var(--slideshow-gap-subheading, 10px);
   }
 
   #shopify-section-{{ section.id }} .slideshow__text .banner__buttons {
@@ -584,23 +488,30 @@
     z-index: 3;
     width: auto;
     border: 0;
-    border-radius: 999px;
-    padding: 0 6px;
-    background: rgba(0, 0, 0, 0.6);
-    color: #ffffff;
+    padding: 0;
+    background: transparent;
   }
 
-  #shopify-section-{{ section.id }} .slideshow__controls--top {
-    order: 0;
-  }
-
-  #shopify-section-{{ section.id }} .slideshow__controls .slider-button,
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter {
+    margin: 0;
     color: #ffffff;
+  }
+
+  #shopify-section-{{ section.id }} .slideshow__controls .slideshow__control-wrapper {
+    display: flex;
+    gap: 8px;
+  }
+
+  #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link {
+    padding: 0;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--dots .dot {
-    border-color: rgba(255, 255, 255, 0.8);
+    width: 8px;
+    height: 8px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active.slider-counter__link--dots .dot {
@@ -609,6 +520,10 @@
   }
 
   @media screen and (max-width: 749px) {
+    #shopify-section-{{ section.id }} .slideshow__heading {
+      font-size: var(--slideshow-heading-size-mobile, inherit);
+    }
+
     #shopify-section-{{ section.id }} .slideshow__controls {
       right: 12px;
       bottom: 12px;
@@ -698,7 +613,8 @@
     }
 
     #shopify-section-{{ section.id }} .slideshow__subheading {
-      margin-top: var(--slideshow-mobile-gap-before-subheading, 0px);
+      font-size: var(--slideshow-subheading-size-mobile, inherit);
+      margin-top: var(--slideshow-mobile-gap-before-subheading, var(--slideshow-gap-before-subheading, 0px));
     }
   }
 
@@ -886,35 +802,9 @@
       "label": "t:sections.slideshow.settings.slide_height.label"
     },
     {
-      "type": "select",
-      "id": "slider_visual",
-      "options": [
-        {
-          "value": "dots",
-          "label": "t:sections.slideshow.settings.slider_visual.options__2.label"
-        },
-        {
-          "value": "counter",
-          "label": "t:sections.slideshow.settings.slider_visual.options__1.label"
-        },
-        {
-          "value": "numbers",
-          "label": "t:sections.slideshow.settings.slider_visual.options__3.label"
-        }
-      ],
-      "default": "counter",
-      "label": "t:sections.slideshow.settings.slider_visual.label"
-    },
-    {
       "type": "checkbox",
       "id": "auto_rotate",
       "label": "t:sections.slideshow.settings.auto_rotate.label",
-      "default": false
-    },
-    {
-      "type": "checkbox",
-      "id": "show_pause_toggle",
-      "label": "Show pause/play control",
       "default": false
     },
     {
@@ -1015,38 +905,14 @@
           "default": true
         },
         {
+          "type": "header",
+          "content": "Text"
+        },
+        {
           "type": "inline_richtext",
           "id": "heading",
           "default": "t:sections.slideshow.blocks.slide.settings.heading.default",
           "label": "t:sections.slideshow.blocks.slide.settings.heading.label"
-        },
-        {
-          "type": "select",
-          "id": "heading_size",
-          "options": [
-            {
-              "value": "h2",
-              "label": "t:sections.all.heading_size.options__1.label"
-            },
-            {
-              "value": "h1",
-              "label": "t:sections.all.heading_size.options__2.label"
-            },
-            {
-              "value": "h0",
-              "label": "t:sections.all.heading_size.options__3.label"
-            },
-            {
-              "value": "hxl",
-              "label": "t:sections.all.heading_size.options__4.label"
-            },
-            {
-              "value": "hxxl",
-              "label": "t:sections.all.heading_size.options__5.label"
-            }
-          ],
-          "default": "h1",
-          "label": "t:sections.all.heading_size.label"
         },
         {
           "type": "inline_richtext",
@@ -1078,7 +944,61 @@
         },
         {
           "type": "header",
+          "content": "Typography"
+        },
+        {
+          "type": "range",
+          "id": "heading_size_desktop",
+          "min": 24,
+          "max": 96,
+          "step": 2,
+          "unit": "px",
+          "label": "Heading size (desktop)",
+          "default": 48
+        },
+        {
+          "type": "range",
+          "id": "heading_size_mobile",
+          "min": 20,
+          "max": 72,
+          "step": 2,
+          "unit": "px",
+          "label": "Heading size (mobile)",
+          "default": 32
+        },
+        {
+          "type": "range",
+          "id": "subheading_size_desktop",
+          "min": 12,
+          "max": 36,
+          "step": 1,
+          "unit": "px",
+          "label": "Subheading size (desktop)",
+          "default": 16
+        },
+        {
+          "type": "range",
+          "id": "subheading_size_mobile",
+          "min": 12,
+          "max": 30,
+          "step": 1,
+          "unit": "px",
+          "label": "Subheading size (mobile)",
+          "default": 14
+        },
+        {
+          "type": "header",
           "content": "Spacing controls"
+        },
+        {
+          "type": "range",
+          "id": "gap_before_subheading",
+          "min": -20,
+          "max": 64,
+          "step": 2,
+          "unit": "px",
+          "label": "Space before subheading",
+          "default": 0
         },
         {
           "type": "range",
@@ -1112,6 +1032,16 @@
         },
         {
           "type": "range",
+          "id": "gap_after_promo_note",
+          "min": -40,
+          "max": 80,
+          "step": 2,
+          "unit": "px",
+          "label": "Space after promo note",
+          "default": 12
+        },
+        {
+          "type": "range",
           "id": "gap_before_buttons",
           "min": -40,
           "max": 120,
@@ -1121,14 +1051,8 @@
           "default": 0
         },
         {
-          "type": "range",
-          "id": "gap_after_promo_note",
-          "min": -40,
-          "max": 80,
-          "step": 2,
-          "unit": "px",
-          "label": "Space after promo note",
-          "default": 12
+          "type": "header",
+          "content": "Buttons"
         },
         {
           "type": "text",
@@ -1163,6 +1087,10 @@
           "id": "button_style_secondary_2",
           "label": "Second button style: secondary",
           "default": false
+        },
+        {
+          "type": "header",
+          "content": "Layout & alignment"
         },
         {
           "type": "select",
@@ -1244,6 +1172,10 @@
           "unit": "%",
           "label": "t:sections.slideshow.blocks.slide.settings.image_overlay_opacity.label",
           "default": 0
+        },
+        {
+          "type": "header",
+          "content": "Colors"
         },
         {
           "type": "color_scheme",
