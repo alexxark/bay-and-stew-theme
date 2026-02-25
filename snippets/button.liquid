@@ -1,0 +1,48 @@
+{%- comment -%}
+  Renders a button / link with customizable style, background, and text color.
+
+  Accepts:
+  - href:       {String}  URL for the link (renders <a>; if blank renders <span>)
+  - content:    {String}  Button label text
+  - style:      {String}  'solid' | 'outline' | 'link'  (default: 'solid')
+  - background: {Color}   Background colour (used by solid & outline styles)
+  - text_color: {Color}   Text colour
+{%- endcomment -%}
+
+{%- liquid
+  assign tag = 'a'
+  if href == blank
+    assign tag = 'span'
+  endif
+
+  assign btn_class = 'button'
+  case style
+    when 'outline'
+      assign btn_class = btn_class | append: ' button--outline'
+    when 'link'
+      assign btn_class = 'button--link'
+    else
+      assign btn_class = btn_class | append: ' button--solid'
+  endcase
+-%}
+
+{%- capture inline_style -%}
+  {%- if style == 'solid' or style == blank -%}
+    {%- if background != blank and background != 'rgba(0,0,0,0)' -%}background-color: {{ background }};{%- endif -%}
+    {%- if text_color != blank and text_color != 'rgba(0,0,0,0)' -%}color: {{ text_color }};{%- endif -%}
+  {%- elsif style == 'outline' -%}
+    background-color: transparent;
+    {%- if background != blank and background != 'rgba(0,0,0,0)' -%}border-color: {{ background }}; color: {{ background }};{%- endif -%}
+    {%- if text_color != blank and text_color != 'rgba(0,0,0,0)' -%}color: {{ text_color }};{%- endif -%}
+  {%- elsif style == 'link' -%}
+    {%- if text_color != blank and text_color != 'rgba(0,0,0,0)' -%}color: {{ text_color }};{%- endif -%}
+  {%- endif -%}
+{%- endcapture -%}
+
+<{{ tag }}
+  {%- if tag == 'a' %} href="{{ href }}"{% endif %}
+  class="{{ btn_class }}"
+  {%- if inline_style != blank %} style="{{ inline_style | strip }}"{% endif %}
+>
+  {{- content | escape -}}
+</{{ tag }}>

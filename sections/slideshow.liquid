@@ -248,37 +248,20 @@
               {%- endif -%}
             {%- endif -%}
 
-            {%- assign primary_label = block.settings.button_label -%}
-            {%- assign primary_link = block.settings.link -%}
-            {%- assign secondary_label = block.settings.button_label_2 -%}
-            {%- assign secondary_link = block.settings.link_2 -%}
+            {%- if block.settings.button_1_text != blank or block.settings.button_2_text != blank -%}
+              {%- if block.settings.button_1_style == 'link' or block.settings.button_2_style == 'link' or block.settings.button_1_text == blank or block.settings.button_2_text == blank -%}
+                {%- capture button_wrapper_class -%}button-group{%- endcapture -%}
+              {%- else -%}
+                {%- capture button_wrapper_class -%}button-group button-group--same-width{%- endcapture -%}
+              {%- endif -%}
 
-            {%- if primary_label != blank or secondary_label != blank -%}
-              <div class="banner__buttons">
-                {%- if primary_label != blank -%}
-                  <a
-                    {% if primary_link %}
-                      href="{{ primary_link }}"
-                    {% else %}
-                      role="link" aria-disabled="true"
-                    {% endif %}
-                    class="button {% if block.settings.button_style_secondary %}button--secondary{% else %}button--primary{% endif %}"
-                  >
-                    {{- primary_label | escape -}}
-                  </a>
+              <div class="{{ button_wrapper_class }}">
+                {%- if block.settings.button_1_text != blank -%}
+                  {%- render 'button', href: block.settings.button_1_link, content: block.settings.button_1_text, style: block.settings.button_1_style, background: block.settings.button_1_background, text_color: block.settings.button_1_text_color -%}
                 {%- endif -%}
 
-                {%- if secondary_label != blank -%}
-                  <a
-                    {% if secondary_link %}
-                      href="{{ secondary_link }}"
-                    {% else %}
-                      role="link" aria-disabled="true"
-                    {% endif %}
-                    class="button {% if block.settings.button_style_secondary_2 %}button--secondary{% else %}button--primary{% endif %}"
-                  >
-                    {{- secondary_label | escape -}}
-                  </a>
+                {%- if block.settings.button_2_text != blank -%}
+                  {%- render 'button', href: block.settings.button_2_link, content: block.settings.button_2_text, style: block.settings.button_2_style, background: block.settings.button_2_background, text_color: block.settings.button_2_text_color -%}
                 {%- endif -%}
               </div>
             {%- endif -%}
@@ -358,8 +341,66 @@
     margin-bottom: var(--slideshow-gap-subheading, 10px);
   }
 
-  #shopify-section-{{ section.id }} .slideshow__text .banner__buttons {
+  #shopify-section-{{ section.id }} .slideshow__text .button-group {
     margin-top: var(--slideshow-gap-before-buttons, 0px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  #shopify-section-{{ section.id }} .button-group--same-width .button {
+    min-width: 160px;
+    text-align: center;
+  }
+
+  #shopify-section-{{ section.id }} .button--solid {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    border: 1px solid transparent;
+    border-radius: 0;
+    font: inherit;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .button--outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 24px;
+    background: transparent;
+    border: 1px solid currentColor;
+    border-radius: 0;
+    font: inherit;
+    font-size: 1.4rem;
+    letter-spacing: 0.1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .button--link {
+    display: inline;
+    background: none;
+    border: 0;
+    padding: 0;
+    font: inherit;
+    font-size: 1.4rem;
+    text-decoration: underline;
+    text-underline-offset: 0.3rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  #shopify-section-{{ section.id }} .button--solid:hover,
+  #shopify-section-{{ section.id }} .button--outline:hover,
+  #shopify-section-{{ section.id }} .button--link:hover {
+    opacity: 0.75;
   }
 
   #shopify-section-{{ section.id }} .slideshow__promo-note {
@@ -505,14 +546,10 @@
     box-shadow: none;
     padding: 0;
     background: transparent;
-    display: flex;
-    align-items: center;
-    gap: 8px;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter {
     margin: 0;
-    min-width: 0;
     color: #ffffff;
   }
 
@@ -529,23 +566,22 @@
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.8) !important;
-    background: transparent !important;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    background: transparent;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active .dot,
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link[aria-current='true'] .dot {
-    background-color: #ffffff !important;
-    border-color: #ffffff !important;
+    background-color: #ffffff;
+    border-color: #ffffff;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slideshow__autoplay {
-    position: static !important;
+    position: static;
     margin-left: 8px;
     width: 32px;
     height: 32px;
     padding: 0;
-    border: 0;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slideshow__autoplay .svg-wrapper {
@@ -1102,41 +1138,95 @@
         },
         {
           "type": "header",
-          "content": "Buttons"
+          "content": "Button 1"
         },
         {
           "type": "text",
-          "id": "button_label",
-          "default": "t:sections.slideshow.blocks.slide.settings.button_label.default",
-          "label": "t:sections.slideshow.blocks.slide.settings.button_label.label",
-          "info": "t:sections.slideshow.blocks.slide.settings.button_label.info"
+          "id": "button_1_text",
+          "label": "Text"
         },
         {
           "type": "url",
-          "id": "link",
-          "label": "t:sections.slideshow.blocks.slide.settings.link.label"
+          "id": "button_1_link",
+          "label": "Link"
         },
         {
-          "type": "checkbox",
-          "id": "button_style_secondary",
-          "label": "t:sections.slideshow.blocks.slide.settings.secondary_style.label",
-          "default": false
+          "type": "select",
+          "id": "button_1_style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "solid"
+        },
+        {
+          "type": "color",
+          "id": "button_1_background",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "button_1_text_color",
+          "label": "Text color",
+          "default": "#000000"
+        },
+        {
+          "type": "header",
+          "content": "Button 2"
         },
         {
           "type": "text",
-          "id": "button_label_2",
-          "label": "Second button label"
+          "id": "button_2_text",
+          "label": "Text"
         },
         {
           "type": "url",
-          "id": "link_2",
-          "label": "Second button link"
+          "id": "button_2_link",
+          "label": "Link"
         },
         {
-          "type": "checkbox",
-          "id": "button_style_secondary_2",
-          "label": "Second button style: secondary",
-          "default": false
+          "type": "select",
+          "id": "button_2_style",
+          "label": "Style",
+          "options": [
+            {
+              "value": "solid",
+              "label": "Solid"
+            },
+            {
+              "value": "outline",
+              "label": "Outline"
+            },
+            {
+              "value": "link",
+              "label": "Link"
+            }
+          ],
+          "default": "outline"
+        },
+        {
+          "type": "color",
+          "id": "button_2_background",
+          "label": "Background",
+          "default": "#ffffff"
+        },
+        {
+          "type": "color",
+          "id": "button_2_text_color",
+          "label": "Text color",
+          "default": "#000000"
         },
         {
           "type": "header",
