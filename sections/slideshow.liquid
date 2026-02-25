@@ -183,13 +183,7 @@
               endif
             -%}
             {%- if block.settings.image_mobile != blank -%}
-              <picture>
-                <source
-                  media="(max-width: 749px)"
-                  srcset="{{ block.settings.image_mobile | image_url: width: 375 }} 375w, {{ block.settings.image_mobile | image_url: width: 550 }} 550w, {{ block.settings.image_mobile | image_url: width: 750 }} 750w, {{ block.settings.image_mobile | image_url: width: 1100 }} 1100w"
-                  width="{{ block.settings.image_mobile.width }}"
-                  height="{{ block.settings.image_mobile.height }}"
-                >
+              <div class="slideshow__media-image slideshow__media-image--desktop">
                 {%- if forloop.first -%}
                   {{
                     block.settings.image
@@ -203,7 +197,14 @@
                     | image_tag: loading: 'lazy', height: height, sizes: sizes, widths: widths
                   }}
                 {%- endif -%}
-              </picture>
+              </div>
+              <div class="slideshow__media-image slideshow__media-image--mobile">
+                {{
+                  block.settings.image_mobile
+                  | image_url: width: 1100
+                  | image_tag: loading: 'lazy', sizes: '100vw', widths: '375, 550, 750, 1100'
+                }}
+              </div>
             {%- else -%}
               {%- if forloop.first -%}
                 {{
@@ -540,6 +541,10 @@
     display: none;
   }
 
+  #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
+    display: none;
+  }
+
   #shopify-section-{{ section.id }} .slideshow__next-section-button {
     position: absolute;
     left: 50%;
@@ -561,6 +566,14 @@
     }
 
     #shopify-section-{{ section.id }} .slideshow__media-video--mobile {
+      display: block;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow__media-image--desktop {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
       display: block;
     }
 
