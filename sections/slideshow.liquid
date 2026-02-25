@@ -256,16 +256,16 @@
             class="slideshow__text banner__box content-container content-container--full-width-mobile color-{{ block.settings.color_scheme }} gradient slideshow__text--{{ block.settings.text_alignment }} slideshow__text-mobile--{{ block.settings.text_alignment_mobile }}"
             style="--slideshow-gap-subheading: {{ block.settings.gap_after_subheading }}px; --slideshow-gap-title: {{ block.settings.gap_after_title }}px; --slideshow-gap-before-buttons: {{ block.settings.gap_before_buttons }}px; --slideshow-mobile-gap-before-subheading: {{ block.settings.mobile_gap_before_subheading }}px; --slideshow-gap-after-promo: {{ block.settings.gap_after_promo_note }}px;"
           >
-            {%- if block.settings.subheading != blank -%}
-              <div class="banner__text rte slideshow__subheading">
-                <p>{{ block.settings.subheading }}</p>
-              </div>
-            {%- endif -%}
-
             {%- if processed_heading != blank -%}
               <h2 class="banner__heading inline-richtext {{ block.settings.heading_size }}">
                 {{ processed_heading }}
               </h2>
+            {%- endif -%}
+
+            {%- if block.settings.subheading != blank -%}
+              <div class="banner__text rte slideshow__subheading">
+                <p>{{ block.settings.subheading }}</p>
+              </div>
             {%- endif -%}
 
             {%- if block.settings.promo_note != blank -%}
@@ -550,6 +550,10 @@
     object-fit: cover;
   }
 
+  #shopify-section-{{ section.id }} .slideshow__media-image--mobile img {
+    object-position: center top;
+  }
+
   #shopify-section-{{ section.id }} .slideshow__media-video--mobile {
     display: none;
   }
@@ -592,6 +596,16 @@
 
     #shopify-section-{{ section.id }} .slideshow__subheading {
       margin-top: var(--slideshow-mobile-gap-before-subheading, 0px);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .slideshow__media-image--desktop {
+      display: block !important;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
+      display: none !important;
     }
   }
 </style>
