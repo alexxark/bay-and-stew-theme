@@ -302,7 +302,7 @@
   </div>
 
   {%- if section.blocks.size > 1 -%}
-    <div class="slideshow__controls slideshow__controls--dots" aria-label="{{ 'sections.slideshow.carousel' | t }}">
+    <div class="slideshow__controls slideshow__controls--dots slider-buttons" aria-label="{{ 'sections.slideshow.carousel' | t }}">
       <div class="slider-counter slider-counter--dots">
         <div class="slideshow__control-wrapper">
           {%- for block in section.blocks -%}
@@ -316,6 +316,20 @@
           {%- endfor -%}
         </div>
       </div>
+      {%- if section.settings.auto_rotate and section.settings.show_pause_toggle -%}
+        <button
+          type="button"
+          class="slideshow__autoplay slider-button"
+          aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+        >
+          <span class="svg-wrapper">
+            {{- 'icon-pause.svg' | inline_asset_content -}}
+          </span>
+          <span class="svg-wrapper">
+            {{- 'icon-play.svg' | inline_asset_content -}}
+          </span>
+        </button>
+      {%- endif -%}
     </div>
   {%- endif -%}
 
@@ -487,7 +501,8 @@
     bottom: 16px;
     z-index: 3;
     width: auto;
-    border: 0;
+    border: 0 !important;
+    box-shadow: none;
     padding: 0;
     background: transparent;
   }
@@ -514,6 +529,11 @@
     background: transparent;
   }
 
+  #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active .dot {
+    background-color: #ffffff;
+    border-color: #ffffff;
+  }
+
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active.slider-counter__link--dots .dot {
     background-color: #ffffff;
     border-color: #ffffff;
@@ -527,6 +547,11 @@
     #shopify-section-{{ section.id }} .slideshow__controls {
       right: 12px;
       bottom: 12px;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow__controls::before,
+    #shopify-section-{{ section.id }} .slideshow__controls::after {
+      content: none !important;
     }
   }
 
@@ -806,6 +831,12 @@
       "id": "auto_rotate",
       "label": "t:sections.slideshow.settings.auto_rotate.label",
       "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pause_toggle",
+      "label": "Show pause/play control",
+      "default": true
     },
     {
       "type": "checkbox",
