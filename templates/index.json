@@ -93,7 +93,7 @@
       "settings": {
         "layout": "full_bleed",
         "slide_height": "small",
-        "auto_rotate": false,
+        "auto_rotate": true,
         "autoplay_pause_on_video": false,
         "change_slides_speed": 7,
         "image_behavior": "none",
