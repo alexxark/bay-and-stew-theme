@@ -9,316 +9,6 @@
  */
 {
   "sections": {
-    "image_banner": {
-      "type": "image-banner",
-      "blocks": {
-        "heading": {
-          "type": "heading",
-          "settings": {
-            "heading": "Jewelry Supplies",
-            "heading_size": "h0"
-          }
-        },
-        "text": {
-          "type": "text",
-          "settings": {
-            "text": "Hand Stamping, Engraving & Permanent Jewelry Supplies",
-            "text_style": "body"
-          }
-        },
-        "button": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/shop-all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading",
-        "text",
-        "button"
-      ],
-      "custom_css": [
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/Bay_and_Stew_Web_Banner-02.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "middle-left",
-        "show_text_box": false,
-        "desktop_content_alignment": "left",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner_kqtJKK": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_xGbbbe": {
-          "type": "heading",
-          "settings": {
-            "heading": "EXCLUSIVE GIFT WITH PURCHASE",
-            "heading_size": "h1"
-          }
-        },
-        "text_DVpVmj": {
-          "type": "text",
-          "settings": {
-            "text": "NOT AVAILABLE ON ETSY",
-            "text_style": "caption-with-letter-spacing"
-          }
-        },
-        "buttons_wdeV48": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "ADD TO CART",
-            "button_link_1": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_xGbbbe",
-        "text_DVpVmj",
-        "buttons_wdeV48"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/Hat-gwp-Desktop2.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "middle-left",
-        "show_text_box": false,
-        "desktop_content_alignment": "left",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner_iA4bn8": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_yfrtVp": {
-          "type": "heading",
-          "settings": {
-            "heading": "EXCLUSIVE GIFT WITH PURCHASE",
-            "heading_size": "h1"
-          }
-        },
-        "text_cDrCC4": {
-          "type": "text",
-          "settings": {
-            "text": "NOT AVAILABLE ON ETSY",
-            "text_style": "caption-with-letter-spacing"
-          }
-        },
-        "buttons_gRReC6": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "ADD TO CART",
-            "button_link_1": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_yfrtVp",
-        "text_cDrCC4",
-        "buttons_gRReC6"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/Hat-gwp-Desktop2.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "middle-left",
-        "show_text_box": false,
-        "desktop_content_alignment": "left",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner_jwcjq6": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_4Dbb6d": {
-          "type": "heading",
-          "settings": {
-            "heading": "Jewelry Supplies",
-            "heading_size": "h0"
-          }
-        },
-        "text_mKqMUM": {
-          "type": "text",
-          "settings": {
-            "text": "Hand Stamping, Engraving & Permanent Jewelry Supplies",
-            "text_style": "body"
-          }
-        },
-        "buttons_94apFa": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Shop all",
-            "button_link_1": "shopify://collections/shop-all",
-            "button_style_secondary_1": true,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_4Dbb6d",
-        "text_mKqMUM",
-        "buttons_94apFa"
-      ],
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/Bay_and_Stew_MOBILE_Banner-02.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner_D7VqkC": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_grrVmF": {
-          "type": "heading",
-          "settings": {
-            "heading": "EXCLUSIVE GIFT WITH PURCHASE",
-            "heading_size": "h1"
-          }
-        },
-        "text_HdxQDq": {
-          "type": "text",
-          "settings": {
-            "text": "NOT AVAILABLE ON ETSY",
-            "text_style": "caption-with-letter-spacing"
-          }
-        },
-        "buttons_XyKdxA": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Add to Cart",
-            "button_link_1": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_grrVmF",
-        "text_HdxQDq",
-        "buttons_XyKdxA"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/GWP-Hat-Mobile.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
-    "image_banner_NbUEmt": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_CcrDMw": {
-          "type": "heading",
-          "settings": {
-            "heading": "EXCLUSIVE GIFT WITH PURCHASE",
-            "heading_size": "h1"
-          }
-        },
-        "text_HKbcLn": {
-          "type": "text",
-          "settings": {
-            "text": "NOT AVAILABLE ON ETSY",
-            "text_style": "caption-with-letter-spacing"
-          }
-        },
-        "buttons_mVmHPd": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Add to Cart",
-            "button_link_1": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_CcrDMw",
-        "text_HKbcLn",
-        "buttons_mVmHPd"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/GWP-Hat-Mobile.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "bottom-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "background-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "stack_images_on_mobile": false,
-        "show_text_below": false
-      }
-    },
     "slideshow_Hg9TMx": {
       "type": "slideshow",
       "blocks": {
@@ -337,12 +27,12 @@
             "promo_details_text": "",
             "mobile_gap_before_subheading": 0,
             "gap_after_subheading": 10,
-            "gap_after_title": 18,
+            "gap_after_title": 4,
             "gap_before_buttons": 0,
             "gap_after_promo_note": 12,
             "button_label": "Shop All",
             "link": "shopify://collections/shop-all",
-            "button_style_secondary": true,
+            "button_style_secondary": false,
             "button_label_2": "",
             "link_2": "",
             "button_style_secondary_2": false,
@@ -353,10 +43,43 @@
             "color_scheme": "",
             "text_alignment_mobile": "center"
           }
+        },
+        "slide_YA4RDt": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Hat-gwp-Desktop2.jpg",
+            "image_mobile": "shopify://shop_images/GWP-Hat-Mobile.jpg",
+            "allow_sound": true,
+            "heading": "EXCLUSIVE GIFT WITH PURCHASE",
+            "heading_size": "h1",
+            "subheading": "NOT AVAILABLE ON ETSY",
+            "highlight_words": "",
+            "promo_note": "",
+            "promo_link_label": "details",
+            "promo_details_text": "",
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 18,
+            "gap_before_buttons": 0,
+            "gap_after_promo_note": 12,
+            "button_label": "ADD TO CART",
+            "link": "shopify://products/fueled-by-welds-espresso-hat",
+            "button_style_secondary": true,
+            "button_label_2": "",
+            "link_2": "",
+            "button_style_secondary_2": false,
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "scheme-1",
+            "text_alignment_mobile": "left"
+          }
         }
       },
       "block_order": [
-        "slide_QLwpGt"
+        "slide_QLwpGt",
+        "slide_YA4RDt"
       ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
@@ -365,8 +88,8 @@
         "slider_visual": "dots",
         "auto_rotate": false,
         "show_pause_toggle": false,
-        "autoplay_pause_on_video": true,
-        "change_slides_speed": 5,
+        "autoplay_pause_on_video": false,
+        "change_slides_speed": 7,
         "image_behavior": "none",
         "show_text_below": false,
         "show_next_section_button": false,
@@ -745,12 +468,6 @@
     }
   },
   "order": [
-    "image_banner",
-    "image_banner_kqtJKK",
-    "image_banner_iA4bn8",
-    "image_banner_jwcjq6",
-    "image_banner_D7VqkC",
-    "image_banner_NbUEmt",
     "slideshow_Hg9TMx",
     "rich_text_fyyfM3",
     "multicolumn_6q6KPE",
