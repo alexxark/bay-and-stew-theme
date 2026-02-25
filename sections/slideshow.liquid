@@ -574,12 +574,21 @@
   }
 
   @media screen and (max-width: 749px) {
+    #Slider-{{ section.id }}::before,
+    #Slider-{{ section.id }} .media::before,
+    #Slider-{{ section.id }}:not(.banner--mobile-bottom) .banner__content::before {
+      content: none !important;
+      display: none !important;
+      padding-bottom: 0 !important;
+    }
+
     #shopify-section-{{ section.id }} .slideshow.banner--mobile-bottom {
       height: auto;
     }
 
     #shopify-section-{{ section.id }} .slideshow__media {
       height: auto;
+      overflow: visible;
     }
 
     #shopify-section-{{ section.id }} .slideshow.banner--small .banner__media,
@@ -601,6 +610,14 @@
       position: static;
       inset: auto;
       height: auto;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow__media-image--mobile {
+      position: relative !important;
+      top: auto !important;
+      left: auto !important;
+      width: 100% !important;
+      height: auto !important;
     }
 
     #shopify-section-{{ section.id }} .slideshow__media-image img {
