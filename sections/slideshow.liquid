@@ -606,6 +606,18 @@
       min-height: 0;
     }
 
+    #shopify-section-{{ section.id }} .slideshow:not(.banner--mobile-bottom) .banner__media {
+      position: relative !important;
+      height: auto !important;
+    }
+
+    #shopify-section-{{ section.id }} .slideshow:not(.banner--mobile-bottom) .banner__content {
+      position: absolute;
+      inset: 0;
+      min-height: 0 !important;
+      z-index: 2;
+    }
+
     #shopify-section-{{ section.id }} .slideshow__media-image {
       position: static;
       inset: auto;
