@@ -285,7 +285,15 @@
   </div>
 
   {%- if section.blocks.size > 1 -%}
-    <div class="slideshow__controls slideshow__controls--dots slider-buttons" aria-label="{{ 'sections.slideshow.carousel' | t }}">
+    {%- comment -%}Hidden prev/next required by Dawn's SliderComponent JS init{%- endcomment -%}
+    <button type="button" class="slider-button" name="previous" aria-label="{{ 'general.slider.previous_slide' | t }}" style="display:none !important">
+      <span class="visually-hidden">{{ 'general.slider.previous_slide' | t }}</span>
+    </button>
+    <button type="button" class="slider-button" name="next" aria-label="{{ 'general.slider.next_slide' | t }}" style="display:none !important">
+      <span class="visually-hidden">{{ 'general.slider.next_slide' | t }}</span>
+    </button>
+
+    <div class="slideshow__controls slider-buttons" aria-label="{{ 'sections.slideshow.carousel' | t }}">
       <div class="slider-counter slider-counter--dots">
         <div class="slideshow__control-wrapper">
           {%- for block in section.blocks -%}
@@ -302,15 +310,16 @@
       {%- if section.settings.auto_rotate and section.settings.show_pause_toggle -%}
         <button
           type="button"
-          class="slideshow__autoplay slider-button"
+          class="slideshow__autoplay slideshow__autoplay--custom"
           aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
         >
-          <span class="svg-wrapper">
-            {{- 'icon-pause.svg' | inline_asset_content -}}
-          </span>
-          <span class="svg-wrapper">
-            {{- 'icon-play.svg' | inline_asset_content -}}
-          </span>
+          <svg class="slideshow__autoplay-icon" data-icon="pause" aria-hidden="true" viewBox="0 0 12 12" focusable="false">
+            <rect x="2" y="2" width="3" height="8" rx="1" fill="currentColor"></rect>
+            <rect x="7" y="2" width="3" height="8" rx="1" fill="currentColor"></rect>
+          </svg>
+          <svg class="slideshow__autoplay-icon" data-icon="play" aria-hidden="true" viewBox="0 0 12 12" focusable="false" hidden>
+            <path d="M4 2.5L10 6 4 9.5Z" fill="currentColor"></path>
+          </svg>
         </button>
       {%- endif -%}
     </div>
@@ -538,7 +547,8 @@
 
   #shopify-section-{{ section.id }} .slideshow__controls {
     position: absolute;
-    right: 16px;
+    left: 50%;
+    transform: translateX(-50%);
     bottom: 16px;
     z-index: 3;
     width: auto;
@@ -546,16 +556,19 @@
     box-shadow: none;
     padding: 0;
     background: transparent;
+    display: flex;
+    align-items: center;
+    gap: 6px;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter {
     margin: 0;
-    color: #ffffff;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slideshow__control-wrapper {
     display: flex;
-    gap: 8px;
+    align-items: center;
+    gap: 10px;
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link {
@@ -566,32 +579,55 @@
     width: 8px;
     height: 8px;
     border-radius: 999px;
-    border: 1px solid rgba(255, 255, 255, 0.8);
+    border: 1.5px solid currentColor;
     background: transparent;
+    opacity: 0.5;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.3));
   }
 
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active .dot,
   #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link[aria-current='true'] .dot {
-    background-color: #ffffff;
-    border-color: #ffffff;
+    background-color: currentColor;
+    border-color: currentColor;
+    opacity: 1;
   }
 
-  #shopify-section-{{ section.id }} .slideshow__controls .slideshow__autoplay {
+  /* Pause/play toggle - small inline icon matching slideshowtest */
+  #shopify-section-{{ section.id }} .slideshow__autoplay--custom {
     position: static;
-    margin-left: 8px;
-    width: 32px;
-    height: 32px;
+    display: grid;
+    place-content: center;
+    width: calc(8px * 5);
+    height: calc(8px * 5);
+    border-radius: 999px;
+    border: 0;
     padding: 0;
+    cursor: pointer;
+    background: #000;
+    color: #fff;
+    align-self: center;
+    transform: translateY(0);
   }
 
-  #shopify-section-{{ section.id }} .slideshow__controls .slideshow__autoplay .svg-wrapper {
-    width: 14px;
-    height: 14px;
+  #shopify-section-{{ section.id }} .slideshow__autoplay--custom::after {
+    content: "";
+    border-radius: inherit;
+    background: #000;
+    position: absolute;
+    inset: 0;
   }
 
-  #shopify-section-{{ section.id }} .slideshow__controls .slider-counter__link--active.slider-counter__link--dots .dot {
-    background-color: #ffffff;
-    border-color: #ffffff;
+  #shopify-section-{{ section.id }} .slideshow__autoplay-icon {
+    width: 10px;
+    height: 10px;
+    position: relative;
+    z-index: 1;
+    fill: currentColor;
+  }
+
+  #shopify-section-{{ section.id }} .slideshow__autoplay--paused [data-icon='pause'],
+  #shopify-section-{{ section.id }} .slideshow__autoplay--custom:not(.slideshow__autoplay--paused) [data-icon='play'] {
+    display: none;
   }
 
   @media screen and (max-width: 749px) {
@@ -600,7 +636,6 @@
     }
 
     #shopify-section-{{ section.id }} .slideshow__controls {
-      right: 12px;
       bottom: 12px;
     }
 
