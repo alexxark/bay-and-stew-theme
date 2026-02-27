@@ -234,6 +234,18 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             });
           }
 
+          /* Restore cached state SYNCHRONOUSLY to prevent flash when Dawn
+             section swaps destroy and recreate this element */
+          if (window.__cartRewardsLastCart) {
+            const cart = window.__cartRewardsLastCart;
+            const total = this._calculateTotal(cart);
+            this.style.display = (cart.item_count || 0) > 0 ? '' : 'none';
+            this._hideOrShowGiftRows(total);
+            this.dataset.totalPrice = total;
+            this._updateProgress(total);
+            this._updateMilestones(total);
+          }
+
           this._bootstrap();
         }
 
@@ -295,6 +307,9 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._pendingTotal = total;
           this._scheduleGiftSync();
           this._ensureDrawerItems(cart);
+
+          /* Cache for instant restore when Dawn section-swaps recreate this element */
+          window.__cartRewardsLastCart = cart;
         }
 
         _scheduleGiftSync() {
@@ -381,7 +396,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             for (const tbody of tbodies) {
               const isCartPage = tbody.closest('#main-cart-items') !== null;
               const placeholder = this._buildGiftPlaceholderRow(vid, entry, isCartPage);
-              tbody.appendChild(placeholder);
+              tbody.insertBefore(placeholder, tbody.firstChild);
             }
           }
         }
