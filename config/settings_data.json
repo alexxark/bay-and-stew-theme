@@ -490,6 +490,11 @@
       "show_cart_note": false,
       "cart_drawer_collection": "",
       "cart_color_scheme": "scheme-1",
+      "show_rewards": true,
+      "reward_1_type": "shipping",
+      "reward_1_threshold": "75",
+      "reward_1_label": "Free shipping!",
+      "reward_1_message": "Spend [amount_left] more to receive [reward]!",
       "sections": {
         "main-password-header": {
           "type": "main-password-header",
