@@ -224,12 +224,23 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         connectedCallback() {
           document.addEventListener('cart:change', this._onCartChange);
           document.addEventListener('cart:refresh', this._onCartRefresh);
+
+          /* Subscribe to Dawn's native cart update pub/sub (fires on cart page quantity changes) */
+          if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+            this._cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
+              if (event.cartData) {
+                void this._updateFromCart(event.cartData);
+              }
+            });
+          }
+
           this._bootstrap();
         }
 
         disconnectedCallback() {
           document.removeEventListener('cart:change', this._onCartChange);
           document.removeEventListener('cart:refresh', this._onCartRefresh);
+          if (this._cartUpdateUnsubscriber) this._cartUpdateUnsubscriber();
         }
 
         async _bootstrap() {
@@ -272,6 +283,9 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           /* Hide tracker when cart is empty */
           this.style.display = itemCount > 0 ? '' : 'none';
 
+          /* Immediately hide/show gift rows in the DOM to prevent flash */
+          this._hideOrShowGiftRows(total);
+
           this.dataset.totalPrice = total;
           this._updateProgress(total);
           this._updateMilestones(total);
@@ -310,6 +324,33 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           } else if (hasItems) {
             this._refreshFallbackTriggered = false;
           }
+        }
+
+        _hideOrShowGiftRows(total) {
+          /* Instantly hide gift rows whose threshold is no longer met (prevents
+             the flash-then-remove when Dawn's section render runs before our
+             _syncGifts call removes the item via the API). */
+
+          /* Build a map  variantId → shouldBeVisible  from milestone data */
+          const allowed = new Map();
+          const milestones = this.querySelectorAll('[data-reward-milestone][data-type="gift"]');
+          for (const m of milestones) {
+            const vid = m.dataset.variantId;
+            if (!vid) continue;
+            const threshold = parseInt(m.dataset.threshold || '0', 10);
+            const show = !this._isExcluded && total >= threshold;
+            /* If multiple milestones share a variant keep the most permissive */
+            if (!allowed.has(vid) || show) allowed.set(vid, show);
+          }
+
+          /* Walk every gift row in BOTH drawer and cart page */
+          document.querySelectorAll('.cart-item--reward-gift').forEach((row) => {
+            const key = row.dataset.cartItemKey || '';
+            /* Shopify key format: {variant_id}:{hash} */
+            const vid = key.split(':')[0];
+            const shouldShow = allowed.get(vid) ?? false;
+            row.style.display = shouldShow ? '' : 'none';
+          });
         }
 
         async _updateExclusion(cart) {
