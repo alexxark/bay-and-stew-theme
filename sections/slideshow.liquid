@@ -654,6 +654,11 @@
       padding-bottom: 0 !important;
     }
 
+    /* Remove the 1rem bottom margin from .slider--everywhere on mobile */
+    #Slider-{{ section.id }}.slider--everywhere {
+      margin-bottom: 0;
+    }
+
     /* Remove fixed min-height on mobile so the slideshow hugs the image */
     #shopify-section-{{ section.id }} .slideshow.banner--small,
     #shopify-section-{{ section.id }} .slideshow.banner--medium,
