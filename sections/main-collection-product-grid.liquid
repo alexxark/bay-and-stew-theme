@@ -131,7 +131,7 @@
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
-  {%- paginate collection.products by section.settings.products_per_page -%}
+  {%- paginate collection.products by 12 -%}
     {% comment %} Sort is the first tabbable element when filter type is vertical {% endcomment %}
     {%- if section.settings.enable_sorting and section.settings.filter_type == 'vertical' -%}
       <facet-filters-form class="facets facets-vertical-sort page-width small-hide">
@@ -287,7 +287,7 @@
                   aria-label="Load more products in the {{ collection.title }} collection"
                   aria-busy="false"
                 >
-                  {{ 'sections.collection_template.load_more' | t | default: 'Load More Products' }}
+                  Load More Products
                 </button>
                 <div id="loading-spinner" class="load-more-spinner" style="display: none;" aria-hidden="true"></div>
               </div>
