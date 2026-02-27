@@ -22,27 +22,27 @@ Renders the cart rewards milestones (spend tracker / progress bar) in the cart d
 
   assign calculated_total_price = calculated_total_price | minus: total_cart_discount
 
-  assign shipping_threshold = section.settings.rewards_free_shipping_threshold | default: '75' | plus: 0 | times: 100
-  assign shipping_label = section.settings.rewards_shipping_label | default: 'Free Shipping'
-  assign rewards_all_unlocked_subtitle = section.settings.rewards_all_unlocked_subtitle | default: 'You have got [nearest_reward]'
-  assign rewards_title_before_1 = section.settings.rewards_title_before_1 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_2 = section.settings.rewards_title_before_2 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_3 = section.settings.rewards_title_before_3 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_4 = section.settings.rewards_title_before_4 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign shipping_threshold = settings.rewards_free_shipping_threshold | default: '75' | plus: 0 | times: 100
+  assign shipping_label = settings.rewards_shipping_label | default: 'Free Shipping'
+  assign rewards_all_unlocked_subtitle = settings.rewards_all_unlocked_subtitle | default: 'You have got [nearest_reward]'
+  assign rewards_title_before_1 = settings.rewards_title_before_1 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_2 = settings.rewards_title_before_2 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_3 = settings.rewards_title_before_3 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_4 = settings.rewards_title_before_4 | default: 'Spend [amount_left] more to receive [reward]!'
 
-  assign rewards_label_1 = section.settings.rewards_label_1
-  assign rewards_label_2 = section.settings.rewards_label_2
-  assign rewards_label_3 = section.settings.rewards_label_3
-  assign rewards_label_4 = section.settings.rewards_label_4
+  assign rewards_label_1 = settings.rewards_label_1
+  assign rewards_label_2 = settings.rewards_label_2
+  assign rewards_label_3 = settings.rewards_label_3
+  assign rewards_label_4 = settings.rewards_label_4
 
-  assign gift_1_product = section.settings.reward_gift_1_product
-  assign gift_1_threshold = section.settings.reward_gift_1_threshold | plus: 0 | times: 100
+  assign gift_1_product = settings.reward_gift_1_product
+  assign gift_1_threshold = settings.reward_gift_1_threshold | plus: 0 | times: 100
 
-  assign gift_2_product = section.settings.reward_gift_2_product
-  assign gift_2_threshold = section.settings.reward_gift_2_threshold | plus: 0 | times: 100
+  assign gift_2_product = settings.reward_gift_2_product
+  assign gift_2_threshold = settings.reward_gift_2_threshold | plus: 0 | times: 100
 
-  assign gift_3_product = section.settings.reward_gift_3_product
-  assign gift_3_threshold = section.settings.reward_gift_3_threshold | plus: 0 | times: 100
+  assign gift_3_product = settings.reward_gift_3_product
+  assign gift_3_threshold = settings.reward_gift_3_threshold | plus: 0 | times: 100
 
   assign milestones_count = 0
   assign max_threshold = 0
@@ -129,40 +129,32 @@ Renders the cart rewards milestones (spend tracker / progress bar) in the cart d
     <div class="cart-rewards__milestones">
       {%- if shipping_threshold > 0 -%}
         {%- assign milestone_index = milestone_index | plus: 1 -%}
-        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
-        {%- assign label_override = section.settings[label_key] -%}
         <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ shipping_threshold }}" data-type="shipping" data-gift-key="reward-shipping">
-          <span class="cart-rewards__label">{{ label_override | default: shipping_label }}</span>
+          <span class="cart-rewards__label">{{ rewards_label_1 | default: shipping_label }}</span>
           <span class="cart-rewards__status" data-reward-status></span>
         </div>
       {%- endif -%}
 
       {%- if gift_1_product != blank and gift_1_threshold > 0 -%}
         {%- assign milestone_index = milestone_index | plus: 1 -%}
-        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
-        {%- assign label_override = section.settings[label_key] -%}
         <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_1_threshold }}" data-type="gift" data-gift-key="reward-gift-1" data-variant-id="{{ gift_1_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ label_override | default: gift_1_product.title }}</span>
+          <span class="cart-rewards__label">{{ rewards_label_2 | default: gift_1_product.title }}</span>
           <span class="cart-rewards__status" data-reward-status></span>
         </div>
       {%- endif -%}
 
       {%- if gift_2_product != blank and gift_2_threshold > 0 -%}
         {%- assign milestone_index = milestone_index | plus: 1 -%}
-        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
-        {%- assign label_override = section.settings[label_key] -%}
         <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_2_threshold }}" data-type="gift" data-gift-key="reward-gift-2" data-variant-id="{{ gift_2_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ label_override | default: gift_2_product.title }}</span>
+          <span class="cart-rewards__label">{{ rewards_label_3 | default: gift_2_product.title }}</span>
           <span class="cart-rewards__status" data-reward-status></span>
         </div>
       {%- endif -%}
 
       {%- if gift_3_product != blank and gift_3_threshold > 0 -%}
         {%- assign milestone_index = milestone_index | plus: 1 -%}
-        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
-        {%- assign label_override = section.settings[label_key] -%}
         <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_3_threshold }}" data-type="gift" data-gift-key="reward-gift-3" data-variant-id="{{ gift_3_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ label_override | default: gift_3_product.title }}</span>
+          <span class="cart-rewards__label">{{ rewards_label_4 | default: gift_3_product.title }}</span>
           <span class="cart-rewards__status" data-reward-status></span>
         </div>
       {%- endif -%}
