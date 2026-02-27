@@ -54,6 +54,7 @@
         },
         "slide_YA4RDt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-gwp-Desktop2.jpg",
             "image_mobile": "shopify://shop_images/GWP-Hat-Mobile.jpg",
