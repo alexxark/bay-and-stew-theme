@@ -218,6 +218,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._syncTimer = null;
           this._pendingCart = null;
           this._pendingTotal = 0;
+          this._lastSections = null;
         }
 
         connectedCallback() {
@@ -530,55 +531,72 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           }
 
           if (didMutate) {
-            await this._refreshDrawer();
+            /* Use sections already returned by the last add/update call (no extra fetch) */
+            if (this._lastSections) {
+              this._applyDrawerSections(this._lastSections);
+              this._lastSections = null;
+            } else {
+              await this._refreshDrawer();
+            }
           }
         }
 
         async _refreshDrawer() {
           try {
-            /* Re-fetch the cart-drawer section HTML and swap it in */
-            const [drawerResp, bubbleResp] = await Promise.all([
-              fetch(`${Shopify.routes.root}?section_id=cart-drawer`),
-              fetch(`${Shopify.routes.root}?section_id=cart-icon-bubble`)
-            ]);
-
-            const drawerHtml = await drawerResp.text();
-            const bubbleHtml = await bubbleResp.text();
-
-            /* Update cart drawer items + footer */
-            const drawerDoc = new DOMParser().parseFromString(drawerHtml, 'text/html');
-            const selectors = ['cart-drawer-items', '.cart-drawer__footer'];
-            for (const sel of selectors) {
-              const source = drawerDoc.querySelector(sel);
-              const target = document.querySelector(sel);
-              if (source && target) target.replaceWith(source);
-            }
-
-            /* Update cart icon bubble */
-            const bubbleDoc = new DOMParser().parseFromString(bubbleHtml, 'text/html');
-            const bubbleSource = bubbleDoc.querySelector('.shopify-section');
-            const bubbleTarget = document.getElementById('cart-icon-bubble');
-            if (bubbleSource && bubbleTarget) bubbleTarget.innerHTML = bubbleSource.innerHTML;
-
-            /* Fire events so other scripts (BLOY, etc.) can react */
-            document.dispatchEvent(new CustomEvent('cart:refresh'));
-            if (window.__runRewardsLast) window.__runRewardsLast();
+            const sectionsParam = 'cart-drawer,cart-icon-bubble';
+            const resp = await fetch(`${Shopify.routes.root}?sections=${sectionsParam}`);
+            const sections = await resp.json();
+            this._applyDrawerSections(sections);
           } catch (e) {
             console.error('[cart-rewards] drawer refresh failed', e);
           }
         }
 
+        _applyDrawerSections(sections) {
+          try {
+            const drawerHtml = sections['cart-drawer'];
+            const bubbleHtml = sections['cart-icon-bubble'];
+
+            /* Update cart drawer items + footer */
+            if (drawerHtml) {
+              const drawerDoc = new DOMParser().parseFromString(drawerHtml, 'text/html');
+              const selectors = ['cart-drawer-items', '.cart-drawer__footer'];
+              for (const sel of selectors) {
+                const source = drawerDoc.querySelector(sel);
+                const target = document.querySelector(sel);
+                if (source && target) target.replaceWith(source);
+              }
+            }
+
+            /* Update cart icon bubble */
+            if (bubbleHtml) {
+              const bubbleDoc = new DOMParser().parseFromString(bubbleHtml, 'text/html');
+              const bubbleSource = bubbleDoc.querySelector('.shopify-section');
+              const bubbleTarget = document.getElementById('cart-icon-bubble');
+              if (bubbleSource && bubbleTarget) bubbleTarget.innerHTML = bubbleSource.innerHTML;
+            }
+
+            /* Fire events so other scripts (BLOY, etc.) can react */
+            document.dispatchEvent(new CustomEvent('cart:refresh'));
+            if (window.__runRewardsLast) window.__runRewardsLast();
+          } catch (e) {
+            console.error('[cart-rewards] section apply failed', e);
+          }
+        }
+
         async _addGift(variantId, quantity) {
-          await fetch(`${Shopify.routes.root}cart/add.js`, {
+          const resp = await fetch(`${Shopify.routes.root}cart/add.js`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
             body: JSON.stringify({
               id: variantId,
               quantity,
-              properties: { __reward_gift_variant: String(variantId) }
+              properties: { __reward_gift_variant: String(variantId) },
+              sections: 'cart-drawer,cart-icon-bubble'
             })
           });
+          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
 
         async _removeGift(lineKey) {
@@ -600,12 +618,13 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         }
 
         async _updateGifts(updates) {
-          await fetch(`${Shopify.routes.root}cart/update.js`, {
+          const resp = await fetch(`${Shopify.routes.root}cart/update.js`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
-            body: JSON.stringify({ updates })
+            body: JSON.stringify({ updates, sections: 'cart-drawer,cart-icon-bubble' })
           });
+          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
       }
 

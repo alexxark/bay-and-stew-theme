@@ -120,3 +120,33 @@
 .cart-rewards__milestones {
   display: none;
 }
+
+/* ============================================
+   CART – reward gift item row
+   ============================================ */
+
+.cart-item--reward-gift .cart-item__gift-label {
+  font-weight: 700;
+  color: #2e7d32;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 0.4rem;
+}
+
+.cart-item--reward-gift .cart-item__name {
+  pointer-events: none;
+  text-decoration: none;
+  cursor: default;
+}
+
+.cart-item--reward-gift .cart-item__gift-qty {
+  font-size: 1.2rem;
+  color: rgb(var(--color-foreground));
+  opacity: 0.7;
+}
+
+.cart-item--reward-gift .price--end {
+  font-weight: 700;
+  color: #2e7d32;
+}

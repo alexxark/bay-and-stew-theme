@@ -122,6 +122,46 @@
 
                   <tbody role="rowgroup">
                     {%- for item in cart.items -%}
+                      {%- liquid
+                        assign is_reward_gift = false
+                        if item.properties['__reward_gift_variant'] != blank
+                          assign is_reward_gift = true
+                        endif
+                      -%}
+
+                      {%- if is_reward_gift -%}
+                        {%- comment -%} ── Reward gift row (no qty controls, not clickable) ── {%- endcomment -%}
+                        <tr id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item cart-item--reward-gift" role="row" data-cart-item-key="{{ item.key }}">
+                          <td class="cart-item__media" role="cell" headers="CartDrawer-ColumnProductImage">
+                            {% if item.image %}
+                              <img
+                                class="cart-item__image"
+                                src="{{ item.image | image_url: width: 300 }}"
+                                alt="{{ item.image.alt | escape }}"
+                                loading="lazy"
+                                width="150"
+                                height="{{ 150 | divided_by: item.image.aspect_ratio | ceil }}"
+                              >
+                            {% endif %}
+                          </td>
+                          <td class="cart-item__details" role="cell" headers="CartDrawer-ColumnProduct">
+                            <span class="cart-item__name h4 break">
+                              {{- item.product.title | escape -}}
+                            </span>
+                            <div class="product-option cart-item__gift-label">FREE</div>
+                          </td>
+                          <td class="cart-item__totals right" role="cell" headers="CartDrawer-ColumnTotal">
+                            <span class="price price--end">FREE</span>
+                          </td>
+                          <td class="cart-item__quantity" role="cell" headers="CartDrawer-ColumnQuantity">
+                            <div class="cart-item__quantity-wrapper">
+                              <span class="cart-item__gift-qty">Qty: {{ item.quantity }}</span>
+                            </div>
+                          </td>
+                        </tr>
+                        {%- continue -%}
+                      {%- endif -%}
+
                       <tr id="CartDrawer-Item-{{ item.index | plus: 1 }}" class="cart-item" role="row" data-cart-item-key="{{ item.key }}">
                         <td class="cart-item__media" role="cell" headers="CartDrawer-ColumnProductImage">
                           {% if item.image %}
