@@ -4,7 +4,8 @@
 
 .cart-rewards {
   display: block;
-  padding: 1.4rem 2.4rem 1.2rem;
+  padding: 1.4rem 2.4rem 2rem;
+  margin-bottom: 0.8rem;
 }
 
 /* ---------- message ---------- */
@@ -149,4 +150,33 @@
 .cart-item--reward-gift .price--end {
   font-weight: 700;
   color: #2e7d32;
+}
+
+/* ============================================
+   CART PAGE – scaled-up tracker
+   ============================================ */
+
+.cart-rewards--page {
+  padding: 2rem 0 2.4rem;
+  margin-bottom: 1.6rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.cart-rewards--page .cart-rewards__message {
+  font-size: 1.6rem;
+  margin-bottom: 1.4rem;
+}
+
+.cart-rewards--page .cart-rewards__track {
+  height: 6px;
+}
+
+.cart-rewards--page .cart-rewards__marker-icon {
+  width: 3.6rem;
+  height: 3.6rem;
+}
+
+.cart-rewards--page .cart-rewards__endpoint {
+  width: 10px;
+  height: 10px;
 }

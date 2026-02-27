@@ -81,7 +81,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
 {%- if milestones_count > 0 -%}
   <cart-rewards
-    class="cart-rewards"
+    class="cart-rewards{% if page_variant %} cart-rewards--page{% endif %}"
     data-total-price="{{ calculated_total_price }}"
     data-max-threshold="{{ max_threshold }}"
     data-all-unlocked-subtitle="{{ rewards_all_unlocked | escape }}"
@@ -285,13 +285,13 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
         _scheduleGiftSync() {
           if (this._syncTimer) {
-            clearTimeout(this._syncTimer);
+            cancelAnimationFrame(this._syncTimer);
           }
-          this._syncTimer = setTimeout(() => {
+          this._syncTimer = requestAnimationFrame(() => {
             this._syncTimer = null;
             if (!this._pendingCart) return;
             void this._syncGifts(this._pendingCart, this._pendingTotal);
-          }, 50);
+          });
         }
 
         _ensureDrawerItems(cart) {
@@ -548,7 +548,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
         async _refreshDrawer() {
           try {
-            const sectionsParam = 'cart-drawer,cart-icon-bubble';
+            const sectionsParam = 'cart-drawer,cart-icon-bubble,main-cart-items';
             const resp = await fetch(`${Shopify.routes.root}?sections=${sectionsParam}`);
             const sections = await resp.json();
             this._applyDrawerSections(sections);
@@ -561,6 +561,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           try {
             const drawerHtml = sections['cart-drawer'];
             const bubbleHtml = sections['cart-icon-bubble'];
+            const cartPageHtml = sections['main-cart-items'];
 
             /* Update cart drawer items + footer */
             if (drawerHtml) {
@@ -581,6 +582,14 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
               if (bubbleSource && bubbleTarget) bubbleTarget.innerHTML = bubbleSource.innerHTML;
             }
 
+            /* Update cart page items (if on /cart) */
+            if (cartPageHtml) {
+              const cartDoc = new DOMParser().parseFromString(cartPageHtml, 'text/html');
+              const cartSource = cartDoc.querySelector('.js-contents');
+              const cartTarget = document.querySelector('#main-cart-items .js-contents');
+              if (cartSource && cartTarget) cartTarget.innerHTML = cartSource.innerHTML;
+            }
+
             /* Fire events so other scripts (BLOY, etc.) can react */
             document.dispatchEvent(new CustomEvent('cart:refresh'));
             if (window.__runRewardsLast) window.__runRewardsLast();
@@ -598,19 +607,20 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
               id: variantId,
               quantity,
               properties: { __reward_gift_variant: String(variantId) },
-              sections: ['cart-drawer', 'cart-icon-bubble']
+              sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items']
             })
           });
           try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
 
         async _removeGift(lineKey) {
-          await fetch(`${Shopify.routes.root}cart/change.js`, {
+          const resp = await fetch(`${Shopify.routes.root}cart/change.js`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
-            body: JSON.stringify({ id: lineKey, quantity: 0 })
+            body: JSON.stringify({ id: lineKey, quantity: 0, sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items'] })
           });
+          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
 
         async _updateGiftQuantity(lineKey, quantity) {
@@ -627,7 +637,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
-            body: JSON.stringify({ updates, sections: ['cart-drawer', 'cart-icon-bubble'] })
+            body: JSON.stringify({ updates, sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items'] })
           });
           try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
