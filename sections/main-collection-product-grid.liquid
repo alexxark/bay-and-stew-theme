@@ -66,6 +66,68 @@
       padding-bottom: {{ section.settings.padding_bottom }}px;
     }
   }
+
+  /* ===== LOAD MORE BUTTON ===== */
+  .load-more-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin: 3rem 0;
+  }
+
+  #load-more-btn {
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  #load-more-btn:focus-visible {
+    outline: 3px solid currentColor;
+    outline-offset: 2px;
+  }
+
+  #load-more-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  /* Loading spinner */
+  .load-more-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    border-top-color: currentColor;
+    animation: load-more-spin 0.8s linear infinite;
+  }
+
+  @keyframes load-more-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* Fade-in for newly loaded products */
+  .load-more-fade-in {
+    animation: loadMoreFadeIn 0.5s ease-in;
+  }
+
+  @keyframes loadMoreFadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Screen reader only */
+  .load-more-sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
 {%- endstyle -%}
 
 <div class="section-{{ section.id }}-padding gradient color-{{ section.settings.color_scheme }}">
@@ -214,8 +276,21 @@
               {%- endfor -%}
             </ul>
 
-            {%- if paginate.pages > 1 -%}
-              {% render 'pagination', paginate: paginate, anchor: '' %}
+            {%- comment -%} Load More button replaces standard pagination {%- endcomment -%}
+            {%- if paginate.next -%}
+              <div class="load-more-container" id="load-more-wrapper">
+                <button
+                  id="load-more-btn"
+                  class="button"
+                  type="button"
+                  data-next-url="{{ paginate.next.url }}"
+                  aria-label="Load more products in the {{ collection.title }} collection"
+                  aria-busy="false"
+                >
+                  {{ 'sections.collection_template.load_more' | t | default: 'Load More Products' }}
+                </button>
+                <div id="loading-spinner" class="load-more-spinner" style="display: none;" aria-hidden="true"></div>
+              </div>
             {%- endif -%}
           </div>
         {%- endif -%}
@@ -227,6 +302,105 @@
   {%- endif -%}
 </div>
 {%- endif -%}
+
+{%- comment -%}
+  ================================================================
+  LOAD MORE JAVASCRIPT
+  Fetches the next page and appends product cards to the grid.
+  ADA compliant with screen reader announcements.
+  ================================================================
+{%- endcomment -%}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const loadMoreBtn = document.getElementById('load-more-btn');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    const loadMoreWrapper = document.getElementById('load-more-wrapper');
+    const productGrid = document.getElementById('product-grid');
+
+    if (!loadMoreBtn || !productGrid) return;
+
+    loadMoreBtn.addEventListener('click', handleLoadMore);
+
+    function handleLoadMore(e) {
+      e.preventDefault();
+
+      // Disable button and show spinner
+      loadMoreBtn.disabled = true;
+      loadMoreBtn.setAttribute('aria-busy', 'true');
+      loadingSpinner.style.display = 'inline-block';
+
+      const nextUrl = loadMoreBtn.dataset.nextUrl;
+
+      fetch(nextUrl)
+        .then(function (response) {
+          return response.text();
+        })
+        .then(function (html) {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+
+          // Get new product list items from the fetched page
+          const newItems = doc.querySelectorAll('#product-grid > li');
+
+          if (newItems.length > 0) {
+            newItems.forEach(function (item, index) {
+              const cloned = item.cloneNode(true);
+
+              // Add fade-in animation class
+              cloned.classList.add('load-more-fade-in');
+
+              // Stagger the animation slightly for each product
+              cloned.style.animationDelay = (index * 0.05) + 's';
+
+              // Make sure reveal animations show immediately
+              cloned.style.opacity = '1';
+              cloned.style.transform = 'translateY(0px)';
+              cloned.classList.remove('scroll-trigger');
+
+              productGrid.appendChild(cloned);
+            });
+
+            announceToScreenReader(newItems.length + ' new products loaded');
+          }
+
+          // Check if there's another page to load
+          const newLoadMoreBtn = doc.querySelector('#load-more-btn');
+          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl) {
+            loadMoreBtn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
+            loadMoreBtn.disabled = false;
+            loadMoreBtn.setAttribute('aria-busy', 'false');
+            loadingSpinner.style.display = 'none';
+          } else {
+            // No more pages — hide the button
+            loadMoreWrapper.style.display = 'none';
+            loadingSpinner.style.display = 'none';
+          }
+        })
+        .catch(function (error) {
+          console.error('Load more error:', error);
+          loadMoreBtn.disabled = false;
+          loadMoreBtn.setAttribute('aria-busy', 'false');
+          loadingSpinner.style.display = 'none';
+        });
+    }
+
+    function announceToScreenReader(message) {
+      var announcer = document.getElementById('load-more-announcer');
+      if (!announcer) {
+        announcer = document.createElement('div');
+        announcer.id = 'load-more-announcer';
+        announcer.className = 'load-more-sr-only';
+        announcer.setAttribute('role', 'status');
+        announcer.setAttribute('aria-live', 'polite');
+        document.body.appendChild(announcer);
+      }
+      announcer.textContent = '';
+      setTimeout(function () {
+        announcer.textContent = message;
+      }, 100);
+    }
+  });
+</script>
 
 {% schema %}
 {
