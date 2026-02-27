@@ -155,7 +155,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           data-type="{{ r1_type }}"
           data-message="{{ r1_message | escape }}"
           data-gift-key="reward-1"
-          {%- if r1_type == 'gift' and r1_product != blank %} data-variant-id="{{ r1_product.selected_or_first_available_variant.id }}"{% endif -%}
+          {%- if r1_type == 'gift' and r1_product != blank %} data-variant-id="{{ r1_product.selected_or_first_available_variant.id }}" data-product-title="{{ r1_product.title | escape }}" data-product-image="{{ r1_product.featured_image | image_url: width: 300 }}"{% endif -%}
         >
           <span class="cart-rewards__label">{{ r1_label }}</span>
         </div>
@@ -167,7 +167,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           data-type="{{ r2_type }}"
           data-message="{{ r2_message | escape }}"
           data-gift-key="reward-2"
-          {%- if r2_type == 'gift' and r2_product != blank %} data-variant-id="{{ r2_product.selected_or_first_available_variant.id }}"{% endif -%}
+          {%- if r2_type == 'gift' and r2_product != blank %} data-variant-id="{{ r2_product.selected_or_first_available_variant.id }}" data-product-title="{{ r2_product.title | escape }}" data-product-image="{{ r2_product.featured_image | image_url: width: 300 }}"{% endif -%}
         >
           <span class="cart-rewards__label">{{ r2_label }}</span>
         </div>
@@ -179,7 +179,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           data-type="{{ r3_type }}"
           data-message="{{ r3_message | escape }}"
           data-gift-key="reward-3"
-          {%- if r3_type == 'gift' and r3_product != blank %} data-variant-id="{{ r3_product.selected_or_first_available_variant.id }}"{% endif -%}
+          {%- if r3_type == 'gift' and r3_product != blank %} data-variant-id="{{ r3_product.selected_or_first_available_variant.id }}" data-product-title="{{ r3_product.title | escape }}" data-product-image="{{ r3_product.featured_image | image_url: width: 300 }}"{% endif -%}
         >
           <span class="cart-rewards__label">{{ r3_label }}</span>
         </div>
@@ -191,7 +191,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           data-type="{{ r4_type }}"
           data-message="{{ r4_message | escape }}"
           data-gift-key="reward-4"
-          {%- if r4_type == 'gift' and r4_product != blank %} data-variant-id="{{ r4_product.selected_or_first_available_variant.id }}"{% endif -%}
+          {%- if r4_type == 'gift' and r4_product != blank %} data-variant-id="{{ r4_product.selected_or_first_available_variant.id }}" data-product-title="{{ r4_product.title | escape }}" data-product-image="{{ r4_product.featured_image | image_url: width: 300 }}"{% endif -%}
         >
           <span class="cart-rewards__label">{{ r4_label }}</span>
         </div>
@@ -329,10 +329,13 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         _hideOrShowGiftRows(total) {
           /* Instantly hide gift rows whose threshold is no longer met (prevents
              the flash-then-remove when Dawn's section render runs before our
-             _syncGifts call removes the item via the API). */
+             _syncGifts call removes the item via the API).
+             ALSO instantly inject placeholder rows for gifts that should be
+             visible but haven't been added to the cart yet (prevents the
+             delayed-appearance when the API add roundtrip is still in-flight). */
 
-          /* Build a map  variantId → shouldBeVisible  from milestone data */
-          const allowed = new Map();
+          /* Build a map  variantId → { shouldShow, title, image }  from milestone data */
+          const desired = new Map();
           const milestones = this.querySelectorAll('[data-reward-milestone][data-type="gift"]');
           for (const m of milestones) {
             const vid = m.dataset.variantId;
@@ -340,17 +343,93 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             const threshold = parseInt(m.dataset.threshold || '0', 10);
             const show = !this._isExcluded && total >= threshold;
             /* If multiple milestones share a variant keep the most permissive */
-            if (!allowed.has(vid) || show) allowed.set(vid, show);
+            if (!desired.has(vid) || show) {
+              desired.set(vid, {
+                shouldShow: show,
+                title: m.dataset.productTitle || '',
+                image: m.dataset.productImage || ''
+              });
+            }
           }
+
+          /* Track which desired gifts already have a real row */
+          const presentVids = new Set();
 
           /* Walk every gift row in BOTH drawer and cart page */
           document.querySelectorAll('.cart-item--reward-gift').forEach((row) => {
             const key = row.dataset.cartItemKey || '';
-            /* Shopify key format: {variant_id}:{hash} */
+            /* Shopify key format: {variant_id}:{hash} — placeholder rows use just the vid */
             const vid = key.split(':')[0];
-            const shouldShow = allowed.get(vid) ?? false;
+            const entry = desired.get(vid);
+            const shouldShow = entry?.shouldShow ?? false;
             row.style.display = shouldShow ? '' : 'none';
+            if (shouldShow) presentVids.add(vid);
           });
+
+          /* Inject placeholder rows for gifts that should be visible but aren't in the DOM */
+          /* First remove any stale placeholders from a previous pass */
+          document.querySelectorAll('.cart-item--reward-placeholder').forEach((p) => p.remove());
+
+          for (const [vid, entry] of desired.entries()) {
+            if (!entry.shouldShow || presentVids.has(vid)) continue;
+
+            /* Find all <tbody> elements that hold cart items (drawer + cart page) */
+            const tbodies = document.querySelectorAll(
+              'cart-drawer-items tbody, #main-cart-items tbody'
+            );
+
+            for (const tbody of tbodies) {
+              const isCartPage = tbody.closest('#main-cart-items') !== null;
+              const placeholder = this._buildGiftPlaceholderRow(vid, entry, isCartPage);
+              tbody.appendChild(placeholder);
+            }
+          }
+        }
+
+        _buildGiftPlaceholderRow(variantId, { title, image }, isCartPage) {
+          const tr = document.createElement('tr');
+          tr.className = 'cart-item cart-item--reward-gift cart-item--reward-placeholder';
+          tr.dataset.cartItemKey = variantId;
+          tr.setAttribute('role', 'row');
+
+          const imgHtml = image
+            ? `<img class="cart-item__image" src="${image}" alt="${title}" loading="lazy" width="150">`
+            : '';
+
+          if (isCartPage) {
+            tr.innerHTML = `
+              <td class="cart-item__media">
+                ${image ? `<div class="cart-item__image-container gradient global-media-settings">${imgHtml}</div>` : ''}
+              </td>
+              <td class="cart-item__details">
+                <span class="cart-item__name h4 break">${title}</span>
+                <div class="product-option cart-item__gift-label">FREE</div>
+              </td>
+              <td class="cart-item__totals right medium-hide large-up-hide"></td>
+              <td class="cart-item__quantity">
+                <div class="cart-item__quantity-wrapper">
+                  <span class="cart-item__gift-qty">Qty: 1</span>
+                </div>
+              </td>
+              <td class="cart-item__totals right small-hide"></td>`;
+          } else {
+            tr.innerHTML = `
+              <td class="cart-item__media" role="cell">
+                ${imgHtml}
+              </td>
+              <td class="cart-item__details" role="cell">
+                <span class="cart-item__name h4 break">${title}</span>
+                <div class="product-option cart-item__gift-label">FREE</div>
+              </td>
+              <td class="cart-item__totals right" role="cell"></td>
+              <td class="cart-item__quantity" role="cell">
+                <div class="cart-item__quantity-wrapper">
+                  <span class="cart-item__gift-qty">Qty: 1</span>
+                </div>
+              </td>`;
+          }
+
+          return tr;
         }
 
         async _updateExclusion(cart) {
