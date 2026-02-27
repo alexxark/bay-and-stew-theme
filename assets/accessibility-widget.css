@@ -27,7 +27,7 @@
   top: 16px;
   right: 16px;
   left: auto;
-  z-index: 99999;
+  z-index: 2147483647;
   box-shadow:
     0 4px 6px rgba(0, 0, 0, 0.04),
     0 10px 24px rgba(0, 0, 0, 0.10),
@@ -68,6 +68,7 @@
   font-weight: 700;
   margin: 0;
   letter-spacing: -0.01em;
+  color: #ffffff !important;
 }
 .a11y-panel__close {
   background: #ffffff;
@@ -263,6 +264,16 @@
 .a11y-card--tts {
   grid-template-columns: 1fr;
   gap: 10px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+}
+.a11y-card--tts:hover {
+  background: transparent;
+  box-shadow: none;
+}
+.a11y-card--tts:active {
+  transform: none;
 }
 .a11y-card__content {
   display: flex;
