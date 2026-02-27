@@ -1540,14 +1540,12 @@
       {
         "type": "text",
         "id": "reward_2_threshold",
-        "label": "Milestone 2 threshold ($)",
-        "default": ""
+        "label": "Milestone 2 threshold ($)"
       },
       {
         "type": "text",
         "id": "reward_2_label",
-        "label": "Milestone 2 label",
-        "default": ""
+        "label": "Milestone 2 label"
       },
       {
         "type": "text",
@@ -1579,14 +1577,12 @@
       {
         "type": "text",
         "id": "reward_3_threshold",
-        "label": "Milestone 3 threshold ($)",
-        "default": ""
+        "label": "Milestone 3 threshold ($)"
       },
       {
         "type": "text",
         "id": "reward_3_label",
-        "label": "Milestone 3 label",
-        "default": ""
+        "label": "Milestone 3 label"
       },
       {
         "type": "text",
@@ -1618,14 +1614,12 @@
       {
         "type": "text",
         "id": "reward_4_threshold",
-        "label": "Milestone 4 threshold ($)",
-        "default": ""
+        "label": "Milestone 4 threshold ($)"
       },
       {
         "type": "text",
         "id": "reward_4_label",
-        "label": "Milestone 4 label",
-        "default": ""
+        "label": "Milestone 4 label"
       },
       {
         "type": "text",
