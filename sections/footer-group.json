@@ -1,1 +1,72 @@
-{"name":"t:sections.footer.name","type":"footer","sections":{"footer":{"type":"footer","blocks":{"c2ce6898-247b-4541-a186-6a80cac7a000":{"type":"link_list","settings":{"heading":"Info","menu":"footer"}}},"block_order":["c2ce6898-247b-4541-a186-6a80cac7a000"],"custom_css":[],"settings":{"color_scheme":"background-1","newsletter_enable":true,"newsletter_heading":"Subscribe to our emails","enable_follow_on_shop":false,"show_social":true,"enable_country_selector":true,"enable_language_selector":true,"payment_enable":true,"show_policy":false,"margin_top":48,"padding_top":36,"padding_bottom":36}}},"order":["footer"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "name": "t:sections.footer.name",
+  "type": "footer",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "link_list_cxfXBL": {
+          "type": "link_list",
+          "settings": {
+            "heading": "SHOP & PROGRAMS",
+            "menu": "footer-menu-shop-programs"
+          }
+        },
+        "link_list_rqDAHy": {
+          "type": "link_list",
+          "settings": {
+            "heading": "RESOURCES",
+            "menu": "footer-menu-resources"
+          }
+        },
+        "link_list_6px4Xq": {
+          "type": "link_list",
+          "settings": {
+            "heading": "SUPPORT",
+            "menu": "footer-menu-support"
+          }
+        },
+        "c2ce6898-247b-4541-a186-6a80cac7a000": {
+          "type": "link_list",
+          "settings": {
+            "heading": "ABOUT",
+            "menu": "footer-menu-about"
+          }
+        }
+      },
+      "block_order": [
+        "link_list_cxfXBL",
+        "link_list_rqDAHy",
+        "link_list_6px4Xq",
+        "c2ce6898-247b-4541-a186-6a80cac7a000"
+      ],
+      "custom_css": [],
+      "settings": {
+        "color_scheme": "background-1",
+        "newsletter_enable": true,
+        "newsletter_heading": "Subscribe to our emails",
+        "enable_follow_on_shop": false,
+        "show_social": true,
+        "enable_country_selector": true,
+        "enable_language_selector": true,
+        "payment_enable": true,
+        "show_policy": false,
+        "margin_top": 48,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}
