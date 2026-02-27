@@ -1,0 +1,586 @@
+{%- comment -%}
+----------------------------------------------------------------------------------------------------------------------
+CART REWARDS
+----------------------------------------------------------------------------------------------------------------------
+Renders the cart rewards milestones in the cart drawer.
+{%- endcomment -%}
+
+{%- liquid
+  assign calculated_total_price = 0
+
+  for line_item in cart.items
+    if line_item.requires_shipping
+      assign calculated_total_price = calculated_total_price | plus: line_item.final_line_price
+    endif
+  endfor
+
+  assign total_cart_discount = 0
+
+  for discount_application in cart.cart_level_discount_applications
+    assign total_cart_discount = total_cart_discount | plus: discount_application.total_allocated_amount
+  endfor
+
+  assign calculated_total_price = calculated_total_price | minus: total_cart_discount
+
+  assign shipping_threshold = section.settings.rewards_free_shipping_threshold | default: '75' | plus: 0 | times: 100
+  assign shipping_icon = section.settings.rewards_shipping_icon | default: 'picto-delivery-truck'
+  assign shipping_label = section.settings.rewards_shipping_label | default: 'Free Shipping'
+  assign rewards_all_unlocked_subtitle = section.settings.rewards_all_unlocked_subtitle | default: 'You have got [nearest_reward]'
+  assign rewards_title_before_1 = section.settings.rewards_title_before_1 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_2 = section.settings.rewards_title_before_2 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_3 = section.settings.rewards_title_before_3 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_title_before_4 = section.settings.rewards_title_before_4 | default: 'Spend [amount_left] more to receive [reward]!'
+
+  assign rewards_label_1 = section.settings.rewards_label_1
+  assign rewards_label_2 = section.settings.rewards_label_2
+  assign rewards_label_3 = section.settings.rewards_label_3
+  assign rewards_label_4 = section.settings.rewards_label_4
+
+  assign gift_1_product = section.settings.reward_gift_1_product
+  assign gift_1_threshold = section.settings.reward_gift_1_threshold | plus: 0 | times: 100
+  assign gift_1_icon = section.settings.reward_gift_1_icon | default: 'picto-gift'
+
+  assign gift_2_product = section.settings.reward_gift_2_product
+  assign gift_2_threshold = section.settings.reward_gift_2_threshold | plus: 0 | times: 100
+  assign gift_2_icon = section.settings.reward_gift_2_icon | default: 'picto-gift'
+
+  assign gift_3_product = section.settings.reward_gift_3_product
+  assign gift_3_threshold = section.settings.reward_gift_3_threshold | plus: 0 | times: 100
+  assign gift_3_icon = section.settings.reward_gift_3_icon | default: 'picto-gift'
+
+  assign milestones_count = 0
+  assign max_threshold = 0
+
+  if shipping_threshold > 0
+    assign milestones_count = milestones_count | plus: 1
+    assign max_threshold = shipping_threshold
+  endif
+
+  if gift_1_product != blank and gift_1_threshold > 0
+    assign milestones_count = milestones_count | plus: 1
+    if gift_1_threshold > max_threshold
+      assign max_threshold = gift_1_threshold
+    endif
+  endif
+
+  if gift_2_product != blank and gift_2_threshold > 0
+    assign milestones_count = milestones_count | plus: 1
+    if gift_2_threshold > max_threshold
+      assign max_threshold = gift_2_threshold
+    endif
+  endif
+
+  if gift_3_product != blank and gift_3_threshold > 0
+    assign milestones_count = milestones_count | plus: 1
+    if gift_3_threshold > max_threshold
+      assign max_threshold = gift_3_threshold
+    endif
+  endif
+-%}
+
+{%- if milestones_count > 0 -%}
+  <cart-rewards class="rewards cart-rewards" data-total-price="{{ calculated_total_price }}" data-max-threshold="{{ max_threshold }}" data-all-unlocked-subtitle="{{ rewards_all_unlocked_subtitle | escape }}" data-title-1="{{ rewards_title_before_1 | escape }}" data-title-2="{{ rewards_title_before_2 | escape }}" data-title-3="{{ rewards_title_before_3 | escape }}" data-title-4="{{ rewards_title_before_4 | escape }}">
+    <div class="cart-rewards__message" data-rewards-message></div>
+
+    <div class="cart-rewards__bar-row">
+      <div class="cart-rewards__progress" style="--progress: 0%;">
+        <span class="cart-rewards__fill"></span>
+        <div class="cart-rewards__markers">
+          {%- if shipping_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ shipping_threshold }}">
+              <span class="cart-rewards__marker-icon">
+                {%- render 'icon' with shipping_icon, width: 12 -%}
+              </span>
+            </span>
+          {%- endif -%}
+          {%- if gift_1_product != blank and gift_1_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_1_threshold }}">
+              <span class="cart-rewards__marker-icon">
+                {%- render 'icon' with gift_1_icon, width: 12 -%}
+              </span>
+            </span>
+          {%- endif -%}
+          {%- if gift_2_product != blank and gift_2_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_2_threshold }}">
+              <span class="cart-rewards__marker-icon">
+                {%- render 'icon' with gift_2_icon, width: 12 -%}
+              </span>
+            </span>
+          {%- endif -%}
+          {%- if gift_3_product != blank and gift_3_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_3_threshold }}">
+              <span class="cart-rewards__marker-icon">
+                {%- render 'icon' with gift_3_icon, width: 12 -%}
+              </span>
+            </span>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- if section.settings.show_rewards_badge -%}
+        <div class="cart-rewards__badge" aria-hidden="true">
+          <span class="cart-rewards__badge-inner">
+            {%- render 'icon' with 'picto-award-gift', width: 20 -%}
+          </span>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="cart-rewards__next" data-rewards-next></div>
+
+    {%- assign milestone_index = 0 -%}
+    <div class="cart-rewards__milestones">
+      {%- if shipping_threshold > 0 -%}
+        {%- assign milestone_index = milestone_index | plus: 1 -%}
+        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
+        {%- assign label_override = section.settings[label_key] -%}
+        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ shipping_threshold }}" data-type="shipping" data-gift-key="reward-shipping">
+          <span class="cart-rewards__label">{{ label_override | default: shipping_label }}</span>
+          <span class="cart-rewards__status" data-reward-status></span>
+        </div>
+      {%- endif -%}
+
+      {%- if gift_1_product != blank and gift_1_threshold > 0 -%}
+        {%- assign milestone_index = milestone_index | plus: 1 -%}
+        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
+        {%- assign label_override = section.settings[label_key] -%}
+        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_1_threshold }}" data-type="gift" data-gift-key="reward-gift-1" data-variant-id="{{ gift_1_product.selected_or_first_available_variant.id }}">
+          <span class="cart-rewards__label">{{ label_override | default: gift_1_product.title }}</span>
+          <span class="cart-rewards__status" data-reward-status></span>
+        </div>
+      {%- endif -%}
+
+      {%- if gift_2_product != blank and gift_2_threshold > 0 -%}
+        {%- assign milestone_index = milestone_index | plus: 1 -%}
+        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
+        {%- assign label_override = section.settings[label_key] -%}
+        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_2_threshold }}" data-type="gift" data-gift-key="reward-gift-2" data-variant-id="{{ gift_2_product.selected_or_first_available_variant.id }}">
+          <span class="cart-rewards__label">{{ label_override | default: gift_2_product.title }}</span>
+          <span class="cart-rewards__status" data-reward-status></span>
+        </div>
+      {%- endif -%}
+
+      {%- if gift_3_product != blank and gift_3_threshold > 0 -%}
+        {%- assign milestone_index = milestone_index | plus: 1 -%}
+        {%- assign label_key = 'rewards_label_' | append: milestone_index -%}
+        {%- assign label_override = section.settings[label_key] -%}
+        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_3_threshold }}" data-type="gift" data-gift-key="reward-gift-3" data-variant-id="{{ gift_3_product.selected_or_first_available_variant.id }}">
+          <span class="cart-rewards__label">{{ label_override | default: gift_3_product.title }}</span>
+          <span class="cart-rewards__status" data-reward-status></span>
+        </div>
+      {%- endif -%}
+    </div>
+  </cart-rewards>
+
+  <script>
+    if (!window.customElements.get('cart-rewards')) {
+      class CartRewards extends HTMLElement {
+        constructor() {
+          super();
+          this._onCartChange = this._onCartChange.bind(this);
+          this._onCartRefresh = this._onCartRefresh.bind(this);
+          this._currencyFormatter = new Intl.NumberFormat(Shopify.locale, {
+            style: 'currency',
+            currency: Shopify.currency.active
+          });
+          this._giftSyncInProgress = false;
+          this._pendingGiftAdds = new Set();
+          this._tagCache = new Map();
+          this._isExcluded = false;
+          this._refreshFallbackTriggered = false;
+          this._syncTimer = null;
+          this._pendingCart = null;
+          this._pendingTotal = 0;
+        }
+
+        connectedCallback() {
+          document.addEventListener('cart:change', this._onCartChange);
+          document.addEventListener('cart:refresh', this._onCartRefresh);
+          this._bootstrap();
+        }
+
+        disconnectedCallback() {
+          document.removeEventListener('cart:change', this._onCartChange);
+          document.removeEventListener('cart:refresh', this._onCartRefresh);
+        }
+
+        async _bootstrap() {
+          const cart = await this._fetchCart();
+          void this._updateFromCart(cart);
+        }
+
+        async _onCartRefresh() {
+          const cart = await this._fetchCart();
+          void this._updateFromCart(cart);
+        }
+
+        _onCartChange(event) {
+          if (!event.detail || !event.detail.cart) return;
+          void this._updateFromCart(event.detail.cart);
+        }
+
+        async _fetchCart() {
+          const response = await fetch(`${Shopify.routes.root}cart.js`, { credentials: 'same-origin' });
+          return response.json();
+        }
+
+        _calculateTotal(cart) {
+          const priceForItems = (cart.items || [])
+            .filter((item) => item.requires_shipping)
+            .reduce((sum, item) => sum + item.final_line_price, 0);
+          const cartDiscount = (cart.cart_level_discount_applications || [])
+            .reduce((sum, discountAllocation) => sum + discountAllocation.total_allocated_amount, 0);
+          return priceForItems - cartDiscount;
+        }
+
+        _formatMoney(cents) {
+          return this._currencyFormatter.format(cents / 100);
+        }
+
+        async _updateFromCart(cart) {
+          const total = this._calculateTotal(cart);
+          this.dataset.totalPrice = total;
+          this._updateProgress(total);
+          this._updateMilestones(total);
+          this._clearPendingGifts(cart.items || []);
+          await this._updateExclusion(cart);
+          this._pendingCart = cart;
+          this._pendingTotal = total;
+          this._scheduleGiftSync();
+          this._ensureDrawerItems(cart);
+        }
+
+        _scheduleGiftSync() {
+          if (this._syncTimer) {
+            clearTimeout(this._syncTimer);
+          }
+
+          this._syncTimer = setTimeout(() => {
+            this._syncTimer = null;
+            if (!this._pendingCart) return;
+            void this._syncGifts(this._pendingCart, this._pendingTotal);
+          }, 250);
+        }
+
+        _ensureDrawerItems(cart) {
+          const drawer = this.closest('cart-drawer');
+          if (!drawer) return;
+
+          const itemsContainer = drawer.querySelector('.cart-drawer__items');
+          if (!itemsContainer) return;
+
+          const hasItems = itemsContainer.querySelectorAll('.line-item').length > 0;
+          const shouldHaveItems = (cart.item_count || 0) > 0;
+
+          if (shouldHaveItems && !hasItems && !this._refreshFallbackTriggered) {
+            this._refreshFallbackTriggered = true;
+            document.dispatchEvent(new CustomEvent('cart:refresh'));
+          } else if (hasItems) {
+            this._refreshFallbackTriggered = false;
+          }
+        }
+
+        async _updateExclusion(cart) {
+          const items = cart.items || [];
+          let hasExcluded = false;
+
+          for (const item of items) {
+            if (!item.handle) continue;
+            const tags = await this._fetchProductTags(item.handle);
+            if (tags.includes('exclude_rewards')) {
+              hasExcluded = true;
+              break;
+            }
+          }
+
+          this._isExcluded = hasExcluded;
+          document.documentElement.classList.toggle('has-exclude-rewards', hasExcluded);
+
+          if (!hasExcluded) return;
+
+          for (const item of items) {
+            const properties = item.properties || {};
+            if (properties.__reward_gift_variant || properties.__reward_gift) {
+              await this._removeGift(item.key);
+            }
+          }
+        }
+
+        async _fetchProductTags(handle) {
+          if (!handle) return [];
+          if (this._tagCache.has(handle)) return this._tagCache.get(handle);
+
+          const cacheKey = `tags_${handle}`;
+          const cached = sessionStorage.getItem(cacheKey);
+          if (cached) {
+            const tags = JSON.parse(cached);
+            this._tagCache.set(handle, tags);
+            return tags;
+          }
+
+          const response = await fetch(`/products/${handle}.js`, { credentials: 'same-origin' });
+          if (!response.ok) return [];
+
+          const data = await response.json();
+          const tags = String(data.tags || '')
+            .split(',')
+            .map((tag) => tag.trim().toLowerCase())
+            .filter(Boolean);
+
+          sessionStorage.setItem(cacheKey, JSON.stringify(tags));
+          this._tagCache.set(handle, tags);
+          return tags;
+        }
+
+        _updateProgress(total) {
+          const maxThreshold = parseInt(this.dataset.maxThreshold || '0', 10);
+          const progress = maxThreshold > 0 ? Math.min(total / maxThreshold, 1) : 0;
+          this.style.setProperty('--progress', `${Math.round(progress * 100)}%`);
+          this.style.setProperty('--progress-scale', progress);
+        }
+
+        _updateMilestones(total) {
+          const milestoneElements = Array.from(this.querySelectorAll('[data-reward-milestone]'));
+          const markers = Array.from(this.querySelectorAll('[data-reward-marker]'));
+          const message = this.querySelector('[data-rewards-message]');
+          const nextLine = this.querySelector('[data-rewards-next]');
+          const maxThreshold = parseInt(this.dataset.maxThreshold || '0', 10);
+          const unlockedSubtitle = this.dataset.allUnlockedSubtitle || 'You have got [nearest_reward]';
+          const titleTemplates = [
+            this.dataset.title1,
+            this.dataset.title2,
+            this.dataset.title3,
+            this.dataset.title4
+          ].filter((value) => value !== undefined);
+
+          const milestones = milestoneElements
+            .map((milestone) => {
+              const threshold = parseInt(milestone.dataset.threshold || '0', 10);
+              const label = milestone.querySelector('.cart-rewards__label')?.textContent?.trim() || 'reward';
+              return { element: milestone, threshold, label };
+            })
+            .filter((milestone) => milestone.threshold > 0)
+            .sort((a, b) => a.threshold - b.threshold)
+            .map((milestone, index) => ({ ...milestone, order: index + 1 }));
+
+          milestones.forEach((milestone) => {
+            const reached = total >= milestone.threshold;
+            const status = milestone.element.querySelector('[data-reward-status]');
+
+            milestone.element.classList.toggle('is-reached', reached);
+
+            if (status) {
+              if (reached) {
+                status.textContent = 'Unlocked';
+              } else {
+                const remaining = Math.max(milestone.threshold - total, 0);
+                status.textContent = `Spend ${this._formatMoney(remaining)} to unlock ${milestone.label}`;
+              }
+            }
+          });
+
+          markers.forEach((marker) => {
+            const threshold = parseInt(marker.dataset.threshold || '0', 10);
+            const reached = threshold > 0 && total >= threshold;
+
+            marker.classList.toggle('is-reached', reached);
+            if (maxThreshold > 0) {
+              const left = Math.min(threshold / maxThreshold, 1) * 100;
+              marker.style.left = `${left}%`;
+            }
+          });
+
+          const nextMilestone = milestones.find((milestone) => total < milestone.threshold);
+
+          if (nextMilestone) {
+            const remaining = Math.max(nextMilestone.threshold - total, 0);
+            const template = titleTemplates[nextMilestone.order - 1] || 'Spend [amount_left] more to receive [reward]!';
+            const tokens = {
+              amount: this._formatMoney(remaining),
+              amount_left: this._formatMoney(remaining),
+              reward: nextMilestone.label,
+              nearest_reward: nextMilestone.label
+            };
+            if (message) {
+              message.textContent = this._formatTemplate(template, tokens);
+            }
+            if (nextLine) {
+              nextLine.textContent = '';
+            }
+          } else {
+            const lastReward = milestones.length ? milestones[milestones.length - 1].label : 'reward';
+            const tokens = {
+              reward: lastReward,
+              nearest_reward: lastReward
+            };
+            if (message) {
+              message.textContent = this._formatTemplate(unlockedSubtitle, tokens);
+            }
+            if (nextLine) {
+              nextLine.textContent = '';
+            }
+          }
+        }
+
+        _formatTemplate(template, tokens) {
+          let output = String(template);
+          Object.keys(tokens).forEach((key) => {
+            const value = tokens[key];
+            output = output
+              .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g'), value)
+              .replace(new RegExp(`\\[\\[\\s*${key}\\s*\\]\\]`, 'g'), value)
+              .replace(new RegExp(`\\[\\s*${key}\\s*\\]`, 'g'), value)
+              .replace(new RegExp(`\\{\\s*${key}\\s*\\}`, 'g'), value);
+          });
+          return output;
+        }
+
+        _clearPendingGifts(cartItems) {
+          const cartGiftVariants = new Set(
+            cartItems
+              .map((item) => {
+                if (!item.properties) return null;
+                return item.properties.__reward_gift_variant || null;
+              })
+              .filter(Boolean)
+          );
+
+          this._pendingGiftAdds.forEach((variantId) => {
+            if (cartGiftVariants.has(String(variantId))) {
+              this._pendingGiftAdds.delete(variantId);
+            }
+          });
+        }
+
+        async _syncGifts(cart, total) {
+          if (this._giftSyncInProgress || window.__cartRewardsSyncBusy) return;
+
+          const isExcluded = this._isExcluded;
+          const milestones = Array.from(this.querySelectorAll('[data-reward-milestone][data-type="gift"]'))
+            .filter((milestone) => milestone.dataset.variantId);
+          const cartItems = cart.items || [];
+
+          if (!milestones.length) return;
+
+          this._giftSyncInProgress = true;
+          window.__cartRewardsSyncBusy = true;
+          let didMutate = false;
+
+          try {
+            const desiredQuantities = new Map();
+            const updates = {};
+
+            for (const milestone of milestones) {
+              const threshold = parseInt(milestone.dataset.threshold || '0', 10);
+              const variantId = String(milestone.dataset.variantId);
+              const shouldHaveGift = !isExcluded && total >= threshold;
+
+              if (!desiredQuantities.has(variantId)) {
+                desiredQuantities.set(variantId, 0);
+              }
+
+              if (shouldHaveGift) {
+                desiredQuantities.set(variantId, desiredQuantities.get(variantId) + 1);
+              }
+            }
+
+            for (const [variantId, desiredQty] of desiredQuantities.entries()) {
+              const giftItems = cartItems.filter((item) => {
+                if (!item.properties) return false;
+                if (item.properties.__reward_gift_variant) {
+                  return String(item.properties.__reward_gift_variant) === variantId;
+                }
+                return Boolean(item.properties.__reward_gift) && String(item.variant_id) === variantId;
+              });
+
+              if (desiredQty <= 0) {
+                for (const item of giftItems) {
+                  updates[item.key] = 0;
+                }
+                this._pendingGiftAdds.delete(variantId);
+                continue;
+              }
+
+              if (giftItems.length === 0) {
+                if (this._pendingGiftAdds.has(variantId)) {
+                  continue;
+                }
+
+                this._pendingGiftAdds.add(variantId);
+                await this._addGift(variantId, desiredQty);
+                didMutate = true;
+                continue;
+              }
+
+              const primaryItem = giftItems[0];
+              const totalQty = giftItems.reduce((sum, item) => sum + item.quantity, 0);
+
+              if (totalQty !== desiredQty || giftItems.length > 1) {
+                updates[primaryItem.key] = desiredQty;
+                for (const extraItem of giftItems.slice(1)) {
+                  updates[extraItem.key] = 0;
+                }
+              }
+            }
+
+            if (Object.keys(updates).length > 0) {
+              await this._updateGifts(updates);
+              didMutate = true;
+            }
+          } finally {
+            this._giftSyncInProgress = false;
+            window.__cartRewardsSyncBusy = false;
+          }
+
+          if (didMutate) {
+            setTimeout(() => {
+              document.dispatchEvent(new CustomEvent('cart:refresh'));
+            }, 150);
+          }
+        }
+
+        async _addGift(variantId, quantity) {
+          await fetch(`${Shopify.routes.root}cart/add.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({
+              id: variantId,
+              quantity,
+              properties: { __reward_gift_variant: String(variantId) }
+            })
+          });
+        }
+
+        async _removeGift(lineKey) {
+          await fetch(`${Shopify.routes.root}cart/change.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ id: lineKey, quantity: 0 })
+          });
+        }
+
+        async _updateGiftQuantity(lineKey, quantity) {
+          await fetch(`${Shopify.routes.root}cart/change.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ id: lineKey, quantity })
+          });
+        }
+
+        async _updateGifts(updates) {
+          await fetch(`${Shopify.routes.root}cart/update.js`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'same-origin',
+            body: JSON.stringify({ updates })
+          });
+        }
+      }
+
+      window.customElements.define('cart-rewards', CartRewards);
+    }
+  </script>
+{%- endif -%}

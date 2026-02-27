@@ -1,0 +1,110 @@
+/* ============================================
+   CART REWARDS – spend tracker / progress bar
+   ============================================ */
+
+.cart-rewards {
+  display: block;
+  padding: 1.6rem 2rem;
+  border-bottom: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+/* ---------- message ---------- */
+
+.cart-rewards__message {
+  text-align: center;
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  margin: 0 0 1.2rem;
+}
+
+/* ---------- progress bar row ---------- */
+
+.cart-rewards__bar-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+}
+
+.cart-rewards__progress {
+  flex: 1;
+  height: 4px;
+  background: rgba(var(--color-foreground), 0.12);
+  border-radius: 9999px;
+  position: relative;
+}
+
+.cart-rewards__fill {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgb(var(--color-foreground));
+  transform-origin: left center;
+  transform: scaleX(var(--progress-scale, 0));
+  transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ---------- markers (icons on the bar) ---------- */
+
+.cart-rewards__markers {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.cart-rewards__marker {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.cart-rewards__marker-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  border-radius: 50%;
+  border: 1.5px solid rgba(var(--color-foreground), 0.25);
+  background: rgb(var(--color-background));
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.cart-rewards__marker-icon .svg-wrapper {
+  display: flex;
+  width: 1.6rem;
+  height: 1.6rem;
+}
+
+.cart-rewards__marker-icon .svg-wrapper svg {
+  width: 100%;
+  height: 100%;
+}
+
+.cart-rewards__marker.is-reached .cart-rewards__marker-icon {
+  border-color: rgb(var(--color-foreground));
+  background: rgb(var(--color-foreground));
+  color: rgb(var(--color-background));
+}
+
+.cart-rewards__marker.is-reached .cart-rewards__marker-icon .svg-wrapper svg {
+  fill: rgb(var(--color-background));
+  stroke: rgb(var(--color-background));
+}
+
+/* ---------- next / subtitle text ---------- */
+
+.cart-rewards__next {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 0.6rem;
+  color: rgba(var(--color-foreground), 0.6);
+}
+
+/* ---------- milestones list (hidden detail rows) ---------- */
+
+.cart-rewards__milestones {
+  display: none;
+}

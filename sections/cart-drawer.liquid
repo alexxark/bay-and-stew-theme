@@ -1,1 +1,135 @@
 {%- render 'cart-drawer' -%}
+
+{% schema %}
+{
+  "name": "Cart drawer",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Rewards tracker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rewards",
+      "label": "Show rewards milestones",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "rewards_free_shipping_threshold",
+      "label": "Free shipping milestone (amount)",
+      "default": "75"
+    },
+    {
+      "type": "text",
+      "id": "rewards_shipping_label",
+      "label": "Free shipping label",
+      "default": "Free Shipping"
+    },
+    {
+      "type": "header",
+      "content": "Milestone messages"
+    },
+    {
+      "type": "text",
+      "id": "rewards_all_unlocked_subtitle",
+      "label": "All milestones unlocked message",
+      "default": "You have got [nearest_reward]"
+    },
+    {
+      "type": "text",
+      "id": "rewards_title_before_1",
+      "label": "Message before milestone 1",
+      "default": "Spend [amount_left] more to receive [reward]!"
+    },
+    {
+      "type": "text",
+      "id": "rewards_title_before_2",
+      "label": "Message before milestone 2",
+      "default": "Spend [amount_left] more to receive [reward]!"
+    },
+    {
+      "type": "text",
+      "id": "rewards_title_before_3",
+      "label": "Message before milestone 3",
+      "default": "Spend [amount_left] more to receive [reward]!"
+    },
+    {
+      "type": "text",
+      "id": "rewards_title_before_4",
+      "label": "Message before milestone 4",
+      "default": "Spend [amount_left] more to receive [reward]!"
+    },
+    {
+      "type": "header",
+      "content": "Milestone labels"
+    },
+    {
+      "type": "text",
+      "id": "rewards_label_1",
+      "label": "Reward 1 label",
+      "default": "Free shipping!"
+    },
+    {
+      "type": "text",
+      "id": "rewards_label_2",
+      "label": "Reward 2 label"
+    },
+    {
+      "type": "text",
+      "id": "rewards_label_3",
+      "label": "Reward 3 label"
+    },
+    {
+      "type": "text",
+      "id": "rewards_label_4",
+      "label": "Reward 4 label"
+    },
+    {
+      "type": "header",
+      "content": "Reward gift 1"
+    },
+    {
+      "type": "product",
+      "id": "reward_gift_1_product",
+      "label": "Gift 1 product"
+    },
+    {
+      "type": "text",
+      "id": "reward_gift_1_threshold",
+      "label": "Gift 1 threshold (amount)",
+      "default": "150"
+    },
+    {
+      "type": "header",
+      "content": "Reward gift 2"
+    },
+    {
+      "type": "product",
+      "id": "reward_gift_2_product",
+      "label": "Gift 2 product"
+    },
+    {
+      "type": "text",
+      "id": "reward_gift_2_threshold",
+      "label": "Gift 2 threshold (amount)",
+      "default": "200"
+    },
+    {
+      "type": "header",
+      "content": "Reward gift 3"
+    },
+    {
+      "type": "product",
+      "id": "reward_gift_3_product",
+      "label": "Gift 3 product"
+    },
+    {
+      "type": "text",
+      "id": "reward_gift_3_threshold",
+      "label": "Gift 3 threshold (amount)",
+      "default": "240"
+    }
+  ]
+}
+{% endschema %}
