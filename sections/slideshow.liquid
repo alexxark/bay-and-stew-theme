@@ -654,6 +654,14 @@
       padding-bottom: 0 !important;
     }
 
+    /* Remove fixed min-height on mobile so the slideshow hugs the image */
+    #shopify-section-{{ section.id }} .slideshow.banner--small,
+    #shopify-section-{{ section.id }} .slideshow.banner--medium,
+    #shopify-section-{{ section.id }} .slideshow.banner--large {
+      min-height: 0 !important;
+      height: auto !important;
+    }
+
     #shopify-section-{{ section.id }} .slideshow.banner--mobile-bottom {
       height: auto;
     }
