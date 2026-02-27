@@ -124,6 +124,10 @@
     "show_vendor": false,
     "show_cart_note": true,
     "cart_drawer_collection": "connectors",
+    "reward_1_threshold": "35",
+    "reward_1_label": "Free standard shipping!",
+    "reward_2_threshold": "500",
+    "reward_2_label": "Free rush shipping!",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
