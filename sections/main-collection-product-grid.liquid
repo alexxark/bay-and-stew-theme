@@ -246,8 +246,37 @@
                 {% if section.settings.quick_add == 'bulk' %} collection-quick-add-bulk{% endif %}
               "
             >
+              {%- comment -%}
+                Locked collection handles for B2B gating.
+                Non-B2B customers won't see products from these collections.
+              {%- endcomment -%}
+              {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
+              {%- assign is_b2b_customer = false -%}
+              {%- if customer and customer.tags contains 'B2B' -%}
+                {%- assign is_b2b_customer = true -%}
+              {%- endif -%}
+
               {% assign skip_card_product_styles = false %}
-              {%- for product in collection.products -%}{% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}<div style="display:none" class="bss-hpc-lock"></div>{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+              {%- for product in collection.products -%}
+                {%- comment -%} B2B lock check: skip the entire <li> if product is locked {%- endcomment -%}
+                {%- unless is_b2b_customer -%}
+                  {%- assign is_product_locked = false -%}
+                  {%- for product_collection in product.collections -%}
+                    {%- if locked_collection_handles contains product_collection.handle -%}
+                      {%- assign is_product_locked = true -%}
+                      {%- break -%}
+                    {%- endif -%}
+                  {%- endfor -%}
+                  {%- if is_product_locked -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                {%- endunless -%}
+
+                {%- comment -%}start BSS Commerce Hide Price{%- endcomment -%}
+                {%- capture bss_lock_check -%}{%- render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' -%}{%- endcapture -%}
+                {%- if bss_lock_check contains 'true' -%}{%- continue -%}{%- endif -%}
+                {%- comment -%}end BSS Commerce Hide Price{%- endcomment -%}
+
                 {% assign lazy_load = false %}
                 {%- if forloop.index > 2 -%}
                   {%- assign lazy_load = true -%}
@@ -259,7 +288,7 @@
                     style="--animation-order: {{ forloop.index }};"
                   {% endif %}
                 >
-                  {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-product',
+                  {% render 'card-product',
                     card_product: product,
                     media_aspect_ratio: section.settings.image_ratio,
                     image_shape: section.settings.image_shape,

@@ -4,7 +4,7 @@
   ================================================================
 {%- endcomment -%}
 {%- liquid
-  assign locked_collection_handles = 'Bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
+  assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
 
   assign is_in_locked_collection = false
   for product_collection in card_product.collections
