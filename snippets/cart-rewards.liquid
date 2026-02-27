@@ -2,7 +2,9 @@
 ----------------------------------------------------------------------------------------------------------------------
 CART REWARDS
 ----------------------------------------------------------------------------------------------------------------------
-Renders the cart rewards milestones (spend tracker / progress bar) in the cart drawer.
+Renders up to 4 spend-based milestones in the cart drawer.
+Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a product).
+----------------------------------------------------------------------------------------------------------------------
 {%- endcomment -%}
 
 {%- liquid
@@ -22,54 +24,57 @@ Renders the cart rewards milestones (spend tracker / progress bar) in the cart d
 
   assign calculated_total_price = calculated_total_price | minus: total_cart_discount
 
-  assign shipping_threshold = settings.rewards_free_shipping_threshold | default: '75' | plus: 0 | times: 100
-  assign shipping_label = settings.rewards_shipping_label | default: 'Free Shipping'
-  assign rewards_all_unlocked_subtitle = settings.rewards_all_unlocked_subtitle | default: 'You have got [nearest_reward]'
-  assign rewards_title_before_1 = settings.rewards_title_before_1 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_2 = settings.rewards_title_before_2 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_3 = settings.rewards_title_before_3 | default: 'Spend [amount_left] more to receive [reward]!'
-  assign rewards_title_before_4 = settings.rewards_title_before_4 | default: 'Spend [amount_left] more to receive [reward]!'
+  assign rewards_all_unlocked = settings.rewards_all_unlocked_subtitle | default: 'You have unlocked all rewards!'
 
-  assign rewards_label_1 = settings.rewards_label_1
-  assign rewards_label_2 = settings.rewards_label_2
-  assign rewards_label_3 = settings.rewards_label_3
-  assign rewards_label_4 = settings.rewards_label_4
+  assign r1_type = settings.reward_1_type | default: 'shipping'
+  assign r1_threshold = settings.reward_1_threshold | default: '' | plus: 0 | times: 100
+  assign r1_label = settings.reward_1_label | default: ''
+  assign r1_message = settings.reward_1_message | default: 'Spend [amount_left] more to receive [reward]!'
+  assign r1_product = settings.reward_1_product
 
-  assign gift_1_product = settings.reward_gift_1_product
-  assign gift_1_threshold = settings.reward_gift_1_threshold | plus: 0 | times: 100
+  assign r2_type = settings.reward_2_type | default: 'shipping'
+  assign r2_threshold = settings.reward_2_threshold | default: '' | plus: 0 | times: 100
+  assign r2_label = settings.reward_2_label | default: ''
+  assign r2_message = settings.reward_2_message | default: 'Spend [amount_left] more to receive [reward]!'
+  assign r2_product = settings.reward_2_product
 
-  assign gift_2_product = settings.reward_gift_2_product
-  assign gift_2_threshold = settings.reward_gift_2_threshold | plus: 0 | times: 100
+  assign r3_type = settings.reward_3_type | default: 'gift'
+  assign r3_threshold = settings.reward_3_threshold | default: '' | plus: 0 | times: 100
+  assign r3_label = settings.reward_3_label | default: ''
+  assign r3_message = settings.reward_3_message | default: 'Spend [amount_left] more to receive [reward]!'
+  assign r3_product = settings.reward_3_product
 
-  assign gift_3_product = settings.reward_gift_3_product
-  assign gift_3_threshold = settings.reward_gift_3_threshold | plus: 0 | times: 100
+  assign r4_type = settings.reward_4_type | default: 'gift'
+  assign r4_threshold = settings.reward_4_threshold | default: '' | plus: 0 | times: 100
+  assign r4_label = settings.reward_4_label | default: ''
+  assign r4_message = settings.reward_4_message | default: 'Spend [amount_left] more to receive [reward]!'
+  assign r4_product = settings.reward_4_product
 
   assign milestones_count = 0
   assign max_threshold = 0
 
-  if shipping_threshold > 0
+  if r1_threshold > 0
     assign milestones_count = milestones_count | plus: 1
-    assign max_threshold = shipping_threshold
-  endif
-
-  if gift_1_product != blank and gift_1_threshold > 0
-    assign milestones_count = milestones_count | plus: 1
-    if gift_1_threshold > max_threshold
-      assign max_threshold = gift_1_threshold
+    if r1_threshold > max_threshold
+      assign max_threshold = r1_threshold
     endif
   endif
-
-  if gift_2_product != blank and gift_2_threshold > 0
+  if r2_threshold > 0
     assign milestones_count = milestones_count | plus: 1
-    if gift_2_threshold > max_threshold
-      assign max_threshold = gift_2_threshold
+    if r2_threshold > max_threshold
+      assign max_threshold = r2_threshold
     endif
   endif
-
-  if gift_3_product != blank and gift_3_threshold > 0
+  if r3_threshold > 0
     assign milestones_count = milestones_count | plus: 1
-    if gift_3_threshold > max_threshold
-      assign max_threshold = gift_3_threshold
+    if r3_threshold > max_threshold
+      assign max_threshold = r3_threshold
+    endif
+  endif
+  if r4_threshold > 0
+    assign milestones_count = milestones_count | plus: 1
+    if r4_threshold > max_threshold
+      assign max_threshold = r4_threshold
     endif
   endif
 -%}
@@ -79,83 +84,116 @@ Renders the cart rewards milestones (spend tracker / progress bar) in the cart d
     class="cart-rewards"
     data-total-price="{{ calculated_total_price }}"
     data-max-threshold="{{ max_threshold }}"
-    data-all-unlocked-subtitle="{{ rewards_all_unlocked_subtitle | escape }}"
-    data-title-1="{{ rewards_title_before_1 | escape }}"
-    data-title-2="{{ rewards_title_before_2 | escape }}"
-    data-title-3="{{ rewards_title_before_3 | escape }}"
-    data-title-4="{{ rewards_title_before_4 | escape }}"
+    data-all-unlocked-subtitle="{{ rewards_all_unlocked | escape }}"
   >
     <p class="cart-rewards__message" data-rewards-message></p>
 
     <div class="cart-rewards__bar-row">
-      <div class="cart-rewards__progress" style="--progress: 0%;">
+      {%- comment -%} Start circle {%- endcomment -%}
+      <span class="cart-rewards__endpoint cart-rewards__endpoint--start"></span>
+
+      <div class="cart-rewards__track">
         <span class="cart-rewards__fill"></span>
         <div class="cart-rewards__markers">
-          {%- if shipping_threshold > 0 -%}
-            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ shipping_threshold }}">
+          {%- if r1_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ r1_threshold }}">
               <span class="cart-rewards__marker-icon">
-                <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {%- if r1_type == 'shipping' -%}
+                  <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {%- else -%}
+                  <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
               </span>
             </span>
           {%- endif -%}
-          {%- if gift_1_product != blank and gift_1_threshold > 0 -%}
-            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_1_threshold }}">
+          {%- if r2_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ r2_threshold }}">
               <span class="cart-rewards__marker-icon">
-                <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- if r2_type == 'shipping' -%}
+                  <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {%- else -%}
+                  <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
               </span>
             </span>
           {%- endif -%}
-          {%- if gift_2_product != blank and gift_2_threshold > 0 -%}
-            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_2_threshold }}">
+          {%- if r3_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ r3_threshold }}">
               <span class="cart-rewards__marker-icon">
-                <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- if r3_type == 'shipping' -%}
+                  <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {%- else -%}
+                  <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
               </span>
             </span>
           {%- endif -%}
-          {%- if gift_3_product != blank and gift_3_threshold > 0 -%}
-            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ gift_3_threshold }}">
+          {%- if r4_threshold > 0 -%}
+            <span class="cart-rewards__marker" data-reward-marker data-threshold="{{ r4_threshold }}">
               <span class="cart-rewards__marker-icon">
-                <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- if r4_type == 'shipping' -%}
+                  <span class="svg-wrapper">{{- 'icon-truck.svg' | inline_asset_content -}}</span>
+                {%- else -%}
+                  <span class="svg-wrapper">{{- 'icon-gift.svg' | inline_asset_content -}}</span>
+                {%- endif -%}
               </span>
             </span>
           {%- endif -%}
         </div>
       </div>
+
+      {%- comment -%} End circle {%- endcomment -%}
+      <span class="cart-rewards__endpoint cart-rewards__endpoint--end"></span>
     </div>
 
-    <div class="cart-rewards__next" data-rewards-next></div>
-
-    {%- assign milestone_index = 0 -%}
+    {%- comment -%} Hidden data rows consumed by JS {%- endcomment -%}
     <div class="cart-rewards__milestones">
-      {%- if shipping_threshold > 0 -%}
-        {%- assign milestone_index = milestone_index | plus: 1 -%}
-        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ shipping_threshold }}" data-type="shipping" data-gift-key="reward-shipping">
-          <span class="cart-rewards__label">{{ rewards_label_1 | default: shipping_label }}</span>
-          <span class="cart-rewards__status" data-reward-status></span>
+      {%- if r1_threshold > 0 -%}
+        <div class="cart-rewards__milestone"
+          data-reward-milestone
+          data-threshold="{{ r1_threshold }}"
+          data-type="{{ r1_type }}"
+          data-message="{{ r1_message | escape }}"
+          data-gift-key="reward-1"
+          {%- if r1_type == 'gift' and r1_product != blank %} data-variant-id="{{ r1_product.selected_or_first_available_variant.id }}"{% endif -%}
+        >
+          <span class="cart-rewards__label">{{ r1_label }}</span>
         </div>
       {%- endif -%}
-
-      {%- if gift_1_product != blank and gift_1_threshold > 0 -%}
-        {%- assign milestone_index = milestone_index | plus: 1 -%}
-        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_1_threshold }}" data-type="gift" data-gift-key="reward-gift-1" data-variant-id="{{ gift_1_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ rewards_label_2 | default: gift_1_product.title }}</span>
-          <span class="cart-rewards__status" data-reward-status></span>
+      {%- if r2_threshold > 0 -%}
+        <div class="cart-rewards__milestone"
+          data-reward-milestone
+          data-threshold="{{ r2_threshold }}"
+          data-type="{{ r2_type }}"
+          data-message="{{ r2_message | escape }}"
+          data-gift-key="reward-2"
+          {%- if r2_type == 'gift' and r2_product != blank %} data-variant-id="{{ r2_product.selected_or_first_available_variant.id }}"{% endif -%}
+        >
+          <span class="cart-rewards__label">{{ r2_label }}</span>
         </div>
       {%- endif -%}
-
-      {%- if gift_2_product != blank and gift_2_threshold > 0 -%}
-        {%- assign milestone_index = milestone_index | plus: 1 -%}
-        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_2_threshold }}" data-type="gift" data-gift-key="reward-gift-2" data-variant-id="{{ gift_2_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ rewards_label_3 | default: gift_2_product.title }}</span>
-          <span class="cart-rewards__status" data-reward-status></span>
+      {%- if r3_threshold > 0 -%}
+        <div class="cart-rewards__milestone"
+          data-reward-milestone
+          data-threshold="{{ r3_threshold }}"
+          data-type="{{ r3_type }}"
+          data-message="{{ r3_message | escape }}"
+          data-gift-key="reward-3"
+          {%- if r3_type == 'gift' and r3_product != blank %} data-variant-id="{{ r3_product.selected_or_first_available_variant.id }}"{% endif -%}
+        >
+          <span class="cart-rewards__label">{{ r3_label }}</span>
         </div>
       {%- endif -%}
-
-      {%- if gift_3_product != blank and gift_3_threshold > 0 -%}
-        {%- assign milestone_index = milestone_index | plus: 1 -%}
-        <div class="cart-rewards__milestone" data-reward-milestone data-threshold="{{ gift_3_threshold }}" data-type="gift" data-gift-key="reward-gift-3" data-variant-id="{{ gift_3_product.selected_or_first_available_variant.id }}">
-          <span class="cart-rewards__label">{{ rewards_label_4 | default: gift_3_product.title }}</span>
-          <span class="cart-rewards__status" data-reward-status></span>
+      {%- if r4_threshold > 0 -%}
+        <div class="cart-rewards__milestone"
+          data-reward-milestone
+          data-threshold="{{ r4_threshold }}"
+          data-type="{{ r4_type }}"
+          data-message="{{ r4_message | escape }}"
+          data-gift-key="reward-4"
+          {%- if r4_type == 'gift' and r4_product != blank %} data-variant-id="{{ r4_product.selected_or_first_available_variant.id }}"{% endif -%}
+        >
+          <span class="cart-rewards__label">{{ r4_label }}</span>
         </div>
       {%- endif -%}
     </div>
@@ -331,82 +369,53 @@ Renders the cart rewards milestones (spend tracker / progress bar) in the cart d
           const milestoneElements = Array.from(this.querySelectorAll('[data-reward-milestone]'));
           const markers = Array.from(this.querySelectorAll('[data-reward-marker]'));
           const message = this.querySelector('[data-rewards-message]');
-          const nextLine = this.querySelector('[data-rewards-next]');
           const maxThreshold = parseInt(this.dataset.maxThreshold || '0', 10);
-          const unlockedSubtitle = this.dataset.allUnlockedSubtitle || 'You have got [nearest_reward]';
-          const titleTemplates = [
-            this.dataset.title1,
-            this.dataset.title2,
-            this.dataset.title3,
-            this.dataset.title4
-          ].filter((value) => value !== undefined);
+          const unlockedSubtitle = this.dataset.allUnlockedSubtitle || 'You have unlocked all rewards!';
 
           const milestones = milestoneElements
-            .map((milestone) => {
-              const threshold = parseInt(milestone.dataset.threshold || '0', 10);
-              const label = milestone.querySelector('.cart-rewards__label')?.textContent?.trim() || 'reward';
-              return { element: milestone, threshold, label };
+            .map((el) => {
+              const threshold = parseInt(el.dataset.threshold || '0', 10);
+              const label = el.querySelector('.cart-rewards__label')?.textContent?.trim() || 'reward';
+              const msg = el.dataset.message || 'Spend [amount_left] more to receive [reward]!';
+              return { element: el, threshold, label, msg };
             })
-            .filter((milestone) => milestone.threshold > 0)
-            .sort((a, b) => a.threshold - b.threshold)
-            .map((milestone, index) => ({ ...milestone, order: index + 1 }));
+            .filter((m) => m.threshold > 0)
+            .sort((a, b) => a.threshold - b.threshold);
 
-          milestones.forEach((milestone) => {
-            const reached = total >= milestone.threshold;
-            const status = milestone.element.querySelector('[data-reward-status]');
-
-            milestone.element.classList.toggle('is-reached', reached);
-
-            if (status) {
-              if (reached) {
-                status.textContent = 'Unlocked';
-              } else {
-                const remaining = Math.max(milestone.threshold - total, 0);
-                status.textContent = `Spend ${this._formatMoney(remaining)} to unlock ${milestone.label}`;
-              }
-            }
+          milestones.forEach((m) => {
+            m.element.classList.toggle('is-reached', total >= m.threshold);
           });
 
           markers.forEach((marker) => {
             const threshold = parseInt(marker.dataset.threshold || '0', 10);
             const reached = threshold > 0 && total >= threshold;
-
             marker.classList.toggle('is-reached', reached);
             if (maxThreshold > 0) {
-              const left = Math.min(threshold / maxThreshold, 1) * 100;
-              marker.style.left = `${left}%`;
+              marker.style.left = `${Math.min(threshold / maxThreshold, 1) * 100}%`;
             }
           });
 
-          const nextMilestone = milestones.find((milestone) => total < milestone.threshold);
+          /* Also update the start/end dots */
+          const startDot = this.querySelector('.cart-rewards__endpoint--start');
+          const endDot = this.querySelector('.cart-rewards__endpoint--end');
+          if (startDot) startDot.classList.toggle('is-reached', total > 0);
+          if (endDot) endDot.classList.toggle('is-reached', maxThreshold > 0 && total >= maxThreshold);
+
+          const nextMilestone = milestones.find((m) => total < m.threshold);
 
           if (nextMilestone) {
             const remaining = Math.max(nextMilestone.threshold - total, 0);
-            const template = titleTemplates[nextMilestone.order - 1] || 'Spend [amount_left] more to receive [reward]!';
             const tokens = {
-              amount: this._formatMoney(remaining),
               amount_left: this._formatMoney(remaining),
+              amount: this._formatMoney(remaining),
               reward: nextMilestone.label,
               nearest_reward: nextMilestone.label
             };
-            if (message) {
-              message.textContent = this._formatTemplate(template, tokens);
-            }
-            if (nextLine) {
-              nextLine.textContent = '';
-            }
+            if (message) message.textContent = this._formatTemplate(nextMilestone.msg, tokens);
           } else {
-            const lastReward = milestones.length ? milestones[milestones.length - 1].label : 'reward';
-            const tokens = {
-              reward: lastReward,
-              nearest_reward: lastReward
-            };
-            if (message) {
-              message.textContent = this._formatTemplate(unlockedSubtitle, tokens);
-            }
-            if (nextLine) {
-              nextLine.textContent = '';
-            }
+            const lastLabel = milestones.length ? milestones[milestones.length - 1].label : 'reward';
+            const tokens = { reward: lastLabel, nearest_reward: lastLabel };
+            if (message) message.textContent = this._formatTemplate(unlockedSubtitle, tokens);
           }
         }
 
