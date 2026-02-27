@@ -1,0 +1,1329 @@
+<style>
+  #shopify-section-{{ section.id }} {
+    --footer-content-justify-items: {% if section.settings.blocks.size <= 2 %}start{% else %}space-between{% endif %};
+  }
+</style>
+
+{%- assign color_scheme_hash = section.settings.color_scheme.settings.background_gradient | default: section.settings.color_scheme.settings.background | md5 -%}
+
+<div class="footer color-scheme color-scheme--{{ section.settings.color_scheme.id }} color-scheme--bg-{{ color_scheme_hash }} {% if section.settings.separate_section_with_border %}bordered-section{% endif %}">
+  <div class="container">
+    <div class="footer__inner">
+      {%- comment -%}
+      ------------------------------------------------------------------------------------------------------------------
+      FOOTER BLOCKS (MAIN CONTENT)
+      ------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="footer__block-list">
+          {%- for block in section.blocks -%}
+            {%- capture block_content -%}
+              {%- case block.type -%}
+                {%- when '@app' -%}
+                  {%- render block -%}
+
+                {%- when 'image' -%}
+                  {%- if block.settings.image != blank -%}
+                    {%- capture sizes -%}{{ block.settings.image_width }}px{%- endcapture -%}
+                    {%- capture widths -%}{{ block.settings.image_width }}, {{ block.settings.image_width | times: 2 | at_most: block.settings.image.width }}{%- endcapture -%}
+                    {%- capture style -%}--image-max-width: {{ block.settings.image_width }}px{%- endcapture -%}
+
+                    {%- if block.settings.link != blank -%}
+                      <a href="{{ block.settings.link }}">
+                        {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: sizes, widths: widths, style: style, class: 'constrained-image' -}}
+                      </a>
+                    {%- else -%}
+                      {{- block.settings.image | image_url: width: block.settings.image.width | image_tag: sizes: sizes, widths: widths, style: style, class: 'constrained-image' -}}
+                    {%- endif -%}
+                  {%- endif -%}
+
+                {%- when 'text' -%}
+                  {%- if block.settings.title != blank or block.settings.content != blank or shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
+                    <div class="v-stack gap-4 sm:gap-5">
+                      {%- if block.settings.title != blank -%}
+                        <h2 class="h6">{{ block.settings.title }}</h2>
+                      {%- endif -%}
+
+                      {%- if block.settings.content != blank -%}
+                        <div class="prose text-subdued">
+                          {{- block.settings.content -}}
+                        </div>
+                      {%- endif -%}
+
+                      {%- if shop.features.follow_on_shop? and block.settings.enable_follow_on_shop -%}
+                        <div class="follow-on-shop">
+                          {{- shop | login_button: action: 'follow' -}}
+                        </div>
+                      {%- endif -%}
+                    </div>
+                  {%- endif -%}
+
+                {%- when 'links' -%}
+                  {%- assign menu = block.settings.menu -%}
+
+                  {%- if menu != blank and menu.links.size > 0 -%}
+                    {%- assign this_title = block.settings.menu_title | default: menu.title -%}
+                    {%- assign title_key = this_title | downcase | strip -%}
+
+                    <div class="v-stack gap-4 sm:gap-5">
+                      {%- if block.settings.show_menu_title != blank -%}
+                        <h2 class="h6">{{ this_title }}</h2>
+                      {%- endif -%}
+
+                      <ul class="v-stack gap-2.5 unstyled-list" role="list">
+                        {%- for link in menu.links -%}
+                          <li>
+                            <a href="{{ link.url }}" class="link-faded">{{ link.title }}</a>
+                          </li>
+                        {%- endfor -%}
+
+                        {%- if title_key == 'help' -%}
+                          <li>
+                            <button type="button" class="link-faded footer-accessibility-trigger" data-a11y-open onclick="window.EverlyA11y && window.EverlyA11y.open && window.EverlyA11y.open()">
+                              Accessibility Support
+                            </button>
+                          </li>
+                        {%- endif -%}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+
+                {%- when 'newsletter' -%}
+                  <div class="v-stack gap-4 sm:gap-5">
+                    {%- if block.settings.title != blank -%}
+                      <h2 class="h6">{{ block.settings.title }}</h2>
+                    {%- endif -%}
+
+                    {%- if block.settings.content != blank -%}
+                      <div class="prose text-subdued">
+                        {{- block.settings.content -}}
+                      </div>
+                    {%- endif -%}
+
+                    {%- assign newsletter_form_id = 'newsletter-form-' | append: section.id -%}
+
+                    {%- form 'customer', id: newsletter_form_id, class: 'form' -%}
+                      {%- if form.posted_successfully? -%}
+                        {%- assign success_message = 'general.newsletter.subscribed_successfully' | t -%}
+                        {%- render 'banner', content: success_message, status: 'success' -%}
+                      {%- else -%}
+                        {%- if form.errors -%}
+                          {%- capture error_message -%}{{ form.errors.translated_fields['email'] }} {{ form.errors.messages['email'] }}{%- endcapture -%}
+                          {%- render 'banner', content: error_message, status: 'error' -%}
+                        {%- endif -%}
+
+                        <input type="hidden" name="contact[tags]" value="newsletter">
+
+                        {%- assign input_label = 'general.newsletter.email' | t -%}
+                        {%- render 'input', name: 'contact[email]', label: input_label, type: 'email', required: true, autocomplete: 'email', enterkeyhint: 'send' -%}
+
+                        <div class="align-self-start">
+                          {%- assign button_label = 'general.newsletter.subscribe' | t -%}
+                          {%- render 'button', type: 'submit', content: button_label, background: block.settings.button_background, text_color: block.settings.button_text_color -%}
+                        </div>
+                      {%- endif -%}
+                    {%- endform -%}
+                  </div>
+
+              {%- endcase -%}
+            {%- endcapture -%}
+
+            {%- if block_content != blank -%}
+              <div class="footer__block footer__block--{{ block.type | remove_first: '@' }}" {{ block.shopify_attributes }}>
+                {{- block_content -}}
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%}
+      ------------------------------------------------------------------------------------------------------------------
+      FOOTER SOCIAL MEDIA
+      ------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      {%- if section.settings.show_social_media -%}
+        {%- render 'social-media', layout: 'list' -%}
+      {%- endif -%}
+
+      {%- comment -%}
+      ------------------------------------------------------------------------------------------------------------------
+      FOOTER ASIDE (COPYRIGHT + LOCALIZATION SELECTORS + PAYMENT METHODS)
+      ------------------------------------------------------------------------------------------------------------------
+      {%- endcomment -%}
+
+      <div class="footer__aside">
+        {%- if section.settings.show_country_selector and localization.available_countries.size > 1 -%}
+          {%- assign show_country_selector = true -%}
+        {%- endif -%}
+
+        {%- if section.settings.show_locale_selector and localization.available_languages.size > 1 -%}
+          {%- assign show_locale_selector = true -%}
+        {%- endif -%}
+
+        {%- if show_country_selector or show_locale_selector -%}
+          <div class="localization-selectors">
+            {%- if show_country_selector -%}
+              {%- render 'localization-selector', type: 'country', placement: 'top-start', show_country_name: section.settings.show_country_name, show_country_flag: section.settings.show_country_flag -%}
+            {%- endif -%}
+
+            {%- if show_locale_selector -%}
+              {%- render 'localization-selector', type: 'locale', placement: 'top-start' -%}
+            {%- endif -%}
+          </div>
+        {%- endif -%}
+
+        <p class="heading text-subdued text-xxs">© {{ 'now' | date: '%Y' }} - {{ shop.name }} </p>
+
+        {%- if section.settings.show_payment_icons and shop.enabled_payment_types.size > 0 -%}
+          <ul class="payment-methods unstyled-list">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{- type | payment_type_svg_tag -}}</li>
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+<dialog id="accessibility-support" class="a11y-panel" aria-labelledby="accessibility-support-title">
+  <div class="a11y-panel__inner">
+    <div class="a11y-panel__header">
+      <h2 id="accessibility-support-title" class="a11y-panel__title">Accessibility Menu</h2>
+      <button type="button" class="a11y-panel__close" data-a11y-close aria-label="Close">×</button>
+    </div>
+
+    <p class="a11y-panel__intro">Adjust motion, readability, and assistance tools. Settings persist on this device.</p>
+
+    <details class="a11y-panel__profiles" open>
+      <summary class="a11y-panel__profiles-summary">Profiles</summary>
+      <div class="a11y-panel__profiles-list">
+        <button type="button" class="a11y-profile" data-a11y-profile="motor" aria-pressed="false">
+          <span>Motor Impaired</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="blind" aria-pressed="false">
+          <span>Blind</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="color" aria-pressed="false">
+          <span>Color Blind</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="dyslexia" aria-pressed="false">
+          <span>Dyslexia</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="visual" aria-pressed="false">
+          <span>Visually-Impaired</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="cognitive" aria-pressed="false">
+          <span>Cognitive & Learning</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="seizure" aria-pressed="false">
+          <span>Seizure & Epileptic</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+        <button type="button" class="a11y-profile" data-a11y-profile="adhd" aria-pressed="false">
+          <span>ADHD</span>
+          <span class="a11y-switch" aria-hidden="true"></span>
+        </button>
+      </div>
+    </details>
+
+    <div class="a11y-panel__grid">
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Reading mode</span>
+          <span class="a11y-card__desc">Improve readability and widen text.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="reading-mode">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Highlight focus & links</span>
+          <span class="a11y-card__desc">Emphasize keyboard focus and links.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="highlight-focus">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Increase contrast</span>
+          <span class="a11y-card__desc">Boost overall contrast.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="contrast">
+      </label>
+
+      <div class="a11y-card a11y-card--tts">
+        <button type="button" class="a11y-tts-toggle" data-a11y-action="tts" aria-pressed="false">
+          <span class="a11y-card__title">Text to speech</span>
+          <span class="a11y-card__desc" data-a11y-tts-status>Enable hover to read</span>
+        </button>
+        <div class="a11y-tts-speeds" role="group" aria-label="Text to speech speed">
+          <button type="button" data-a11y-tts-speed="0.8">Slow</button>
+          <button type="button" data-a11y-tts-speed="1" aria-pressed="true">Normal</button>
+          <button type="button" data-a11y-tts-speed="1.2">Fast</button>
+        </div>
+      </div>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Reduce animations</span>
+          <span class="a11y-card__desc">Minimize motion effects.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="reduce-motion">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Pause auto-rotating content</span>
+          <span class="a11y-card__desc">Stops slideshows and carousels.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="pause-autoplay">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Increase text size</span>
+          <span class="a11y-card__desc">Scale text slightly larger.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="text-size">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Increase letter spacing</span>
+          <span class="a11y-card__desc">Add space between letters.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="letter-spacing">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Increase line height</span>
+          <span class="a11y-card__desc">Add vertical spacing.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="line-height">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Dyslexia-friendly font</span>
+          <span class="a11y-card__desc">Apply a clearer text font.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="dyslexia-font">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Invert colors</span>
+          <span class="a11y-card__desc">Invert page colors.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="invert-colors">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Big cursor</span>
+          <span class="a11y-card__desc">Increase cursor size.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="big-cursor">
+      </label>
+
+      <label class="a11y-card">
+        <span class="a11y-card__content">
+          <span class="a11y-card__title">Hide images</span>
+          <span class="a11y-card__desc">Reduce visual distractions.</span>
+        </span>
+        <input type="checkbox" data-a11y-toggle="hide-images">
+      </label>
+    </div>
+
+    <div class="a11y-panel__footer">
+      <label class="a11y-side-switch">
+        <input type="checkbox" data-a11y-side-switch>
+        <span>Switch widget to left</span>
+      </label>
+      <button type="button" class="a11y-panel__reset" data-a11y-reset>Reset</button>
+    </div>
+  </div>
+</dialog>
+
+<style>
+  .a11y-panel{
+    border: 0;
+    padding: 0;
+    width: min(720px, calc(100% - 24px));
+    border-radius: 18px;
+    display: none;
+    background: #ffffff;
+    color: #111111;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    left: auto;
+    margin: 0;
+    max-height: calc(100vh - 40px);
+    overflow: auto;
+    z-index: 1000;
+  }
+  .a11y-panel.a11y-panel--left{
+    left: 20px;
+    right: auto;
+  }
+  .a11y-panel[open],
+  .a11y-panel.is-open{
+    display: block;
+  }
+  .a11y-panel::backdrop{
+    background: rgba(0,0,0,.55);
+  }
+  .a11y-panel__inner{
+    position: relative;
+    padding: 18px 18px 20px;
+  }
+  .a11y-panel__header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #111111;
+    color: #ffffff;
+    border-radius: 12px;
+  }
+  .a11y-panel__title{
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .a11y-panel__close{
+    background: #ffffff;
+    border: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    line-height: 1;
+    cursor: pointer;
+    display: grid;
+    place-content: center;
+    color: #111111;
+    font-size: 18px;
+  }
+  .a11y-panel__intro{
+    margin: 12px 4px 16px;
+    color: #4a4a4a;
+  }
+  .a11y-panel__grid{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  @media (max-width: 640px){
+    .a11y-panel__grid{
+      grid-template-columns: 1fr;
+    }
+  }
+  .a11y-card{
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 14px;
+    background: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 14px;
+    cursor: pointer;
+  }
+  .a11y-card--tts{
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .a11y-card__title{
+    font-weight: 600;
+    display: block;
+  }
+  .a11y-card__desc{
+    color: #222222;
+    font-size: 12px;
+  }
+  .a11y-tts-toggle{
+    display: grid;
+    gap: 4px;
+    text-align: left;
+    background: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 12px;
+    padding: 10px 12px;
+    cursor: pointer;
+  }
+  .a11y-tts-toggle[aria-pressed="true"]{
+    background: #111111;
+    color: #ffffff;
+  }
+  .a11y-tts-speeds{
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+  .a11y-tts-speeds button{
+    border: 1px solid #111111;
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 6px 8px;
+    cursor: pointer;
+  }
+  .a11y-tts-speeds button[aria-pressed="true"]{
+    background: #111111;
+    color: #ffffff;
+  }
+  .a11y-tts-toggle:focus-visible,
+  .a11y-tts-speeds button:focus-visible{
+    outline: 3px solid #111111;
+    outline-offset: 2px;
+  }
+  .a11y-card input{
+    width: 42px;
+    height: 24px;
+    appearance: none;
+    border-radius: 999px;
+    background: #f0f0f0;
+    border: 1px solid #111111;
+    position: relative;
+    outline: none;
+    cursor: pointer;
+  }
+  .a11y-card input:before{
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #ffffff;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s ease;
+  }
+  .a11y-card input:checked{
+    background: #111111;
+  }
+  .a11y-card input:checked:before{
+    transform: translateX(18px);
+  }
+  .a11y-card input:focus-visible,
+  .a11y-panel__close:focus-visible,
+  .a11y-panel__reset:focus-visible,
+  .a11y-side-switch input:focus-visible,
+  .a11y-profile:focus-visible{
+    outline: 3px solid #111111;
+    outline-offset: 2px;
+  }
+  .a11y-panel__profiles{
+    border: 1px solid #111111;
+    border-radius: 14px;
+    padding: 8px;
+    margin: 12px 0 16px;
+  }
+  .a11y-panel__profiles-summary{
+    cursor: pointer;
+    font-weight: 600;
+    list-style: none;
+  }
+  .a11y-panel__profiles-summary::-webkit-details-marker{
+    display: none;
+  }
+  .a11y-panel__profiles-list{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  @media (max-width: 640px){
+    .a11y-panel__profiles-list{
+      grid-template-columns: 1fr;
+    }
+  }
+  .a11y-profile{
+    background: #ffffff;
+    border: 1px solid #111111;
+    border-radius: 10px;
+    padding: 8px 10px;
+    text-align: left;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .a11y-profile[aria-pressed="true"]{
+    background: #111111;
+    color: #ffffff;
+  }
+  .a11y-switch{
+    width: 36px;
+    height: 20px;
+    border-radius: 999px;
+    border: 1px solid #111111;
+    background: #f0f0f0;
+    position: relative;
+  }
+  .a11y-switch:after{
+    content: "";
+    width: 14px;
+    height: 14px;
+    border-radius: 999px;
+    background: #ffffff;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    transition: transform 0.2s ease;
+    border: 1px solid #111111;
+  }
+  .a11y-profile[aria-pressed="true"] .a11y-switch{
+    background: #ffffff;
+  }
+  .a11y-profile[aria-pressed="true"] .a11y-switch:after{
+    transform: translateX(16px);
+  }
+  .a11y-panel__footer{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #111111;
+  }
+  .a11y-side-switch{
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+  }
+  .a11y-side-switch input{
+    width: 42px;
+    height: 24px;
+    appearance: none;
+    border-radius: 999px;
+    background: #f0f0f0;
+    border: 1px solid #111111;
+    position: relative;
+  }
+  .a11y-side-switch input:before{
+    content: "";
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: #ffffff;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s ease;
+  }
+  .a11y-side-switch input:checked:before{
+    transform: translateX(18px);
+  }
+  .a11y-panel__reset{
+    border: 1px solid #111111;
+    background: #111111;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  (function () {
+    const dialog = document.getElementById('accessibility-support');
+    const closeBtn = dialog ? dialog.querySelector('[data-a11y-close]') : null;
+    if (!dialog) return;
+    const supportsDialog = typeof dialog.showModal === 'function';
+    const mainEl = document.querySelector('main');
+    let focusTrapHandler = null;
+    let keydownHandler = null;
+    let lastFocusedElement = null;
+
+    const reduceMotionInput = dialog.querySelector('[data-a11y-toggle="reduce-motion"]');
+    const pauseAutoplayInput = dialog.querySelector('[data-a11y-toggle="pause-autoplay"]');
+    const textSizeInput = dialog.querySelector('[data-a11y-toggle="text-size"]');
+    const letterSpacingInput = dialog.querySelector('[data-a11y-toggle="letter-spacing"]');
+    const lineHeightInput = dialog.querySelector('[data-a11y-toggle="line-height"]');
+    const dyslexiaFontInput = dialog.querySelector('[data-a11y-toggle="dyslexia-font"]');
+    const invertColorsInput = dialog.querySelector('[data-a11y-toggle="invert-colors"]');
+    const readingModeInput = dialog.querySelector('[data-a11y-toggle="reading-mode"]');
+    const highlightFocusInput = dialog.querySelector('[data-a11y-toggle="highlight-focus"]');
+    const contrastInput = dialog.querySelector('[data-a11y-toggle="contrast"]');
+    const bigCursorInput = dialog.querySelector('[data-a11y-toggle="big-cursor"]');
+    const hideImagesInput = dialog.querySelector('[data-a11y-toggle="hide-images"]');
+    const ttsButton = dialog.querySelector('[data-a11y-action="tts"]');
+    const ttsStatus = dialog.querySelector('[data-a11y-tts-status]');
+    const ttsSpeedButtons = Array.from(dialog.querySelectorAll('[data-a11y-tts-speed]'));
+    const sideSwitch = dialog.querySelector('[data-a11y-side-switch]');
+    const resetButton = dialog.querySelector('[data-a11y-reset]');
+    const profileButtons = Array.from(dialog.querySelectorAll('[data-a11y-profile]'));
+    let ttsActive = false;
+    let ttsRate = 1;
+    let hoverTimer = null;
+    let lastSpoken = '';
+    let lastSpokenTarget = null;
+
+    function getSettingsState() {
+      return {
+        reduceMotion: !!(reduceMotionInput && reduceMotionInput.checked),
+        pauseAutoplay: !!(pauseAutoplayInput && pauseAutoplayInput.checked),
+        textSize: !!(textSizeInput && textSizeInput.checked),
+        letterSpacing: !!(letterSpacingInput && letterSpacingInput.checked),
+        lineHeight: !!(lineHeightInput && lineHeightInput.checked),
+        dyslexiaFont: !!(dyslexiaFontInput && dyslexiaFontInput.checked),
+        invertColors: !!(invertColorsInput && invertColorsInput.checked),
+        readingMode: !!(readingModeInput && readingModeInput.checked),
+        highlightFocus: !!(highlightFocusInput && highlightFocusInput.checked),
+        contrastBoost: !!(contrastInput && contrastInput.checked),
+        bigCursor: !!(bigCursorInput && bigCursorInput.checked),
+        hideImages: !!(hideImagesInput && hideImagesInput.checked)
+      };
+    }
+
+    function applySettingsState(state) {
+      if (!state) return;
+      if (reduceMotionInput) reduceMotionInput.checked = !!state.reduceMotion;
+      if (pauseAutoplayInput) pauseAutoplayInput.checked = !!state.pauseAutoplay;
+      if (textSizeInput) textSizeInput.checked = !!state.textSize;
+      if (letterSpacingInput) letterSpacingInput.checked = !!state.letterSpacing;
+      if (lineHeightInput) lineHeightInput.checked = !!state.lineHeight;
+      if (dyslexiaFontInput) dyslexiaFontInput.checked = !!state.dyslexiaFont;
+      if (invertColorsInput) invertColorsInput.checked = !!state.invertColors;
+      if (readingModeInput) readingModeInput.checked = !!state.readingMode;
+      if (highlightFocusInput) highlightFocusInput.checked = !!state.highlightFocus;
+      if (contrastInput) contrastInput.checked = !!state.contrastBoost;
+      if (bigCursorInput) bigCursorInput.checked = !!state.bigCursor;
+      if (hideImagesInput) hideImagesInput.checked = !!state.hideImages;
+      applyPreferences();
+    }
+
+    function syncInputsFromStorage() {
+      try {
+        const panelSide = window.localStorage.getItem('a11y-panel-side') || 'right';
+        dialog.classList.toggle('a11y-panel--left', panelSide === 'left');
+        if (sideSwitch) sideSwitch.checked = panelSide === 'left';
+        const ttsStored = window.localStorage.getItem('a11y-tts-active') === 'true';
+        setTtsState(ttsStored);
+        if (ttsStored) enableHoverTts();
+        if (reduceMotionInput) {
+          reduceMotionInput.checked = window.localStorage.getItem('a11y-reduce-motion') === 'true';
+        }
+        if (pauseAutoplayInput) {
+          pauseAutoplayInput.checked = window.localStorage.getItem('a11y-pause-autoplay') === 'true';
+        }
+        if (textSizeInput) {
+          textSizeInput.checked = window.localStorage.getItem('a11y-text-size') === 'true';
+        }
+        if (letterSpacingInput) {
+          letterSpacingInput.checked = window.localStorage.getItem('a11y-letter-spacing') === 'true';
+        }
+        if (lineHeightInput) {
+          lineHeightInput.checked = window.localStorage.getItem('a11y-line-height') === 'true';
+        }
+        if (dyslexiaFontInput) {
+          dyslexiaFontInput.checked = window.localStorage.getItem('a11y-dyslexia-font') === 'true';
+        }
+        if (invertColorsInput) {
+          invertColorsInput.checked = window.localStorage.getItem('a11y-invert-colors') === 'true';
+        }
+        if (readingModeInput) {
+          readingModeInput.checked = window.localStorage.getItem('a11y-reading-mode') === 'true';
+        }
+        if (highlightFocusInput) {
+          highlightFocusInput.checked = window.localStorage.getItem('a11y-highlight-focus') === 'true';
+        }
+        if (contrastInput) {
+          contrastInput.checked = window.localStorage.getItem('a11y-contrast') === 'true';
+        }
+        if (bigCursorInput) {
+          bigCursorInput.checked = window.localStorage.getItem('a11y-big-cursor') === 'true';
+        }
+        if (hideImagesInput) {
+          hideImagesInput.checked = window.localStorage.getItem('a11y-hide-images') === 'true';
+        }
+        const storedRate = parseFloat(window.localStorage.getItem('a11y-tts-rate') || '1');
+        ttsRate = isNaN(storedRate) ? 1 : storedRate;
+        ttsSpeedButtons.forEach((btn) => {
+          btn.setAttribute('aria-pressed', String(parseFloat(btn.dataset.a11yTtsSpeed) === ttsRate));
+        });
+        const activeProfile = window.localStorage.getItem('a11y-profile') || '';
+        profileButtons.forEach((btn) => {
+          btn.setAttribute('aria-pressed', btn.dataset.a11yProfile === activeProfile ? 'true' : 'false');
+        });
+      } catch (e) {}
+    }
+
+    function applyPreferences() {
+      try {
+        const reduceMotion = !!(reduceMotionInput && reduceMotionInput.checked);
+        const pauseAutoplay = !!(pauseAutoplayInput && pauseAutoplayInput.checked) || reduceMotion;
+        const textSize = !!(textSizeInput && textSizeInput.checked);
+        const letterSpacing = !!(letterSpacingInput && letterSpacingInput.checked);
+        const lineHeight = !!(lineHeightInput && lineHeightInput.checked);
+        const dyslexiaFont = !!(dyslexiaFontInput && dyslexiaFontInput.checked);
+        const invertColors = !!(invertColorsInput && invertColorsInput.checked);
+        const readingMode = !!(readingModeInput && readingModeInput.checked);
+        const highlightFocus = !!(highlightFocusInput && highlightFocusInput.checked);
+        const contrastBoost = !!(contrastInput && contrastInput.checked);
+        const bigCursor = !!(bigCursorInput && bigCursorInput.checked);
+        const hideImages = !!(hideImagesInput && hideImagesInput.checked);
+        if (pauseAutoplayInput) pauseAutoplayInput.checked = pauseAutoplay;
+
+        window.localStorage.setItem('a11y-reduce-motion', String(reduceMotion));
+        window.localStorage.setItem('a11y-pause-autoplay', String(pauseAutoplay));
+        window.localStorage.setItem('a11y-text-size', String(textSize));
+        window.localStorage.setItem('a11y-letter-spacing', String(letterSpacing));
+        window.localStorage.setItem('a11y-line-height', String(lineHeight));
+        window.localStorage.setItem('a11y-dyslexia-font', String(dyslexiaFont));
+        window.localStorage.setItem('a11y-invert-colors', String(invertColors));
+        window.localStorage.setItem('a11y-reading-mode', String(readingMode));
+        window.localStorage.setItem('a11y-highlight-focus', String(highlightFocus));
+        window.localStorage.setItem('a11y-contrast', String(contrastBoost));
+        window.localStorage.setItem('a11y-big-cursor', String(bigCursor));
+        window.localStorage.setItem('a11y-hide-images', String(hideImages));
+
+        document.documentElement.classList.toggle('a11y-reduce-motion', reduceMotion);
+        document.documentElement.classList.toggle('a11y-pause-autoplay', pauseAutoplay);
+        document.documentElement.classList.toggle('a11y-text-size', textSize);
+        document.documentElement.classList.toggle('a11y-letter-spacing', letterSpacing);
+        document.documentElement.classList.toggle('a11y-line-height', lineHeight);
+        document.documentElement.classList.toggle('a11y-dyslexia-font', dyslexiaFont);
+        document.documentElement.classList.toggle('a11y-invert-colors', invertColors);
+        document.documentElement.classList.toggle('a11y-reading-mode', readingMode);
+        document.documentElement.classList.toggle('a11y-highlight-focus', highlightFocus);
+        document.documentElement.classList.toggle('a11y-contrast', contrastBoost);
+        document.documentElement.classList.toggle('a11y-big-cursor', bigCursor);
+        document.documentElement.classList.toggle('a11y-hide-images', hideImages);
+
+        document.documentElement.dispatchEvent(new CustomEvent('a11y:settings-changed', {
+          detail: { reduceMotion, pauseAutoplay, textSize, letterSpacing, lineHeight, dyslexiaFont, invertColors, readingMode, highlightFocus, contrastBoost, bigCursor, hideImages }
+        }));
+      } catch (e) {}
+    }
+
+    function setTtsState(active) {
+      ttsActive = active;
+      if (ttsButton) ttsButton.setAttribute('aria-pressed', active ? 'true' : 'false');
+      dialog.classList.toggle('a11y-tts-active', active);
+      if (ttsStatus) ttsStatus.textContent = active ? 'Hover to read' : 'Enable hover to read';
+    }
+
+    function stopTts() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
+      if (hoverTimer) {
+        clearTimeout(hoverTimer);
+        hoverTimer = null;
+      }
+      window.localStorage.setItem('a11y-tts-active', 'false');
+      setTtsState(false);
+    }
+
+    function speak(text, onEnd) {
+      if (!('speechSynthesis' in window)) return;
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = ttsRate;
+      if (onEnd) utterance.onend = onEnd;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function getLabelledText(element, attribute) {
+      const ids = element.getAttribute && element.getAttribute(attribute);
+      if (!ids) return '';
+      return ids
+        .split(/\s+/)
+        .map((id) => document.getElementById(id))
+        .filter(Boolean)
+        .map((node) => (node.textContent || '').replace(/\s+/g, ' ').trim())
+        .filter(Boolean)
+        .join(' ');
+    }
+
+    function getSpeakableText(target) {
+      if (!target || target.closest('#accessibility-support')) return '';
+      let el = target;
+      for (let i = 0; i < 3 && el; i += 1) {
+        const labelledText = getLabelledText(el, 'aria-labelledby');
+        if (labelledText) return labelledText;
+        const describedText = getLabelledText(el, 'aria-describedby');
+        if (describedText) return describedText;
+        const ariaLabel = el.getAttribute && el.getAttribute('aria-label');
+        if (ariaLabel) return ariaLabel;
+        const role = el.getAttribute && el.getAttribute('role');
+        if ((el.tagName === 'BUTTON' || el.tagName === 'A' || role === 'button' || role === 'link') && el.textContent) {
+          return el.textContent.replace(/\s+/g, ' ').trim();
+        }
+        const title = el.getAttribute && el.getAttribute('title');
+        if (title) return title;
+        if (el.tagName === 'IMG' && el.alt) return el.alt;
+        if ((el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') && el.placeholder) return el.placeholder;
+        const nestedImg = el.querySelector && el.querySelector('img[alt]');
+        if (nestedImg && nestedImg.alt) return nestedImg.alt;
+        el = el.parentElement;
+      }
+      const text = target.textContent || '';
+      return text.replace(/\s+/g, ' ').trim().slice(0, 160);
+    }
+
+    function handleHover(event) {
+      if (!ttsActive) return;
+      const text = getSpeakableText(event.target);
+      if (!text) return;
+      if (text === lastSpoken && event.target === lastSpokenTarget) return;
+      if (hoverTimer) clearTimeout(hoverTimer);
+      hoverTimer = setTimeout(function () {
+        lastSpoken = text;
+        lastSpokenTarget = event.target;
+        speak(text);
+      }, 250);
+    }
+
+    function enableHoverTts() {
+      document.addEventListener('mouseover', handleHover, true);
+      document.addEventListener('focusin', handleHover, true);
+    }
+
+    function disableHoverTts() {
+      document.removeEventListener('mouseover', handleHover, true);
+      document.removeEventListener('focusin', handleHover, true);
+    }
+
+    function startTts() {
+      if (!('speechSynthesis' in window)) return;
+      setTtsState(true);
+      enableHoverTts();
+      window.localStorage.setItem('a11y-tts-active', 'true');
+      speak('Text to speech enabled');
+    }
+
+    function applyProfile(profileKey) {
+      const activeProfile = window.localStorage.getItem('a11y-profile') || '';
+      const presets = {
+        motor: { highlightFocus: true, textSize: true, lineHeight: true },
+        blind: { readingMode: true, highlightFocus: true, textSize: true, lineHeight: true, contrastBoost: true, reduceMotion: true, pauseAutoplay: true },
+        color: { contrastBoost: true },
+        dyslexia: { dyslexiaFont: true, letterSpacing: true, lineHeight: true, readingMode: true },
+        visual: { textSize: true, contrastBoost: true, highlightFocus: true, lineHeight: true },
+        cognitive: { readingMode: true, reduceMotion: true, pauseAutoplay: true, highlightFocus: true },
+        seizure: { reduceMotion: true, pauseAutoplay: true },
+        adhd: { reduceMotion: true, pauseAutoplay: true, highlightFocus: true }
+      };
+
+      const preset = presets[profileKey];
+      if (!preset) return;
+
+      const existingBackup = window.localStorage.getItem('a11y-profile-backup');
+      if (!existingBackup) {
+        const backup = getSettingsState();
+        window.localStorage.setItem('a11y-profile-backup', JSON.stringify(backup));
+      }
+
+      if (readingModeInput) readingModeInput.checked = !!preset.readingMode;
+      if (highlightFocusInput) highlightFocusInput.checked = !!preset.highlightFocus;
+      if (contrastInput) contrastInput.checked = !!preset.contrastBoost;
+      if (reduceMotionInput) reduceMotionInput.checked = !!preset.reduceMotion;
+      if (pauseAutoplayInput) pauseAutoplayInput.checked = !!preset.pauseAutoplay;
+      if (textSizeInput) textSizeInput.checked = !!preset.textSize;
+      if (letterSpacingInput) letterSpacingInput.checked = !!preset.letterSpacing;
+      if (lineHeightInput) lineHeightInput.checked = !!preset.lineHeight;
+      if (dyslexiaFontInput) dyslexiaFontInput.checked = !!preset.dyslexiaFont;
+      if (invertColorsInput) invertColorsInput.checked = !!preset.invertColors;
+
+      window.localStorage.setItem('a11y-profile', profileKey);
+      profileButtons.forEach((btn) => {
+        btn.setAttribute('aria-pressed', btn.dataset.a11yProfile === profileKey ? 'true' : 'false');
+      });
+      applyPreferences();
+    }
+
+    function setBackgroundHidden(isHidden) {
+      if (!mainEl) return;
+      if (isHidden) {
+        mainEl.setAttribute('aria-hidden', 'true');
+      } else {
+        mainEl.removeAttribute('aria-hidden');
+      }
+    }
+
+    function closeDialog() {
+      if (supportsDialog) {
+        dialog.close();
+      }
+      dialog.classList.remove('is-open');
+      dialog.removeAttribute('aria-modal');
+      if (focusTrapHandler) dialog.removeEventListener('keydown', focusTrapHandler);
+      if (keydownHandler) dialog.removeEventListener('keydown', keydownHandler);
+      setBackgroundHidden(false);
+      if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+        lastFocusedElement.focus();
+      }
+    }
+
+    function openDialog() {
+      syncInputsFromStorage();
+      lastFocusedElement = document.activeElement;
+      if (supportsDialog) {
+        dialog.showModal();
+        setBackgroundHidden(true);
+      } else {
+        dialog.classList.add('is-open');
+        dialog.setAttribute('open', '');
+        dialog.setAttribute('aria-modal', 'true');
+        setBackgroundHidden(true);
+        if (!focusTrapHandler) {
+          focusTrapHandler = function (e) {
+            if (e.key !== 'Tab') return;
+            const focusable = dialog.querySelectorAll('a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])');
+            if (!focusable.length) return;
+            const first = focusable[0];
+            const last = focusable[focusable.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          };
+        }
+        if (!keydownHandler) {
+          keydownHandler = function (e) {
+            if (e.key === 'Escape') {
+              e.preventDefault();
+              closeDialog();
+            }
+          };
+        }
+        dialog.addEventListener('keydown', focusTrapHandler);
+        dialog.addEventListener('keydown', keydownHandler);
+      }
+      if (reduceMotionInput) reduceMotionInput.focus();
+    }
+
+    window.EverlyA11y = window.EverlyA11y || {};
+    window.EverlyA11y.open = openDialog;
+
+    document.addEventListener('click', function (e) {
+      const trigger = e.target.closest('[data-a11y-open]');
+      if (!trigger) return;
+      e.preventDefault();
+      openDialog();
+    });
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        closeDialog();
+      });
+    }
+
+    dialog.addEventListener('click', function (e) {
+      if (e.target === dialog && !supportsDialog) closeDialog();
+    });
+
+    if (reduceMotionInput) reduceMotionInput.addEventListener('change', applyPreferences);
+    if (pauseAutoplayInput) pauseAutoplayInput.addEventListener('change', applyPreferences);
+    if (textSizeInput) textSizeInput.addEventListener('change', applyPreferences);
+    if (letterSpacingInput) letterSpacingInput.addEventListener('change', applyPreferences);
+    if (lineHeightInput) lineHeightInput.addEventListener('change', applyPreferences);
+    if (dyslexiaFontInput) dyslexiaFontInput.addEventListener('change', applyPreferences);
+    if (invertColorsInput) invertColorsInput.addEventListener('change', applyPreferences);
+    if (readingModeInput) readingModeInput.addEventListener('change', applyPreferences);
+    if (highlightFocusInput) highlightFocusInput.addEventListener('change', applyPreferences);
+    if (contrastInput) contrastInput.addEventListener('change', applyPreferences);
+    if (bigCursorInput) bigCursorInput.addEventListener('change', applyPreferences);
+    if (hideImagesInput) hideImagesInput.addEventListener('change', applyPreferences);
+    if (ttsButton) {
+      ttsButton.addEventListener('click', function () {
+        if (ttsActive) {
+          stopTts();
+          disableHoverTts();
+        } else {
+          startTts();
+        }
+      });
+    }
+
+    ttsSpeedButtons.forEach((btn) => {
+      btn.addEventListener('click', function () {
+        ttsRate = parseFloat(btn.dataset.a11yTtsSpeed) || 1;
+        window.localStorage.setItem('a11y-tts-rate', String(ttsRate));
+        ttsSpeedButtons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+        if (ttsActive) speak('Speech rate updated');
+      });
+    });
+
+    if (sideSwitch) {
+      sideSwitch.addEventListener('change', function () {
+        const isLeft = sideSwitch.checked;
+        dialog.classList.toggle('a11y-panel--left', isLeft);
+        window.localStorage.setItem('a11y-panel-side', isLeft ? 'left' : 'right');
+      });
+    }
+
+    if (resetButton) {
+      resetButton.addEventListener('click', function () {
+        const keys = [
+          'a11y-reduce-motion','a11y-pause-autoplay','a11y-text-size','a11y-letter-spacing','a11y-line-height',
+          'a11y-dyslexia-font','a11y-invert-colors','a11y-reading-mode','a11y-highlight-focus','a11y-contrast',
+          'a11y-big-cursor','a11y-hide-images',
+          'a11y-tts-rate','a11y-tts-active','a11y-profile','a11y-profile-backup','a11y-panel-side'
+        ];
+        keys.forEach((key) => window.localStorage.removeItem(key));
+        if (sideSwitch) sideSwitch.checked = false;
+        profileButtons.forEach((btn) => btn.setAttribute('aria-pressed', 'false'));
+        [
+          reduceMotionInput, pauseAutoplayInput, textSizeInput, letterSpacingInput, lineHeightInput,
+          dyslexiaFontInput, invertColorsInput, readingModeInput, highlightFocusInput, contrastInput,
+          bigCursorInput, hideImagesInput
+        ].forEach((input) => {
+          if (input) input.checked = false;
+        });
+        ttsSpeedButtons.forEach((btn) => btn.setAttribute('aria-pressed', String(btn.dataset.a11yTtsSpeed === '1')));
+        ttsRate = 1;
+        if (ttsActive) {
+          stopTts();
+          disableHoverTts();
+        }
+        applyPreferences();
+        syncInputsFromStorage();
+      });
+    }
+
+    profileButtons.forEach((btn) => {
+      btn.addEventListener('click', function () {
+        const key = btn.dataset.a11yProfile;
+        const activeProfile = window.localStorage.getItem('a11y-profile') || '';
+        if (activeProfile === key) {
+          const backupRaw = window.localStorage.getItem('a11y-profile-backup');
+          window.localStorage.removeItem('a11y-profile');
+          window.localStorage.removeItem('a11y-profile-backup');
+          profileButtons.forEach((b) => b.setAttribute('aria-pressed', 'false'));
+          if (backupRaw) {
+            try {
+              applySettingsState(JSON.parse(backupRaw));
+            } catch (e) {
+              applyPreferences();
+            }
+          } else {
+            applySettingsState({
+              reduceMotion: false,
+              pauseAutoplay: false,
+              textSize: false,
+              letterSpacing: false,
+              lineHeight: false,
+              dyslexiaFont: false,
+              invertColors: false,
+              readingMode: false,
+              highlightFocus: false,
+              contrastBoost: false,
+              bigCursor: false,
+              hideImages: false
+            });
+          }
+          return;
+        }
+        applyProfile(key);
+      });
+    });
+
+    syncInputsFromStorage();
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "t:sections.footer.name",
+  "class": "shopify-section--footer",
+  "tag": "footer",
+  "max_blocks": 6,
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "t:global.colors.scheme",
+      "default": "scheme-2"
+    },
+    {
+      "type": "checkbox",
+      "id": "separate_section_with_border",
+      "label": "t:global.section.separate_section_with_border",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_social_media",
+      "label": "t:sections.footer.show_social_media",
+      "info": "t:sections.footer.show_social_media_info",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_payment_icons",
+      "label": "t:sections.footer.show_payment_icons",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:global.localization.country_region_selector_category",
+      "info": "t:global.localization.country_region_selector_category_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_selector",
+      "label": "t:global.localization.show_country_region_selector",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_name",
+      "label": "t:global.localization.show_country_name",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_country_flag",
+      "label": "t:global.localization.show_country_flag",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "t:global.localization.language_selector_category",
+      "info": "t:global.localization.language_selector_category_info"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_locale_selector",
+      "label": "t:global.localization.show_locale_selector",
+      "default": true
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    },
+    {
+      "type": "image",
+      "name": "t:sections.footer.blocks.image.name",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "t:global.image.image",
+          "info": "t:sections.footer.blocks.image.image_size_recommendation"
+        },
+        {
+          "type": "range",
+          "id": "image_width",
+          "min": 50,
+          "max": 300,
+          "step": 10,
+          "unit": "px",
+          "label": "t:global.image.width",
+          "default": 150
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "t:global.text.link"
+        }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "t:sections.footer.blocks.text.name",
+      "settings": [
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "t:global.text.heading",
+          "default": "About our store"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:global.text.content",
+          "default": "<p>Use this text area to tell your customers about your brand and vision. You can change it in the theme editor.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "enable_follow_on_shop",
+          "label": "t:sections.footer.blocks.text.show_follow_on_shop",
+          "info": "t:sections.footer.blocks.text.show_follow_on_shop_info",
+          "default": true
+        }
+      ]
+    },
+    {
+      "type": "links",
+      "name": "t:sections.footer.blocks.links.name",
+      "settings": [
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "t:sections.footer.blocks.links.menu",
+          "info": "t:sections.footer.blocks.links.menu_info",
+          "default": "footer"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_menu_title",
+          "label": "t:sections.footer.blocks.links.show_menu_title",
+          "default": true
+        },
+        {
+          "type": "inline_richtext",
+          "id": "menu_title",
+          "label": "t:sections.footer.blocks.links.menu_title",
+          "info": "t:sections.footer.blocks.links.menu_title_info"
+        }
+      ]
+    },
+    {
+      "type": "newsletter",
+      "name": "t:sections.footer.blocks.newsletter.name",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "paragraph",
+          "content": "t:sections.footer.blocks.newsletter.newsletter_info"
+        },
+        {
+          "type": "inline_richtext",
+          "id": "title",
+          "label": "t:global.text.heading",
+          "default": "Newsletter"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "t:global.text.content",
+          "default": "<p>Sign up to our newsletter to receive exclusive offers.</p>"
+        },
+        {
+          "type": "color",
+          "id": "button_background",
+          "label": "t:global.colors.button_background"
+        },
+        {
+          "type": "color",
+          "id": "button_text_color",
+          "label": "t:global.colors.button_text"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
