@@ -17,12 +17,12 @@
 }
 
 .__pf *:focus-visible {
-    outline: none !important;
-    box-shadow: none !important;
+    outline: 2px solid currentColor !important;
+    outline-offset: 2px !important;
 }
 
-.__pf *:not(input):not(select):not(textarea):not([data-active="true"]):focus-visible {
-    border: none !important;
+.__pf *:not(input):not(select):not(textarea):not([data-active="true"]):focus:not(:focus-visible) {
+    outline: none !important;
 }
 
 .__pf *,

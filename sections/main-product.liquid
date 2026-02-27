@@ -516,7 +516,7 @@
                     <td data-label="Quantity" class="bulk-order-form__cell-quantity">
                       <div class="quantity">
                         <button class="quantity__button" name="minus" type="button">
-                          <span class="visually-hidden">-</span>
+                          <span class="visually-hidden">{{ 'products.product.quantity.decrease' | t | default: 'Decrease quantity' }}</span>
                           <span class="svg-wrapper">
                             {%- comment %} FIX: Correctly renders the minus icon {%- endcomment %}
                             {{ 'icon-minus.svg' | asset_url | img_tag: '', 'icon icon-minus' }}
@@ -524,7 +524,7 @@
                         </button>
                         <input class="quantity__input" type="number" value="0" min="0" aria-label="Quantity for {{ variant.title | escape }}">
                         <button class="quantity__button" name="plus" type="button">
-                          <span class="visually-hidden">+</span>
+                          <span class="visually-hidden">{{ 'products.product.quantity.increase' | t | default: 'Increase quantity' }}</span>
                           <span class="svg-wrapper">
                             {%- comment %} FIX: Correctly renders the plus icon {%- endcomment %}
                             {{ 'icon-plus.svg' | asset_url | img_tag: '', 'icon icon-plus' }}
@@ -961,7 +961,7 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
             {{- 'icon-close.svg' | inline_asset_content -}}
           </button>
           <div class="product-popup-modal__content-info">
-            <h1 class="h2">{{ block.settings.page.title | escape }}</h1>
+            <h2 class="h2">{{ block.settings.page.title | escape }}</h2>
             {{ block.settings.page.content }}
           </div>
         </div>

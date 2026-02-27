@@ -303,7 +303,14 @@ If you plan to remove PageFly, please see the guide in our help center first: ht
   {% render 'wsg-custom' %}
 {% include 'pagefly-app-header' %}</head>
 
-  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}"><div class="pagefly-container">
-              {{ content_for_layout }}
-            </div></body>
+  <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
+    <a class="skip-to-content-link button visually-hidden" href="#MainContent">
+      {{ 'accessibility.skip_to_text' | t }}
+    </a>
+    <main id="MainContent">
+      <div class="pagefly-container">
+        {{ content_for_layout }}
+      </div>
+    </main>
+  </body>
 </html>

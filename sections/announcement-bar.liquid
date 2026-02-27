@@ -127,6 +127,18 @@
             </span>
           </button>
         </div>
+        {%- if section.settings.auto_rotate -%}
+          <button
+            type="button"
+            class="slideshow__autoplay slider-button no-js-hidden"
+            aria-label="{{ 'sections.slideshow.pause_slideshow' | t }}"
+            style="position:absolute;right:8px;top:50%;transform:translateY(-50%);z-index:2;background:transparent;border:0;color:currentColor;cursor:pointer;padding:4px;"
+          >
+            <span class="svg-wrapper" aria-hidden="true">
+              {{- 'icon-pause.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        {%- endif -%}
       </slideshow-component>
       {%- if request.design_mode -%}
         <script src="{{ 'theme-editor.js' | asset_url }}" defer="defer"></script>

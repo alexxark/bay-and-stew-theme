@@ -9,7 +9,7 @@ Do not delete unless Wholesale Gorilla has been uninstalled.
     <div data-translation-selector="applyForWholesaleAccount">{{ section.settings.description }}</div>
     {% if section.settings.image != blank %}
     <div class="registration-form-img-container">
-      <img src="{{ section.settings.image | img_url: '' }}" />
+      <img src="{{ section.settings.image | img_url: '' }}" alt="{{ section.settings.page-title | escape }}" />
     </div>
     {% endif %}
     {{ section.settings.custom-html }}

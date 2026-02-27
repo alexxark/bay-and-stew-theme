@@ -40,7 +40,7 @@
     {%- endif -%}
 
     <div class="cart__warnings">
-      <h1 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h1>
+      <h2 class="cart__empty-text">{{ 'sections.cart.empty' | t }}</h2>
       <a href="{{ routes.all_products_collection_url }}" class="button">
         {{ 'general.continue_shopping' | t }}
       </a>
@@ -281,6 +281,7 @@
                               <button
                                 type="button"
                                 aria-expanded="false"
+                                aria-label="{{ 'products.product.quantity.info' | t | default: 'Quantity rules' }}"
                                 class="quantity-popover__info-button quantity-popover__info-button--icon-only button button--tertiary small-hide medium-hide"
                               >
                                 {{- 'icon-info.svg' | inline_asset_content -}}
