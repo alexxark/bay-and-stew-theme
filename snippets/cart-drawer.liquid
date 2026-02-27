@@ -75,7 +75,7 @@
           </span>
         </button>
       </div>
-      {%- if settings.show_rewards -%}
+      {%- if settings.show_rewards and cart.item_count > 0 -%}
         {%- render 'cart-rewards' -%}
       {%- endif -%}
       <cart-drawer-items

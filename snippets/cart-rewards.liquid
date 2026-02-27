@@ -267,6 +267,11 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
         async _updateFromCart(cart) {
           const total = this._calculateTotal(cart);
+          const itemCount = cart.item_count || 0;
+
+          /* Hide tracker when cart is empty */
+          this.style.display = itemCount > 0 ? '' : 'none';
+
           this.dataset.totalPrice = total;
           this._updateProgress(total);
           this._updateMilestones(total);
@@ -286,7 +291,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             this._syncTimer = null;
             if (!this._pendingCart) return;
             void this._syncGifts(this._pendingCart, this._pendingTotal);
-          }, 250);
+          }, 50);
         }
 
         _ensureDrawerItems(cart) {
@@ -593,7 +598,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
               id: variantId,
               quantity,
               properties: { __reward_gift_variant: String(variantId) },
-              sections: 'cart-drawer,cart-icon-bubble'
+              sections: ['cart-drawer', 'cart-icon-bubble']
             })
           });
           try { this._lastSections = (await resp.json()).sections; } catch(e) {}
@@ -622,7 +627,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
-            body: JSON.stringify({ updates, sections: 'cart-drawer,cart-icon-bubble' })
+            body: JSON.stringify({ updates, sections: ['cart-drawer', 'cart-icon-bubble'] })
           });
           try { this._lastSections = (await resp.json()).sections; } catch(e) {}
         }
