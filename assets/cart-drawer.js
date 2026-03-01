@@ -180,8 +180,8 @@ customElements.define('cart-drawer-items', CartDrawerItems);
 
     const priceLike = (node) =>
       node?.nodeType === 1 && (
-        node.matches?.('[bss-b2b-*], [bss-b2b-cart-item-key], [bss-b2b-final-line-price], [bss-b2b-cart-total-price], .bss-b2b-qb-table') ||
-        node.closest?.('[bss-b2b-*], .bss-b2b-qb-table')
+        node.matches?.('[bss-b2b-cart-item-key], [bss-b2b-final-line-price], [bss-b2b-cart-total-price], .bss-b2b-qb-table') ||
+        node.closest?.('[bss-b2b-cart-item-key], [bss-b2b-final-line-price], [bss-b2b-cart-total-price], .bss-b2b-qb-table')
       );
 
     const mo = new MutationObserver((mutList) => {

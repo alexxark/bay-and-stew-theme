@@ -51,9 +51,9 @@
           echo '<!-- PageFly begins loading Google fonts -->'
           echo '<link rel="preconnect" href="https://fonts.googleapis.com">'
           echo '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
-          echo refined_google_font_url | prepend: '<link rel="preload" as="style" fetchpriority="low" href="' | append: '&display=block">'
-          echo refined_google_font_url | prepend: '<link rel="stylesheet" href="' | append: '&display=block" media="(min-width: 640px)">'
-          echo refined_google_font_url | prepend: '<link rel="stylesheet" href="' | append: '&display=block" media="print" onload="this.onload=null;this.media=__PF_GOOGLE_FONT_MEDIA_ALL__">' | replace: '__PF_GOOGLE_FONT_MEDIA_ALL__', "'all'"
+          echo refined_google_font_url | prepend: '<link rel="preload" as="style" fetchpriority="low" href="' | append: '&display=swap">'
+          echo refined_google_font_url | prepend: '<link rel="stylesheet" href="' | append: '&display=swap" media="(min-width: 640px)">'
+          echo refined_google_font_url | prepend: '<link rel="stylesheet" href="' | append: '&display=swap" media="print" onload="this.onload=null;this.media=__PF_GOOGLE_FONT_MEDIA_ALL__">' | replace: '__PF_GOOGLE_FONT_MEDIA_ALL__', "'all'"
           echo '<!-- PageFly ends loading Google fonts -->'
         endcapture
       endif

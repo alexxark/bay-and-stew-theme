@@ -14,7 +14,7 @@ if (!customElements.get('localization-form')) {
           closeButton: this.querySelector('.country-selector__close-button'),
           resetButton: this.querySelector('.country-filter__reset-button'),
           searchIcon: this.querySelector('.country-filter__search-icon'),
-          liveRegion: this.querySelector('#sr-country-search-results'),
+          liveRegion: this.querySelector('[id$="-sr-country-search-results"]'),
         };
         this.addEventListener('keyup', this.onContainerKeyUp.bind(this));
         this.addEventListener('keydown', this.onContainerKeyDown.bind(this));

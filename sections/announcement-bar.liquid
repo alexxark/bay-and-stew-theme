@@ -15,7 +15,7 @@
 -%}
 
 {% if social_icons %}
-  {{ 'component-list-social.css' | asset_url | stylesheet_tag }}
+  <link rel="stylesheet" href="{{ 'component-list-social.css' | asset_url }}" media="print" onload="this.media='all'">
 {% endif %}
 
 <div
