@@ -1,6 +1,6 @@
-{{ 'section-multicolumn.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'section-multicolumn.css' | asset_url }}" media="print" onload="this.media='all'">
 {{ 'component-slider.css' | asset_url | stylesheet_tag }}
-{{ 'section-multicolumn-slider-custom.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'section-multicolumn-slider-custom.css' | asset_url }}" media="print" onload="this.media='all'">
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
