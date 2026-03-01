@@ -63,7 +63,7 @@
   color: #ffffff !important;
   border-radius: 12px;
 }
-.a11y-panel__header * {
+.a11y-panel__header .a11y-panel__title {
   color: #ffffff !important;
 }
 .a11y-panel__title {
@@ -87,6 +87,11 @@
   font-weight: 700;
   line-height: 1;
   transition: background 0.15s ease, transform 0.15s ease;
+}
+.a11y-panel__close svg,
+.a11y-panel__close path {
+  color: #1a1a1a !important;
+  stroke: #1a1a1a !important;
 }
 .a11y-panel__close:hover {
   background: #e0e0e0;
@@ -342,17 +347,20 @@
 }
 .a11y-tts-speeds {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 6px;
 }
 .a11y-tts-speeds button {
   border: 1.5px solid #1a1a1a;
   background: #ffffff;
   border-radius: 10px;
-  padding: 7px 8px;
+  padding: 7px 4px;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   font-family: inherit;
   transition: background 0.15s ease, color 0.15s ease;
 }
