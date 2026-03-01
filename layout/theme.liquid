@@ -300,8 +300,9 @@
     </script>
   {% render 'wsg-custom' %}
   {%- comment -%} B2B Product Page Locking Logic {%- endcomment -%}
-{%- if template.name == 'product' and product -%}
-  {%- liquid
+{%- liquid
+  assign b2b_product_locked = false
+  if template.name == 'product' and product
     assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
 
     assign is_in_locked_collection = false
@@ -318,12 +319,10 @@
     endif
 
     if is_in_locked_collection and is_b2b_customer == false
-      echo '<meta http-equiv="refresh" content="0; url=/" />'
-      echo '<script>window.location.href = "/";</script>'
-      echo '<style>body { display: none !important; }</style>'
+      assign b2b_product_locked = true
     endif
-  -%}
-{%- endif -%}
+  endif
+-%}
 {% include 'pagefly-app-header' %}</head>
 
   <body class="gradient{% if settings.animations_hover_elements != 'none' %} animate--hover-{{ settings.animations_hover_elements }}{% endif %}">
@@ -340,7 +339,14 @@
     {% sections 'header-group' %}
 
     <main id="MainContent" class="content-for-layout focus-none" tabindex="-1">
-      {{ content_for_layout }}
+      {%- if b2b_product_locked -%}
+        <div class="page-width" style="text-align: center; padding: 50px 0 100px;">
+          <h2>Wholesale Access Only</h2>
+          <p>You must be a B2B customer to access this product. Please <a href="/account/login?checkout_url={{ request.path | url_encode }}">log in</a> or <a href="/pages/wholesale-sales-tax-exemption-requirements?checkout_url={{ request.path | url_encode }}">register here</a>.</p>
+        </div>
+      {%- else -%}
+        {{ content_for_layout }}
+      {%- endif -%}
     </main>
 
     {% sections 'footer-group' %}
