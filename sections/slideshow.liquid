@@ -1,6 +1,6 @@
-{{ 'section-image-banner.css' | asset_url | stylesheet_tag }}
-{{ 'component-slider.css' | asset_url | stylesheet_tag }}
-{{ 'component-slideshow.css' | asset_url | stylesheet_tag }}
+<link rel="stylesheet" href="{{ 'section-image-banner.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-slider.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-slideshow.css' | asset_url }}" media="print" onload="this.media='all'">
 
 {%- if section.settings.slide_height == 'adapt_image' and section.blocks.first.settings.image != blank -%}
   {%- style -%}
@@ -136,11 +136,19 @@
                 {%- endif -%}
               </div>
               <div class="slideshow__media-image slideshow__media-image--mobile">
-                {{
-                  block.settings.image_mobile
-                  | image_url: width: 1100
-                  | image_tag: loading: 'lazy', sizes: '100vw', widths: '375, 550, 750, 1100', alt: slide_alt_mobile
-                }}
+                {%- if forloop.first -%}
+                  {{
+                    block.settings.image_mobile
+                    | image_url: width: 1100
+                    | image_tag: fetchpriority: 'high', sizes: '100vw', widths: '375, 550, 750, 1100', alt: slide_alt_mobile
+                  }}
+                {%- else -%}
+                  {{
+                    block.settings.image_mobile
+                    | image_url: width: 1100
+                    | image_tag: loading: 'lazy', sizes: '100vw', widths: '375, 550, 750, 1100', alt: slide_alt_mobile
+                  }}
+                {%- endif -%}
               </div>
             {%- else -%}
               {%- if forloop.first -%}
