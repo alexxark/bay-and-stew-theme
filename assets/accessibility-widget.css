@@ -59,9 +59,12 @@
   align-items: center;
   justify-content: space-between;
   padding: 11px 16px;
-  background: #1a1a1a;
-  color: #ffffff;
+  background: #1a1a1a !important;
+  color: #ffffff !important;
   border-radius: 12px;
+}
+.a11y-panel__header * {
+  color: #ffffff !important;
 }
 .a11y-panel__title {
   font-size: 17px;
@@ -79,7 +82,7 @@
   cursor: pointer;
   display: grid;
   place-content: center;
-  color: #1a1a1a;
+  color: #1a1a1a !important;
   font-size: 15px;
   font-weight: 700;
   line-height: 1;
@@ -264,16 +267,6 @@
 .a11y-card--tts {
   grid-template-columns: 1fr;
   gap: 10px;
-  border: 0;
-  padding: 0;
-  background: transparent;
-}
-.a11y-card--tts:hover {
-  background: transparent;
-  box-shadow: none;
-}
-.a11y-card--tts:active {
-  transform: none;
 }
 .a11y-card__content {
   display: flex;
