@@ -98,7 +98,7 @@
           "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
-            "image_mobile": "shopify://shop_images/GWP-Hat-Mobile.jpg",
+            "image_mobile": "shopify://shop_images/Hat-Banner-Relaunch-mobile.jpg",
             "allow_sound": true,
             "heading": "<strong>BACK BY POPULAR DEMAND</strong>",
             "subheading": "<strong>FREE TRUCKER HAT </strong>WITH ANY $150+ PURCHASE",
@@ -131,7 +131,7 @@
             "text_alignment": "left",
             "image_overlay_opacity": 0,
             "color_scheme": "scheme-adca6236-3bba-46b0-be38-e3836ef3bd6a",
-            "text_alignment_mobile": "left"
+            "text_alignment_mobile": "center"
           }
         }
       },
