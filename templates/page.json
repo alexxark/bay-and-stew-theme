@@ -69,10 +69,69 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "multicolumn_Nx3KQd": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_kbB3Na": {
+          "type": "column",
+          "disabled": true,
+          "settings": {
+            "title": "",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_GKh38t": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
+            "title": "FREE SHIPPING ON US",
+            "text": "<p>Free Standard Shipping - Spend $35+<br/>FREE RUSH Shipping - Spend $500+</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_c9qxDk": {
+          "type": "column",
+          "disabled": true,
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_kbB3Na",
+        "column_GKh38t",
+        "column_c9qxDk"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h0",
+        "image_width": "third",
+        "image_ratio": "circle",
+        "columns_desktop": 2,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-adca6236-3bba-46b0-be38-e3836ef3bd6a",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
-    "image_with_text_YxWFtF"
+    "image_with_text_YxWFtF",
+    "multicolumn_Nx3KQd"
   ]
 }
