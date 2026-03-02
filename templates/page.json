@@ -12,7 +12,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        ".main-page-title {font-size: 32px; font-weight: bold; text-align: center;}"
+        ".main-page-title {font-size: 48px; font-weight: bold; text-align: center; color: #806f65;}"
       ],
       "settings": {
         "padding_top": 28,
@@ -32,7 +32,7 @@
         "text_dJgLTW": {
           "type": "text",
           "settings": {
-            "text": "<h3>WELDS & ESPRESSO ON US<br/></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
             "text_style": "subtitle"
           }
         },
@@ -49,6 +49,9 @@
         "heading_CTy8GP",
         "text_dJgLTW",
         "button_ML7zzX"
+      ],
+      "custom_css": [
+        "h3 {font-weight: bold; color: #806f65; text-decoration: underline;}"
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
