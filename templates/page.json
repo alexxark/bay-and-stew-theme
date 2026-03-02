@@ -39,8 +39,8 @@
         "button_ML7zzX": {
           "type": "button",
           "settings": {
-            "button_label": "Button label",
-            "button_link": "",
+            "button_label": "SHOP NOW",
+            "button_link": "shopify://collections/shop-all",
             "button_style_secondary": false
           }
         }
@@ -52,6 +52,7 @@
       ],
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
+        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
         "height": "adapt",
         "desktop_image_width": "small",
         "layout": "image_first",
