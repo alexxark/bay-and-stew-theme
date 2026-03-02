@@ -98,7 +98,7 @@
           "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
-            "image_mobile": "shopify://shop_images/Hat-Banner-Relaunch-mobile.jpg",
+            "image_mobile": "shopify://shop_images/Hat-Banner-mobile.jpg",
             "allow_sound": true,
             "heading": "<strong>BACK BY POPULAR DEMAND</strong>",
             "subheading": "<strong>FREE TRUCKER HAT </strong>WITH ANY $150+ PURCHASE",
@@ -107,7 +107,7 @@
             "promo_link_label": "details",
             "promo_details_text": "",
             "heading_size_desktop": 48,
-            "heading_size_mobile": 26,
+            "heading_size_mobile": 28,
             "subheading_size_desktop": 18,
             "subheading_size_mobile": 12,
             "gap_before_subheading": 0,
@@ -139,6 +139,9 @@
         "slide_QLwpGt",
         "slide_YA4RDt",
         "slide_afMiDm"
+      ],
+      "custom_css": [
+        "@media screen and (max-width: 749px) {.banner__content {align-items: flex-start; /* top */ justify-content: center; /* horizontal center */ padding-top: 2px; /* optional spacing from top */ }}"
       ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
