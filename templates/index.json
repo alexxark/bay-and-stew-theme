@@ -92,11 +92,53 @@
             "color_scheme": "scheme-1",
             "text_alignment_mobile": "left"
           }
+        },
+        "slide_afMiDm": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
+            "image_mobile": "shopify://shop_images/GWP-Hat-Mobile.jpg",
+            "allow_sound": true,
+            "heading": "<strong>BACK BY POPULAR DEMAND</strong>",
+            "subheading": "<strong>FREE TRUCKER HAT </strong>WITH ANY $150+ PURCHASE",
+            "highlight_words": "",
+            "promo_note": "",
+            "promo_link_label": "details",
+            "promo_details_text": "",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 26,
+            "subheading_size_desktop": 18,
+            "subheading_size_mobile": 12,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": -16,
+            "gap_after_subheading": 10,
+            "gap_after_title": 18,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": 0,
+            "button_1_text": "SHOP NOW",
+            "button_1_link": "shopify://collections/shop-all",
+            "button_1_style": "solid",
+            "button_1_background": "#cfebfb",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "scheme-adca6236-3bba-46b0-be38-e3836ef3bd6a",
+            "text_alignment_mobile": "left"
+          }
         }
       },
       "block_order": [
         "slide_QLwpGt",
-        "slide_YA4RDt"
+        "slide_YA4RDt",
+        "slide_afMiDm"
       ],
       "name": "t:sections.slideshow.presets.name",
       "settings": {
