@@ -25,7 +25,7 @@
             "promo_link_label": "details",
             "promo_details_text": "",
             "heading_size_desktop": 48,
-            "heading_size_mobile": 26,
+            "heading_size_mobile": 22,
             "subheading_size_desktop": 16,
             "subheading_size_mobile": 12,
             "gap_before_subheading": 0,
@@ -90,7 +90,7 @@
             "text_alignment": "left",
             "image_overlay_opacity": 0,
             "color_scheme": "",
-            "mobile_box_align": "middle-left",
+            "mobile_box_align": "middle-center",
             "text_alignment_mobile": "center"
           }
         }
