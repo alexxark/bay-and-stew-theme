@@ -49,6 +49,7 @@
             "text_alignment": "left",
             "image_overlay_opacity": 0,
             "color_scheme": "scheme-1",
+            "mobile_box_align": "middle-left",
             "text_alignment_mobile": "left"
           }
         },
@@ -89,6 +90,7 @@
             "text_alignment": "left",
             "image_overlay_opacity": 0,
             "color_scheme": "",
+            "mobile_box_align": "middle-left",
             "text_alignment_mobile": "center"
           }
         }
