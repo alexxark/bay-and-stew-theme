@@ -783,26 +783,29 @@
       align-items: flex-end !important;
     }
 
-    /* ---- Horizontal positioning via asymmetric padding ---- */
-    #shopify-section-{{ section.id }} .banner__content-mobile--top-left,
-    #shopify-section-{{ section.id }} .banner__content-mobile--middle-left,
-    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-left {
-      padding-left: 1.5rem !important;
-      padding-right: max(1.5rem, var(--slideshow-mobile-h-offset, 12%)) !important;
+    /* ---- Horizontal positioning via box width + margin ---- */
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-left .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-left .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-left .banner__box {
+      max-width: calc(100% - var(--slideshow-mobile-h-offset, 12%)) !important;
+      margin-left: 0 !important;
+      margin-right: auto !important;
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--top-center,
-    #shopify-section-{{ section.id }} .banner__content-mobile--middle-center,
-    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-center {
-      padding-left: 1.5rem !important;
-      padding-right: 1.5rem !important;
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-center .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-center .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-center .banner__box {
+      max-width: calc(100% - var(--slideshow-mobile-h-offset, 12%) * 2) !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--top-right,
-    #shopify-section-{{ section.id }} .banner__content-mobile--middle-right,
-    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-right {
-      padding-left: max(1.5rem, var(--slideshow-mobile-h-offset, 12%)) !important;
-      padding-right: 1.5rem !important;
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-right .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-right .banner__box,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-right .banner__box {
+      max-width: calc(100% - var(--slideshow-mobile-h-offset, 12%)) !important;
+      margin-left: auto !important;
+      margin-right: 0 !important;
     }
 
     /* ---- Mobile button size ---- */
@@ -1508,7 +1511,7 @@
           "step": 2,
           "unit": "%",
           "label": "Mobile horizontal offset",
-          "info": "Pushes text further toward the chosen side. 0% = edge, higher = more offset.",
+          "info": "Constrains the text area width. Higher values make the content narrower, pushing it toward the chosen side.",
           "default": 12
         },
         {
