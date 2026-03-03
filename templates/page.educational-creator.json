@@ -52,18 +52,21 @@
         "text_iyXnfT": {
           "type": "text",
           "settings": {
-            "text": "<p>Bay & Stew is looking for<strong> </strong>experienced<strong> </strong>permanent jewelry artists and handmade jewelry professionals who are confident on camera and passionate about teaching.</p><p><em>This is a paid contractor opportunity.</em></p><p>Selected contributors will create educational video tutorials and/or written how-to articles focused on tools, techniques, and best practices for jewelry professionals.</p>"
+            "text": "<h3>Bay & Stew is looking for<strong> </strong>experienced<strong> </strong>permanent jewelry artists and handmade jewelry professionals who are confident on camera and passionate about teaching.</h3><p><em>This is a paid contractor opportunity.</em></p><h3>Selected contributors will create educational video tutorials and/or written how-to articles focused on tools, techniques, and best practices for jewelry professionals.</h3>"
           }
         }
       },
       "block_order": [
         "text_iyXnfT"
       ],
+      "custom_css": [
+        "h3 {font-family: sans-serif; line-height: 2;}"
+      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-2",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
