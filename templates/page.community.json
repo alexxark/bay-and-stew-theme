@@ -102,21 +102,38 @@
     "image_with_text_yziiii": {
       "type": "image-with-text",
       "blocks": {
+        "heading_WJpjHE": {
+          "type": "heading",
+          "settings": {
+            "heading": "Free Trucker Hat with Any $150+ Purchase",
+            "heading_size": "h1"
+          }
+        },
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<p>Bay and Stew began in 2013 when I first started making jewelry and couldn’t find high-quality stamping blanks that met my standards — so I began making my own. Soon after, I started offering these blanks to other small jewelry businesses, and from there, expanded into chains, findings, and more.</p><p>When permanent jewelry began to take off, I received more and more requests for my gold-filled connectors and custom hand-stamped pieces from customers in the permanent jewelry industry. </p>",
+            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
             "text_style": "body"
+          }
+        },
+        "button_Xx8WkJ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
           }
         }
       },
       "block_order": [
-        "text_66mTxa"
+        "heading_WJpjHE",
+        "text_66mTxa",
+        "button_Xx8WkJ"
       ],
       "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/stewie-gerly-small.png",
-        "height": "medium",
+        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
         "desktop_content_position": "top",
@@ -126,116 +143,54 @@
         "color_scheme": "scheme-1",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
-        "padding_top": 0,
+        "padding_top": 36,
         "padding_bottom": 36
       }
     },
-    "image_with_text_gwKdWK": {
-      "type": "image-with-text",
+    "multicolumn_BJB7wL": {
+      "type": "multicolumn",
       "blocks": {
-        "heading_6hifzJ": {
-          "type": "heading",
+        "column_eqKqBg": {
+          "type": "column",
           "settings": {
-            "heading": "From Basement dreams to handcrafted pieces - the early days, 2016",
-            "heading_size": "h1"
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
           }
         },
-        "text_8R6NwM": {
-          "type": "text",
+        "column_D7RpLC": {
+          "type": "column",
           "settings": {
-            "text": "<h3>Today, Bay and Stew is proud to supply premium materials to makers across the handmade, engraved, and permanent jewelry communities.</h3><p>The name <em>Bay and Stew</em> comes from my two Italian Greyhounds, Bailey and Stewie, who were always by my side in the studio while I created jewelry. Though they’re no longer with me, their memory is a sweet reminder of where it all started — with passion, creativity, and a lot of heart.</p>",
-            "text_style": "body"
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
           }
         }
       },
       "block_order": [
-        "heading_6hifzJ",
-        "text_8R6NwM"
+        "column_eqKqBg",
+        "column_D7RpLC"
       ],
-      "custom_css": [
-        "h2 {font-size: 13px; color: #b19d8c; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
-      ],
+      "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Polaroid600-steweie_4ca4183e-6bba-479e-a4f8-8d1953ad9f73.png",
-        "height": "medium",
-        "desktop_image_width": "small",
-        "layout": "image_first",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-5",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 20,
-        "padding_bottom": 24
-      }
-    },
-    "rich_text_7PqGV8": {
-      "type": "rich-text",
-      "blocks": {
-        "text_VrFEFA": {
-          "type": "text",
-          "settings": {
-            "text": ""
-          }
-        }
-      },
-      "block_order": [
-        "text_VrFEFA"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-2",
-        "full_width": true,
-        "padding_top": 4,
-        "padding_bottom": 0
-      }
-    },
-    "rich_text_CMKUe4": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_mw9rdm": {
-          "type": "heading",
-          "settings": {
-            "heading": "Our Mission",
-            "heading_size": "h1"
-          }
-        },
-        "text_7QcpBg": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Born from a maker’s need for better supplies. Built on loyalty, quality, and heart.</p>"
-          }
-        },
-        "button_86AQ6W": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop Supplies",
-            "button_link": "shopify://pages/whats-new",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_mw9rdm",
-        "text_7QcpBg",
-        "button_86AQ6W"
-      ],
-      "custom_css": [
-        "h2 {font-size: 28px; color: #b19d8c;}"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-73fe3fdc-82ab-44c0-bac9-6d5df6d0238d",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 2,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     }
   },
@@ -244,8 +199,6 @@
     "image_banner_tayJNr",
     "main",
     "image_with_text_yziiii",
-    "image_with_text_gwKdWK",
-    "rich_text_7PqGV8",
-    "rich_text_CMKUe4"
+    "multicolumn_BJB7wL"
   ]
 }
