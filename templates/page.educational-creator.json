@@ -46,6 +46,28 @@
         "show_text_below": false
       }
     },
+    "rich_text_7PqGV8": {
+      "type": "rich-text",
+      "blocks": {
+        "text_VrFEFA": {
+          "type": "text",
+          "settings": {
+            "text": ""
+          }
+        }
+      },
+      "block_order": [
+        "text_VrFEFA"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-54fb6e74-e27e-414b-b204-74824a093fc8",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
     "rich_text_iyPnEJ": {
       "type": "rich-text",
       "blocks": {
@@ -124,10 +146,10 @@
         "padding_bottom": 24
       }
     },
-    "rich_text_7PqGV8": {
+    "rich_text_wNpWyL": {
       "type": "rich-text",
       "blocks": {
-        "text_VrFEFA": {
+        "text_rmrcat": {
           "type": "text",
           "settings": {
             "text": ""
@@ -135,7 +157,7 @@
         }
       },
       "block_order": [
-        "text_VrFEFA"
+        "text_rmrcat"
       ],
       "settings": {
         "desktop_content_position": "center",
@@ -191,10 +213,11 @@
   },
   "order": [
     "image_banner_c8ipB7",
+    "rich_text_7PqGV8",
     "rich_text_iyPnEJ",
     "main",
     "image_with_text_gwKdWK",
-    "rich_text_7PqGV8",
+    "rich_text_wNpWyL",
     "image_with_text_yziiii"
   ]
 }
