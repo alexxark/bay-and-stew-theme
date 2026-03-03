@@ -50,6 +50,7 @@
         "text_dJgLTW",
         "button_ML7zzX"
       ],
+      "disabled": true,
       "custom_css": [
         "h3 {font-weight: bold; color: #806f65; text-decoration: underline;}"
       ],
@@ -109,6 +110,7 @@
         "column_GKh38t",
         "column_c9qxDk"
       ],
+      "disabled": true,
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
         "title": "",
