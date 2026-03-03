@@ -75,7 +75,7 @@
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6><em>DIRECT LINK TO FORM BELOW</em></h6>",
+            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6>Ready to apply? Fill out the form <br/>below or click the button</h6>",
             "text_style": "body"
           }
         },
@@ -100,7 +100,7 @@
         "desktop_content_position": "top",
         "desktop_content_alignment": "left",
         "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
+        "section_color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
         "color_scheme": "scheme-1",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
