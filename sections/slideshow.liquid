@@ -81,6 +81,12 @@
       z-index: 2;
     }
 
+    /* Let the box shrink to content so flex alignment (justify-content) can reposition it */
+    #shopify-section-{{ section.id }} .banner__content .banner__box {
+      width: auto;
+      max-width: 100%;
+    }
+
     #shopify-section-{{ section.id }} .slideshow__media-image {
       position: static;
       inset: auto;
