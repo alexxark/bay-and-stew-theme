@@ -58,7 +58,6 @@
         },
         "slide_QLwpGt": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
             "image_mobile": "shopify://shop_images/Hat-Banner-mobile.jpg",
@@ -93,7 +92,7 @@
             "show_text_box": false,
             "text_alignment": "left",
             "image_overlay_opacity": 0,
-            "color_scheme": "",
+            "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
             "mobile_box_align": "top-center",
             "mobile_horizontal_padding": 12,
             "mobile_button_size": 14,
@@ -102,6 +101,7 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Bay_and_Stew_Web_Banner-03.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_MOBILE_Banner-02.jpg",
