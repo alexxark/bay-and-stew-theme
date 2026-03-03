@@ -81,12 +81,6 @@
       z-index: 2;
     }
 
-    /* Let the box shrink to content so flex alignment (justify-content) can reposition it */
-    #shopify-section-{{ section.id }} .banner__content .banner__box {
-      width: auto;
-      max-width: 100%;
-    }
-
     #shopify-section-{{ section.id }} .slideshow__media-image {
       position: static;
       inset: auto;
@@ -754,49 +748,61 @@
       font-size: var(--slideshow-heading-size-mobile, inherit);
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--top-left {
-      align-items: flex-start;
-      justify-content: flex-start;
+    /*
+     * Mobile content position — vertical axis via align-items,
+     * horizontal axis via asymmetric padding on the wrapper.
+     * Using !important to guarantee override of theme CSS.
+     */
+
+    /* Force flex context on the wrapper (theme CSS sets it but be safe) */
+    #shopify-section-{{ section.id }} .banner__content[class*="banner__content-mobile--"] {
+      display: flex !important;
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--top-center {
-      align-items: flex-start;
-      justify-content: center;
+    /* Prevent mobile-bottom height:100% on the box from blocking vertical positioning */
+    #shopify-section-{{ section.id }} .banner__content[class*="banner__content-mobile--"] .banner__box {
+      height: auto !important;
     }
 
+    /* ---- Vertical positioning ---- */
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-left,
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-center,
     #shopify-section-{{ section.id }} .banner__content-mobile--top-right {
-      align-items: flex-start;
-      justify-content: flex-end;
+      align-items: flex-start !important;
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--middle-left {
-      align-items: center;
-      justify-content: flex-start;
-    }
-
-    #shopify-section-{{ section.id }} .banner__content-mobile--middle-center {
-      align-items: center;
-      justify-content: center;
-    }
-
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-left,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-center,
     #shopify-section-{{ section.id }} .banner__content-mobile--middle-right {
-      align-items: center;
-      justify-content: flex-end;
+      align-items: center !important;
     }
 
-    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-left {
-      align-items: flex-end;
-      justify-content: flex-start;
-    }
-
-    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-center {
-      align-items: flex-end;
-      justify-content: center;
-    }
-
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-left,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-center,
     #shopify-section-{{ section.id }} .banner__content-mobile--bottom-right {
-      align-items: flex-end;
-      justify-content: flex-end;
+      align-items: flex-end !important;
+    }
+
+    /* ---- Horizontal positioning via asymmetric padding ---- */
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-left,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-left,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-left {
+      padding-left: 1.5rem !important;
+      padding-right: max(1.5rem, 12%) !important;
+    }
+
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-center,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-center,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-center {
+      padding-left: 1.5rem !important;
+      padding-right: 1.5rem !important;
+    }
+
+    #shopify-section-{{ section.id }} .banner__content-mobile--top-right,
+    #shopify-section-{{ section.id }} .banner__content-mobile--middle-right,
+    #shopify-section-{{ section.id }} .banner__content-mobile--bottom-right {
+      padding-left: max(1.5rem, 12%) !important;
+      padding-right: 1.5rem !important;
     }
 
     #shopify-section-{{ section.id }} .slideshow__controls {
