@@ -174,7 +174,7 @@
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6>Fill out the form above<br/>or click the button</h6>",
+            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6>Fill out the form above or<br/>click the button to apply</h6>",
             "text_style": "body"
           }
         },
@@ -192,7 +192,7 @@
         "button_XhVGee"
       ],
       "custom_css": [
-        "h6 {font-size: 15px; color: #b19d8c;}"
+        "h6 {font-size: 15px; color: #b19d8c; font-weight: 400;}"
       ],
       "settings": {
         "image": "shopify://shop_images/maker-2.jpg",
