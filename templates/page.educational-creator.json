@@ -9,108 +9,103 @@
  */
 {
   "sections": {
-    "image_banner_rJf3hX": {
+    "image_banner_c8ipB7": {
       "type": "image-banner",
       "blocks": {
-        "heading_pif77m": {
+        "heading_qRkjFU": {
           "type": "heading",
           "settings": {
-            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
+            "heading": "We’re Hiring Educational Creators!",
             "heading_size": "h1"
           }
         },
-        "text_FxKzWY": {
+        "text_VPzWNw": {
           "type": "text",
           "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
+            "text": "FROM OUR BAY & STEW COMMUNITY",
+            "text_style": "body"
           }
         }
       },
       "block_order": [
-        "heading_pif77m",
-        "text_FxKzWY"
+        "heading_qRkjFU",
+        "text_VPzWNw"
       ],
-      "custom_css": [
-        "h1 {font-size: 32px;}",
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
+      "name": "t:sections.image-banner.presets.name",
       "settings": {
-        "image": "shopify://shop_images/bailey-stewie-banner_copy_37019048-8845-4379-b4a4-03aac2dbd01a.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "top-right",
+        "image": "shopify://shop_images/maker-banner.jpg",
+        "image_overlay_opacity": 30,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
         "show_text_box": false,
-        "desktop_content_alignment": "right",
-        "color_scheme": "scheme-3",
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": true,
-        "show_text_below": true
+        "show_text_below": false
       }
     },
-    "image_banner_tayJNr": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_wrbB7A": {
-          "type": "heading",
-          "settings": {
-            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
-            "heading_size": "h2"
-          }
-        },
-        "text_YaDd33": {
-          "type": "text",
-          "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
-          }
-        }
-      },
-      "block_order": [
-        "heading_wrbB7A",
-        "text_YaDd33"
-      ],
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/mobile.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "top-right",
-        "show_text_box": false,
-        "desktop_content_alignment": "right",
-        "color_scheme": "scheme-54fb6e74-e27e-414b-b204-74824a093fc8",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "stack_images_on_mobile": true,
-        "show_text_below": true
-      }
-    },
-    "rich_text_xWLV6J": {
+    "rich_text_iyPnEJ": {
       "type": "rich-text",
       "blocks": {
-        "text_QaTaPF": {
+        "text_iyXnfT": {
           "type": "text",
           "settings": {
-            "text": "<h6><em>In loving memory of Bailey and Stewie — the little studio companions who inspired it all.</em></h6>"
+            "text": "<p>Bay & Stew is looking for<strong> </strong>experienced<strong> </strong>permanent jewelry artists and handmade jewelry professionals who are confident on camera and passionate about teaching.</p><p><em>This is a paid contractor opportunity.</em></p><p>Selected contributors will create educational video tutorials and/or written how-to articles focused on tools, techniques, and best practices for jewelry professionals.</p>"
           }
         }
       },
       "block_order": [
-        "text_QaTaPF"
+        "text_iyXnfT"
       ],
-      "custom_css": [
-        "h6 {font-size: 11px; font-kerning: 2px; font-weight: 200;}"
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image_with_text_yziiii": {
+      "type": "image-with-text",
+      "blocks": {
+        "text_66mTxa": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6><em>DIRECT LINK TO FORM BELOW</em></h6>",
+            "text_style": "body"
+          }
+        },
+        "button_XhVGee": {
+          "type": "button",
+          "settings": {
+            "button_label": "Apply Now",
+            "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSf86EYpAHpilICc5sZPa2x0rl7jSZiYuDbwGbnJoTG6lqDCSA/viewform",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "text_66mTxa",
+        "button_XhVGee"
       ],
       "settings": {
-        "desktop_content_position": "right",
-        "content_alignment": "left",
-        "color_scheme": "scheme-5",
-        "full_width": true,
-        "padding_top": 12,
-        "padding_bottom": 12
+        "image": "shopify://shop_images/maker-2.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "main": {
@@ -121,37 +116,6 @@
       "settings": {
         "padding_top": 36,
         "padding_bottom": 0
-      }
-    },
-    "image_with_text_yziiii": {
-      "type": "image-with-text",
-      "blocks": {
-        "text_66mTxa": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Bay and Stew began in 2013 when I first started making jewelry and couldn’t find high-quality stamping blanks that met my standards — so I began making my own. Soon after, I started offering these blanks to other small jewelry businesses, and from there, expanded into chains, findings, and more.</p><p>When permanent jewelry began to take off, I received more and more requests for my gold-filled connectors and custom hand-stamped pieces from customers in the permanent jewelry industry. </p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "text_66mTxa"
-      ],
-      "custom_css": [],
-      "settings": {
-        "image": "shopify://shop_images/stewie-gerly-small.png",
-        "height": "medium",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 0,
-        "padding_bottom": 36
       }
     },
     "image_with_text_gwKdWK": {
@@ -217,61 +181,14 @@
         "padding_top": 4,
         "padding_bottom": 0
       }
-    },
-    "rich_text_CMKUe4": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_mw9rdm": {
-          "type": "heading",
-          "settings": {
-            "heading": "Our Mission",
-            "heading_size": "h1"
-          }
-        },
-        "text_7QcpBg": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Born from a maker’s need for better supplies. Built on loyalty, quality, and heart.</p>"
-          }
-        },
-        "button_86AQ6W": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop Supplies",
-            "button_link": "shopify://pages/whats-new",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_mw9rdm",
-        "text_7QcpBg",
-        "button_86AQ6W"
-      ],
-      "custom_css": [
-        "h2 {font-size: 28px; color: #b19d8c;}"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-73fe3fdc-82ab-44c0-bac9-6d5df6d0238d",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
     }
   },
   "order": [
-    "image_banner_rJf3hX",
-    "image_banner_tayJNr",
-    "rich_text_xWLV6J",
-    "main",
+    "image_banner_c8ipB7",
+    "rich_text_iyPnEJ",
     "image_with_text_yziiii",
+    "main",
     "image_with_text_gwKdWK",
-    "rich_text_7PqGV8",
-    "rich_text_CMKUe4"
+    "rich_text_7PqGV8"
   ]
 }
