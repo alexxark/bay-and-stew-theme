@@ -36,9 +36,9 @@
             "gap_before_buttons": 0,
             "button_1_text": "ADD TO CART",
             "button_1_link": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_1_style": "outline",
-            "button_1_background": "#ffffff",
-            "button_1_text_color": "#000000",
+            "button_1_style": "solid",
+            "button_1_background": "#121212",
+            "button_1_text_color": "#ffffff",
             "button_2_text": "",
             "button_2_link": "",
             "button_2_style": "outline",
@@ -50,6 +50,8 @@
             "image_overlay_opacity": 0,
             "color_scheme": "scheme-1",
             "mobile_box_align": "middle-left",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 12,
             "text_alignment_mobile": "left"
           }
         },
@@ -91,6 +93,8 @@
             "image_overlay_opacity": 0,
             "color_scheme": "",
             "mobile_box_align": "middle-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
             "text_alignment_mobile": "center"
           }
         }
