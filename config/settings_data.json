@@ -129,7 +129,7 @@
     "reward_1_label": "Free standard shipping!",
     "reward_2_threshold": "500",
     "reward_2_label": "Free rush shipping!",
-    "reward_3_threshold": "",
+    "reward_3_threshold": "150",
     "reward_3_label": "hat",
     "reward_3_product": "fueled-by-welds-espresso-hat-free-gift-with-x-purchase-limit-1-per-order",
     "sections": {
@@ -316,17 +316,6 @@
           "text": "#f3f3f3",
           "button": "#ffffff",
           "button_label": "#ffffff",
-          "secondary_button_label": "#ffffff",
-          "shadow": "#121212"
-        }
-      },
-      "scheme-adca6236-3bba-46b0-be38-e3836ef3bd6a": {
-        "settings": {
-          "background": "#000000",
-          "background_gradient": "",
-          "text": "#ffffff",
-          "button": "#cfebfb",
-          "button_label": "#cfebfb",
           "secondary_button_label": "#ffffff",
           "shadow": "#121212"
         }
