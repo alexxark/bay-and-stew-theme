@@ -88,31 +88,6 @@
         "show_text_below": true
       }
     },
-    "rich_text_xWLV6J": {
-      "type": "rich-text",
-      "blocks": {
-        "text_QaTaPF": {
-          "type": "text",
-          "settings": {
-            "text": "<h6><em>In loving memory of Bailey and Stewie — the little studio companions who inspired it all.</em></h6>"
-          }
-        }
-      },
-      "block_order": [
-        "text_QaTaPF"
-      ],
-      "custom_css": [
-        "h6 {font-size: 11px; font-kerning: 2px; font-weight: 200;}"
-      ],
-      "settings": {
-        "desktop_content_position": "right",
-        "content_alignment": "left",
-        "color_scheme": "scheme-5",
-        "full_width": true,
-        "padding_top": 12,
-        "padding_bottom": 12
-      }
-    },
     "main": {
       "type": "main-page",
       "disabled": true,
@@ -267,7 +242,6 @@
   "order": [
     "image_banner_rJf3hX",
     "image_banner_tayJNr",
-    "rich_text_xWLV6J",
     "main",
     "image_with_text_yziiii",
     "image_with_text_gwKdWK",
