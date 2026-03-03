@@ -88,7 +88,7 @@
           "settings": {
             "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
             "title": "FREE SHIPPING ON US",
-            "text": "<p>Free Standard Shipping - Spend $35+<br/>FREE RUSH Shipping - Spend $500+</p>",
+            "text": "<p>Free Standard Shipping on Orders $35+<br/>FREE RUSH Shipping on Orders $500+</p>",
             "link_label": "",
             "link": ""
           }
@@ -121,7 +121,7 @@
         "button_label": "",
         "button_link": "",
         "swipe_on_desktop": false,
-        "color_scheme": "scheme-adca6236-3bba-46b0-be38-e3836ef3bd6a",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,

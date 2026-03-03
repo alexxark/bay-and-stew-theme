@@ -322,7 +322,7 @@
       },
       "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3": {
         "settings": {
-          "background": "#ffffff",
+          "background": "#000000",
           "background_gradient": "",
           "text": "#ffffff",
           "button": "#cfebfb",
