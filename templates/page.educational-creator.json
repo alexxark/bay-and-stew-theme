@@ -72,6 +72,45 @@
         "padding_bottom": 52
       }
     },
+    "image_with_text_yziiii": {
+      "type": "image-with-text",
+      "blocks": {
+        "text_66mTxa": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6>Fill out the form above<br/>or click the button</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_XhVGee": {
+          "type": "button",
+          "settings": {
+            "button_label": "Apply Now",
+            "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSf86EYpAHpilICc5sZPa2x0rl7jSZiYuDbwGbnJoTG6lqDCSA/viewform",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "text_66mTxa",
+        "button_XhVGee"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/maker-2.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "main": {
       "type": "main-page",
       "custom_css": [
@@ -145,56 +184,14 @@
         "padding_top": 4,
         "padding_bottom": 0
       }
-    },
-    "image_with_text_yziiii": {
-      "type": "image-with-text",
-      "blocks": {
-        "text_66mTxa": {
-          "type": "text",
-          "settings": {
-            "text": "<h3><em>You do not need to be local to apply.</em></h3><p>For select contributors, there may be an opportunity to travel to Bay & Stew headquarters to film content in studio with our team. Travel expenses would be covered by us. Studio invitations will be extended after initial content submissions are reviewed and approved.<br/></p><h6>Fill out the form above<br/>or click the button</h6>",
-            "text_style": "body"
-          }
-        },
-        "button_XhVGee": {
-          "type": "button",
-          "settings": {
-            "button_label": "Apply Now",
-            "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSf86EYpAHpilICc5sZPa2x0rl7jSZiYuDbwGbnJoTG6lqDCSA/viewform",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "text_66mTxa",
-        "button_XhVGee"
-      ],
-      "custom_css": [
-        "h6 {font-size: 13px; color: #b19d8c;}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/maker-2.jpg",
-        "height": "small",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
     "image_banner_c8ipB7",
     "rich_text_iyPnEJ",
+    "image_with_text_yziiii",
     "main",
     "image_with_text_gwKdWK",
-    "rich_text_7PqGV8",
-    "image_with_text_yziiii"
+    "rich_text_7PqGV8"
   ]
 }
