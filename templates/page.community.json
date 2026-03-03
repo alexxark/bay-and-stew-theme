@@ -9,46 +9,6 @@
  */
 {
   "sections": {
-    "image_banner_rJf3hX": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_pif77m": {
-          "type": "heading",
-          "settings": {
-            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
-            "heading_size": "h1"
-          }
-        },
-        "text_FxKzWY": {
-          "type": "text",
-          "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
-          }
-        }
-      },
-      "block_order": [
-        "heading_pif77m",
-        "text_FxKzWY"
-      ],
-      "custom_css": [
-        "h1 {font-size: 32px;}",
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/bailey-stewie-banner_copy_37019048-8845-4379-b4a4-03aac2dbd01a.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "top-right",
-        "show_text_box": false,
-        "desktop_content_alignment": "right",
-        "color_scheme": "scheme-3",
-        "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": true,
-        "show_text_below": true
-      }
-    },
     "image_banner_tayJNr": {
       "type": "image-banner",
       "blocks": {
@@ -154,25 +114,15 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_D7RpLC": {
-          "type": "column",
-          "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "FREE SHIPPING ON US",
+            "text": "<p>Free Standard Shipping on Orders $35+<br/>FREE RUSH Shipping on Orders $500+</p>",
             "link_label": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "column_eqKqBg",
-        "column_D7RpLC"
+        "column_eqKqBg"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -181,7 +131,7 @@
         "image_width": "third",
         "image_ratio": "adapt",
         "columns_desktop": 2,
-        "column_alignment": "left",
+        "column_alignment": "center",
         "background_style": "primary",
         "button_label": "",
         "button_link": "",
@@ -195,7 +145,6 @@
     }
   },
   "order": [
-    "image_banner_rJf3hX",
     "image_banner_tayJNr",
     "main",
     "image_with_text_yziiii",
