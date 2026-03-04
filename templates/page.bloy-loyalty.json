@@ -106,6 +106,44 @@
         "include_margins": true
       }
     },
+    "image_banner_fLGfCN": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_xEUTNH": {
+          "type": "heading",
+          "settings": {
+            "heading": "Your Loyalty, Your Hat!",
+            "heading_size": "h1"
+          }
+        },
+        "text_iF7QUF": {
+          "type": "text",
+          "settings": {
+            "text": "For a limited time, redeem <strong>2,000 loyalty points</strong> to get a complimentary Welds & Espresso trucker hat—perfect for studio days, coffee runs, and everything in between.💎 <strong>Diamond Members</strong> receive the hat for free!",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_xEUTNH",
+        "text_iF7QUF"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
+        "image_overlay_opacity": 60,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
+    },
     "17586089124980a585": {
       "type": "apps",
       "blocks": {
@@ -208,6 +246,7 @@
   "order": [
     "main",
     "1751907374071531ed",
+    "image_banner_fLGfCN",
     "17586089124980a585",
     "multicolumn_RHyKTH"
   ]
