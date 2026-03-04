@@ -85,6 +85,11 @@
             "redeem_secondary_button": "Apply",
             "redeem_store_credit_subtitle": "Available store credit is automatically shown at checkout. Simply choose whether to apply it to your order.",
             "redeem_tertiary_button": "Okay",
+            "redeem_free_product_placeholder": "Select",
+            "redeem_free_product_subtitle": "You will receive a free product by selecting a product below",
+            "redeem_free_product_add_to_cart": "Add to cart",
+            "redeem_free_product_subtitle_2": "The product has been added to the cart. If you do not use the discount now, you can always access it later in the Your Rewards tab.",
+            "redeem_free_product_go_to_cart": "Go to cart",
             "toast_copied": "Discount copied",
             "toast_applied": "Discount applied"
           }
@@ -113,9 +118,16 @@
             "heading_text": "Your balance: {x points}",
             "your_reward": "Your rewards",
             "your_activities": "Your activities",
+            "select_product": "Select product",
+            "select_product_placeholder": "Select",
+            "free_product_subtitle": "You will receive a free product by selecting a product below",
+            "free_product_add_to_cart": "Add to cart",
+            "free_product_subtitle_2": "The product has been added to the cart. If you do not use the discount now, you can always access it later in the Your Rewards tab.",
+            "free_product_go_to_cart": "Go to cart",
             "copy_button": "Copy",
             "apply_button": "Apply",
             "used_badge": "Used",
+            "expired_badge": "Expired",
             "empty_state_rewards_title": "No rewards yet",
             "empty_state_rewards_content": "You do not have any rewards yet. Start earning points to get access to exclusive rewards.",
             "empty_state_activities_title": "No activities yet",
@@ -132,11 +144,71 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "multicolumn_RHyKTH": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_fVtgEY": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
+            "title": "FREE STANDARD SHIPPING",
+            "text": "<p>Spend $35+ to receive free standard shipping! Offer will be automatically applied in cart. <br/></p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_MKhQ3z": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Express-shipping.png",
+            "title": "FREE RUSH SHIPPING",
+            "text": "<p>Spend $500+ to receive free RUSH shipping! Offer will be automatically applied in cart. </p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_w9NFzw": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/paw-point.png",
+            "title": "EARN POINTS",
+            "text": "<p>Shop, earn, repeat! Collect points on every purchase with our loyalty program—exclusive to BayAndStew.com. <em>(Points and offers don’t apply on Etsy)</em></p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_fVtgEY",
+        "column_MKhQ3z",
+        "column_w9NFzw"
+      ],
+      "disabled": true,
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Why bayandstew.com?",
+        "heading_size": "h2",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "B&S Rewards",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
     "1751907374071531ed",
-    "17586089124980a585"
+    "17586089124980a585",
+    "multicolumn_RHyKTH"
   ]
 }
