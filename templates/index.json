@@ -216,7 +216,7 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/rewards.png",
-            "title": "<strong>Loyal Links</strong>",
+            "title": "<strong>Loyal Rewards</strong>",
             "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
             "link_label": "",
             "link": ""
