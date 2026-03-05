@@ -26,8 +26,8 @@
             "primary_color": "#cc9b6e",
             "background_color": "#e7ded6",
             "image": "shopify://shop_images/Rewards_page_photo.png",
-            "heading_text": "Loyalty Rewards Program",
-            "subtitle": "Become a member to earn points and gain exclusive rewards for every purchase you make",
+            "heading_text": "Loyalty Rewards",
+            "subtitle": "Become a Makers Circle member to earn points and gain exclusive rewards for every purchase you make",
             "primary_button": "Join now",
             "secondary_button": "Sign in"
           }
@@ -65,8 +65,8 @@
         "bloy_loyalty_rewards_bloy_loyalty_vip_program_XU7qKB": {
           "type": "shopify://apps/bloy-loyalty-rewards/blocks/bloy-loyalty-vip-program/97e8894d-00f0-41a9-b986-49828146257c",
           "settings": {
-            "heading_title": "VIP tiers",
-            "subtitle": "Join VIP program to enjoy exclusive rewards and special perks made just for you!"
+            "heading_title": "Reward tiers",
+            "subtitle": "Join our Makers Circle to enjoy exclusive rewards and special perks made just for you!"
           }
         },
         "bloy_loyalty_rewards_bloy_loyalty_ways_redeem_c8fqGn": {
