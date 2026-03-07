@@ -188,13 +188,40 @@
         "padding_bottom": 16
       }
     },
+    "rich_text_AVqiJP": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Nk6FNg": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Bay & Stew?",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Nk6FNg"
+      ],
+      "custom_css": [
+        "{margin-top: 8px; margin-bottom: -40px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "multicolumn_6q6KPE": {
       "type": "multicolumn",
       "blocks": {
         "column_EBTbGa": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/shipping.png",
+            "image": "shopify://shop_images/small-shipping.png",
             "title": "Free Shipping on U.S. Orders $35+",
             "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
             "link_label": "",
@@ -204,7 +231,7 @@
         "column_36Q47y": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/sameornext.png",
+            "image": "shopify://shop_images/Express-shipping.png",
             "title": "Same or Next Day Shipping",
             "text": "<p>We ship fast so you can keep creating without delay.</p>",
             "link_label": "",
@@ -214,7 +241,7 @@
         "column_z7arMH": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/rewards.png",
+            "image": "shopify://shop_images/Icons-03.png",
             "title": "<strong>Loyal Rewards</strong>",
             "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
             "link_label": "",
@@ -224,7 +251,7 @@
         "column_faLJ4k": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/bayandstew-website.png",
+            "image": "shopify://shop_images/small-wholesale-pricing.png",
             "title": "Wholesale Pricing – <strong> $35 Minimum</strong>",
             "text": "<p>Designed for makers and businesses, our $35 minimum unlocks access to premium supplies at wholesale prices.</p>",
             "link_label": "",
@@ -234,7 +261,7 @@
         "column_ah8MXK": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/makers.png",
+            "image": "shopify://shop_images/small-makers-like-you.png",
             "title": "Made for Makers Like You",
             "text": "<p>Our supplies are trusted by permanent jewelry artists, hand stampers, engravers, and more—whether you're a hobbyist or a seasoned pro.</p>",
             "link_label": "",
@@ -244,7 +271,7 @@
         "column_YLKyGi": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/exclusive.png",
+            "image": "shopify://shop_images/small-exclusive.png",
             "title": "Exclusive In-House Designs",
             "text": "<p>We design and manufacture our own unique products that you won’t find anywhere else.</p>",
             "link_label": "",
@@ -273,13 +300,13 @@
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "Why Bay & Stew?",
+        "title": "",
         "heading_size": "h1",
-        "image_width": "full",
+        "image_width": "half",
         "image_ratio": "adapt",
         "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "primary",
+        "column_alignment": "center",
+        "background_style": "none",
         "button_label": "",
         "button_link": "",
         "swipe_on_desktop": true,
@@ -567,6 +594,7 @@
   "order": [
     "slideshow_Hg9TMx",
     "rich_text_fyyfM3",
+    "rich_text_AVqiJP",
     "multicolumn_6q6KPE",
     "rich_text_cjJbya",
     "collection_list_eFLBt6",
