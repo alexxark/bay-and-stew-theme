@@ -221,7 +221,7 @@
         "column_EBTbGa": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/small-shipping.png",
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
             "title": "Free Shipping on U.S. Orders $35+",
             "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
             "link_label": "",
@@ -251,7 +251,7 @@
         "column_faLJ4k": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/small-wholesale-pricing.png",
+            "image": "shopify://shop_images/Icons-04.png",
             "title": "Wholesale Pricing – <strong> $35 Minimum</strong>",
             "text": "<p>Designed for makers and businesses, our $35 minimum unlocks access to premium supplies at wholesale prices.</p>",
             "link_label": "",
@@ -261,7 +261,7 @@
         "column_ah8MXK": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/small-makers-like-you.png",
+            "image": "shopify://shop_images/Icons-05.png",
             "title": "Made for Makers Like You",
             "text": "<p>Our supplies are trusted by permanent jewelry artists, hand stampers, engravers, and more—whether you're a hobbyist or a seasoned pro.</p>",
             "link_label": "",
@@ -271,7 +271,7 @@
         "column_YLKyGi": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/small-exclusive.png",
+            "image": "shopify://shop_images/Icons-06.png",
             "title": "Exclusive In-House Designs",
             "text": "<p>We design and manufacture our own unique products that you won’t find anywhere else.</p>",
             "link_label": "",
@@ -281,7 +281,7 @@
         "column_3dhCHN": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/quality-check.png",
+            "image": "shopify://shop_images/Icons-07.png",
             "title": "Reliable Quality, Every Time",
             "text": "<p>We source high-quality materials so you can count on consistency with every order.</p>",
             "link_label": "",
@@ -358,7 +358,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
