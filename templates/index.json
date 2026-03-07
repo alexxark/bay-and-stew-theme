@@ -419,7 +419,7 @@
         "show_secondary_image": false,
         "show_vendor": false,
         "show_rating": false,
-        "quick_add": "none",
+        "quick_add": "bulk",
         "columns_mobile": "2",
         "swipe_on_mobile": true,
         "padding_top": 28,
