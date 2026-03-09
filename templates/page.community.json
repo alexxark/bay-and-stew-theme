@@ -50,9 +50,8 @@
     },
     "main": {
       "type": "main-page",
-      "disabled": true,
       "custom_css": [
-        "h1 {font-size: 26px; color: #b19d8c; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
+        "h1 {font-size: 38px; color: #806f65; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "padding_top": 36,
@@ -104,7 +103,31 @@
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 36,
-        "padding_bottom": 36
+        "padding_bottom": 60
+      }
+    },
+    "rich_text_zU3mja": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_VgmHgV": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Bay & Stew?",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_VgmHgV"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
       }
     },
     "multicolumn_BJB7wL": {
@@ -113,16 +136,38 @@
         "column_eqKqBg": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/Icons-03.png",
+            "title": "<strong>Loyal Rewards</strong>",
+            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_99mPYz": {
+          "type": "column",
+          "settings": {
             "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
-            "title": "FREE SHIPPING ON US",
-            "text": "<p>Free Standard Shipping on Orders $35+<br/>FREE RUSH Shipping on Orders $500+</p>",
+            "title": "Free Shipping on U.S. Orders $35+",
+            "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_dqc3E4": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Express-shipping.png",
+            "title": "Same or Next Day Shipping",
+            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
             "link_label": "",
             "link": ""
           }
         }
       },
       "block_order": [
-        "column_eqKqBg"
+        "column_eqKqBg",
+        "column_99mPYz",
+        "column_dqc3E4"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -130,15 +175,15 @@
         "heading_size": "h1",
         "image_width": "third",
         "image_ratio": "adapt",
-        "columns_desktop": 2,
+        "columns_desktop": 3,
         "column_alignment": "center",
         "background_style": "primary",
         "button_label": "",
         "button_link": "",
-        "swipe_on_desktop": false,
-        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "swipe_on_desktop": true,
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
         "columns_mobile": "1",
-        "swipe_on_mobile": false,
+        "swipe_on_mobile": true,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -148,6 +193,7 @@
     "image_banner_tayJNr",
     "main",
     "image_with_text_yziiii",
+    "rich_text_zU3mja",
     "multicolumn_BJB7wL"
   ]
 }
