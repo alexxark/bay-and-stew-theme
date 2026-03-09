@@ -710,6 +710,55 @@
         "padding_bottom": 36
       }
     },
+    "image_banner_wwe687": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_zFiLnW": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grow Your Business. Earn Rewards.",
+            "heading_size": "h2"
+          }
+        },
+        "text_R9tLJC": {
+          "type": "text",
+          "settings": {
+            "text": "Get points for purchases, move up reward tiers faster, and<strong> redeem for discounts, credits, and exclusive perks.</strong> <em>Available </em><em><strong>only</strong></em><em> </em><em><strong>on bayandstew.com.</strong></em>",
+            "text_style": "subtitle"
+          }
+        },
+        "buttons_YP7XmJ": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Join Loyalty Rewards",
+            "button_link_1": "https://bayandstew.com/pages/about?view=bloy-loyalty",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_zFiLnW",
+        "text_R9tLJC",
+        "buttons_YP7XmJ"
+      ],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/cn20-banner.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": false
+      }
+    },
     "rich_text_zjAhg4": {
       "type": "rich-text",
       "blocks": {
@@ -804,6 +853,7 @@
     "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
     "multicolumn_t7zdcd",
+    "image_banner_wwe687",
     "rich_text_zjAhg4",
     "rich_text_QfzRBA"
   ]
