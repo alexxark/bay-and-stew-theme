@@ -243,7 +243,7 @@
           "settings": {
             "image": "shopify://shop_images/Express-shipping.png",
             "title": "Same or Next Day Shipping",
-            "text": "<p>We ship fast so you can keep creating without delay.</p>",
+            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
             "link_label": "",
             "link": ""
           }
