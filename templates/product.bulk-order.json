@@ -185,7 +185,7 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Icons-03.png",
-            "title": "<strong>Loyal Rewards</strong>",
+            "title": "<strong>Loyalty Rewards</strong>",
             "text": "<p>Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
             "link_label": "Join Now",
             "link": "https://bayandstew.com/pages/about?view=bloy-loyalty"
