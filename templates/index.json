@@ -361,6 +361,71 @@
         "padding_bottom": 52
       }
     },
+    "multicolumn_B3nNV7": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_LqqEWJ": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "NEW",
+            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "column_PHjJCg": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "CHAIN SAMPLES",
+            "link": "https://bayandstew.com/collections/samples"
+          }
+        },
+        "column_PJT679": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "BEST SELLING",
+            "link": "https://bayandstew.com/collections/shop-all"
+          }
+        },
+        "column_nYJPDx": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "SALE",
+            "link": "https://bayandstew.com/collections/sale-1"
+          }
+        }
+      },
+      "block_order": [
+        "column_LqqEWJ",
+        "column_PHjJCg",
+        "column_PJT679",
+        "column_nYJPDx"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "collection_list_eFLBt6": {
       "type": "collection-list",
       "blocks": {
@@ -759,6 +824,51 @@
         "show_text_below": false
       }
     },
+    "rich_text_yBTjT3": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_77ypqL": {
+          "type": "heading",
+          "settings": {
+            "heading": "RESOURCES",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_77ypqL"
+      ],
+      "custom_css": [
+        "{margin-bottom: -10px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "featured_blog_XCRVp8": {
+      "type": "featured-blog",
+      "name": "t:sections.featured-blog.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h2",
+        "blog": "news",
+        "post_limit": 4,
+        "columns_desktop": 4,
+        "color_scheme": "",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "rich_text_zjAhg4": {
       "type": "rich-text",
       "blocks": {
@@ -844,6 +954,7 @@
     "rich_text_AVqiJP",
     "multicolumn_6q6KPE",
     "rich_text_cjJbya",
+    "multicolumn_B3nNV7",
     "collection_list_eFLBt6",
     "rich_text_GaGRwE",
     "featured_collection",
@@ -854,6 +965,8 @@
     "rich_text_Ugb7AD",
     "multicolumn_t7zdcd",
     "image_banner_wwe687",
+    "rich_text_yBTjT3",
+    "featured_blog_XCRVp8",
     "rich_text_zjAhg4",
     "rich_text_QfzRBA"
   ]
