@@ -218,6 +218,16 @@
     "multicolumn_6q6KPE": {
       "type": "multicolumn",
       "blocks": {
+        "column_z7arMH": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-03.png",
+            "title": "<strong>Loyal Rewards</strong>",
+            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
         "column_EBTbGa": {
           "type": "column",
           "settings": {
@@ -234,16 +244,6 @@
             "image": "shopify://shop_images/Express-shipping.png",
             "title": "Same or Next Day Shipping",
             "text": "<p>We ship fast so you can keep creating without delay.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_z7arMH": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-03.png",
-            "title": "<strong>Loyal Rewards</strong>",
-            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
             "link_label": "",
             "link": ""
           }
@@ -290,9 +290,9 @@
         }
       },
       "block_order": [
+        "column_z7arMH",
         "column_EBTbGa",
         "column_36Q47y",
-        "column_z7arMH",
         "column_faLJ4k",
         "column_ah8MXK",
         "column_YLKyGi",

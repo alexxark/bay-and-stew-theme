@@ -11,6 +11,40 @@
   "name": "t:sections.header.name",
   "type": "header",
   "sections": {
+    "announcement_bar_AcR7te": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_LA9eAr": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free Shipping on U.S. Orders $35+",
+            "link": ""
+          }
+        },
+        "announcement_CWnHeh": {
+          "type": "announcement",
+          "settings": {
+            "text": "Same or Next Day Shipping",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_LA9eAr",
+        "announcement_CWnHeh"
+      ],
+      "custom_css": [],
+      "name": "t:sections.announcement-bar.presets.name",
+      "settings": {
+        "color_scheme": "scheme-5",
+        "show_line_separator": true,
+        "show_social": false,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
     "announcement-bar": {
       "type": "announcement-bar",
       "blocks": {
@@ -80,6 +114,7 @@
     }
   },
   "order": [
+    "announcement_bar_AcR7te",
     "announcement-bar",
     "header"
   ]
