@@ -70,6 +70,15 @@
             "content": "<p>We are your go to shop for hand stamping supplies, engraving supplies, permanent jewelry supplies and wholesale/bulk jewelry supplies. Made in our studio in California. USA small business & female owned company.</p>",
             "page": ""
           }
+        },
+        "collapsible_tab_etcDAq": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Resources",
+            "icon": "paw_print",
+            "content": "<p><a href=\"https://bayandstew.com/blogs/news\" title=\"https://bayandstew.com/blogs/news\">Blog</a></p><p><a href=\"https://cdn.shopify.com/s/files/1/0730/7824/3649/files/01_Birthstone-Color-Chart_Final.pdf?v=1759959905\" title=\"https://cdn.shopify.com/s/files/1/0730/7824/3649/files/01_Birthstone-Color-Chart_Final.pdf?v=1759959905\">Birthstone Color Chart (Free PDF)</a></p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -81,7 +90,8 @@
         "ecomsend_restock_product_restore_email_MdVpP6",
         "description",
         "9445ca66-0abf-4dff-8633-6def5547ba18",
-        "661e5f9d-2379-48b0-a1fe-243797bae4fb"
+        "661e5f9d-2379-48b0-a1fe-243797bae4fb",
+        "collapsible_tab_etcDAq"
       ],
       "custom_css": [
         ".loox-rating {margin-top: -10px; margin-bottom: -10px;}"
