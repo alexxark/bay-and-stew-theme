@@ -619,17 +619,114 @@
         "heading_DWimkg": {
           "type": "heading",
           "settings": {
+            "heading": "Trusted by permanent jewelry artists",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_DWimkg"
+      ],
+      "custom_css": [
+        "{margin-bottom: -10px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "multicolumn_t7zdcd": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_weJepx": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>“I’ve been ordering from Bay & Stew for my business for about 2 years now and I won’t go with anyone else!  Their product is the best, delivery is always made in a timely manner, and they have the best customer service! Highly Recommend!”</h3><h2></h2><h4><strong>BRIANNA K. </strong></h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_M9pAdX": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-birthstones.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_rabdid": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>\"Absolutely love everything I get from Bay & Stew! I got everything just on time for my event. Absolutely love my charms and connectos.\"<br/></h3><h4><strong>VSITTERDING </strong></h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_Fx3YKM": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-shipping.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_weJepx",
+        "column_M9pAdX",
+        "column_rabdid",
+        "column_Fx3YKM"
+      ],
+      "custom_css": [
+        "h3 {font-weight: bold; font-family: sans-serif; color: #806f65;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_zjAhg4": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_F8TJUd": {
+          "type": "heading",
+          "settings": {
             "heading": "Not sure what chain to choose?",
             "heading_size": "h2"
           }
         },
-        "text_DHFETn": {
+        "text_MDVeaK": {
           "type": "text",
           "settings": {
             "text": "<p>If you’re unsure which chain is right for you, explore our <em>sample cards</em>. They let you feel the quality, see the true color tones, and choose confidently before purchasing your full piece.</p>"
           }
         },
-        "button_nMXECr": {
+        "button_9Bqaxy": {
           "type": "button",
           "settings": {
             "button_label": "Shop Samples",
@@ -642,10 +739,11 @@
         }
       },
       "block_order": [
-        "heading_DWimkg",
-        "text_DHFETn",
-        "button_nMXECr"
+        "heading_F8TJUd",
+        "text_MDVeaK",
+        "button_9Bqaxy"
       ],
+      "disabled": true,
       "custom_css": [
         "{margin-bottom: -10px;}"
       ],
@@ -705,6 +803,8 @@
     "multicolumn_baH7TX",
     "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
+    "multicolumn_t7zdcd",
+    "rich_text_zjAhg4",
     "rich_text_QfzRBA"
   ]
 }
