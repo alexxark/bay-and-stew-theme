@@ -467,6 +467,7 @@
     },
     "featured_collection_iQH7YA": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".collection__view-all {padding-top: 15px;}"
       ],
@@ -497,8 +498,95 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_LDLKra": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_aMQMzr": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grow Your Jewelry Business with Wholesale Pricing",
+            "heading_size": "h2"
+          }
+        },
+        "text_7yKLcq": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Apply today for access to professional pricing and tax-exempt purchasing for qualified businesses.<br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_aMQMzr",
+        "text_7yKLcq"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_baH7TX": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_M7Rxfy": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/account/register\" title=\"https://bayandstew.com/account/register\">US BASED</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "column_ggePWP": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\">INTERNATIONAL</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/samples"
+          }
+        },
+        "column_97UfjD": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\">REQUIREMENTS</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/shop-all"
+          }
+        }
+      },
+      "block_order": [
+        "column_M7Rxfy",
+        "column_ggePWP",
+        "column_97UfjD"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 16,
+        "padding_bottom": 36
+      }
+    },
     "featured_collection_BBDHfE": {
       "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "title": "Featured products",
         "heading_size": "h2",
@@ -613,6 +701,8 @@
     "rich_text_GaGRwE",
     "featured_collection",
     "featured_collection_iQH7YA",
+    "rich_text_LDLKra",
+    "multicolumn_baH7TX",
     "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
     "rich_text_QfzRBA"
