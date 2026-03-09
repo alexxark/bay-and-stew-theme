@@ -183,15 +183,38 @@
         "include_margins": true
       }
     },
+    "rich_text_eNz6WC": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_yVYyww": {
+          "type": "heading",
+          "settings": {
+            "heading": "Perks for Makers",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_yVYyww"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-5",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "multicolumn_RHyKTH": {
       "type": "multicolumn",
       "blocks": {
         "column_fVtgEY": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
-            "title": "FREE STANDARD SHIPPING",
-            "text": "<p>Spend $35+ to receive free standard shipping! Offer will be automatically applied in cart. <br/></p>",
+            "title": "Earn Points as You Shop",
+            "text": "<p>Get <strong>1 point for every $1</strong> spent on supplies and tools you already love.</p>",
             "link_label": "",
             "link": ""
           }
@@ -199,9 +222,8 @@
         "column_MKhQ3z": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/Express-shipping.png",
-            "title": "FREE RUSH SHIPPING",
-            "text": "<p>Spend $500+ to receive free RUSH shipping! Offer will be automatically applied in cart. </p>",
+            "title": "Bonus Points for Joining",
+            "text": "<p>Create an account and receive <strong>100+ points</strong> just for signing up.</p>",
             "link_label": "",
             "link": ""
           }
@@ -209,9 +231,17 @@
         "column_w9NFzw": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/paw-point.png",
-            "title": "EARN POINTS",
-            "text": "<p>Shop, earn, repeat! Collect points on every purchase with our loyalty program—exclusive to BayAndStew.com. <em>(Points and offers don’t apply on Etsy)</em></p>",
+            "title": "Unlock Member Tiers",
+            "text": "<p><strong>Advance through</strong> Entry, Pro, and Premier <strong>tiers to earn points faster and receive quarterly + annual credits.</strong><br/></p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_pdPEPg": {
+          "type": "column",
+          "settings": {
+            "title": "Redeem for Rewards",
+            "text": "<p>Turn <strong>points into $ off your order </strong>or<strong> redeem for exclusive gifts with purchase.</strong><br/></p>",
             "link_label": "",
             "link": ""
           }
@@ -220,22 +250,22 @@
       "block_order": [
         "column_fVtgEY",
         "column_MKhQ3z",
-        "column_w9NFzw"
+        "column_w9NFzw",
+        "column_pdPEPg"
       ],
-      "disabled": true,
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "Why bayandstew.com?",
+        "title": "",
         "heading_size": "h2",
         "image_width": "third",
         "image_ratio": "adapt",
-        "columns_desktop": 3,
+        "columns_desktop": 4,
         "column_alignment": "center",
         "background_style": "primary",
-        "button_label": "B&S Rewards",
+        "button_label": "",
         "button_link": "",
         "swipe_on_desktop": false,
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
         "padding_top": 36,
@@ -248,6 +278,7 @@
     "1751907374071531ed",
     "image_banner_fLGfCN",
     "17586089124980a585",
+    "rich_text_eNz6WC",
     "multicolumn_RHyKTH"
   ]
 }
