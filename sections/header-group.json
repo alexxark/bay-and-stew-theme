@@ -43,6 +43,7 @@
         "announcement_yxMhRg",
         "announcement-bar-0"
       ],
+      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
