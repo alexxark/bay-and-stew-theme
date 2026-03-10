@@ -58,6 +58,7 @@
         },
         "slide_QLwpGt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
             "image_mobile": "shopify://shop_images/Hat-Banner-Relaunch-mobile.jpg",
