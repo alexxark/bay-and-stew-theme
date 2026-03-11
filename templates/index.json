@@ -102,6 +102,50 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/Chain-Birthstone-Banner.jpg",
+            "image_mobile": "shopify://shop_images/Chain-Birthstone-Banner-Mobile.jpg",
+            "allow_sound": true,
+            "heading": "25% Off Sale Items",
+            "subheading": "Newly added items waiting for you",
+            "highlight_words": "",
+            "promo_note": "",
+            "promo_link_label": "details",
+            "promo_details_text": "",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 32,
+            "subheading_size_desktop": 16,
+            "subheading_size_mobile": 14,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 4,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": 0,
+            "button_1_text": "Shop the Sale",
+            "button_1_link": "shopify://collections/sale-1",
+            "button_1_style": "solid",
+            "button_1_background": "#ffffff",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-center",
+            "show_text_box": false,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "mobile_box_align": "middle-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
+            "text_alignment_mobile": "center"
+          }
+        },
+        "slide_GNpfTB": {
+          "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Chain-Birthstone-Banner.jpg",
             "image_mobile": "shopify://shop_images/Chain-Birthstone-Banner-Mobile.jpg",
@@ -147,7 +191,8 @@
       "block_order": [
         "slide_YA4RDt",
         "slide_QLwpGt",
-        "slide_8LMkQB"
+        "slide_8LMkQB",
+        "slide_GNpfTB"
       ],
       "custom_css": [
         "@media screen and (max-width: 749px) {.banner__content {align-items: flex-start; /* top */ justify-content: center; /* horizontal center */ padding-top: 2px; /* optional spacing from top */ }}"
