@@ -103,7 +103,7 @@
     "drawer_shadow_blur": 5,
     "badge_position": "bottom left",
     "badge_corner_radius": 40,
-    "sale_badge_color_scheme": "accent-2",
+    "sale_badge_color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
     "sold_out_badge_color_scheme": "inverse",
     "brand_headline": "",
     "brand_description": "<p></p>",
@@ -349,6 +349,17 @@
           "text": "#121212",
           "button": "#121212",
           "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-e993cf15-6aba-443a-9790-1639e6683028": {
+        "settings": {
+          "background": "#b5e1fd",
+          "background_gradient": "",
+          "text": "#2b2b2b",
+          "button": "#23a3c1",
+          "button_label": "#23a3c1",
           "secondary_button_label": "#121212",
           "shadow": "#121212"
         }
