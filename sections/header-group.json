@@ -63,14 +63,14 @@
         "announcement_LA9eAr": {
           "type": "announcement",
           "settings": {
-            "text": "Free Shipping on U.S. Orders $35+",
+            "text": "Free Standard Shipping on U.S. Orders $35+",
             "link": ""
           }
         },
         "announcement_CWnHeh": {
           "type": "announcement",
           "settings": {
-            "text": "Same or Next Day Shipping",
+            "text": "Free RUSH Shipping on Orders $500+",
             "link": ""
           }
         }
