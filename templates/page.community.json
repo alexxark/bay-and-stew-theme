@@ -71,11 +71,60 @@
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text": "<h3>Save an additional 25% on all sale items<br/></h3><p>For a limited time, take an extra 25% off all sale items at Bay & Stew. We have also added new styles to the sale section, making it the perfect opportunity to restock tools, supplies, and studio essentials at even better pricing. Discount automatically applied in cart.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/31/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
             "text_style": "body"
           }
         },
         "button_Xx8WkJ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Sale",
+            "button_link": "shopify://collections/sale-1",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_WJpjHE",
+        "text_66mTxa",
+        "button_Xx8WkJ"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_btPUQR": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_Q3hk6b": {
+          "type": "heading",
+          "settings": {
+            "heading": "Free Trucker Hat with Any $150+ Purchase",
+            "heading_size": "h1"
+          }
+        },
+        "text_RQetUt": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_C8XcVD": {
           "type": "button",
           "settings": {
             "button_label": "Shop All",
@@ -85,9 +134,9 @@
         }
       },
       "block_order": [
-        "heading_WJpjHE",
-        "text_66mTxa",
-        "button_Xx8WkJ"
+        "heading_Q3hk6b",
+        "text_RQetUt",
+        "button_C8XcVD"
       ],
       "disabled": true,
       "custom_css": [],
@@ -125,7 +174,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 0
@@ -182,7 +231,7 @@
         "button_label": "",
         "button_link": "",
         "swipe_on_desktop": true,
-        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "color_scheme": "scheme-1",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
         "padding_top": 36,
@@ -194,6 +243,7 @@
     "image_banner_tayJNr",
     "main",
     "image_with_text_yziiii",
+    "image_with_text_btPUQR",
     "rich_text_zU3mja",
     "multicolumn_BJB7wL"
   ]
