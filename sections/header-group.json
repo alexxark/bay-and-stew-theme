@@ -33,8 +33,8 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Free hat with purchase has RESTOCKED, get yours today on orders $150+!",
-            "link": "https://bayandstew.com/products/fueled-by-welds-espresso-hat"
+            "text": "EXTRA 25% OFF SALE ON SALE ITEMS",
+            "link": "shopify://collections/sale-1"
           }
         }
       },

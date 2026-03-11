@@ -31,6 +31,7 @@
         "heading_wrbB7A",
         "text_YaDd33"
       ],
+      "disabled": true,
       "custom_css": [
         "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
       ],
@@ -89,10 +90,9 @@
         "text_66mTxa",
         "button_Xx8WkJ"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "image": "shopify://shop_images/sale-offers-page.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
