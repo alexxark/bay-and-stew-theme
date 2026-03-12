@@ -551,7 +551,7 @@
     "featured_collection": {
       "type": "featured-collection",
       "settings": {
-        "title": "Saint Patrick’s Collection",
+        "title": "St Patrick’s Collection",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
