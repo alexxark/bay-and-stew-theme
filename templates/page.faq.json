@@ -188,21 +188,11 @@
             "row_content": "<p><strong>Applying for a Bay & Stew wholesale account is simple:</strong><br/><br/>1. Complete the<strong> </strong><a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"><strong>wholesale application form here.</strong></a><br/><br/>2. Submit your <strong>resale certificate or tax exemption documentation.<br/></strong><br/>3. Allow <strong>1–2 business days</strong> for our team to review and verify your application.<br/><br/>Once approved, you’ll receive an activation email with instructions to log in and start placing wholesale orders.</p>",
             "page": ""
           }
-        },
-        "collapsible_row_iUPmtJ": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Is there a minimum order requirement?",
-            "icon": "check_mark",
-            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
-            "page": ""
-          }
         }
       },
       "block_order": [
         "collapsible_row_ehNzYD",
-        "collapsible_row_NJVPYX",
-        "collapsible_row_iUPmtJ"
+        "collapsible_row_NJVPYX"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
