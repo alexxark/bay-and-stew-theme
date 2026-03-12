@@ -59,6 +59,37 @@
         "padding_bottom": 0
       }
     },
+    "rich_text_dXNmG6": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_JGdwM6": {
+          "type": "heading",
+          "settings": {
+            "heading": "UPCOMING!",
+            "heading_size": "h1"
+          }
+        },
+        "text_fHbUb9": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Check out our upcoming deals and limited-time promotions—made for makers, by makers.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_JGdwM6",
+        "text_fHbUb9"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "image_with_text_yziiii": {
       "type": "image-with-text",
       "blocks": {
@@ -90,7 +121,6 @@
         "text_66mTxa",
         "button_Xx8WkJ"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
         "image": "shopify://shop_images/sale-offers-page.jpg",
@@ -138,6 +168,54 @@
         "heading_Q3hk6b",
         "text_RQetUt",
         "button_C8XcVD"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_YztMxr": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_JpEBGC": {
+          "type": "heading",
+          "settings": {
+            "heading": "Free Trucker Hat with Any $150+ Purchase",
+            "heading_size": "h1"
+          }
+        },
+        "text_6MwMn4": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_pJgAky": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JpEBGC",
+        "text_6MwMn4",
+        "button_pJgAky"
       ],
       "disabled": true,
       "custom_css": [],
@@ -243,8 +321,10 @@
   "order": [
     "image_banner_tayJNr",
     "main",
+    "rich_text_dXNmG6",
     "image_with_text_yziiii",
     "image_with_text_btPUQR",
+    "image_with_text_YztMxr",
     "rich_text_zU3mja",
     "multicolumn_BJB7wL"
   ]
