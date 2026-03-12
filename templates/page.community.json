@@ -61,15 +61,27 @@
     },
     "rich_text_dXNmG6": {
       "type": "rich-text",
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_RxzLeU": {
+      "type": "rich-text",
       "blocks": {
-        "heading_JGdwM6": {
+        "heading_XNzwh3": {
           "type": "heading",
           "settings": {
             "heading": "UPCOMING!",
             "heading_size": "h1"
           }
         },
-        "text_fHbUb9": {
+        "text_XQ9Wm8": {
           "type": "text",
           "settings": {
             "text": "<p>Check out our upcoming deals and limited-time promotions—made for makers, by makers.</p>"
@@ -77,8 +89,8 @@
         }
       },
       "block_order": [
-        "heading_JGdwM6",
-        "text_fHbUb9"
+        "heading_XNzwh3",
+        "text_XQ9Wm8"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -322,6 +334,7 @@
     "image_banner_tayJNr",
     "main",
     "rich_text_dXNmG6",
+    "rich_text_RxzLeU",
     "image_with_text_yziiii",
     "image_with_text_btPUQR",
     "image_with_text_YztMxr",
