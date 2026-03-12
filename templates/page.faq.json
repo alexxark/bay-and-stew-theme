@@ -226,19 +226,11 @@
       "blocks": {
         "collapsible_row_MJqrND": {
           "type": "collapsible_row",
+          "disabled": true,
           "settings": {
             "heading": "Is there a minimum order requirement?",
             "icon": "check_mark",
             "row_content": "<p>Yes, we require a <strong>$35 minimum order.</strong></p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_tizybH": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How do I open a wholesale account?",
-            "icon": "check_mark",
-            "row_content": "<p><strong>Applying for a Bay & Stew wholesale account is simple:</strong><br/><br/>1. Complete the<strong> </strong><a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"><strong>wholesale application form here.</strong></a><br/><br/>2. Submit your <strong>resale certificate or tax exemption documentation.<br/></strong><br/>3. Allow <strong>1–2 business days</strong> for our team to review and verify your application.<br/><br/>Once approved, you’ll receive an activation email with instructions to log in and start placing wholesale orders.</p>",
             "page": ""
           }
         },
@@ -250,12 +242,115 @@
             "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_f3PfJd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer free shipping?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes! We offer <strong>free U.S. shipping on orders over $35+</strong> and <strong>free expedited shipping on $500+.</strong></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_JWmQXL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How quickly do you ship orders?",
+            "icon": "check_mark",
+            "row_content": "<p>We ship<strong> same day or next business day on most orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_BYjnx4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I make a change to my order?",
+            "icon": "check_mark",
+            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_MJqrND",
-        "collapsible_row_tizybH",
-        "collapsible_row_8zNXwQ"
+        "collapsible_row_8zNXwQ",
+        "collapsible_row_f3PfJd",
+        "collapsible_row_JWmQXL",
+        "collapsible_row_BYjnx4"
+      ],
+      "disabled": true,
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Shipping & Fulfillment",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_jtGTgd": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_yJpA8x": {
+          "type": "collapsible_row",
+          "disabled": true,
+          "settings": {
+            "heading": "Is there a minimum order requirement?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes, we require a <strong>$35 minimum order.</strong></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_eQygf3": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there a minimum order requirement?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_m3iG9J": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer free shipping?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes! We offer <strong>free U.S. shipping on orders over $35+</strong> and <strong>free expedited shipping on $500+.</strong></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_qg6JwM": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How quickly do you ship orders?",
+            "icon": "check_mark",
+            "row_content": "<p>We ship<strong> same day or next business day on most orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_CygFV7": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I make a change to my order?",
+            "icon": "check_mark",
+            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_yJpA8x",
+        "collapsible_row_eQygf3",
+        "collapsible_row_m3iG9J",
+        "collapsible_row_qg6JwM",
+        "collapsible_row_CygFV7"
       ],
       "disabled": true,
       "name": "t:sections.collapsible_content.presets.name",
@@ -283,6 +378,7 @@
     "page_dcjphR",
     "page_FwEPHh",
     "collapsible_content_H9FfFq",
-    "collapsible_content_zgdCjJ"
+    "collapsible_content_zgdCjJ",
+    "collapsible_content_jtGTgd"
   ]
 }
