@@ -167,6 +167,112 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "collapsible_content_H9FfFq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_ehNzYD": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you offer wholesale accounts?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes — <strong>Bayandstew.com</strong> serves <strong>both</strong> retail and wholesale customers.<br/><br/>You must have a valid seller’s permit or<a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"> sales tax exemption certificate</a> to apply. <br/><br/>If you do not have one, you can still shop our products on Etsy at <a href=\"https://www.etsy.com/shop/bayandstew\" title=\"https://www.etsy.com/shop/bayandstew\">bayandstew.etsy.com.</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_NJVPYX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I open a wholesale account?",
+            "icon": "check_mark",
+            "row_content": "<p><strong>Applying for a Bay & Stew wholesale account is simple:</strong><br/><br/>1. Complete the<strong> </strong><a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"><strong>wholesale application form here.</strong></a><br/><br/>2. Submit your <strong>resale certificate or tax exemption documentation.<br/></strong><br/>3. Allow <strong>1–2 business days</strong> for our team to review and verify your application.<br/><br/>Once approved, you’ll receive an activation email with instructions to log in and start placing wholesale orders.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_iUPmtJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there a minimum order requirement?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_ehNzYD",
+        "collapsible_row_NJVPYX",
+        "collapsible_row_iUPmtJ"
+      ],
+      "disabled": true,
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Wholesale Accounts",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_zgdCjJ": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_MJqrND": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there a minimum order requirement?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes, we require a <strong>$35 minimum order.</strong></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_tizybH": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I open a wholesale account?",
+            "icon": "check_mark",
+            "row_content": "<p><strong>Applying for a Bay & Stew wholesale account is simple:</strong><br/><br/>1. Complete the<strong> </strong><a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"><strong>wholesale application form here.</strong></a><br/><br/>2. Submit your <strong>resale certificate or tax exemption documentation.<br/></strong><br/>3. Allow <strong>1–2 business days</strong> for our team to review and verify your application.<br/><br/>Once approved, you’ll receive an activation email with instructions to log in and start placing wholesale orders.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_8zNXwQ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Is there a minimum order requirement?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_MJqrND",
+        "collapsible_row_tizybH",
+        "collapsible_row_8zNXwQ"
+      ],
+      "disabled": true,
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Shipping & Fulfillment",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -175,6 +281,8 @@
     "collapsible_content_DRLnPq",
     "rich_text_bhyXp9",
     "page_dcjphR",
-    "page_FwEPHh"
+    "page_FwEPHh",
+    "collapsible_content_H9FfFq",
+    "collapsible_content_zgdCjJ"
   ]
 }
