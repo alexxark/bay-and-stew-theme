@@ -133,7 +133,6 @@
         "text_66mTxa",
         "button_Xx8WkJ"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
         "image": "shopify://shop_images/sale-offers-page.jpg",
@@ -182,10 +181,9 @@
         "text_RQetUt",
         "button_C8XcVD"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "image": "shopify://shop_images/Double-Loyalty-Points.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "image_first",
@@ -231,10 +229,9 @@
         "text_AfDa6P",
         "button_8cbpjb"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "image": "shopify://shop_images/Deck-of-cards.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
