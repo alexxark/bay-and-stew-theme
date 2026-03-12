@@ -204,7 +204,6 @@
         "collapsible_row_NJVPYX",
         "collapsible_row_iUPmtJ"
       ],
-      "disabled": true,
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
@@ -224,16 +223,6 @@
     "collapsible_content_zgdCjJ": {
       "type": "collapsible-content",
       "blocks": {
-        "collapsible_row_MJqrND": {
-          "type": "collapsible_row",
-          "disabled": true,
-          "settings": {
-            "heading": "Is there a minimum order requirement?",
-            "icon": "check_mark",
-            "row_content": "<p>Yes, we require a <strong>$35 minimum order.</strong></p>",
-            "page": ""
-          }
-        },
         "collapsible_row_8zNXwQ": {
           "type": "collapsible_row",
           "settings": {
@@ -260,25 +249,13 @@
             "row_content": "<p>We ship<strong> same day or next business day on most orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
             "page": ""
           }
-        },
-        "collapsible_row_BYjnx4": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can I make a change to my order?",
-            "icon": "check_mark",
-            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
-            "page": ""
-          }
         }
       },
       "block_order": [
-        "collapsible_row_MJqrND",
         "collapsible_row_8zNXwQ",
         "collapsible_row_f3PfJd",
-        "collapsible_row_JWmQXL",
-        "collapsible_row_BYjnx4"
+        "collapsible_row_JWmQXL"
       ],
-      "disabled": true,
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
@@ -298,65 +275,85 @@
     "collapsible_content_jtGTgd": {
       "type": "collapsible-content",
       "blocks": {
-        "collapsible_row_yJpA8x": {
+        "collapsible_row_qg6JwM": {
           "type": "collapsible_row",
-          "disabled": true,
           "settings": {
-            "heading": "Is there a minimum order requirement?",
+            "heading": "Can I make a change to my order?",
             "icon": "check_mark",
-            "row_content": "<p>Yes, we require a <strong>$35 minimum order.</strong></p>",
+            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
             "page": ""
           }
         },
         "collapsible_row_eQygf3": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Is there a minimum order requirement?",
+            "heading": "Do you accept returns or exchanges?",
             "icon": "check_mark",
-            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
+            "row_content": "<p><strong>We do not accept returns or exchanges.</strong><br/>However, if there’s an issue with your order, please email us within 3 days of delivery and we’ll make it right.</p>",
             "page": ""
           }
         },
         "collapsible_row_m3iG9J": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Do you offer free shipping?",
+            "heading": "What if something arrives damaged or incorrect?",
             "icon": "check_mark",
-            "row_content": "<p>Yes! We offer <strong>free U.S. shipping on orders over $35+</strong> and <strong>free expedited shipping on $500+.</strong></p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_qg6JwM": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "How quickly do you ship orders?",
-            "icon": "check_mark",
-            "row_content": "<p>We ship<strong> same day or next business day on most orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
-            "page": ""
-          }
-        },
-        "collapsible_row_CygFV7": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Can I make a change to my order?",
-            "icon": "check_mark",
-            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
+            "row_content": "<p>All products go through strict quality control, but if something arrives damaged or incorrect, <strong>please email us at hello@bayandstew.com within 3 days of delivery and include:</strong></p><ul><li><strong>Your order number</strong></li><li><strong>Clear photos of the issue</strong></li></ul>",
             "page": ""
           }
         }
       },
       "block_order": [
-        "collapsible_row_yJpA8x",
-        "collapsible_row_eQygf3",
-        "collapsible_row_m3iG9J",
         "collapsible_row_qg6JwM",
-        "collapsible_row_CygFV7"
+        "collapsible_row_eQygf3",
+        "collapsible_row_m3iG9J"
       ],
-      "disabled": true,
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
-        "heading": "Shipping & Fulfillment",
+        "heading": "Returns, Exchanges & Order Issues",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_a3Diww": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_qqkQyq": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Are your supplies only for permanent jewelry?",
+            "icon": "check_mark",
+            "row_content": "<p>While we specialize in permanent jewelry supplies, our products are also great for handmade jewelry, hand stamping, engraving, and more — <strong>perfect for both hobbyists and professionals.</strong></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_6WayAj": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Do you create your own products?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes! We design and manufacture many of our pieces in-house, giving you access to exclusive products you won’t find anywhere else.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_qqkQyq",
+        "collapsible_row_6WayAj"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Products & Use",
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
@@ -379,6 +376,7 @@
     "page_FwEPHh",
     "collapsible_content_H9FfFq",
     "collapsible_content_zgdCjJ",
-    "collapsible_content_jtGTgd"
+    "collapsible_content_jtGTgd",
+    "collapsible_content_a3Diww"
   ]
 }
