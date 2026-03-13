@@ -52,7 +52,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        "h1 {font-size: 38px; color: #806f65; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
+        "h1 {font-size: 38px; color: #73635B; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "padding_top": 36,
