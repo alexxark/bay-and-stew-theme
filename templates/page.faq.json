@@ -159,6 +159,7 @@
     },
     "page_FwEPHh": {
       "type": "page",
+      "custom_css": [],
       "name": "t:sections.page.presets.name",
       "settings": {
         "page": "faq",
@@ -301,7 +302,7 @@
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
-        "heading": "Returns, Exchanges & Order Issues",
+        "heading": "Returns, Exchanges & Order Support",
         "heading_size": "h1",
         "heading_alignment": "center",
         "layout": "none",
