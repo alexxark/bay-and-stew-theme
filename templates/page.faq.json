@@ -159,7 +159,10 @@
     },
     "page_FwEPHh": {
       "type": "page",
-      "custom_css": [],
+      "custom_css": [
+        "{font-size: 36px; text-align: center;}",
+        "h2 {font-size: 36px;}"
+      ],
       "name": "t:sections.page.presets.name",
       "settings": {
         "page": "faq",
@@ -199,11 +202,11 @@
       "settings": {
         "caption": "",
         "heading": "Wholesale Accounts",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
-        "color_scheme": "",
-        "container_color_scheme": "",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "container_color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
@@ -251,7 +254,7 @@
       "settings": {
         "caption": "",
         "heading": "Shipping & Fulfillment",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
         "color_scheme": "",
@@ -303,11 +306,11 @@
       "settings": {
         "caption": "",
         "heading": "Returns, Exchanges & Order Support",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
-        "color_scheme": "",
-        "container_color_scheme": "",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "container_color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
@@ -345,7 +348,7 @@
       "settings": {
         "caption": "",
         "heading": "Products & Use",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
         "color_scheme": "",
