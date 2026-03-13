@@ -28,15 +28,23 @@
             "heading": "Build Your Brand with Us!",
             "heading_size": "h1"
           }
+        },
+        "text_k4JLbA": {
+          "type": "text",
+          "settings": {
+            "text": "From custom permanent jewelry components to branded packaging and inserts, our in-house team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.",
+            "text_style": "body"
+          }
         }
       },
       "block_order": [
-        "heading_pif77m"
+        "heading_pif77m",
+        "text_k4JLbA"
       ],
       "custom_css": [],
       "settings": {
-        "image": "shopify://shop_images/bailey-stewie-banner_copy_37019048-8845-4379-b4a4-03aac2dbd01a.jpg",
-        "image_overlay_opacity": 0,
+        "image": "shopify://shop_images/deck-of-cards-landscape.jpg",
+        "image_overlay_opacity": 70,
         "image_height": "adapt",
         "desktop_content_position": "middle-center",
         "show_text_box": false,
@@ -51,16 +59,10 @@
     "rich_text_7jgKck": {
       "type": "rich-text",
       "blocks": {
-        "text_X8GXFh": {
-          "type": "text",
-          "settings": {
-            "text": "<p>From custom permanent jewelry components to branded packaging and inserts, our in-house team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.</p>"
-          }
-        },
         "button_dKnV3p": {
           "type": "button",
           "settings": {
-            "button_label": "Button label",
+            "button_label": "Request a Custom Product",
             "button_link": "",
             "button_style_secondary": false,
             "button_label_2": "",
@@ -70,7 +72,6 @@
         }
       },
       "block_order": [
-        "text_X8GXFh",
         "button_dKnV3p"
       ],
       "name": "t:sections.rich-text.presets.name",
