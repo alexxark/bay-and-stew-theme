@@ -15,33 +15,22 @@
         "heading_pif77m": {
           "type": "heading",
           "settings": {
-            "heading": "text",
+            "heading": "Build Your Brand With Bay & Stew",
             "heading_size": "h1"
-          }
-        },
-        "text_FxKzWY": {
-          "type": "text",
-          "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
           }
         }
       },
       "block_order": [
-        "heading_pif77m",
-        "text_FxKzWY"
+        "heading_pif77m"
       ],
-      "custom_css": [
-        "h1 {font-size: 32px;}",
-        "@media screen and (max-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
+      "custom_css": [],
       "settings": {
         "image": "shopify://shop_images/bailey-stewie-banner_copy_37019048-8845-4379-b4a4-03aac2dbd01a.jpg",
         "image_overlay_opacity": 0,
-        "image_height": "small",
-        "desktop_content_position": "top-right",
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
         "show_text_box": false,
-        "desktop_content_alignment": "right",
+        "desktop_content_alignment": "center",
         "color_scheme": "scheme-3",
         "image_behavior": "none",
         "mobile_content_alignment": "center",
@@ -49,68 +38,39 @@
         "show_text_below": true
       }
     },
-    "image_banner_tayJNr": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_wrbB7A": {
-          "type": "heading",
-          "settings": {
-            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
-            "heading_size": "h2"
-          }
-        },
-        "text_YaDd33": {
-          "type": "text",
-          "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
-          }
-        }
-      },
-      "block_order": [
-        "heading_wrbB7A",
-        "text_YaDd33"
-      ],
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/mobile.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "top-right",
-        "show_text_box": false,
-        "desktop_content_alignment": "right",
-        "color_scheme": "scheme-54fb6e74-e27e-414b-b204-74824a093fc8",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "stack_images_on_mobile": true,
-        "show_text_below": true
-      }
-    },
-    "rich_text_xWLV6J": {
+    "rich_text_7jgKck": {
       "type": "rich-text",
       "blocks": {
-        "text_QaTaPF": {
+        "text_X8GXFh": {
           "type": "text",
           "settings": {
-            "text": "<h6><em>In loving memory of Bailey and Stewie — the little studio companions who inspired it all.</em></h6>"
+            "text": "<p>From custom permanent jewelry components to branded packaging and inserts, our in-house team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.</p>"
+          }
+        },
+        "button_dKnV3p": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
           }
         }
       },
       "block_order": [
-        "text_QaTaPF"
+        "text_X8GXFh",
+        "button_dKnV3p"
       ],
-      "custom_css": [
-        "h6 {font-size: 11px; font-kerning: 2px; font-weight: 200;}"
-      ],
+      "name": "t:sections.rich-text.presets.name",
       "settings": {
-        "desktop_content_position": "right",
-        "content_alignment": "left",
-        "color_scheme": "scheme-5",
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
         "full_width": true,
-        "padding_top": 12,
-        "padding_bottom": 12
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "main": {
@@ -265,8 +225,7 @@
   },
   "order": [
     "image_banner_rJf3hX",
-    "image_banner_tayJNr",
-    "rich_text_xWLV6J",
+    "rich_text_7jgKck",
     "main",
     "image_with_text_yziiii",
     "image_with_text_gwKdWK",
