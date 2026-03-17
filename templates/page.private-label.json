@@ -26,7 +26,7 @@
           "type": "heading",
           "settings": {
             "heading": "Build Your Brand with Us!",
-            "heading_size": "h1"
+            "heading_size": "h2"
           }
         },
         "text_k4JLbA": {
@@ -54,10 +54,12 @@
         "text_k4JLbA",
         "buttons_nXpcfk"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "@media screen and (max-width: 768px) {.banner__text {padding: 15px 20px; }}"
+      ],
       "settings": {
         "image": "shopify://shop_images/deck-of-cards-landscape.jpg",
-        "image_overlay_opacity": 70,
+        "image_overlay_opacity": 80,
         "image_height": "adapt",
         "desktop_content_position": "middle-center",
         "show_text_box": false,
@@ -66,7 +68,7 @@
         "image_behavior": "none",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": true,
-        "show_text_below": true
+        "show_text_below": false
       }
     },
     "rich_text_DV7iQQ": {
