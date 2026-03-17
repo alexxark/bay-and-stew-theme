@@ -12,7 +12,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        "h1 {font-size: 26px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
+        "h1 {font-size: 32px; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "padding_top": 36,
@@ -71,17 +71,46 @@
         "show_text_below": false
       }
     },
-    "rich_text_DV7iQQ": {
+    "rich_text_iQyCAC": {
       "type": "rich-text",
       "blocks": {
-        "heading_fGTadU": {
+        "heading_xbMMfi": {
           "type": "heading",
           "settings": {
             "heading": "What We Offer",
-            "heading_size": "h2"
+            "heading_size": "h1"
           }
-        },
-        "caption_Uc8RVp": {
+        }
+      },
+      "block_order": [
+        "heading_xbMMfi"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_DV7iQQ": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_ynHhzV": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_pJBRik": {
           "type": "caption",
           "settings": {
             "caption": "Your Partner in Private Label Production",
@@ -91,8 +120,7 @@
         }
       },
       "block_order": [
-        "heading_fGTadU",
-        "caption_Uc8RVp"
+        "caption_pJBRik"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -100,7 +128,7 @@
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
-        "padding_top": 40,
+        "padding_top": 8,
         "padding_bottom": 8
       }
     },
@@ -292,7 +320,9 @@
   "order": [
     "main",
     "image_banner_rJf3hX",
+    "rich_text_iQyCAC",
     "rich_text_DV7iQQ",
+    "rich_text_ynHhzV",
     "multicolumn_PQkzWj",
     "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
