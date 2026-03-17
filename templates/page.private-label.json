@@ -184,7 +184,7 @@
           "type": "heading",
           "settings": {
             "heading": "Why Work With Us?",
-            "heading_size": "h1"
+            "heading_size": "h0"
           }
         },
         "text_8R6NwM": {
@@ -200,7 +200,7 @@
         "text_8R6NwM"
       ],
       "custom_css": [
-        "h2 {font-size: 13px; color: #73635B; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
+        "h2 {font-size: 20px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "image": "shopify://shop_images/Polaroid600-steweie_4ca4183e-6bba-479e-a4f8-8d1953ad9f73.png",
