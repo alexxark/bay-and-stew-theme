@@ -550,10 +550,13 @@
     },
     "featured_collection": {
       "type": "featured-collection",
+      "custom_css": [
+        "H4 {font-family: sans-serif;}"
+      ],
       "settings": {
-        "title": "Sale",
+        "title": "EXTRA 25% OFF SALE",
         "heading_size": "h2",
-        "description": "",
+        "description": "<h4>With code <strong>SALEONSALE</strong> at checkout.</h4><h4></h4><h6><a href=\"/pages/offers\" title=\"Offers\"><strong>exclusions apply.</strong></a></h6>",
         "show_description": false,
         "description_style": "body",
         "collection": "sale-1",
