@@ -145,6 +145,7 @@
         },
         "slide_GNpfTB": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Chain-Birthstone-Banner.jpg",
             "image_mobile": "shopify://shop_images/Chain-Birthstone-Banner-Mobile.jpg",
