@@ -139,7 +139,7 @@
           "type": "column",
           "settings": {
             "title": "Artwork & Design Services",
-            "text": "<h4>Design support to help you develop visuals for your brand.</h4><p>Prints, illustrations, and original artwork</p>",
+            "text": "<h4>Design support to help you develop visuals for your brand.</h4><h5>Prints, illustrations, & original artwork</h5>",
             "link_label": "",
             "link": ""
           }
@@ -148,7 +148,7 @@
           "type": "column",
           "settings": {
             "title": "Branded Paper Goods",
-            "text": "<p>Custom-designed pieces that elevate your customer experience.<br/><br/>Card decks & playing cards<br/><br/>Stickers (vinyl, die-cut, custom designs)</p>",
+            "text": "<h4>Custom-designed pieces that elevate your customer experience.</h4><h5>Card decks/Playing cards & Stickers <br/>(vinyl, die-cut, custom designs)</h5>",
             "link_label": "",
             "link": ""
           }
@@ -157,7 +157,7 @@
           "type": "column",
           "settings": {
             "title": "Custom Apparel & Add-Ons",
-            "text": "<p>Branded merchandise to expand your product offering.<br/><br/>Custom patches (embroidered or screen printed)<br/><br/>Custom hats</p>",
+            "text": "<h4>Branded merchandise to expand your product offering.<br/></h4><h5>Custom hats and Custom patches<br/>(embroidered or screen printed) </h5>",
             "link_label": "",
             "link": ""
           }
@@ -189,7 +189,8 @@
         "column_bdjKeE"
       ],
       "custom_css": [
-        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 20px; /* adjust heading size */ color: #73635b; /* brand color */}"
+        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 22px; /* adjust heading size */ color: #000000; /* brand color */}",
+        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; /* adjust heading size */ color: #73635b; /* brand color */}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
