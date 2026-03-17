@@ -109,7 +109,7 @@
           "type": "column",
           "settings": {
             "title": "Artwork & Design Services",
-            "text": "<p>Custom graphics for jewelry, packaging, and marketing materials<br/></p>",
+            "text": "<p>Design support to help you develop visuals for your brand.</p><p>Prints, illustrations, and original artwork</p>",
             "link_label": "",
             "link": ""
           }
@@ -117,8 +117,8 @@
         "column_ibiqXb": {
           "type": "column",
           "settings": {
-            "title": "Unique Branded Products",
-            "text": "<p>Shipping inserts, stickers, card decks, and promo materials</p>",
+            "title": "Branded Paper Goods",
+            "text": "<p>Custom-designed pieces that elevate your customer experience.<br/><br/>Card decks & playing cards<br/><br/>Stickers (vinyl, die-cut, custom designs)</p>",
             "link_label": "",
             "link": ""
           }
@@ -126,8 +126,8 @@
         "column_mHkLDV": {
           "type": "column",
           "settings": {
-            "title": "Custom Jewelry Components",
-            "text": "<p>Personalized charms, connectors, and stamps (MOQ Varies)</p>",
+            "title": "Custom Apparel & Add-Ons",
+            "text": "<p>Branded merchandise to expand your product offering.<br/><br/>Custom patches (embroidered or screen printed)<br/><br/>Custom hats</p>",
             "link_label": "",
             "link": ""
           }
@@ -135,8 +135,17 @@
         "column_KKNMHU": {
           "type": "column",
           "settings": {
-            "title": "Jewelry Cases & Packaging",
-            "text": "<p>Branded or fully custom packaging</p>",
+            "title": "Permanent Jewelry Components",
+            "text": "<p>Designed for makers building or scaling their jewelry business. <br/><br/>Personalized charms<br/><br/>Connectors (MOQ 30)<br/><br/>Custom stamps </p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_bdjKeE": {
+          "type": "column",
+          "settings": {
+            "title": "Packaging & Brand Materials",
+            "text": "<p>Everything you need to create a cohesive, branded unboxing experience.<br/><br/>Custom boxes and bags<br/><br/>Shipping inserts and postcards</p>",
             "link_label": "",
             "link": ""
           }
@@ -146,7 +155,8 @@
         "column_yfmDRp",
         "column_ibiqXb",
         "column_mHkLDV",
-        "column_KKNMHU"
+        "column_KKNMHU",
+        "column_bdjKeE"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -154,8 +164,8 @@
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
-        "columns_desktop": 4,
-        "column_alignment": "left",
+        "columns_desktop": 3,
+        "column_alignment": "center",
         "background_style": "primary",
         "button_label": "Request a Custom Product",
         "button_link": "https://form.jotform.com/260715843519159",
