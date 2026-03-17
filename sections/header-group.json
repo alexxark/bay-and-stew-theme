@@ -43,12 +43,11 @@
         "announcement_yxMhRg",
         "announcement-bar-0"
       ],
-      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
       "settings": {
-        "color_scheme": "",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
         "show_line_separator": false,
         "show_social": false,
         "auto_rotate": true,
@@ -82,7 +81,7 @@
       "custom_css": [],
       "name": "t:sections.announcement-bar.presets.name",
       "settings": {
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-3",
         "show_line_separator": true,
         "show_social": false,
         "auto_rotate": false,
