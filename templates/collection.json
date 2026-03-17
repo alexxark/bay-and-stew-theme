@@ -15,6 +15,8 @@
       "settings": {
         "show_collection_description": true,
         "show_collection_image": true,
+        "title_font_size": 32,
+        "description_font_size": 14,
         "color_scheme": "background-1"
       }
     },
