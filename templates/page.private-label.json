@@ -69,52 +69,6 @@
         "show_text_below": true
       }
     },
-    "rich_text_ePLd38": {
-      "type": "rich-text",
-      "blocks": {
-        "caption_zxgGPw": {
-          "type": "caption",
-          "settings": {
-            "caption": "NEW TO PRIVATE LABEL?",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
-          }
-        },
-        "caption_jDMfm4": {
-          "type": "caption",
-          "settings": {
-            "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
-            "text_style": "subtitle",
-            "text_size": "medium"
-          }
-        },
-        "button_JMewJd": {
-          "type": "button",
-          "settings": {
-            "button_label": "Frequently Asked Questions",
-            "button_link": "",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "caption_zxgGPw",
-        "caption_jDMfm4",
-        "button_JMewJd"
-      ],
-      "name": "New to Private Label?",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
     "rich_text_DV7iQQ": {
       "type": "rich-text",
       "blocks": {
@@ -306,16 +260,62 @@
         "padding_top": 4,
         "padding_bottom": 0
       }
+    },
+    "rich_text_ePLd38": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_zxgGPw": {
+          "type": "caption",
+          "settings": {
+            "caption": "NEW TO PRIVATE LABEL?",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "caption_jDMfm4": {
+          "type": "caption",
+          "settings": {
+            "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
+            "text_style": "subtitle",
+            "text_size": "medium"
+          }
+        },
+        "button_JMewJd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Frequently Asked Questions",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "caption_zxgGPw",
+        "caption_jDMfm4",
+        "button_JMewJd"
+      ],
+      "name": "New to Private Label?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
     "main",
     "image_banner_rJf3hX",
-    "rich_text_ePLd38",
     "rich_text_DV7iQQ",
     "multicolumn_PQkzWj",
     "image_with_text_yziiii",
     "image_with_text_gwKdWK",
-    "rich_text_7PqGV8"
+    "rich_text_7PqGV8",
+    "rich_text_ePLd38"
   ]
 }
