@@ -32,12 +32,13 @@
         "text_k4JLbA": {
           "type": "text",
           "settings": {
-            "text": "From custom permanent jewelry components to branded packaging and inserts, our in-house team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.",
+            "text": "From custom permanent jewelry components to branded packaging and inserts, our in-house creative team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.",
             "text_style": "body"
           }
         },
         "buttons_nXpcfk": {
           "type": "buttons",
+          "disabled": true,
           "settings": {
             "button_label_1": "Request a Custom Product",
             "button_link_1": "https://form.jotform.com/260715843519159",
@@ -71,25 +72,71 @@
     "rich_text_ePLd38": {
       "type": "rich-text",
       "blocks": {
-        "heading_Y6aXJt": {
+        "caption_zxgGPw": {
+          "type": "caption",
+          "settings": {
+            "caption": "NEW TO PRIVATE LABEL?",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "caption_jDMfm4": {
+          "type": "caption",
+          "settings": {
+            "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
+            "text_style": "subtitle",
+            "text_size": "medium"
+          }
+        },
+        "button_JMewJd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Frequently Asked Questions",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "caption_zxgGPw",
+        "caption_jDMfm4",
+        "button_JMewJd"
+      ],
+      "name": "New to Private Label?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_DV7iQQ": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_fGTadU": {
           "type": "heading",
           "settings": {
             "heading": "What We Offer",
             "heading_size": "h2"
           }
         },
-        "caption_jDMfm4": {
+        "caption_Uc8RVp": {
           "type": "caption",
           "settings": {
-            "caption": "Your Partner in Private Label Jewelry Production",
+            "caption": "Your Partner in Private Label Production",
             "text_style": "caption-with-letter-spacing",
             "text_size": "medium"
           }
         }
       },
       "block_order": [
-        "heading_Y6aXJt",
-        "caption_jDMfm4"
+        "heading_fGTadU",
+        "caption_Uc8RVp"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -98,7 +145,7 @@
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
-        "padding_bottom": 52
+        "padding_bottom": 8
       }
     },
     "multicolumn_PQkzWj": {
@@ -107,8 +154,8 @@
         "column_yfmDRp": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Artwork & Design Services",
+            "text": "<p>Custom graphics for jewelry, packaging, and marketing materials<br/></p>",
             "link_label": "",
             "link": ""
           }
@@ -116,8 +163,8 @@
         "column_ibiqXb": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Unique Branded Products",
+            "text": "<p>Shipping inserts, stickers, card decks, and promo materials</p>",
             "link_label": "",
             "link": ""
           }
@@ -125,8 +172,17 @@
         "column_mHkLDV": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Custom Jewelry Components",
+            "text": "<p>Personalized charms, connectors, and stamps (MOQ Varies)</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_KKNMHU": {
+          "type": "column",
+          "settings": {
+            "title": "Jewelry Cases & Packaging",
+            "text": "<p>Branded or fully custom packaging</p>",
             "link_label": "",
             "link": ""
           }
@@ -135,7 +191,8 @@
       "block_order": [
         "column_yfmDRp",
         "column_ibiqXb",
-        "column_mHkLDV"
+        "column_mHkLDV",
+        "column_KKNMHU"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -143,11 +200,11 @@
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
-        "columns_desktop": 3,
+        "columns_desktop": 4,
         "column_alignment": "left",
         "background_style": "primary",
-        "button_label": "",
-        "button_link": "",
+        "button_label": "Request a Custom Product",
+        "button_link": "https://form.jotform.com/260715843519159",
         "swipe_on_desktop": false,
         "color_scheme": "",
         "columns_mobile": "1",
@@ -249,61 +306,16 @@
         "padding_top": 4,
         "padding_bottom": 0
       }
-    },
-    "rich_text_CMKUe4": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_mw9rdm": {
-          "type": "heading",
-          "settings": {
-            "heading": "Our Mission",
-            "heading_size": "h1"
-          }
-        },
-        "text_7QcpBg": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Born from a maker’s need for better supplies. Built on loyalty, quality, and heart.</p>"
-          }
-        },
-        "button_86AQ6W": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop Supplies",
-            "button_link": "shopify://pages/whats-new",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_mw9rdm",
-        "text_7QcpBg",
-        "button_86AQ6W"
-      ],
-      "custom_css": [
-        "h2 {font-size: 28px; color: #b19d8c;}"
-      ],
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-73fe3fdc-82ab-44c0-bac9-6d5df6d0238d",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
     }
   },
   "order": [
     "main",
     "image_banner_rJf3hX",
     "rich_text_ePLd38",
+    "rich_text_DV7iQQ",
     "multicolumn_PQkzWj",
     "image_with_text_yziiii",
     "image_with_text_gwKdWK",
-    "rich_text_7PqGV8",
-    "rich_text_CMKUe4"
+    "rich_text_7PqGV8"
   ]
 }
