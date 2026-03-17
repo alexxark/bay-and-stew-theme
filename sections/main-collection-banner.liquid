@@ -23,9 +23,18 @@
   }
 {%- endstyle -%}
 
-{%- assign has_description = section.settings.show_collection_description and collection.description != blank -%}
-{%- assign has_image = section.settings.show_collection_image and collection.image -%}
-{%- assign is_collapsible = section.settings.collapsible_description and has_description -%}
+{%- assign has_description = false -%}
+{%- if section.settings.show_collection_description and collection.description != blank -%}
+  {%- assign has_description = true -%}
+{%- endif -%}
+{%- assign has_image = false -%}
+{%- if section.settings.show_collection_image and collection.image -%}
+  {%- assign has_image = true -%}
+{%- endif -%}
+{%- assign is_collapsible = false -%}
+{%- if section.settings.collapsible_description and has_description -%}
+  {%- assign is_collapsible = true -%}
+{%- endif -%}
 
 <div class="collection-hero{% if has_image %} collection-hero--with-image{% endif %}{% if is_collapsible %} collection-hero--collapsible{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
