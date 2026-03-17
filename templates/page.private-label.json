@@ -233,11 +233,11 @@
         "heading_6hifzJ",
         "text_8R6NwM"
       ],
+      "disabled": true,
       "custom_css": [
         "h2 {font-size: 20px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
-        "image": "shopify://shop_images/Polaroid600-steweie_4ca4183e-6bba-479e-a4f8-8d1953ad9f73.png",
         "height": "medium",
         "desktop_image_width": "small",
         "layout": "image_first",
@@ -272,6 +272,50 @@
         "full_width": true,
         "padding_top": 4,
         "padding_bottom": 0
+      }
+    },
+    "rich_text_XgGjrc": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_JpgdNM": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Work With Us?",
+            "heading_size": "h1"
+          }
+        },
+        "text_MfCRPF": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+          }
+        },
+        "button_EyWeph": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JpgdNM",
+        "text_MfCRPF",
+        "button_EyWeph"
+      ],
+      "disabled": true,
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "rich_text_ePLd38": {
@@ -330,6 +374,7 @@
     "multicolumn_PQkzWj",
     "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
+    "rich_text_XgGjrc",
     "rich_text_ePLd38"
   ]
 }
