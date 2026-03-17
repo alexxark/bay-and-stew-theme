@@ -139,7 +139,7 @@
           "type": "column",
           "settings": {
             "title": "Artwork & Design Services",
-            "text": "<p>Design support to help you develop visuals for your brand.</p><p>Prints, illustrations, and original artwork</p>",
+            "text": "<h4>Design support to help you develop visuals for your brand.</h4><p>Prints, illustrations, and original artwork</p>",
             "link_label": "",
             "link": ""
           }
@@ -187,6 +187,9 @@
         "column_mHkLDV",
         "column_KKNMHU",
         "column_bdjKeE"
+      ],
+      "custom_css": [
+        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 20px; /* adjust heading size */ color: #73635b; /* brand color */}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
