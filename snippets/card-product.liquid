@@ -23,6 +23,21 @@
   if is_in_locked_collection and is_b2b_customer == false
     assign show_product = false
   endif
+
+  assign has_sale_tag = false
+  for product_tag in card_product.tags
+    if product_tag | handleize == 'sale'
+      assign has_sale_tag = true
+      break
+    endif
+  endfor
+
+  assign show_sale_badge = false
+  if card_product.available and has_sale_tag
+    assign show_sale_badge = true
+  elsif card_product.compare_at_price > card_product.price and card_product.available
+    assign show_sale_badge = true
+  endif
 -%}
 {%- comment -%}
   ================================================================
@@ -164,7 +179,7 @@
               >
                 {{- 'products.product.sold_out' | t -}}
               </span>
-            {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+            {%- elsif show_sale_badge -%}
               <span
                 id="NoMediaStandardBadge-{{ section_id }}-{{ card_product.id }}"
                 class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
@@ -589,7 +604,7 @@
             >
               {{- 'products.product.sold_out' | t -}}
             </span>
-          {%- elsif card_product.compare_at_price > card_product.price and card_product.available -%}
+          {%- elsif show_sale_badge -%}
             <span
               id="Badge-{{ section_id }}-{{ card_product.id }}"
               class="badge badge--bottom-left color-{{ settings.sale_badge_color_scheme }}"
