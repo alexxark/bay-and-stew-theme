@@ -1,0 +1,393 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "image_banner_tayJNr": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_wrbB7A": {
+          "type": "heading",
+          "settings": {
+            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
+            "heading_size": "h2"
+          }
+        },
+        "text_YaDd33": {
+          "type": "text",
+          "settings": {
+            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
+            "text_style": "caption-with-letter-spacing"
+          }
+        }
+      },
+      "block_order": [
+        "heading_wrbB7A",
+        "text_YaDd33"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/mobile.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "desktop_content_position": "top-right",
+        "show_text_box": false,
+        "desktop_content_alignment": "right",
+        "color_scheme": "scheme-54fb6e74-e27e-414b-b204-74824a093fc8",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "custom_css": [
+        "h1 {font-size: 38px; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_dXNmG6": {
+      "type": "rich-text",
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_RxzLeU": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_XNzwh3": {
+          "type": "heading",
+          "settings": {
+            "heading": "UPCOMING",
+            "heading_size": "h1"
+          }
+        },
+        "text_XQ9Wm8": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Check out our upcoming deals and</strong><em><strong> limited-time promotions</strong></em><strong>—made for makers, by makers.</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_XNzwh3",
+        "text_XQ9Wm8"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "image_with_text_yziiii": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_WJpjHE": {
+          "type": "heading",
+          "settings": {
+            "heading": "EXTRA 25% OFF SALE",
+            "heading_size": "h1"
+          }
+        },
+        "text_66mTxa": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Save an additional 25% on all sale items</a><br/></h3><p>Valid 03/17/2026 through 03/31/2026 at 11:59pm PS, take an extra 25% off all sale items at Bay & Stew. We have also added new styles to the sale section, making it the perfect opportunity to restock tools, supplies, and studio essentials at even better pricing. Discount automatically applied in cart.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid 03/17/2026 through 03/31/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_Xx8WkJ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Sale",
+            "button_link": "shopify://collections/sale-1",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_WJpjHE",
+        "text_66mTxa",
+        "button_Xx8WkJ"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_btPUQR": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_Q3hk6b": {
+          "type": "heading",
+          "settings": {
+            "heading": "DOUBLE LOYALTY POINTS",
+            "heading_size": "h1"
+          }
+        },
+        "text_RQetUt": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Exclusive to Growth + Makers Circle Rewards Members</a><br/></h3><p><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Makers Circle loyalty rewards member</a>s will earn <strong>double points on every purchase from March 24 through March 26 (Growth+ tiers only).</strong> It is the perfect time to stock up on supplies, earn rewards faster, and maximize your studio purchasing power. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid March 24, 2026 through March 26, 2026 at 11:59 PM PST. Double points will be automatically applied to qualifying purchases for eligible loyalty tiers: Growth, Trade, Pro, and Premier. Studio tier is not eligible for this promotion. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_C8XcVD": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_Q3hk6b",
+        "text_RQetUt",
+        "button_C8XcVD"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/Double-Loyalty-Points.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_aiRX6U": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_jV6mPR": {
+          "type": "heading",
+          "settings": {
+            "heading": "LIMITED EDITION CARD DECK",
+            "heading_size": "h1"
+          }
+        },
+        "text_AfDa6P": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>Free with qualifying $125+ purchase<br/></h3><p>Receive a limited edition Bay & Stew playing card deck with $125+ qualifying purchases throughout April. Featuring custom hand-drawn artwork inspired by the permanent jewelry studio and maker community. Available while supplies last and automatically added to eligible carts.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid 04/01/2026 through 04/30/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_8cbpjb": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_jV6mPR",
+        "text_AfDa6P",
+        "button_8cbpjb"
+      ],
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/Deck-of-cards.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_YztMxr": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_JpEBGC": {
+          "type": "heading",
+          "settings": {
+            "heading": "Free Trucker Hat with Any $150+ Purchase",
+            "heading_size": "h1"
+          }
+        },
+        "text_6MwMn4": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\" title=\"https://bayandstew.com/products/fueled-by-welds-espresso-hat?_pos=13&_sid=7729d003b&_ss=r\">WELDS & ESPRESSO ON US<br/></a></h3><p>For a limited time, receive <strong>a complimentary Welds & Espresso trucker hat with purchases of $150 or more at Bay & Stew.</strong> The perfect finishing touch for studio days, coffee runs, and everything in between. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid through 03/06/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_pJgAky": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JpEBGC",
+        "text_6MwMn4",
+        "button_pJgAky"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "settings": {
+        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "rich_text_zU3mja": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_VgmHgV": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Bay & Stew?",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_VgmHgV"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_BJB7wL": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_eqKqBg": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-03.png",
+            "title": "<strong>Loyalty Rewards</strong>",
+            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_99mPYz": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
+            "title": "Free Shipping on U.S. Orders $35+",
+            "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_dqc3E4": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Express-shipping.png",
+            "title": "Same or Next Day Shipping",
+            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_eqKqBg",
+        "column_99mPYz",
+        "column_dqc3E4"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": true,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "image_banner_tayJNr",
+    "main",
+    "rich_text_dXNmG6",
+    "rich_text_RxzLeU",
+    "image_with_text_yziiii",
+    "image_with_text_btPUQR",
+    "image_with_text_aiRX6U",
+    "image_with_text_YztMxr",
+    "rich_text_zU3mja",
+    "multicolumn_BJB7wL"
+  ]
+}

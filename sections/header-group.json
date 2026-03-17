@@ -33,8 +33,8 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "Free hat with purchase has RESTOCKED, get yours today on orders $150+!",
-            "link": "https://bayandstew.com/products/fueled-by-welds-espresso-hat"
+            "text": "EXTRA 25% OFF ON SALE ITEMS",
+            "link": "shopify://collections/sale-1"
           }
         }
       },
@@ -43,6 +43,7 @@
         "announcement_yxMhRg",
         "announcement-bar-0"
       ],
+      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
@@ -52,6 +53,40 @@
         "show_social": false,
         "auto_rotate": true,
         "change_slides_speed": 10,
+        "enable_country_selector": false,
+        "enable_language_selector": false
+      }
+    },
+    "announcement_bar_AcR7te": {
+      "type": "announcement-bar",
+      "blocks": {
+        "announcement_LA9eAr": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free Standard Shipping on U.S. Orders $35+",
+            "link": ""
+          }
+        },
+        "announcement_CWnHeh": {
+          "type": "announcement",
+          "settings": {
+            "text": "Free RUSH Shipping on Orders $500+",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "announcement_LA9eAr",
+        "announcement_CWnHeh"
+      ],
+      "custom_css": [],
+      "name": "t:sections.announcement-bar.presets.name",
+      "settings": {
+        "color_scheme": "scheme-5",
+        "show_line_separator": true,
+        "show_social": false,
+        "auto_rotate": false,
+        "change_slides_speed": 5,
         "enable_country_selector": false,
         "enable_language_selector": false
       }
@@ -81,6 +116,7 @@
   },
   "order": [
     "announcement-bar",
+    "announcement_bar_AcR7te",
     "header"
   ]
 }

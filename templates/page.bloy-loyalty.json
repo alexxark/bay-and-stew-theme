@@ -26,8 +26,8 @@
             "primary_color": "#cc9b6e",
             "background_color": "#e7ded6",
             "image": "shopify://shop_images/Rewards_page_photo.png",
-            "heading_text": "Loyalty Rewards Program",
-            "subtitle": "Become a member to earn points and gain exclusive rewards for every purchase you make",
+            "heading_text": "Loyalty Rewards",
+            "subtitle": "Become a Makers Circle member to earn points and gain exclusive rewards for every purchase you make",
             "primary_button": "Join now",
             "secondary_button": "Sign in"
           }
@@ -65,8 +65,8 @@
         "bloy_loyalty_rewards_bloy_loyalty_vip_program_XU7qKB": {
           "type": "shopify://apps/bloy-loyalty-rewards/blocks/bloy-loyalty-vip-program/97e8894d-00f0-41a9-b986-49828146257c",
           "settings": {
-            "heading_title": "VIP tiers",
-            "subtitle": "Join VIP program to enjoy exclusive rewards and special perks made just for you!"
+            "heading_title": "Reward tiers",
+            "subtitle": "Join our Makers Circle to enjoy exclusive rewards and special perks made just for you!"
           }
         },
         "bloy_loyalty_rewards_bloy_loyalty_ways_redeem_c8fqGn": {
@@ -85,6 +85,11 @@
             "redeem_secondary_button": "Apply",
             "redeem_store_credit_subtitle": "Available store credit is automatically shown at checkout. Simply choose whether to apply it to your order.",
             "redeem_tertiary_button": "Okay",
+            "redeem_free_product_placeholder": "Select",
+            "redeem_free_product_subtitle": "You will receive a free product by selecting a product below",
+            "redeem_free_product_add_to_cart": "Add to cart",
+            "redeem_free_product_subtitle_2": "The product has been added to the cart. If you do not use the discount now, you can always access it later in the Your Rewards tab.",
+            "redeem_free_product_go_to_cart": "Go to cart",
             "toast_copied": "Discount copied",
             "toast_applied": "Discount applied"
           }
@@ -101,6 +106,44 @@
         "include_margins": true
       }
     },
+    "image_banner_fLGfCN": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_xEUTNH": {
+          "type": "heading",
+          "settings": {
+            "heading": "Your Loyalty, Your Hat!",
+            "heading_size": "h1"
+          }
+        },
+        "text_iF7QUF": {
+          "type": "text",
+          "settings": {
+            "text": "For a limited time, redeem <strong>2,000 loyalty points</strong> to get a complimentary Welds & Espresso trucker hat—perfect for studio days, coffee runs, and everything in between.💎 <strong>Diamond Members</strong> receive the hat for free!",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_xEUTNH",
+        "text_iF7QUF"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
+        "image_overlay_opacity": 60,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
+    },
     "17586089124980a585": {
       "type": "apps",
       "blocks": {
@@ -113,9 +156,16 @@
             "heading_text": "Your balance: {x points}",
             "your_reward": "Your rewards",
             "your_activities": "Your activities",
+            "select_product": "Select product",
+            "select_product_placeholder": "Select",
+            "free_product_subtitle": "You will receive a free product by selecting a product below",
+            "free_product_add_to_cart": "Add to cart",
+            "free_product_subtitle_2": "The product has been added to the cart. If you do not use the discount now, you can always access it later in the Your Rewards tab.",
+            "free_product_go_to_cart": "Go to cart",
             "copy_button": "Copy",
             "apply_button": "Apply",
             "used_badge": "Used",
+            "expired_badge": "Expired",
             "empty_state_rewards_title": "No rewards yet",
             "empty_state_rewards_content": "You do not have any rewards yet. Start earning points to get access to exclusive rewards.",
             "empty_state_activities_title": "No activities yet",
@@ -132,11 +182,103 @@
       "settings": {
         "include_margins": true
       }
+    },
+    "rich_text_eNz6WC": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_yVYyww": {
+          "type": "heading",
+          "settings": {
+            "heading": "Perks for Makers",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_yVYyww"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-5",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "multicolumn_RHyKTH": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_fVtgEY": {
+          "type": "column",
+          "settings": {
+            "title": "Earn Points as You Shop",
+            "text": "<p>Get <strong>1 point for every $1</strong> spent on supplies and tools you already love.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_MKhQ3z": {
+          "type": "column",
+          "settings": {
+            "title": "Bonus Points for Joining",
+            "text": "<p>Create an account and receive <strong>100+ points</strong> just for signing up.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_w9NFzw": {
+          "type": "column",
+          "settings": {
+            "title": "Unlock Member Tiers",
+            "text": "<p><strong>Advance through</strong> Entry, Pro, and Premier <strong>tiers to earn points faster and receive quarterly + annual credits.</strong><br/></p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_pdPEPg": {
+          "type": "column",
+          "settings": {
+            "title": "Redeem for Rewards",
+            "text": "<p>Turn <strong>points into $ off your order </strong>or<strong> redeem for exclusive gifts with purchase.</strong><br/></p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_fVtgEY",
+        "column_MKhQ3z",
+        "column_w9NFzw",
+        "column_pdPEPg"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h2",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-5",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
     "main",
     "1751907374071531ed",
-    "17586089124980a585"
+    "image_banner_fLGfCN",
+    "17586089124980a585",
+    "rich_text_eNz6WC",
+    "multicolumn_RHyKTH"
   ]
 }

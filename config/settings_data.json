@@ -103,7 +103,7 @@
     "drawer_shadow_blur": 5,
     "badge_position": "bottom left",
     "badge_corner_radius": 40,
-    "sale_badge_color_scheme": "accent-2",
+    "sale_badge_color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
     "sold_out_badge_color_scheme": "inverse",
     "brand_headline": "",
     "brand_description": "<p></p>",
@@ -129,7 +129,7 @@
     "reward_1_label": "Free standard shipping!",
     "reward_2_threshold": "500",
     "reward_2_label": "Free rush shipping!",
-    "reward_3_threshold": "150",
+    "reward_3_threshold": "0",
     "reward_3_label": "hat",
     "reward_3_product": "fueled-by-welds-espresso-hat-free-gift-with-x-purchase-limit-1-per-order",
     "sections": {
@@ -317,6 +317,61 @@
           "button": "#ffffff",
           "button_label": "#ffffff",
           "secondary_button_label": "#ffffff",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3": {
+        "settings": {
+          "background": "#000000",
+          "background_gradient": "",
+          "text": "#ffffff",
+          "button": "#cfebfb",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-33e077ce-be67-493d-ab69-6688695edc41": {
+        "settings": {
+          "background": "#ffffff",
+          "background_gradient": "",
+          "text": "#73635b",
+          "button": "#121212",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9": {
+        "settings": {
+          "background": "#f2faff",
+          "background_gradient": "",
+          "text": "#121212",
+          "button": "#121212",
+          "button_label": "#ffffff",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-e993cf15-6aba-443a-9790-1639e6683028": {
+        "settings": {
+          "background": "#b5e1fd",
+          "background_gradient": "",
+          "text": "#2b2b2b",
+          "button": "#b5e1fd",
+          "button_label": "#121212",
+          "secondary_button_label": "#121212",
+          "shadow": "#121212"
+        }
+      },
+      "scheme-9270d5c1-d33a-4906-b852-135e0c623d89": {
+        "settings": {
+          "background": "#f2faff",
+          "background_gradient": "",
+          "text": "#121212",
+          "button": "#121212",
+          "button_label": "#f2faff",
+          "secondary_button_label": "#121212",
           "shadow": "#121212"
         }
       }

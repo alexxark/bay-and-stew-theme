@@ -14,6 +14,7 @@
       "blocks": {
         "slide_YA4RDt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Hat-gwp-Desktop2.jpg",
             "image_mobile": "shopify://shop_images/GWP-Hat-Mobile.jpg",
@@ -24,7 +25,7 @@
             "promo_note": "",
             "promo_link_label": "details",
             "promo_details_text": "",
-            "heading_size_desktop": 48,
+            "heading_size_desktop": 40,
             "heading_size_mobile": 22,
             "subheading_size_desktop": 16,
             "subheading_size_mobile": 12,
@@ -36,9 +37,9 @@
             "gap_before_buttons": 0,
             "button_1_text": "ADD TO CART",
             "button_1_link": "shopify://products/fueled-by-welds-espresso-hat",
-            "button_1_style": "outline",
-            "button_1_background": "#ffffff",
-            "button_1_text_color": "#000000",
+            "button_1_style": "solid",
+            "button_1_background": "#121212",
+            "button_1_text_color": "#ffffff",
             "button_2_text": "",
             "button_2_link": "",
             "button_2_style": "outline",
@@ -50,14 +51,104 @@
             "image_overlay_opacity": 0,
             "color_scheme": "scheme-1",
             "mobile_box_align": "middle-left",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 12,
             "text_alignment_mobile": "left"
           }
         },
         "slide_QLwpGt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Bay_and_Stew_Web_Banner-03.jpg",
-            "image_mobile": "shopify://shop_images/Bay_and_Stew_MOBILE_Banner-02.jpg",
+            "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
+            "image_mobile": "shopify://shop_images/Hat-Banner-Relaunch-mobile.jpg",
+            "allow_sound": true,
+            "heading": "Back by Popular Demand",
+            "subheading": "<strong>FREE TRUCKER HAT</strong> WITH <strong>ANY $150+ PURCHASE</strong>",
+            "highlight_words": "",
+            "promo_note": "while supplies last",
+            "promo_link_label": "",
+            "promo_details_text": "",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 28,
+            "subheading_size_desktop": 16,
+            "subheading_size_mobile": 14,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 4,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": -8,
+            "button_1_text": "Shop Now",
+            "button_1_link": "https://bayandstew.com/pages/permanent-jewelry",
+            "button_1_style": "solid",
+            "button_1_background": "#cfebfb",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+            "mobile_box_align": "top-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
+            "text_alignment_mobile": "center"
+          }
+        },
+        "slide_8LMkQB": {
+          "type": "slide",
+          "disabled": true,
+          "settings": {
+            "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
+            "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
+            "allow_sound": true,
+            "heading": "25% Off Sale Items",
+            "subheading": "Newly added items waiting for you",
+            "highlight_words": "",
+            "promo_note": "",
+            "promo_link_label": "details",
+            "promo_details_text": "",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 32,
+            "subheading_size_desktop": 16,
+            "subheading_size_mobile": 14,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 4,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": 0,
+            "button_1_text": "Shop Sale",
+            "button_1_link": "shopify://collections/sale-1",
+            "button_1_style": "solid",
+            "button_1_background": "#b5e1fd",
+            "button_1_text_color": "#121212",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-center",
+            "show_text_box": false,
+            "text_alignment": "center",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "mobile_box_align": "middle-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
+            "text_alignment_mobile": "center"
+          }
+        },
+        "slide_GNpfTB": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Chain-Birthstone-Banner.jpg",
+            "image_mobile": "shopify://shop_images/Chain-Birthstone-Banner-Mobile.jpg",
             "allow_sound": true,
             "heading": "Jewelry Supplies",
             "subheading": "Hand Stamping, Engraving & Permanent Jewelry Supplies",
@@ -85,19 +176,23 @@
             "button_2_style": "outline",
             "button_2_background": "#ffffff",
             "button_2_text_color": "#000000",
-            "box_align": "middle-left",
+            "box_align": "middle-center",
             "show_text_box": false,
-            "text_alignment": "left",
+            "text_alignment": "center",
             "image_overlay_opacity": 0,
             "color_scheme": "",
             "mobile_box_align": "middle-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
             "text_alignment_mobile": "center"
           }
         }
       },
       "block_order": [
         "slide_YA4RDt",
-        "slide_QLwpGt"
+        "slide_QLwpGt",
+        "slide_8LMkQB",
+        "slide_GNpfTB"
       ],
       "custom_css": [
         "@media screen and (max-width: 749px) {.banner__content {align-items: flex-start; /* top */ justify-content: center; /* horizontal center */ padding-top: 2px; /* optional spacing from top */ }}"
@@ -139,13 +234,50 @@
         "padding_bottom": 16
       }
     },
+    "rich_text_AVqiJP": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Nk6FNg": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Bay & Stew?",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Nk6FNg"
+      ],
+      "custom_css": [
+        "{margin-top: 8px; margin-bottom: -40px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "multicolumn_6q6KPE": {
       "type": "multicolumn",
       "blocks": {
+        "column_z7arMH": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-03.png",
+            "title": "<strong>Loyalty Rewards</strong>",
+            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
         "column_EBTbGa": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/shipping.png",
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
             "title": "Free Shipping on U.S. Orders $35+",
             "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
             "link_label": "",
@@ -155,19 +287,9 @@
         "column_36Q47y": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/sameornext.png",
+            "image": "shopify://shop_images/Express-shipping.png",
             "title": "Same or Next Day Shipping",
-            "text": "<p>We ship fast so you can keep creating without delay.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_z7arMH": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/rewards.png",
-            "title": "<strong>Loyal Links</strong>",
-            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
             "link_label": "",
             "link": ""
           }
@@ -175,7 +297,7 @@
         "column_faLJ4k": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/bayandstew-website.png",
+            "image": "shopify://shop_images/Icons-04.png",
             "title": "Wholesale Pricing – <strong> $35 Minimum</strong>",
             "text": "<p>Designed for makers and businesses, our $35 minimum unlocks access to premium supplies at wholesale prices.</p>",
             "link_label": "",
@@ -185,7 +307,7 @@
         "column_ah8MXK": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/makers.png",
+            "image": "shopify://shop_images/Icons-05.png",
             "title": "Made for Makers Like You",
             "text": "<p>Our supplies are trusted by permanent jewelry artists, hand stampers, engravers, and more—whether you're a hobbyist or a seasoned pro.</p>",
             "link_label": "",
@@ -195,7 +317,7 @@
         "column_YLKyGi": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/exclusive.png",
+            "image": "shopify://shop_images/Icons-06.png",
             "title": "Exclusive In-House Designs",
             "text": "<p>We design and manufacture our own unique products that you won’t find anywhere else.</p>",
             "link_label": "",
@@ -205,7 +327,7 @@
         "column_3dhCHN": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/quality-check.png",
+            "image": "shopify://shop_images/Icons-07.png",
             "title": "Reliable Quality, Every Time",
             "text": "<p>We source high-quality materials so you can count on consistency with every order.</p>",
             "link_label": "",
@@ -214,9 +336,9 @@
         }
       },
       "block_order": [
+        "column_z7arMH",
         "column_EBTbGa",
         "column_36Q47y",
-        "column_z7arMH",
         "column_faLJ4k",
         "column_ah8MXK",
         "column_YLKyGi",
@@ -224,13 +346,13 @@
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "Why Bay & Stew?",
+        "title": "",
         "heading_size": "h1",
-        "image_width": "full",
+        "image_width": "half",
         "image_ratio": "adapt",
         "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "primary",
+        "column_alignment": "center",
+        "background_style": "none",
         "button_label": "",
         "button_link": "",
         "swipe_on_desktop": true,
@@ -247,14 +369,14 @@
         "heading_zDhxWD": {
           "type": "heading",
           "settings": {
-            "heading": "Looking for permanent jewelry supplies?",
+            "heading": "Permanent Jewelry Supplies for Professional Makers",
             "heading_size": "h2"
           }
         },
         "text_HewVVU": {
           "type": "text",
           "settings": {
-            "text": "<p>Discover our curated collection of high-quality chains, charms, and findings—crafted in durable gold-filled and timeless sterling silver. Designed for lasting beauty, everyday wear, and permanent jewelry, our pieces bring you the perfect blend of elegance, quality, and value.<br/><br/></p>"
+            "text": "<p>Shop high-quality permanent jewelry chains, connectors, charms, and findings designed for jewelry artists, studios, and event-based permanent jewelry businesses. <br/><br/>Our gold-filled and sterling silver materials are trusted by makers who need reliable supplies for permanent jewelry bracelets, anklets, and custom pieces.</p>"
           }
         },
         "button_WJWTcb": {
@@ -274,47 +396,77 @@
         "text_HewVVU",
         "button_WJWTcb"
       ],
-      "custom_css": [
-        "{margin-top: -30px; margin-bottom: -30px;}",
-        ".button {margin-top: -20px;}"
-      ],
+      "custom_css": [],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
       }
     },
-    "featured_collection_iQH7YA": {
-      "type": "featured-collection",
-      "custom_css": [
-        ".collection__view-all {padding-top: 15px;}"
+    "multicolumn_B3nNV7": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_LqqEWJ": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "NEW",
+            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "column_PHjJCg": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "CHAIN SAMPLES",
+            "link": "https://bayandstew.com/collections/samples"
+          }
+        },
+        "column_PJT679": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "BEST SELLING",
+            "link": "https://bayandstew.com/collections/shop-all"
+          }
+        },
+        "column_nYJPDx": {
+          "type": "column",
+          "settings": {
+            "title": "",
+            "text": "",
+            "link_label": "SALE",
+            "link": "https://bayandstew.com/collections/sale-1"
+          }
+        }
+      },
+      "block_order": [
+        "column_LqqEWJ",
+        "column_PHjJCg",
+        "column_PJT679",
+        "column_nYJPDx"
       ],
-      "name": "t:sections.featured-collection.presets.name",
+      "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "New Releases",
-        "heading_size": "h2",
-        "description": "",
-        "show_description": false,
-        "description_style": "body",
-        "collection": "new",
-        "products_to_show": 6,
-        "columns_desktop": 6,
-        "full_width": false,
-        "show_view_all": true,
-        "view_all_style": "solid",
-        "enable_desktop_slider": false,
-        "color_scheme": "",
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "third",
         "image_ratio": "adapt",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "columns_mobile": "2",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
@@ -368,6 +520,9 @@
         "featured_collection_g378bH",
         "featured_collection_QU8pqe"
       ],
+      "custom_css": [
+        "{margin-top: 10px; margin-bottom: 10px;}"
+      ],
       "settings": {
         "title": "Collections",
         "heading_size": "h2",
@@ -375,14 +530,174 @@
         "columns_desktop": 6,
         "color_scheme": "",
         "show_view_all": false,
-        "columns_mobile": "1",
+        "columns_mobile": "2",
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
     },
+    "rich_text_GaGRwE": {
+      "type": "rich-text",
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
     "featured_collection": {
       "type": "featured-collection",
+      "settings": {
+        "title": "Sale",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "sale-1",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "background-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "bulk",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 28,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_iQH7YA": {
+      "type": "featured-collection",
+      "disabled": true,
+      "custom_css": [
+        ".collection__view-all {padding-top: 15px;}"
+      ],
+      "name": "t:sections.featured-collection.presets.name",
+      "settings": {
+        "title": "New Releases",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "new",
+        "products_to_show": 6,
+        "columns_desktop": 6,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "solid",
+        "enable_desktop_slider": false,
+        "color_scheme": "",
+        "image_ratio": "adapt",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_LDLKra": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_aMQMzr": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grow Your Jewelry Business with Wholesale Pricing",
+            "heading_size": "h2"
+          }
+        },
+        "text_7yKLcq": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Apply today for access to professional pricing and tax-exempt purchasing for qualified businesses.<br/></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_aMQMzr",
+        "text_7yKLcq"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_baH7TX": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_M7Rxfy": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/account/register\" title=\"https://bayandstew.com/account/register\">US BASED</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
+          }
+        },
+        "column_ggePWP": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\">INTERNATIONAL</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/samples"
+          }
+        },
+        "column_97UfjD": {
+          "type": "column",
+          "settings": {
+            "title": "<a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\">REQUIREMENTS</a>",
+            "text": "",
+            "link_label": "",
+            "link": "https://bayandstew.com/collections/shop-all"
+          }
+        }
+      },
+      "block_order": [
+        "column_M7Rxfy",
+        "column_ggePWP",
+        "column_97UfjD"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 16,
+        "padding_bottom": 36
+      }
+    },
+    "featured_collection_BBDHfE": {
+      "type": "featured-collection",
+      "disabled": true,
       "settings": {
         "title": "Featured products",
         "heading_size": "h2",
@@ -390,7 +705,7 @@
         "show_description": false,
         "description_style": "body",
         "collection": "most-popular-7-31-25",
-        "products_to_show": 10,
+        "products_to_show": 5,
         "columns_desktop": 5,
         "full_width": false,
         "show_view_all": true,
@@ -404,7 +719,7 @@
         "show_rating": false,
         "quick_add": "none",
         "columns_mobile": "2",
-        "swipe_on_mobile": false,
+        "swipe_on_mobile": true,
         "padding_top": 28,
         "padding_bottom": 36
       }
@@ -415,17 +730,208 @@
         "heading_DWimkg": {
           "type": "heading",
           "settings": {
+            "heading": "Trusted by permanent jewelry artists",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_DWimkg"
+      ],
+      "custom_css": [
+        "{margin-bottom: -10px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "multicolumn_t7zdcd": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_weJepx": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>“I’ve been ordering from Bay & Stew for my business for about 2 years now and I won’t go with anyone else!  Their product is the best, delivery is always made in a timely manner, and they have the best customer service! Highly Recommend!”</h3><h2></h2><h4><strong>BRIANNA K. </strong></h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_M9pAdX": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-birthstones.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_rabdid": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>“Customer service is always excellent! I needed a large quantity order and they shipped it out so fast, I was honestly in shock with how fast it came. I love doing business with this company!”<br/></h3><h4>RACHEL F.</h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_Fx3YKM": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-shipping.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_weJepx",
+        "column_M9pAdX",
+        "column_rabdid",
+        "column_Fx3YKM"
+      ],
+      "custom_css": [
+        "h3 {font-weight: bold; font-family: sans-serif; color: #806f65;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_banner_wwe687": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_zFiLnW": {
+          "type": "heading",
+          "settings": {
+            "heading": "Grow Your Business. Earn Rewards.",
+            "heading_size": "h2"
+          }
+        },
+        "text_R9tLJC": {
+          "type": "text",
+          "settings": {
+            "text": "Get points for purchases, move up reward tiers faster, and<strong> redeem for discounts, credits, and exclusive perks.</strong> <em>Available </em><em><strong>only</strong></em><em> </em><em><strong>on bayandstew.com.</strong></em>",
+            "text_style": "subtitle"
+          }
+        },
+        "buttons_YP7XmJ": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Join Loyalty Rewards",
+            "button_link_1": "https://bayandstew.com/pages/about?view=bloy-loyalty",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_zFiLnW",
+        "text_R9tLJC",
+        "buttons_YP7XmJ"
+      ],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/cn20-banner.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": false
+      }
+    },
+    "rich_text_yBTjT3": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_77ypqL": {
+          "type": "heading",
+          "settings": {
+            "heading": "RESOURCES",
+            "heading_size": "h2"
+          }
+        }
+      },
+      "block_order": [
+        "heading_77ypqL"
+      ],
+      "custom_css": [
+        "{margin-bottom: -10px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "featured_blog_XCRVp8": {
+      "type": "featured-blog",
+      "name": "t:sections.featured-blog.presets.name",
+      "settings": {
+        "heading": "",
+        "heading_size": "h2",
+        "blog": "news",
+        "post_limit": 4,
+        "columns_desktop": 4,
+        "color_scheme": "",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_zjAhg4": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_F8TJUd": {
+          "type": "heading",
+          "settings": {
             "heading": "Not sure what chain to choose?",
             "heading_size": "h2"
           }
         },
-        "text_DHFETn": {
+        "text_MDVeaK": {
           "type": "text",
           "settings": {
             "text": "<p>If you’re unsure which chain is right for you, explore our <em>sample cards</em>. They let you feel the quality, see the true color tones, and choose confidently before purchasing your full piece.</p>"
           }
         },
-        "button_nMXECr": {
+        "button_9Bqaxy": {
           "type": "button",
           "settings": {
             "button_label": "Shop Samples",
@@ -438,10 +944,11 @@
         }
       },
       "block_order": [
-        "heading_DWimkg",
-        "text_DHFETn",
-        "button_nMXECr"
+        "heading_F8TJUd",
+        "text_MDVeaK",
+        "button_9Bqaxy"
       ],
+      "disabled": true,
       "custom_css": [
         "{margin-bottom: -10px;}"
       ],
@@ -490,12 +997,23 @@
   "order": [
     "slideshow_Hg9TMx",
     "rich_text_fyyfM3",
+    "rich_text_AVqiJP",
     "multicolumn_6q6KPE",
     "rich_text_cjJbya",
-    "featured_collection_iQH7YA",
+    "multicolumn_B3nNV7",
     "collection_list_eFLBt6",
+    "rich_text_GaGRwE",
     "featured_collection",
+    "featured_collection_iQH7YA",
+    "rich_text_LDLKra",
+    "multicolumn_baH7TX",
+    "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
+    "multicolumn_t7zdcd",
+    "image_banner_wwe687",
+    "rich_text_yBTjT3",
+    "featured_blog_XCRVp8",
+    "rich_text_zjAhg4",
     "rich_text_QfzRBA"
   ]
 }
