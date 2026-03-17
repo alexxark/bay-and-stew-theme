@@ -200,7 +200,7 @@
         "text_8R6NwM"
       ],
       "custom_css": [
-        "h2 {font-size: 13px; color: #b19d8c; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
+        "h2 {font-size: 13px; color: #73635B; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "image": "shopify://shop_images/Polaroid600-steweie_4ca4183e-6bba-479e-a4f8-8d1953ad9f73.png",
@@ -210,8 +210,8 @@
         "desktop_content_position": "middle",
         "desktop_content_alignment": "left",
         "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-5",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "section_color_scheme": "scheme-2",
+        "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 20,
