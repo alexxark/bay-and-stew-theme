@@ -33,7 +33,7 @@
         "announcement-bar-0": {
           "type": "announcement",
           "settings": {
-            "text": "EXTRA 25% OFF ON SALE ITEMS",
+            "text": "EXTRA 25% OFF ON SALE ITEMS WITH CODE SALEONSALE",
             "link": "shopify://collections/sale-1"
           }
         }
