@@ -8,9 +8,13 @@
   padding-bottom: 1rem;
 }
 
+.collection-hero--collapsible.collection-hero--with-image .collection-hero__inner {
+  padding-bottom: 0;
+}
+
 @media screen and (min-width: 750px) {
   .collection-hero.collection-hero--with-image {
-    padding: calc(1.5rem + var(--page-width-margin)) 0 calc(1.5rem + var(--page-width-margin));
+    padding: calc(0.5rem + var(--page-width-margin)) 0 calc(0.5rem + var(--page-width-margin));
     overflow: hidden;
   }
 
@@ -154,6 +158,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
+  gap: 1rem;
 }
 
 @media screen and (min-width: 750px) {
