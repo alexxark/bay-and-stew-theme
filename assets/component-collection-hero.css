@@ -133,6 +133,7 @@
 
 .collection-hero__collapsible-content {
   overflow: hidden;
+  margin-top: 1rem;
   animation: collectionHeroExpand 0.3s ease;
 }
 
