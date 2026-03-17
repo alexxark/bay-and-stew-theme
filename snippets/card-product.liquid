@@ -26,7 +26,8 @@
 
   assign has_sale_tag = false
   for product_tag in card_product.tags
-    if product_tag | handleize == 'sale'
+    assign normalized_product_tag = product_tag | handleize
+    if normalized_product_tag == 'sale'
       assign has_sale_tag = true
       break
     endif
