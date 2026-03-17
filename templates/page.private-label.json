@@ -177,51 +177,20 @@
         "padding_bottom": 36
       }
     },
-    "image_with_text_yziiii": {
-      "type": "image-with-text",
-      "blocks": {
-        "text_66mTxa": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Bay and Stew began in 2013 when I first started making jewelry and couldn’t find high-quality stamping blanks that met my standards — so I began making my own. Soon after, I started offering these blanks to other small jewelry businesses, and from there, expanded into chains, findings, and more.</p><p>When permanent jewelry began to take off, I received more and more requests for my gold-filled connectors and custom hand-stamped pieces from customers in the permanent jewelry industry. </p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "text_66mTxa"
-      ],
-      "custom_css": [],
-      "settings": {
-        "image": "shopify://shop_images/stewie-gerly-small.png",
-        "height": "medium",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 0,
-        "padding_bottom": 36
-      }
-    },
     "image_with_text_gwKdWK": {
       "type": "image-with-text",
       "blocks": {
         "heading_6hifzJ": {
           "type": "heading",
           "settings": {
-            "heading": "From Basement dreams to handcrafted pieces - the early days, 2016",
+            "heading": "Why Work With Us?",
             "heading_size": "h1"
           }
         },
         "text_8R6NwM": {
           "type": "text",
           "settings": {
-            "text": "<h3>Today, Bay and Stew is proud to supply premium materials to makers across the handmade, engraved, and permanent jewelry communities.</h3><p>The name <em>Bay and Stew</em> comes from my two Italian Greyhounds, Bailey and Stewie, who were always by my side in the studio while I created jewelry. Though they’re no longer with me, their memory is a sweet reminder of where it all started — with passion, creativity, and a lot of heart.</p>",
+            "text": "<h3>A Team That Works for Your Jewelry Business<br/></h3><ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail</li><li>Collaborative approach tailored to your brand<br/></li></ul>",
             "text_style": "body"
           }
         }
@@ -323,7 +292,6 @@
     "image_banner_rJf3hX",
     "rich_text_DV7iQQ",
     "multicolumn_PQkzWj",
-    "image_with_text_yziiii",
     "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
     "rich_text_ePLd38"
