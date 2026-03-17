@@ -39,14 +39,15 @@
 <div class="collection-hero{% if has_image %} collection-hero--with-image{% endif %}{% if is_collapsible %} collection-hero--collapsible{% endif %} color-{{ section.settings.color_scheme }} gradient">
   <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
     <div class="collection-hero__text-wrapper">
-      <h1 class="collection-hero__title">
-        <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
-        {{- collection.title | escape -}}
-      </h1>
-
       {%- if is_collapsible -%}
         <details class="collection-hero__collapsible">
-          <summary>Read more <svg class="icon-caret" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+          <summary>
+            <h1 class="collection-hero__title">
+              <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+              {{- collection.title | escape -}}
+            </h1>
+            <svg class="icon-caret" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
           <div class="collection-hero__collapsible-content">
             <div class="collection-hero__description rte">{{ collection.description }}</div>
             {%- if has_image -%}
@@ -57,6 +58,10 @@
           </div>
         </details>
       {%- else -%}
+        <h1 class="collection-hero__title">
+          <span class="visually-hidden">{{ 'sections.collection_template.title' | t }}: </span>
+          {{- collection.title | escape -}}
+        </h1>
         {%- if has_description -%}
           <div class="collection-hero__description rte">{{ collection.description }}</div>
         {%- endif -%}
