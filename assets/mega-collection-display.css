@@ -72,12 +72,16 @@
   margin: 0;
 }
 
-/* Balanced card layout — titles clamped, prices aligned */
-.mega-collection__grid .card__heading {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+/* Balanced card layout — prices aligned at bottom */
+.mega-collection__grid .card > .card__content {
+  display: flex !important;
+  flex-direction: column !important;
+}
+.mega-collection__grid .card__information {
+  flex-grow: 0;
+}
+.mega-collection__grid .card-information {
+  margin-top: auto;
 }
 .mega-collection__grid .card__heading > a {
   display: -webkit-box;

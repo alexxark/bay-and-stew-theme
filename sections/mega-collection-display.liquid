@@ -179,60 +179,11 @@
         if (panel) {
           panel.classList.add('mega-collection__panel--active');
           panel.hidden = false;
-          setTimeout(equalizeCardHeadings, 100);
         }
       }
     }
     customElements.define('mega-collection-tabs', MegaCollectionTabs);
   }
-
-  function equalizeCardHeadings() {
-    document.querySelectorAll('.mega-collection__panel:not([hidden])').forEach(function(panel) {
-      var headings = panel.querySelectorAll('.card__heading');
-      if (headings.length < 2) return;
-      /* Reset */
-      for (var i = 0; i < headings.length; i++) {
-        headings[i].style.minHeight = '';
-      }
-      /* Group by row using offsetTop */
-      var rows = [];
-      var currentRow = [headings[0]];
-      var currentTop = headings[0].offsetTop;
-      for (var i = 1; i < headings.length; i++) {
-        if (Math.abs(headings[i].offsetTop - currentTop) < 15) {
-          currentRow.push(headings[i]);
-        } else {
-          rows.push(currentRow);
-          currentRow = [headings[i]];
-          currentTop = headings[i].offsetTop;
-        }
-      }
-      rows.push(currentRow);
-      /* Apply max height per row */
-      for (var r = 0; r < rows.length; r++) {
-        var max = 0;
-        for (var j = 0; j < rows[r].length; j++) {
-          if (rows[r][j].offsetHeight > max) max = rows[r][j].offsetHeight;
-        }
-        for (var j = 0; j < rows[r].length; j++) {
-          rows[r][j].style.minHeight = max + 'px';
-        }
-      }
-    });
-  }
-
-  /* Run on multiple events to ensure it fires */
-  document.addEventListener('DOMContentLoaded', function() {
-    setTimeout(equalizeCardHeadings, 200);
-  });
-  window.addEventListener('load', function() {
-    equalizeCardHeadings();
-    setTimeout(equalizeCardHeadings, 500);
-  });
-  window.addEventListener('resize', function() {
-    clearTimeout(window._eqTimer);
-    window._eqTimer = setTimeout(equalizeCardHeadings, 150);
-  });
 </script>
 
 {% schema %}
