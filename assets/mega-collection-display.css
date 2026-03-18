@@ -73,13 +73,13 @@
 }
 
 /* Balanced card layout — titles clamped, prices aligned */
-.mega-collection__grid .card-wrapper > .card__content > .card__information > .card__heading {
+.mega-collection__grid .card__heading {
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
 }
-.mega-collection__grid .card-wrapper > .card__content > .card__information > .card__heading > a {
+.mega-collection__grid .card__heading > a {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
