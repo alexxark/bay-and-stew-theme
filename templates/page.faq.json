@@ -219,10 +219,11 @@
       "blocks": {
         "collapsible_row_8zNXwQ": {
           "type": "collapsible_row",
+          "disabled": true,
           "settings": {
-            "heading": "Is there a minimum order requirement?",
+            "heading": "",
             "icon": "check_mark",
-            "row_content": "<p>Yes, we require a<strong> $35 minimum order</strong>.</p>",
+            "row_content": "",
             "page": ""
           }
         },
