@@ -73,12 +73,9 @@
 }
 
 /* Balanced card layout — prices aligned at bottom */
-.mega-collection__grid .card > .card__content {
-  display: flex !important;
-  flex-direction: column !important;
-}
 .mega-collection__grid .card__information {
-  flex-grow: 0;
+  display: flex;
+  flex-direction: column;
 }
 .mega-collection__grid .card-information {
   margin-top: auto;
