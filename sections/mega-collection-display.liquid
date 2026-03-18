@@ -161,6 +161,11 @@
         this.tabs = this.querySelectorAll('[role="tab"]');
         this.panels = this.querySelectorAll('[role="tabpanel"]');
         this.tabs.forEach(tab => tab.addEventListener('click', this.handleTabClick.bind(this)));
+        this.equalizeHeights();
+        window.addEventListener('resize', () => {
+          clearTimeout(this._resizeTimer);
+          this._resizeTimer = setTimeout(() => this.equalizeHeights(), 150);
+        });
       }
 
       handleTabClick(e) {
@@ -179,7 +184,27 @@
         if (panel) {
           panel.classList.add('mega-collection__panel--active');
           panel.hidden = false;
+          this.equalizeHeights();
         }
+      }
+
+      equalizeHeights() {
+        requestAnimationFrame(() => {
+          const activePanel = this.querySelector('[role="tabpanel"]:not([hidden])');
+          if (!activePanel) return;
+          const headings = activePanel.querySelectorAll('.card__heading');
+          headings.forEach(h => h.style.minHeight = '');
+          const rows = {};
+          headings.forEach(h => {
+            const top = Math.round(h.getBoundingClientRect().top);
+            if (!rows[top]) rows[top] = [];
+            rows[top].push(h);
+          });
+          Object.values(rows).forEach(group => {
+            const max = Math.max(...group.map(h => h.offsetHeight));
+            group.forEach(h => h.style.minHeight = max + 'px');
+          });
+        });
       }
     }
     customElements.define('mega-collection-tabs', MegaCollectionTabs);

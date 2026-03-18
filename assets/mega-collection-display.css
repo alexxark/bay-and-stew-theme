@@ -73,36 +73,11 @@
 }
 
 /* Balanced card layout — titles clamped, prices aligned */
-.mega-collection__grid .grid__item {
-  display: flex;
-}
-
-.mega-collection__grid .card-wrapper {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-}
-
-.mega-collection__grid .card-wrapper > .card__content {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-  grid-template-rows: none;
-}
-
-.mega-collection__grid .card-wrapper > .card__content > .card__information {
-  grid-row-start: auto;
-}
-
 .mega-collection__grid .card-wrapper > .card__content > .card__information > .card__heading {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-}
-
-.mega-collection__grid .card-wrapper > .card__content > .card-information {
-  margin-top: auto;
 }
 
 /* View all button */
