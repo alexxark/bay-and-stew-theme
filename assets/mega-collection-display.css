@@ -73,28 +73,39 @@
 }
 
 /* Balanced card layout — titles clamped, prices aligned */
-.mega-collection__grid .card__content {
+.mega-collection__grid .grid__item {
+  display: flex;
+  flex-direction: column;
+}
+
+.mega-collection__grid .card-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.mega-collection__grid .card-wrapper > .card__content {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.mega-collection__grid .card__information {
+.mega-collection__grid .card-wrapper > .card__content > .card__information {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
 }
 
-.mega-collection__grid .card__heading {
+.mega-collection__grid .card-wrapper > .card__content > .card__information > .card__heading {
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  min-height: calc(3 * 1.3em);
 }
 
-.mega-collection__grid .card-information {
+.mega-collection__grid .card-wrapper > .card__content .card-information {
   margin-top: auto;
+  padding-top: 0.4rem;
 }
 
 /* View all button */
