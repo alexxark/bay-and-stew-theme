@@ -1,0 +1,356 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+{{ 'mega-collection-display.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<div class="mega-collection color-{{ section.settings.color_scheme }} gradient section-{{ section.id }}-padding">
+  <div class="page-width">
+    {%- if section.settings.title != blank -%}
+      <h2 class="mega-collection__heading {{ section.settings.heading_size }}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.title }}
+      </h2>
+    {%- endif -%}
+
+    {%- if section.settings.description != blank -%}
+      <div class="mega-collection__description rte{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {{ section.settings.description }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Tab navigation {%- endcomment -%}
+    {%- assign has_tabs = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'featured_collection' and block.settings.collection != blank -%}
+        {%- assign has_tabs = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_tabs -%}
+      <mega-collection-tabs class="mega-collection__tabs-wrapper">
+        <div class="mega-collection__tab-nav{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" role="tablist">
+          {%- assign tab_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'featured_collection' and block.settings.collection != blank -%}
+              <button
+                class="mega-collection__tab{% if tab_index == 0 %} mega-collection__tab--active{% endif %}"
+                role="tab"
+                aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
+                aria-controls="MegaPanel-{{ section.id }}-{{ block.id }}"
+                id="MegaTab-{{ section.id }}-{{ block.id }}"
+                data-tab-index="{{ tab_index }}"
+                {{ block.shopify_attributes }}
+              >
+                {{- block.settings.label | default: block.settings.collection.title -}}
+              </button>
+              {%- assign tab_index = tab_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+
+        {%- comment -%} Tab panels with product grids {%- endcomment -%}
+        {%- assign tab_index = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'featured_collection' and block.settings.collection != blank -%}
+            <div
+              class="mega-collection__panel{% if tab_index == 0 %} mega-collection__panel--active{% endif %}"
+              role="tabpanel"
+              id="MegaPanel-{{ section.id }}-{{ block.id }}"
+              aria-labelledby="MegaTab-{{ section.id }}-{{ block.id }}"
+              {% if tab_index != 0 %}hidden{% endif %}
+            >
+              {%- assign products_to_show = block.settings.products_to_show -%}
+              <ul class="mega-collection__grid grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down" role="list">
+                {%- for product in block.settings.collection.products limit: products_to_show -%}
+                  <li class="grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                    {% if settings.animations_reveal_on_scroll %}
+                      data-cascade
+                      style="--animation-order: {{ forloop.index }};"
+                    {% endif %}
+                  >
+                    {% render 'card-product',
+                      card_product: product,
+                      media_aspect_ratio: section.settings.image_ratio,
+                      image_shape: 'default',
+                      show_secondary_image: false,
+                      show_vendor: false,
+                      show_rating: false,
+                      show_quick_add: false,
+                      section_id: section.id
+                    %}
+                  </li>
+                {%- endfor -%}
+              </ul>
+
+              {%- if block.settings.collection.all_products_count > products_to_show or block.settings.show_view_all -%}
+                <div class="mega-collection__view-all">
+                  <a href="{{ block.settings.collection.url }}" class="button button--secondary">
+                    View all {{ block.settings.label | default: block.settings.collection.title }}
+                  </a>
+                </div>
+              {%- endif -%}
+            </div>
+            {%- assign tab_index = tab_index | plus: 1 -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </mega-collection-tabs>
+    {%- endif -%}
+
+    {%- comment -%} Collection links row {%- endcomment -%}
+    {%- assign has_links = false -%}
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'collection_link' and block.settings.collection != blank -%}
+        {%- assign has_links = true -%}
+        {%- break -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if has_links -%}
+      <div class="mega-collection__links{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
+        {%- if section.settings.links_title != blank -%}
+          <h3 class="mega-collection__links-title h3">{{ section.settings.links_title }}</h3>
+        {%- endif -%}
+        <div class="mega-collection__links-grid grid grid--{{ section.settings.links_columns }}-col-desktop grid--2-col-tablet-down">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'collection_link' and block.settings.collection != blank -%}
+              <a href="{{ block.settings.collection.url }}" class="mega-collection__link-card" {{ block.shopify_attributes }}>
+                {%- if block.settings.collection.featured_image -%}
+                  <div class="mega-collection__link-image">
+                    {{
+                      block.settings.collection.featured_image
+                      | image_url: width: 600
+                      | image_tag:
+                        loading: 'lazy',
+                        sizes: '(min-width: 750px) 150px, 80px',
+                        widths: '80, 150, 300',
+                        class: 'mega-collection__link-img'
+                    }}
+                  </div>
+                {%- endif -%}
+                <span class="mega-collection__link-label">
+                  {{- block.settings.label | default: block.settings.collection.title -}}
+                  <svg viewBox="0 0 14 10" fill="none" aria-hidden="true" focusable="false" class="mega-collection__link-arrow"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.537.808a.5.5 0 01.817-.162l4 4a.5.5 0 010 .708l-4 4a.5.5 0 11-.708-.708L11.793 5.5H1a.5.5 0 010-1h10.793L8.646 1.354a.5.5 0 01-.109-.546z" fill="currentColor" /></svg>
+                </span>
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<script>
+  if (!customElements.get('mega-collection-tabs')) {
+    class MegaCollectionTabs extends HTMLElement {
+      constructor() {
+        super();
+        this.tabs = this.querySelectorAll('[role="tab"]');
+        this.panels = this.querySelectorAll('[role="tabpanel"]');
+        this.tabs.forEach(tab => tab.addEventListener('click', this.handleTabClick.bind(this)));
+      }
+
+      handleTabClick(e) {
+        const clicked = e.currentTarget;
+        this.tabs.forEach(tab => {
+          tab.classList.remove('mega-collection__tab--active');
+          tab.setAttribute('aria-selected', 'false');
+        });
+        this.panels.forEach(panel => {
+          panel.classList.remove('mega-collection__panel--active');
+          panel.hidden = true;
+        });
+        clicked.classList.add('mega-collection__tab--active');
+        clicked.setAttribute('aria-selected', 'true');
+        const panel = this.querySelector('#' + clicked.getAttribute('aria-controls'));
+        if (panel) {
+          panel.classList.add('mega-collection__panel--active');
+          panel.hidden = false;
+        }
+      }
+    }
+    customElements.define('mega-collection-tabs', MegaCollectionTabs);
+  }
+</script>
+
+{% schema %}
+{
+  "name": "Mega collection display",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "label": "Heading",
+      "default": "Shop by category"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "columns_desktop",
+      "options": [
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" },
+        { "value": "5", "label": "5" },
+        { "value": "6", "label": "6" }
+      ],
+      "default": "6",
+      "label": "Product columns (desktop)"
+    },
+    {
+      "type": "select",
+      "id": "columns_mobile",
+      "options": [
+        { "value": "1", "label": "1" },
+        { "value": "2", "label": "2" }
+      ],
+      "default": "2",
+      "label": "Product columns (mobile)"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "adapt",
+      "label": "Image ratio"
+    },
+    {
+      "type": "inline_richtext",
+      "id": "links_title",
+      "label": "Links section title",
+      "default": "More categories"
+    },
+    {
+      "type": "select",
+      "id": "links_columns",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4",
+      "label": "Links columns (desktop)"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Top padding",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Bottom padding",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "featured_collection",
+      "name": "Collection tab",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Tab label",
+          "info": "Leave blank to use collection title"
+        },
+        {
+          "type": "range",
+          "id": "products_to_show",
+          "min": 2,
+          "max": 12,
+          "step": 1,
+          "default": 6,
+          "label": "Products to show"
+        },
+        {
+          "type": "checkbox",
+          "id": "show_view_all",
+          "default": true,
+          "label": "Show 'View all' button"
+        }
+      ]
+    },
+    {
+      "type": "collection_link",
+      "name": "Collection link",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Leave blank to use collection title"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 15,
+  "presets": [
+    {
+      "name": "Mega collection display",
+      "blocks": [
+        { "type": "featured_collection" },
+        { "type": "featured_collection" },
+        { "type": "featured_collection" }
+      ]
+    }
+  ]
+}
+{% endschema %}
