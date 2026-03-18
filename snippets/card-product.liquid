@@ -252,7 +252,9 @@
               </p>
             {%- endif -%}
 
-            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+            {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+            <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+            {% render "bss-b2b-collection-item-vat", product: card_product %}
             {%- if card_product.quantity_price_breaks_configured? -%}
               {% if card_product.variants.size == 1 and quick_add == 'bulk' %}
                 {% liquid
@@ -392,7 +394,7 @@
                   class: 'form',
                   novalidate: 'novalidate',
                   data-type: 'add-to-cart-form'
-                -%} <div class='bss-b2b-qb-table'></div>
+                -%}
                   <input
                     type="hidden"
                     name="id"
@@ -561,7 +563,9 @@
                           <h3>{{ card_product.title | escape }}</h3>
                               <div product-id="{{ card_product.id }}" product-handle="{{ card_product.handle }}" class="alireviews-review-star-rating"></div>
                         </a>
-                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                        <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+                        {% render "bss-b2b-collection-item-vat", product: card_product %}
                         {%- if card_product.quantity_price_breaks_configured? -%}
                           <div class="card__information-volume-pricing-note">
                             <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
@@ -576,7 +580,9 @@
                             {{ card_product.title | escape }}
                           </h3>
                         </a>
-                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div> {% render "bss-b2b-collection-item-vat", product: card_product %} <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+                        {% render 'price', product: card_product, price_class: '', show_compare_at_price: true %}
+                        <div class="bss-qb-collection-table"></div><div class="bss-b2b-qb-table"></div>
+                        {% render "bss-b2b-collection-item-vat", product: card_product %}
                         {%- if card_product.quantity_price_breaks_configured? -%}
                           <div class="card__information-volume-pricing-note">
                             <span class="caption">{{ 'products.product.volume_pricing.note' | t }}</span>
