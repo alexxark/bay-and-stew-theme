@@ -1,0 +1,153 @@
+{{ 'component-collection-hero.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .collection-hero__title {
+    font-size: {{ section.settings.title_font_size | times: 0.75 }}px;
+  }
+  #shopify-section-{{ section.id }} .collection-hero__description {
+    font-size: {{ section.settings.description_font_size | times: 0.85 }}px;
+  }
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .collection-hero__title {
+      font-size: {{ section.settings.title_font_size }}px;
+    }
+    #shopify-section-{{ section.id }} .collection-hero__description {
+      font-size: {{ section.settings.description_font_size }}px;
+    }
+  }
+  @media screen and (max-width: 749px) {
+    .collection-hero--with-image:not(.collection-hero--collapsible) .collection-hero__inner {
+      padding-bottom: calc({{ settings.media_shadow_vertical_offset | at_least: 0 }}px + 1rem);
+    }
+  }
+{%- endstyle -%}
+
+{%- assign has_description = false -%}
+{%- if section.settings.description != blank -%}
+  {%- assign has_description = true -%}
+{%- endif -%}
+{%- assign has_image = false -%}
+{%- if section.settings.image != blank -%}
+  {%- assign has_image = true -%}
+{%- endif -%}
+{%- assign is_collapsible = false -%}
+{%- if section.settings.collapsible and has_description -%}
+  {%- assign is_collapsible = true -%}
+{%- endif -%}
+
+<div class="collection-hero{% if has_image %} collection-hero--with-image{% endif %}{% if is_collapsible %} collection-hero--collapsible{% endif %} color-{{ section.settings.color_scheme }} gradient">
+  <div class="collection-hero__inner page-width {% if settings.animations_reveal_on_scroll %} scroll-trigger animate--fade-in{% endif %}">
+    <div class="collection-hero__text-wrapper">
+      {%- if is_collapsible -%}
+        <details class="collection-hero__collapsible">
+          <summary>
+            <h1 class="collection-hero__title">
+              {{- section.settings.title | escape -}}
+            </h1>
+            <svg class="icon-caret" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </summary>
+          <div class="collection-hero__collapsible-content">
+            <div class="collection-hero__description rte">{{ section.settings.description }}</div>
+            {%- if has_image -%}
+              <div class="collection-hero__image-container media gradient">
+                {{
+                  section.settings.image
+                  | image_url: width: 1500
+                  | image_tag:
+                    loading: 'lazy',
+                    sizes: '(min-width: 750px) calc(50vw - 130px), calc(100vw - 30px)',
+                    widths: '165, 360, 535, 750, 1070, 1500'
+                }}
+              </div>
+            {%- endif -%}
+          </div>
+        </details>
+      {%- else -%}
+        <h1 class="collection-hero__title">
+          {{- section.settings.title | escape -}}
+        </h1>
+        {%- if has_description -%}
+          <div class="collection-hero__description rte">{{ section.settings.description }}</div>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- unless is_collapsible -%}
+      {%- if has_image -%}
+        <div class="collection-hero__image-container media gradient">
+          {{
+            section.settings.image
+            | image_url: width: 1500
+            | image_tag:
+              loading: 'lazy',
+              sizes: '(min-width: 750px) calc(50vw - 130px), calc(100vw - 30px)',
+              widths: '165, 360, 535, 750, 1070, 1500'
+          }}
+        </div>
+      {%- endif -%}
+    {%- endunless -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Page banner",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "default": "Page title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "checkbox",
+      "id": "collapsible",
+      "default": false,
+      "label": "Collapse description and image",
+      "info": "Shows only the title with a toggle. Description and image stay in the page for SEO."
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "min": 18,
+      "max": 54,
+      "step": 2,
+      "unit": "px",
+      "default": 40,
+      "label": "Title font size"
+    },
+    {
+      "type": "range",
+      "id": "description_font_size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15,
+      "label": "Description font size"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Page banner"
+    }
+  ]
+}
+{% endschema %}
