@@ -41,24 +41,26 @@
 
     {%- if has_tabs -%}
       <mega-collection-tabs class="mega-collection__tabs-wrapper">
-        <div class="mega-collection__tab-nav{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" role="tablist">
-          {%- assign tab_index = 0 -%}
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'featured_collection' and block.settings.collection != blank -%}
-              <button
-                class="mega-collection__tab{% if tab_index == 0 %} mega-collection__tab--active{% endif %}"
-                role="tab"
-                aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
-                aria-controls="MegaPanel-{{ section.id }}-{{ block.id }}"
-                id="MegaTab-{{ section.id }}-{{ block.id }}"
-                data-tab-index="{{ tab_index }}"
-                {{ block.shopify_attributes }}
-              >
-                {{- block.settings.label | default: block.settings.collection.title -}}
-              </button>
-              {%- assign tab_index = tab_index | plus: 1 -%}
-            {%- endif -%}
-          {%- endfor -%}
+        <div class="mega-collection__tab-nav-wrapper">
+          <div class="mega-collection__tab-nav{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}" role="tablist">
+            {%- assign tab_index = 0 -%}
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'featured_collection' and block.settings.collection != blank -%}
+                <button
+                  class="mega-collection__tab{% if tab_index == 0 %} mega-collection__tab--active{% endif %}"
+                  role="tab"
+                  aria-selected="{% if tab_index == 0 %}true{% else %}false{% endif %}"
+                  aria-controls="MegaPanel-{{ section.id }}-{{ block.id }}"
+                  id="MegaTab-{{ section.id }}-{{ block.id }}"
+                  data-tab-index="{{ tab_index }}"
+                  {{ block.shopify_attributes }}
+                >
+                  {{- block.settings.label | default: block.settings.collection.title -}}
+                </button>
+                {%- assign tab_index = tab_index | plus: 1 -%}
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
         </div>
 
         {%- comment -%} Tab panels with product grids {%- endcomment -%}
@@ -184,6 +186,18 @@
     }
     customElements.define('mega-collection-tabs', MegaCollectionTabs);
   }
+
+  /* Tab scroll fade indicator */
+  document.querySelectorAll('.mega-collection__tab-nav').forEach(function(nav) {
+    var wrapper = nav.closest('.mega-collection__tab-nav-wrapper');
+    if (!wrapper) return;
+    function checkScroll() {
+      var atEnd = nav.scrollLeft + nav.offsetWidth >= nav.scrollWidth - 2;
+      wrapper.classList.toggle('scrolled-end', atEnd);
+    }
+    nav.addEventListener('scroll', checkScroll, { passive: true });
+    checkScroll();
+  });
 </script>
 
 {% schema %}

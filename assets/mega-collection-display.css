@@ -10,12 +10,33 @@
   color: rgba(var(--color-foreground), 0.7);
 }
 
-/* Tab navigation */
+/* Tab navigation wrapper with scroll fade */
+.mega-collection__tab-nav-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.mega-collection__tab-nav-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 4rem;
+  background: linear-gradient(to right, transparent, rgb(var(--color-background)));
+  pointer-events: none;
+  z-index: 1;
+  transition: opacity 0.2s;
+}
+
+.mega-collection__tab-nav-wrapper.scrolled-end::after {
+  opacity: 0;
+}
+
 .mega-collection__tab-nav {
   display: flex;
   gap: 0;
   border-bottom: 0.1rem solid rgba(var(--color-foreground), 0.12);
-  margin-bottom: 2rem;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
   scrollbar-width: none;
