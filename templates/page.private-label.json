@@ -210,7 +210,7 @@
         "background_style": "none",
         "button_label": "Request a Custom Product",
         "button_link": "https://form.jotform.com/260715843519159",
-        "swipe_on_desktop": false,
+        "swipe_on_desktop": true,
         "color_scheme": "",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
@@ -333,6 +333,7 @@
       ],
       "custom_css": [],
       "settings": {
+        "image": "shopify://shop_images/IMG_9552.jpg",
         "height": "adapt",
         "desktop_image_width": "small",
         "layout": "image_first",
@@ -358,7 +359,59 @@
             "text_size": "medium"
           }
         },
-        "caption_jDMfm4": {
+        "heading_aDj6yT": {
+          "type": "heading",
+          "settings": {
+            "heading": "How it Works",
+            "heading_size": "h1"
+          }
+        },
+        "text_iG7qpL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>1. Submit Your Request Form<br/>2. Share your vision—artwork, packaging, or product idea<br/>3. Our team guides you on design, MOQs, and pricing<br/>4. We produce your items with care and quality control<br/>5. Receive and launch your private label permanent jewelry products</p>"
+          }
+        },
+        "button_JMewJd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Request a Custom Product",
+            "button_link": "https://form.jotform.com/260715843519159",
+            "button_style_secondary": false,
+            "button_label_2": "Questions?",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "caption_zxgGPw",
+        "heading_aDj6yT",
+        "text_iG7qpL",
+        "button_JMewJd"
+      ],
+      "name": "How it Works",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_W3Yn7G": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_awhJzW": {
+          "type": "caption",
+          "settings": {
+            "caption": "NEW TO PRIVATE LABEL?",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "caption_y8hAPJ": {
           "type": "caption",
           "settings": {
             "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
@@ -366,7 +419,7 @@
             "text_size": "medium"
           }
         },
-        "button_JMewJd": {
+        "button_CxUXYX": {
           "type": "button",
           "settings": {
             "button_label": "Frequently Asked Questions",
@@ -379,10 +432,11 @@
         }
       },
       "block_order": [
-        "caption_zxgGPw",
-        "caption_jDMfm4",
-        "button_JMewJd"
+        "caption_awhJzW",
+        "caption_y8hAPJ",
+        "button_CxUXYX"
       ],
+      "disabled": true,
       "name": "New to Private Label?",
       "settings": {
         "desktop_content_position": "center",
@@ -406,6 +460,7 @@
     "rich_text_XM7ahn",
     "rich_text_wtFzft",
     "image_with_text_gwKdWK",
-    "rich_text_ePLd38"
+    "rich_text_ePLd38",
+    "rich_text_W3Yn7G"
   ]
 }
