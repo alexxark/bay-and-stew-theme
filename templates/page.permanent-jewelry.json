@@ -30,8 +30,100 @@
         "color_scheme": ""
       }
     },
+    "mega_collection_display_4mCxM7": {
+      "type": "mega-collection-display",
+      "blocks": {
+        "featured_collection_AXfWUX": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "gold-filled-1",
+            "label": "Gold Filled",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_trBeF7": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "sterling-silver-1",
+            "label": "Sterling Silver",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_BJWfwg": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "chains",
+            "label": "",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_kfNLik": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "connectors-pj",
+            "label": "Connectors",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_HBc8ky": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "charms-pj",
+            "label": "Charms",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_8hLWVW": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "findings-pj",
+            "label": "Findings",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        },
+        "featured_collection_9a4rzP": {
+          "type": "featured_collection",
+          "settings": {
+            "collection": "jump-rings-pj",
+            "label": "Jump Rings",
+            "products_to_show": 6,
+            "show_view_all": true
+          }
+        }
+      },
+      "block_order": [
+        "featured_collection_AXfWUX",
+        "featured_collection_trBeF7",
+        "featured_collection_BJWfwg",
+        "featured_collection_kfNLik",
+        "featured_collection_HBc8ky",
+        "featured_collection_8hLWVW",
+        "featured_collection_9a4rzP"
+      ],
+      "name": "Mega collection display",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "description": "",
+        "columns_desktop": "6",
+        "columns_mobile": "2",
+        "image_ratio": "adapt",
+        "links_title": "More categories",
+        "links_columns": "4",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "featured_collection_C8cRcq": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".collection__view-all {padding-top: 15px;}"
       ],
@@ -64,6 +156,7 @@
     },
     "featured_collection_t9UQqd": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".collection__view-all {padding-top: 15px;}"
       ],
@@ -96,6 +189,7 @@
     },
     "featured_collection_BKreFK": {
       "type": "featured-collection",
+      "disabled": true,
       "custom_css": [
         ".collection__view-all {padding-top: 15px;}"
       ],
@@ -160,6 +254,7 @@
         "featured_collection_gCNqak",
         "featured_collection_gBaPYg"
       ],
+      "disabled": true,
       "name": "t:sections.collection-list.presets.name",
       "settings": {
         "title": "<strong>More</strong>",
@@ -178,6 +273,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "mega_collection_display_4mCxM7",
     "featured_collection_C8cRcq",
     "featured_collection_t9UQqd",
     "featured_collection_BKreFK",
