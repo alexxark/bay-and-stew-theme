@@ -163,24 +163,6 @@
         this.tabs.forEach(tab => tab.addEventListener('click', this.handleTabClick.bind(this)));
       }
 
-      connectedCallback() {
-        this.equalizeHeights();
-        /* Re-run after all images in section finish loading */
-        const imgs = this.querySelectorAll('img');
-        let pending = 0;
-        imgs.forEach(img => {
-          if (!img.complete) {
-            pending++;
-            img.addEventListener('load', () => { if (--pending === 0) this.equalizeHeights(); }, { once: true });
-            img.addEventListener('error', () => { if (--pending === 0) this.equalizeHeights(); }, { once: true });
-          }
-        });
-        window.addEventListener('resize', () => {
-          clearTimeout(this._resizeTimer);
-          this._resizeTimer = setTimeout(() => this.equalizeHeights(), 150);
-        });
-      }
-
       handleTabClick(e) {
         const clicked = e.currentTarget;
         this.tabs.forEach(tab => {
@@ -197,46 +179,60 @@
         if (panel) {
           panel.classList.add('mega-collection__panel--active');
           panel.hidden = false;
-          /* Small delay for layout to settle after unhiding */
-          setTimeout(() => this.equalizeHeights(), 50);
+          setTimeout(equalizeCardHeadings, 100);
         }
-      }
-
-      equalizeHeights() {
-        /* Run in next frame so layout is stable */
-        requestAnimationFrame(() => {
-          this.panels.forEach(panel => {
-            if (panel.hidden) return;
-            const headings = panel.querySelectorAll('.card__heading');
-            if (!headings.length) return;
-            /* Reset first so we measure natural heights */
-            headings.forEach(h => h.style.minHeight = '');
-            /* Group by row: items sharing similar top offset */
-            const rows = [];
-            let currentRow = [headings[0]];
-            let currentTop = headings[0].getBoundingClientRect().top;
-            for (let i = 1; i < headings.length; i++) {
-              const t = headings[i].getBoundingClientRect().top;
-              if (Math.abs(t - currentTop) < 10) {
-                currentRow.push(headings[i]);
-              } else {
-                rows.push(currentRow);
-                currentRow = [headings[i]];
-                currentTop = t;
-              }
-            }
-            rows.push(currentRow);
-            /* Set min-height per row */
-            rows.forEach(group => {
-              const max = Math.max(...group.map(h => h.offsetHeight));
-              group.forEach(h => h.style.minHeight = max + 'px');
-            });
-          });
-        });
       }
     }
     customElements.define('mega-collection-tabs', MegaCollectionTabs);
   }
+
+  function equalizeCardHeadings() {
+    document.querySelectorAll('.mega-collection__panel:not([hidden])').forEach(function(panel) {
+      var headings = panel.querySelectorAll('.card__heading');
+      if (headings.length < 2) return;
+      /* Reset */
+      for (var i = 0; i < headings.length; i++) {
+        headings[i].style.minHeight = '';
+      }
+      /* Group by row using offsetTop */
+      var rows = [];
+      var currentRow = [headings[0]];
+      var currentTop = headings[0].offsetTop;
+      for (var i = 1; i < headings.length; i++) {
+        if (Math.abs(headings[i].offsetTop - currentTop) < 15) {
+          currentRow.push(headings[i]);
+        } else {
+          rows.push(currentRow);
+          currentRow = [headings[i]];
+          currentTop = headings[i].offsetTop;
+        }
+      }
+      rows.push(currentRow);
+      /* Apply max height per row */
+      for (var r = 0; r < rows.length; r++) {
+        var max = 0;
+        for (var j = 0; j < rows[r].length; j++) {
+          if (rows[r][j].offsetHeight > max) max = rows[r][j].offsetHeight;
+        }
+        for (var j = 0; j < rows[r].length; j++) {
+          rows[r][j].style.minHeight = max + 'px';
+        }
+      }
+    });
+  }
+
+  /* Run on multiple events to ensure it fires */
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(equalizeCardHeadings, 200);
+  });
+  window.addEventListener('load', function() {
+    equalizeCardHeadings();
+    setTimeout(equalizeCardHeadings, 500);
+  });
+  window.addEventListener('resize', function() {
+    clearTimeout(window._eqTimer);
+    window._eqTimer = setTimeout(equalizeCardHeadings, 150);
+  });
 </script>
 
 {% schema %}
