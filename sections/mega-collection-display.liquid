@@ -97,7 +97,7 @@
 
               {%- if block.settings.collection.all_products_count > products_to_show or block.settings.show_view_all -%}
                 <div class="mega-collection__view-all">
-                  <a href="{{ block.settings.collection.url }}" class="button button--secondary">
+                  <a href="{{ block.settings.collection.url }}?sort_by=best-selling" class="button button--secondary">
                     View all {{ block.settings.label | default: block.settings.collection.title }}
                   </a>
                 </div>
