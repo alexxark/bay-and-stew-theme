@@ -161,7 +161,20 @@
         this.tabs = this.querySelectorAll('[role="tab"]');
         this.panels = this.querySelectorAll('[role="tabpanel"]');
         this.tabs.forEach(tab => tab.addEventListener('click', this.handleTabClick.bind(this)));
+      }
+
+      connectedCallback() {
         this.equalizeHeights();
+        /* Re-run after all images in section finish loading */
+        const imgs = this.querySelectorAll('img');
+        let pending = 0;
+        imgs.forEach(img => {
+          if (!img.complete) {
+            pending++;
+            img.addEventListener('load', () => { if (--pending === 0) this.equalizeHeights(); }, { once: true });
+            img.addEventListener('error', () => { if (--pending === 0) this.equalizeHeights(); }, { once: true });
+          }
+        });
         window.addEventListener('resize', () => {
           clearTimeout(this._resizeTimer);
           this._resizeTimer = setTimeout(() => this.equalizeHeights(), 150);
@@ -184,25 +197,40 @@
         if (panel) {
           panel.classList.add('mega-collection__panel--active');
           panel.hidden = false;
-          this.equalizeHeights();
+          /* Small delay for layout to settle after unhiding */
+          setTimeout(() => this.equalizeHeights(), 50);
         }
       }
 
       equalizeHeights() {
+        /* Run in next frame so layout is stable */
         requestAnimationFrame(() => {
-          const activePanel = this.querySelector('[role="tabpanel"]:not([hidden])');
-          if (!activePanel) return;
-          const headings = activePanel.querySelectorAll('.card__heading');
-          headings.forEach(h => h.style.minHeight = '');
-          const rows = {};
-          headings.forEach(h => {
-            const top = Math.round(h.getBoundingClientRect().top);
-            if (!rows[top]) rows[top] = [];
-            rows[top].push(h);
-          });
-          Object.values(rows).forEach(group => {
-            const max = Math.max(...group.map(h => h.offsetHeight));
-            group.forEach(h => h.style.minHeight = max + 'px');
+          this.panels.forEach(panel => {
+            if (panel.hidden) return;
+            const headings = panel.querySelectorAll('.card__heading');
+            if (!headings.length) return;
+            /* Reset first so we measure natural heights */
+            headings.forEach(h => h.style.minHeight = '');
+            /* Group by row: items sharing similar top offset */
+            const rows = [];
+            let currentRow = [headings[0]];
+            let currentTop = headings[0].getBoundingClientRect().top;
+            for (let i = 1; i < headings.length; i++) {
+              const t = headings[i].getBoundingClientRect().top;
+              if (Math.abs(t - currentTop) < 10) {
+                currentRow.push(headings[i]);
+              } else {
+                rows.push(currentRow);
+                currentRow = [headings[i]];
+                currentTop = t;
+              }
+            }
+            rows.push(currentRow);
+            /* Set min-height per row */
+            rows.forEach(group => {
+              const max = Math.max(...group.map(h => h.offsetHeight));
+              group.forEach(h => h.style.minHeight = max + 'px');
+            });
           });
         });
       }
