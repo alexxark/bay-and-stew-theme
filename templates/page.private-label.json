@@ -286,38 +286,62 @@
             "heading": "Why Work With Us?",
             "heading_size": "h1"
           }
-        },
-        "text_MfCRPF": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
-          }
-        },
-        "button_EyWeph": {
-          "type": "button",
-          "settings": {
-            "button_label": "Button label",
-            "button_link": "",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
         }
       },
       "block_order": [
-        "heading_JpgdNM",
-        "text_MfCRPF",
-        "button_EyWeph"
+        "heading_JpgdNM"
       ],
-      "disabled": true,
-      "name": "t:sections.rich-text.presets.name",
+      "name": "Why Work with Us",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_XM7ahn": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_wtFzft": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_fcPxUM": {
+          "type": "caption",
+          "settings": {
+            "caption": "A Team That Works for Your Jewelry Business",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "text_FgxNHi": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail</li><li>Collaborative approach tailored to your brand</li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "caption_fcPxUM",
+        "text_FgxNHi"
+      ],
+      "name": "Why -DESC",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 8,
         "padding_bottom": 52
       }
     },
@@ -378,6 +402,8 @@
     "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
     "rich_text_XgGjrc",
+    "rich_text_XM7ahn",
+    "rich_text_wtFzft",
     "rich_text_ePLd38"
   ]
 }
