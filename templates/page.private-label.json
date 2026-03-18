@@ -12,7 +12,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        "h1 {font-size: 26px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
+        "h1 {font-size: 32px; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
         "padding_top": 36,
@@ -32,12 +32,13 @@
         "text_k4JLbA": {
           "type": "text",
           "settings": {
-            "text": "From custom permanent jewelry components to branded packaging and inserts, our in-house team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.",
+            "text": "From custom permanent jewelry components to branded packaging and inserts, our in-house creative team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.",
             "text_style": "body"
           }
         },
         "buttons_nXpcfk": {
           "type": "buttons",
+          "disabled": true,
           "settings": {
             "button_label_1": "Request a Custom Product",
             "button_link_1": "https://form.jotform.com/260715843519159",
@@ -53,10 +54,12 @@
         "text_k4JLbA",
         "buttons_nXpcfk"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "@media screen and (max-width: 768px) {.banner__text {padding: 15px 20px; }}"
+      ],
       "settings": {
         "image": "shopify://shop_images/deck-of-cards-landscape.jpg",
-        "image_overlay_opacity": 70,
+        "image_overlay_opacity": 80,
         "image_height": "adapt",
         "desktop_content_position": "middle-center",
         "show_text_box": false,
@@ -65,31 +68,22 @@
         "image_behavior": "none",
         "mobile_content_alignment": "center",
         "stack_images_on_mobile": true,
-        "show_text_below": true
+        "show_text_below": false
       }
     },
-    "rich_text_ePLd38": {
+    "rich_text_iQyCAC": {
       "type": "rich-text",
       "blocks": {
-        "heading_Y6aXJt": {
+        "heading_xbMMfi": {
           "type": "heading",
           "settings": {
             "heading": "What We Offer",
-            "heading_size": "h2"
-          }
-        },
-        "caption_jDMfm4": {
-          "type": "caption",
-          "settings": {
-            "caption": "Your Partner in Private Label Jewelry Production",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
+            "heading_size": "h1"
           }
         }
       },
       "block_order": [
-        "heading_Y6aXJt",
-        "caption_jDMfm4"
+        "heading_xbMMfi"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -98,7 +92,44 @@
         "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
-        "padding_bottom": 52
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_DV7iQQ": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_ynHhzV": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_pJBRik": {
+          "type": "caption",
+          "settings": {
+            "caption": "Your Partner in Private Label Production",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_pJBRik"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 8,
+        "padding_bottom": 8
       }
     },
     "multicolumn_PQkzWj": {
@@ -107,8 +138,8 @@
         "column_yfmDRp": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Artwork & Design Services",
+            "text": "<h4>Design support to help you develop visuals for your brand.</h4><h5>Prints, illustrations, & original artwork</h5>",
             "link_label": "",
             "link": ""
           }
@@ -116,8 +147,8 @@
         "column_ibiqXb": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Branded Paper Goods",
+            "text": "<h4>Custom-designed pieces that elevate your customer experience.</h4><h5>Card Decks/Playing Cards & Stickers <br/><br/><em>(vinyl, die-cut, custom designs)</em></h5>",
             "link_label": "",
             "link": ""
           }
@@ -125,8 +156,26 @@
         "column_mHkLDV": {
           "type": "column",
           "settings": {
-            "title": "Column",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "title": "Custom Apparel & Add-Ons",
+            "text": "<h4>Branded merchandise to expand your product offering.<br/></h4><h5>Custom Hats & Custom Patches<br/><br/><em>(embroidered or screen printed) </em></h5>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_KKNMHU": {
+          "type": "column",
+          "settings": {
+            "title": "Permanent Jewelry Components",
+            "text": "<h4>Designed for makers building or scaling their jewelry business. <br/></h4><h5>Custom Charms, Connectors, & Stamps <br/><br/><em>(MOQ VARIES)</em></h5>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_bdjKeE": {
+          "type": "column",
+          "settings": {
+            "title": "Packaging & Brand Materials",
+            "text": "<h4>Everything you need to create a cohesive, branded unboxing experience.<br/></h4><h5>Custom Boxes, Handle Bags,<br/>& Shipping Inserts/Postcards<br/><br/><em>(MOQ VARIES)</em></h5>",
             "link_label": "",
             "link": ""
           }
@@ -135,7 +184,13 @@
       "block_order": [
         "column_yfmDRp",
         "column_ibiqXb",
-        "column_mHkLDV"
+        "column_mHkLDV",
+        "column_KKNMHU",
+        "column_bdjKeE"
+      ],
+      "custom_css": [
+        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 22px; /* adjust heading size */ color: #000000; /* brand color */}",
+        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; /* adjust heading size */ color: #73635b; /* brand color */}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -144,46 +199,15 @@
         "image_width": "full",
         "image_ratio": "adapt",
         "columns_desktop": 3,
-        "column_alignment": "left",
+        "column_alignment": "center",
         "background_style": "primary",
-        "button_label": "",
-        "button_link": "",
+        "button_label": "Request a Custom Product",
+        "button_link": "https://form.jotform.com/260715843519159",
         "swipe_on_desktop": false,
         "color_scheme": "",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
         "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "image_with_text_yziiii": {
-      "type": "image-with-text",
-      "blocks": {
-        "text_66mTxa": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Bay and Stew began in 2013 when I first started making jewelry and couldn’t find high-quality stamping blanks that met my standards — so I began making my own. Soon after, I started offering these blanks to other small jewelry businesses, and from there, expanded into chains, findings, and more.</p><p>When permanent jewelry began to take off, I received more and more requests for my gold-filled connectors and custom hand-stamped pieces from customers in the permanent jewelry industry. </p>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "text_66mTxa"
-      ],
-      "custom_css": [],
-      "settings": {
-        "image": "shopify://shop_images/stewie-gerly-small.png",
-        "height": "medium",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 0,
         "padding_bottom": 36
       }
     },
@@ -193,14 +217,14 @@
         "heading_6hifzJ": {
           "type": "heading",
           "settings": {
-            "heading": "From Basement dreams to handcrafted pieces - the early days, 2016",
-            "heading_size": "h1"
+            "heading": "Why Work With Us?",
+            "heading_size": "h0"
           }
         },
         "text_8R6NwM": {
           "type": "text",
           "settings": {
-            "text": "<h3>Today, Bay and Stew is proud to supply premium materials to makers across the handmade, engraved, and permanent jewelry communities.</h3><p>The name <em>Bay and Stew</em> comes from my two Italian Greyhounds, Bailey and Stewie, who were always by my side in the studio while I created jewelry. Though they’re no longer with me, their memory is a sweet reminder of where it all started — with passion, creativity, and a lot of heart.</p>",
+            "text": "<h3>A Team That Works for Your Jewelry Business<br/></h3><ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail</li><li>Collaborative approach tailored to your brand<br/></li></ul>",
             "text_style": "body"
           }
         }
@@ -209,19 +233,19 @@
         "heading_6hifzJ",
         "text_8R6NwM"
       ],
+      "disabled": true,
       "custom_css": [
-        "h2 {font-size: 13px; color: #b19d8c; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
+        "h2 {font-size: 20px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
       ],
       "settings": {
-        "image": "shopify://shop_images/Polaroid600-steweie_4ca4183e-6bba-479e-a4f8-8d1953ad9f73.png",
         "height": "medium",
         "desktop_image_width": "small",
         "layout": "image_first",
         "desktop_content_position": "middle",
         "desktop_content_alignment": "left",
         "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-5",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "section_color_scheme": "scheme-2",
+        "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 20,
@@ -250,27 +274,27 @@
         "padding_bottom": 0
       }
     },
-    "rich_text_CMKUe4": {
+    "rich_text_XgGjrc": {
       "type": "rich-text",
       "blocks": {
-        "heading_mw9rdm": {
+        "heading_JpgdNM": {
           "type": "heading",
           "settings": {
-            "heading": "Our Mission",
+            "heading": "Why Work With Us?",
             "heading_size": "h1"
           }
         },
-        "text_7QcpBg": {
+        "text_MfCRPF": {
           "type": "text",
           "settings": {
-            "text": "<p>Born from a maker’s need for better supplies. Built on loyalty, quality, and heart.</p>"
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
           }
         },
-        "button_86AQ6W": {
+        "button_EyWeph": {
           "type": "button",
           "settings": {
-            "button_label": "Shop Supplies",
-            "button_link": "shopify://pages/whats-new",
+            "button_label": "Button label",
+            "button_link": "",
             "button_style_secondary": false,
             "button_label_2": "",
             "button_link_2": "",
@@ -279,17 +303,62 @@
         }
       },
       "block_order": [
-        "heading_mw9rdm",
-        "text_7QcpBg",
-        "button_86AQ6W"
+        "heading_JpgdNM",
+        "text_MfCRPF",
+        "button_EyWeph"
       ],
-      "custom_css": [
-        "h2 {font-size: 28px; color: #b19d8c;}"
-      ],
+      "disabled": true,
+      "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-73fe3fdc-82ab-44c0-bac9-6d5df6d0238d",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_ePLd38": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_zxgGPw": {
+          "type": "caption",
+          "settings": {
+            "caption": "NEW TO PRIVATE LABEL?",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "caption_jDMfm4": {
+          "type": "caption",
+          "settings": {
+            "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
+            "text_style": "subtitle",
+            "text_size": "medium"
+          }
+        },
+        "button_JMewJd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Frequently Asked Questions",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "caption_zxgGPw",
+        "caption_jDMfm4",
+        "button_JMewJd"
+      ],
+      "name": "New to Private Label?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
@@ -299,11 +368,13 @@
   "order": [
     "main",
     "image_banner_rJf3hX",
-    "rich_text_ePLd38",
+    "rich_text_iQyCAC",
+    "rich_text_DV7iQQ",
+    "rich_text_ynHhzV",
     "multicolumn_PQkzWj",
-    "image_with_text_yziiii",
     "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
-    "rich_text_CMKUe4"
+    "rich_text_XgGjrc",
+    "rich_text_ePLd38"
   ]
 }
