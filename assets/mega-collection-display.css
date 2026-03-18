@@ -14,23 +14,7 @@
 .mega-collection__tab-nav-wrapper {
   position: relative;
   margin-bottom: 2rem;
-}
-
-.mega-collection__tab-nav-wrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: 4rem;
-  background: linear-gradient(to right, transparent, rgb(var(--color-background)));
-  pointer-events: none;
-  z-index: 1;
-  transition: opacity 0.2s;
-}
-
-.mega-collection__tab-nav-wrapper.scrolled-end::after {
-  opacity: 0;
+  overflow: hidden;
 }
 
 .mega-collection__tab-nav {
@@ -44,6 +28,25 @@
 
 .mega-collection__tab-nav::-webkit-scrollbar {
   display: none;
+}
+
+/* Scroll fade hint — visible only when tabs overflow */
+.mega-collection__tab-nav-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 5rem;
+  background: linear-gradient(to right, transparent, rgb(var(--color-background)));
+  pointer-events: none;
+  z-index: 2;
+  transition: opacity 0.3s;
+}
+
+.mega-collection__tab-nav-wrapper.scrolled-end::after,
+.mega-collection__tab-nav-wrapper.no-overflow::after {
+  opacity: 0;
 }
 
 .mega-collection__tab {

@@ -192,10 +192,13 @@
     var wrapper = nav.closest('.mega-collection__tab-nav-wrapper');
     if (!wrapper) return;
     function checkScroll() {
+      var overflows = nav.scrollWidth > nav.offsetWidth + 2;
       var atEnd = nav.scrollLeft + nav.offsetWidth >= nav.scrollWidth - 2;
-      wrapper.classList.toggle('scrolled-end', atEnd);
+      wrapper.classList.toggle('no-overflow', !overflows);
+      wrapper.classList.toggle('scrolled-end', atEnd && overflows);
     }
     nav.addEventListener('scroll', checkScroll, { passive: true });
+    window.addEventListener('resize', checkScroll);
     checkScroll();
   });
 </script>
