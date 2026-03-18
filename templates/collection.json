@@ -17,7 +17,7 @@
         "show_collection_image": true,
         "collapsible_description": true,
         "title_font_size": 32,
-        "description_font_size": 14,
+        "description_font_size": 13,
         "color_scheme": "background-1"
       }
     },
