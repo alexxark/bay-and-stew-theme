@@ -140,7 +140,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
             "title": "Artwork & Design Services",
-            "text": "<h4>DESIGN SUPPORT TO HELP YOU DEVELOP VISUALS FOR YOUR BRAND.</h4><h5>Prints, illustrations, & original artwork</h5>",
+            "text": "<h5>Prints, illustrations, & original artwork</h5><h4>DESIGN SUPPORT TO HELP YOU DEVELOP VISUALS FOR YOUR BRAND.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -150,7 +150,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-06.png",
             "title": "Branded Paper Goods",
-            "text": "<h4>CUSTOM-DESIGNED PIECES THAT ELEVATE YOUR CUSTOMER EXPERIENCE.</h4><h5>Card Decks/Playing Cards & Stickers <br/></h5><h6><em>(vinyl, die-cut, custom designs)</em></h6>",
+            "text": "<h5>Card Decks/Playing Cards & Stickers <br/></h5><h6><em>(vinyl, die-cut, custom designs)</em></h6><h6></h6><h4>CUSTOM-DESIGNED PIECES THAT ELEVATE YOUR CUSTOMER EXPERIENCE.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -160,7 +160,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
             "title": "Custom Apparel & Add-Ons",
-            "text": "<h4>BRANDED MERCHANDISE TO EXPAND YOUR PRODUCT OFFERING.<br/></h4><h5>Custom Hats & Custom Patches<br/></h5><h6><em>(embroidered or screen printed) </em></h6>",
+            "text": "<h5>Custom Hats & Custom Patches<br/></h5><h6><em>(embroidered or screen printed) </em></h6><h4>BRANDED MERCHANDISE TO EXPAND YOUR PRODUCT OFFERING.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -170,7 +170,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-06.png",
             "title": "Permanent Jewelry Components",
-            "text": "<h4>DESIGNED FOR MAKERS BUILDING OR SCALING THEIR JEWELRY BUSINESS.<br/></h4><h5>Custom Charms, Connectors, & Stamps <br/></h5><h6><em>(MOQ VARIES)</em></h6>",
+            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h6><em>(MOQ VARIES)</em></h6><h4>DESIGNED FOR MAKERS BUILDING OR SCALING THEIR JEWELRY BUSINESS.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -180,7 +180,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
             "title": "Packaging & Brand Materials",
-            "text": "<h4>EVERYTHING YOU NEED TO CREATE A COHESIVE, BRANDED UNBOXING EXPERIENCE.</h4><h5>Custom Boxes, Handle Bags,<br/>& Shipping Inserts/Postcards</h5><h6><em>(MOQ VARIES)</em></h6>",
+            "text": "<h5>Custom Boxes, Handle Bags,<br/>& Shipping Inserts/Postcards</h5><h6><em>(MOQ VARIES)</em></h6><h6></h6><h4>EVERYTHING YOU NEED TO CREATE BRANDED UNBOXING EXPERIENCE.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -194,8 +194,8 @@
         "column_bdjKeE"
       ],
       "custom_css": [
-        "h3 {font-size: 24px; /* adjust heading size */ color: #000000; /* brand color */}",
-        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 14px; /* adjust heading size */ color: #73635b; /* brand color */}",
+        "h3 {font-size: 24px; /* adjust heading size */ color: #73635b; /* brand color */}",
+        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 12px; /* adjust heading size */ color: #000000; /* brand color */}",
         "h5 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; color: #000000; /* brand color */}",
         ".multicolumn-list__item {border: 1px solid #e5e5e5; padding: 20px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);}"
       ],
