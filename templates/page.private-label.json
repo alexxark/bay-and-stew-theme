@@ -189,8 +189,9 @@
         "column_bdjKeE"
       ],
       "custom_css": [
-        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 22px; /* adjust heading size */ color: #000000; /* brand color */}",
-        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; /* adjust heading size */ color: #73635b; /* brand color */}"
+        "h3 {font-size: 22px; /* adjust heading size */ color: #000000; /* brand color */}",
+        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 16px; /* adjust heading size */ color: #73635b; /* brand color */}",
+        "h5 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; color: #000000; /* brand color */}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
