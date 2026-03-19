@@ -107,6 +107,18 @@
         "padding_bottom": 4
       }
     },
+    "rich_text_z76c4W": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
     "rich_text_ynHhzV": {
       "type": "rich-text",
       "blocks": {
@@ -276,16 +288,33 @@
         "padding_bottom": 60
       }
     },
-    "rich_text_qg6jic": {
+    "rich_text_6tMJBQ": {
       "type": "rich-text",
       "blocks": {
-        "heading_f4kBQg": {
+        "heading_TVdWfQ": {
           "type": "heading",
           "settings": {
             "heading": "Why Work With Us?",
             "heading_size": "h1"
           }
-        },
+        }
+      },
+      "block_order": [
+        "heading_TVdWfQ"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_qg6jic": {
+      "type": "rich-text",
+      "blocks": {
         "caption_RRQhhL": {
           "type": "caption",
           "settings": {
@@ -302,7 +331,6 @@
         }
       },
       "block_order": [
-        "heading_f4kBQg",
         "caption_RRQhhL",
         "text_wfc9wx"
       ],
@@ -426,6 +454,8 @@
     "rich_text_7PqGV8",
     "rich_text_XgGjrc",
     "rich_text_wtFzft",
+    "rich_text_6tMJBQ",
+    "rich_text_z76c4W",
     "rich_text_qg6jic",
     "rich_text_ePLd38",
     "rich_text_W3Yn7G"
