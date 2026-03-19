@@ -138,7 +138,7 @@
         "column_yfmDRp": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/Icons-05.png",
+            "image": "shopify://shop_images/bay-private-label-02.png",
             "title": "Artwork & Design Services",
             "text": "<h5>Custom graphics, prints, and illustrations for marketing materials.</h5><h4>Design support to help you build a cohesive, elevated brand.<br/></h4>",
             "link_label": "",
@@ -148,7 +148,7 @@
         "column_ibiqXb": {
           "type": "column",
           "settings": {
-            "image": "shopify://shop_images/Icons-06.png",
+            "image": "shopify://shop_images/bay-private-label-03.png",
             "title": "Unique Branded Products",
             "text": "<h5>Card decks, hats, custom patches, shipping inserts, and stickers. <br/></h5><h4>Custom-designed pieces that enhance your customer experience and expand your brand reach.</h4>",
             "link_label": "",
@@ -192,7 +192,7 @@
       "settings": {
         "title": "",
         "heading_size": "h1",
-        "image_width": "third",
+        "image_width": "full",
         "image_ratio": "adapt",
         "columns_desktop": 4,
         "column_alignment": "center",
