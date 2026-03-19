@@ -235,7 +235,7 @@
         "heading_JpgdNM": {
           "type": "heading",
           "settings": {
-            "heading": "Why Work With Us?",
+            "heading": "Who This is For?",
             "heading_size": "h1"
           }
         }
@@ -268,14 +268,6 @@
     "rich_text_wtFzft": {
       "type": "rich-text",
       "blocks": {
-        "caption_fcPxUM": {
-          "type": "caption",
-          "settings": {
-            "caption": "A Team That Works for Your Jewelry Business",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
-          }
-        },
         "text_FgxNHi": {
           "type": "text",
           "settings": {
@@ -284,7 +276,6 @@
         }
       },
       "block_order": [
-        "caption_fcPxUM",
         "text_FgxNHi"
       ],
       "name": "Why -DESC",
