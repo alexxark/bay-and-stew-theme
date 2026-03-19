@@ -140,7 +140,7 @@
           "settings": {
             "image": "shopify://shop_images/bay-private-label-02.png",
             "title": "Artwork & Design Services",
-            "text": "<h5>Custom graphics, prints, and illustrations for marketing materials.</h5><h4>Design support to help you build a cohesive, elevated brand.<br/></h4>",
+            "text": "<h5>Custom Graphics, Prints, and Illustrations for Marketing Materials.</h5><h4>Design support to help you build a cohesive, elevated brand.<br/></h4>",
             "link_label": "",
             "link": ""
           }
@@ -150,7 +150,7 @@
           "settings": {
             "image": "shopify://shop_images/bay-private-label-03.png",
             "title": "Unique Branded Products",
-            "text": "<h5>Card decks, hats, custom patches, shipping inserts, and stickers. <br/></h5><h4>Custom-designed pieces that enhance your customer experience and expand your brand reach.</h4>",
+            "text": "<h5>Card Decks, Hats, Custom Patches, Shipping Inserts, and Stickers. <br/></h5><h4>Custom-designed pieces that enhance your customer experience and expand your brand reach.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -170,7 +170,7 @@
           "settings": {
             "image": "shopify://shop_images/bay-private-label-05.png",
             "title": "Jewelry Cases & Packaging",
-            "text": "<h5>Branded boxes, handle bags, and fully custom packaging solutions.</h5><h4>Everything you need to create a memorable unboxing experience.</h4>",
+            "text": "<h5>Branded boxes, Handle bags, and Fully Custom Packaging Solutions.</h5><h4>Everything you need to create a memorable unboxing experience.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -334,20 +334,12 @@
         "color_scheme": "",
         "full_width": true,
         "padding_top": 16,
-        "padding_bottom": 8
+        "padding_bottom": 32
       }
     },
     "rich_text_qg6jic": {
       "type": "rich-text",
       "blocks": {
-        "caption_RRQhhL": {
-          "type": "caption",
-          "settings": {
-            "caption": "A Team That Works for Your Jewelry Business",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "large"
-          }
-        },
         "text_wfc9wx": {
           "type": "text",
           "settings": {
@@ -356,7 +348,6 @@
         }
       },
       "block_order": [
-        "caption_RRQhhL",
         "text_wfc9wx"
       ],
       "name": "t:sections.rich-text.presets.name",
