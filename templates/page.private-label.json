@@ -160,7 +160,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-06.png",
             "title": "Custom Jewelry Components",
-            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h6><em>(MOQ VARIES)</em></h6><h4>Thoughtfully designed elements for makers building or scaling their jewelry business.</h4>",
+            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h4>Thoughtfully designed elements for makers building or scaling their jewelry business.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -170,7 +170,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
             "title": "Jewelry Cases & Packaging",
-            "text": "<h5>Branded boxes, handle bags, and fully custom packaging solutions.</h5><h6><em>(MOQ VARIES)</em></h6><h6></h6><h4>Everything you need to create a memorable unboxing experience.</h4>",
+            "text": "<h5>Branded boxes, handle bags, and fully custom packaging solutions.</h5><h4>Everything you need to create a memorable unboxing experience.</h4>",
             "link_label": "",
             "link": ""
           }
