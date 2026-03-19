@@ -140,7 +140,7 @@
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
             "title": "Artwork & Design Services",
-            "text": "<h5>Prints, illustrations, & original artwork</h5><h4>DESIGN SUPPORT TO HELP YOU DEVELOP VISUALS FOR YOUR BRAND.</h4>",
+            "text": "<h5>Custom graphics, prints, and illustrations for marketing materials.</h5><h4>Design support to help you build a cohesive, elevated brand.<br/></h4>",
             "link_label": "",
             "link": ""
           }
@@ -149,18 +149,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Icons-06.png",
-            "title": "Branded Paper Goods",
-            "text": "<h5>Card Decks/Playing Cards & Stickers <br/></h5><h6><em>(vinyl, die-cut, custom designs)</em></h6><h6></h6><h4>CUSTOM-DESIGNED PIECES THAT ELEVATE YOUR CUSTOMER EXPERIENCE.</h4>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_mHkLDV": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-05.png",
-            "title": "Custom Apparel & Add-Ons",
-            "text": "<h5>Custom Hats & Custom Patches<br/></h5><h6><em>(embroidered or screen printed) </em></h6><h4>BRANDED MERCHANDISE TO EXPAND YOUR PRODUCT OFFERING.</h4>",
+            "title": "Unique Branded Products",
+            "text": "<h5>Card decks, hats, custom patches, shipping inserts, and stickers. <br/></h5><h4>Custom-designed pieces that enhance your customer experience and expand your brand reach.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -169,8 +159,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Icons-06.png",
-            "title": "Permanent Jewelry Components",
-            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h6><em>(MOQ VARIES)</em></h6><h4>DESIGNED FOR MAKERS BUILDING OR SCALING THEIR JEWELRY BUSINESS.</h4>",
+            "title": "Custom Jewelry Components",
+            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h6><em>(MOQ VARIES)</em></h6><h4>Thoughtfully designed elements for makers building or scaling their jewelry business.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -179,8 +169,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Icons-05.png",
-            "title": "Packaging & Brand Materials",
-            "text": "<h5>Custom Boxes, Handle Bags,<br/>& Shipping Inserts/Postcards</h5><h6><em>(MOQ VARIES)</em></h6><h6></h6><h4>EVERYTHING YOU NEED TO CREATE BRANDED UNBOXING EXPERIENCE.</h4>",
+            "title": "Jewelry Cases & Packaging",
+            "text": "<h5>Branded boxes, handle bags, and fully custom packaging solutions.</h5><h6><em>(MOQ VARIES)</em></h6><h6></h6><h4>Everything you need to create a memorable unboxing experience.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -189,7 +179,6 @@
       "block_order": [
         "column_yfmDRp",
         "column_ibiqXb",
-        "column_mHkLDV",
         "column_KKNMHU",
         "column_bdjKeE"
       ],
@@ -210,7 +199,7 @@
         "background_style": "none",
         "button_label": "Request a Custom Product",
         "button_link": "https://form.jotform.com/260715843519159",
-        "swipe_on_desktop": true,
+        "swipe_on_desktop": false,
         "color_scheme": "",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
