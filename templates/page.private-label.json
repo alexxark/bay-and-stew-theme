@@ -291,6 +291,14 @@
     "image_with_text_gwKdWK": {
       "type": "image-with-text",
       "blocks": {
+        "caption_7xddjz": {
+          "type": "caption",
+          "settings": {
+            "caption": "A Team That Works for Your Jewelry Business",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
         "heading_6hifzJ": {
           "type": "heading",
           "disabled": true,
@@ -308,6 +316,7 @@
         }
       },
       "block_order": [
+        "caption_7xddjz",
         "heading_6hifzJ",
         "text_8R6NwM"
       ],
