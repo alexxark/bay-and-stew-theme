@@ -312,6 +312,31 @@
         "padding_bottom": 4
       }
     },
+    "rich_text_W37qCB": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_p4kqpt": {
+          "type": "caption",
+          "settings": {
+            "caption": "A Team That Works for Your Jewelry Business",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_p4kqpt"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 16,
+        "padding_bottom": 8
+      }
+    },
     "rich_text_qg6jic": {
       "type": "rich-text",
       "blocks": {
@@ -456,6 +481,7 @@
     "rich_text_wtFzft",
     "rich_text_6tMJBQ",
     "rich_text_z76c4W",
+    "rich_text_W37qCB",
     "rich_text_qg6jic",
     "rich_text_ePLd38",
     "rich_text_W3Yn7G"
