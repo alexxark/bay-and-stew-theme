@@ -310,7 +310,7 @@
         "text_8R6NwM": {
           "type": "text",
           "settings": {
-            "text": "<h2>Why Work With Us?<br/></h2><ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail<br/>Collaborative approach tailored to your brand<br/></li></ul>",
+            "text": "<h2>Why Work With Us?<br/></h2><ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail</li><li>Collaborative approach tailored to your brand<br/></li></ul>",
             "text_style": "body"
           }
         }
@@ -319,46 +319,6 @@
         "caption_7xddjz",
         "heading_6hifzJ",
         "text_8R6NwM"
-      ],
-      "custom_css": [],
-      "settings": {
-        "image": "shopify://shop_images/IMG_9552.jpg",
-        "height": "adapt",
-        "desktop_image_width": "small",
-        "layout": "image_first",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "center",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-2",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 20,
-        "padding_bottom": 24
-      }
-    },
-    "image_with_text_MVqE7F": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_4Je3Kr": {
-          "type": "heading",
-          "disabled": true,
-          "settings": {
-            "heading": "Why Work With Us?",
-            "heading_size": "h0"
-          }
-        },
-        "text_jDrJ3E": {
-          "type": "text",
-          "settings": {
-            "text": "<h2>Who This is For<br/></h2><ul><li>Makers looking to launch private label permanent jewelry products</li><li>Small businesses seeking custom jewelry components or branded packaging</li><li>Event hosts, educators, and designers needing supplies & personalized products<br/></li></ul>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "heading_4Je3Kr",
-        "text_jDrJ3E"
       ],
       "custom_css": [],
       "settings": {
@@ -489,7 +449,6 @@
     "rich_text_XM7ahn",
     "rich_text_wtFzft",
     "image_with_text_gwKdWK",
-    "image_with_text_MVqE7F",
     "rich_text_ePLd38",
     "rich_text_W3Yn7G"
   ]
