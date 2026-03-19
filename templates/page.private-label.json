@@ -259,7 +259,7 @@
         "text_FgxNHi": {
           "type": "text",
           "settings": {
-            "text": "<ul><li>Makers looking to launch private label permanent jewelry products</li><li>Small businesses seeking custom jewelry components or branded packaging</li><li>Event hosts, educators, and designers needing supplies & personalized products</li></ul>"
+            "text": "<ul><li>Makers looking to launch private label permanent jewelry products</li></ul><p></p><ul><li>Small businesses seeking custom jewelry components or branded packaging</li></ul><p></p><ul><li>Event hosts, educators, and designers needing supplies & personalized products</li></ul>"
           }
         }
       },
@@ -276,67 +276,22 @@
         "padding_bottom": 60
       }
     },
-    "image_banner_F4KtQx": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_cHFMRL": {
-          "type": "heading",
-          "settings": {
-            "heading": "Why Work With Us?",
-            "heading_size": "h2"
-          }
-        },
-        "text_qLqxfT": {
-          "type": "text",
-          "settings": {
-            "text": "",
-            "text_style": "body"
-          }
-        },
-        "buttons_kcj7JH": {
-          "type": "buttons",
-          "disabled": true,
-          "settings": {
-            "button_label_1": "Request a Custom Product",
-            "button_link_1": "https://form.jotform.com/260715843519159",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_cHFMRL",
-        "text_qLqxfT",
-        "buttons_kcj7JH"
-      ],
-      "custom_css": [
-        "@media screen and (max-width: 768px) {.banner__text {padding: 15px 20px; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/deck-of-cards-landscape.jpg",
-        "image_overlay_opacity": 80,
-        "image_height": "adapt",
-        "desktop_content_position": "middle-center",
-        "show_text_box": false,
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-3",
-        "image_behavior": "fixed",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": true,
-        "show_text_below": false
-      }
-    },
     "rich_text_qg6jic": {
       "type": "rich-text",
       "blocks": {
+        "heading_f4kBQg": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Work With Us?",
+            "heading_size": "h1"
+          }
+        },
         "caption_RRQhhL": {
           "type": "caption",
           "settings": {
             "caption": "A Team That Works for Your Jewelry Business",
             "text_style": "caption-with-letter-spacing",
-            "text_size": "medium"
+            "text_size": "large"
           }
         },
         "text_wfc9wx": {
@@ -347,6 +302,7 @@
         }
       },
       "block_order": [
+        "heading_f4kBQg",
         "caption_RRQhhL",
         "text_wfc9wx"
       ],
@@ -470,7 +426,6 @@
     "rich_text_7PqGV8",
     "rich_text_XgGjrc",
     "rich_text_wtFzft",
-    "image_banner_F4KtQx",
     "rich_text_qg6jic",
     "rich_text_ePLd38",
     "rich_text_W3Yn7G"
