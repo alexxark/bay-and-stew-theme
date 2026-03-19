@@ -276,6 +276,58 @@
         "padding_bottom": 60
       }
     },
+    "image_banner_F4KtQx": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_cHFMRL": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Work With Us?",
+            "heading_size": "h2"
+          }
+        },
+        "text_qLqxfT": {
+          "type": "text",
+          "settings": {
+            "text": "",
+            "text_style": "body"
+          }
+        },
+        "buttons_kcj7JH": {
+          "type": "buttons",
+          "disabled": true,
+          "settings": {
+            "button_label_1": "Request a Custom Product",
+            "button_link_1": "https://form.jotform.com/260715843519159",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_cHFMRL",
+        "text_qLqxfT",
+        "buttons_kcj7JH"
+      ],
+      "custom_css": [
+        "@media screen and (max-width: 768px) {.banner__text {padding: 15px 20px; }}"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/deck-of-cards-landscape.jpg",
+        "image_overlay_opacity": 80,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-3",
+        "image_behavior": "fixed",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": false
+      }
+    },
     "image_with_text_gwKdWK": {
       "type": "image-with-text",
       "blocks": {
@@ -316,9 +368,9 @@
         "layout": "image_first",
         "desktop_content_position": "middle",
         "desktop_content_alignment": "center",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-2",
+        "content_layout": "overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 20,
@@ -435,6 +487,7 @@
     "rich_text_7PqGV8",
     "rich_text_XgGjrc",
     "rich_text_wtFzft",
+    "image_banner_F4KtQx",
     "image_with_text_gwKdWK",
     "rich_text_ePLd38",
     "rich_text_W3Yn7G"
