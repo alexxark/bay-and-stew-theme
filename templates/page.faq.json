@@ -275,7 +275,7 @@
           "settings": {
             "heading": "Can I make a change to my order?",
             "icon": "check_mark",
-            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
+            "row_content": "<p>To keep our fulfillment process efficient, we’re <strong>unable to make changes once an order is placed. <br/><br/></strong>This includes:<br/><br/>• Changing the shipping address<br/><br/>• Modifying the shipping method<br/><br/>• Adding or removing items<br/><br/>• Combining orders<br/><br/><strong>If there’s an error, contact us immediately at hello@bayandstew.com to request a cancellation.</strong> If the order has not begun processing, we’ll do our best to help. You can then place a corrected order.</p>",
             "page": ""
           }
         },
