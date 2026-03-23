@@ -102,7 +102,6 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
@@ -146,6 +145,7 @@
         },
         "slide_yJEEjD": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Double-Star-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Double-Star-Mobile.jpg",
