@@ -170,7 +170,7 @@
           "settings": {
             "heading": "Which states do not require sales tax documentation? 🚫",
             "icon": "check_mark",
-            "row_content": "<p>If you’re based in one of these states, no documentation is required:<br/></p><ul><li>Delaware</li><li>Montana</li><li>New Hampshire</li><li>Oregon</li><li>Alaska (note: some cities do charge local sales tax)</li></ul>",
+            "row_content": "<p>If you’re based in one of these states, no documentation is required:<br/></p><ul><li>Alaska (note: some cities do charge local sales tax)</li><li>Delaware</li><li>Montana</li><li>New Hampshire</li><li>Oregon</li></ul>",
             "page": ""
           }
         }
