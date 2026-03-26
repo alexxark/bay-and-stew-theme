@@ -37,7 +37,7 @@
         "text_fqgnLU": {
           "type": "text",
           "settings": {
-            "text": "<p>U.S. WHOLESALE REQUIREMENTS BY STATE</p><p>Before applying, check which documents your state <strong>requires</strong> to avoid delays.</p>"
+            "text": "<p><strong>REQUIREMENTS BY STATE</strong></p><p>Before applying, check which documents your state <em>requires to avoid delays.</em></p>"
           }
         },
         "button_atMBkc": {
