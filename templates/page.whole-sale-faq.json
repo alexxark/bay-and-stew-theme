@@ -351,6 +351,51 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_yPhYq7": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kentucky",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_TVqMpx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Louisiana",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_hwHbqb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maine",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_ax8q6H": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maryland",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_Vy3bzy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Massachusetts",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -371,7 +416,12 @@
         "collapsible_row_xggztw",
         "collapsible_row_xAWyFx",
         "collapsible_row_wCVf3H",
-        "collapsible_row_q4hGWf"
+        "collapsible_row_q4hGWf",
+        "collapsible_row_yPhYq7",
+        "collapsible_row_TVqMpx",
+        "collapsible_row_hwHbqb",
+        "collapsible_row_ax8q6H",
+        "collapsible_row_Vy3bzy"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
