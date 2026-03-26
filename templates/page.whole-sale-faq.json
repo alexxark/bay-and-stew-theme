@@ -217,7 +217,7 @@
           "settings": {
             "heading": "International",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p>Business license issued by your local government or municipality</p>",
             "page": ""
           }
         },
