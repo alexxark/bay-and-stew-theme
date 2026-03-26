@@ -432,6 +432,33 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_n3r6Hh": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Montana",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_rVzfUn": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nebraska",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_HiTNXt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nevada",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -461,7 +488,10 @@
         "collapsible_row_rVifYw",
         "collapsible_row_BkNCPm",
         "collapsible_row_9FgMHb",
-        "collapsible_row_tPprHB"
+        "collapsible_row_tPprHB",
+        "collapsible_row_n3r6Hh",
+        "collapsible_row_rVzfUn",
+        "collapsible_row_HiTNXt"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
