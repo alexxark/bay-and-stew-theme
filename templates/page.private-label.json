@@ -49,8 +49,9 @@
         "ai_gen_block_32b49b4_gMLd8U": {
           "type": "ai_gen_block_32b49b4",
           "settings": {
-            "image_1": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
-            "image_2": "shopify://shop_images/cn20-banner.jpg",
+            "image_1": "shopify://shop_images/Private_Label_Carousel-1.jpg",
+            "image_2": "shopify://shop_images/Private_Label_Carousel2.jpg",
+            "image_3": "shopify://shop_images/Private_Label_Carousel3.jpg",
             "banner_height": 300,
             "mobile_banner_height": 400,
             "desktop_width_percent": 100,
@@ -77,7 +78,6 @@
       "block_order": [
         "ai_gen_block_32b49b4_gMLd8U"
       ],
-      "disabled": true,
       "custom_css": [],
       "settings": {}
     },
