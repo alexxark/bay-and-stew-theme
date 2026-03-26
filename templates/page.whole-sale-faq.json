@@ -617,7 +617,16 @@
         "collapsible_row_iGUz9E": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Tennessee",
+            "heading": "Wisconsin",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_M68V9p": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Wyoming",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
@@ -671,7 +680,8 @@
         "collapsible_row_3bqLM8",
         "collapsible_row_D77nwN",
         "collapsible_row_x9TXzg",
-        "collapsible_row_iGUz9E"
+        "collapsible_row_iGUz9E",
+        "collapsible_row_M68V9p"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
