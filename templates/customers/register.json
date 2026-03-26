@@ -46,6 +46,83 @@
         "padding_bottom": 8
       }
     },
+    "rich_text_mzQxJV": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Cgyeg3": {
+          "type": "heading",
+          "settings": {
+            "heading": "U.S. BASED",
+            "heading_size": "h1"
+          }
+        },
+        "heading_3kEPUA": {
+          "type": "heading",
+          "settings": {
+            "heading": "WHOLESALE APPLICATION FORM",
+            "heading_size": "h2"
+          }
+        },
+        "text_fqgnLU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>U.S. WHOLESALE REQUIREMENTS BY STATE</p><p></p>"
+          }
+        },
+        "caption_tprPrw": {
+          "type": "caption",
+          "settings": {
+            "caption": "Add a tagline",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        },
+        "button_atMBkc": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        },
+        "text_mERqif": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For retail buyers </em><a href=\"https://bayandstew.myshopify.com/pages/retail-customers\" title=\"https://bayandstew.myshopify.com/pages/retailcustomer\"><em>Retail Form</em></a></p>"
+          }
+        },
+        "text_3P48Uh": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For international buyers </em><a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" target=\"_blank\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><em>International Form</em></a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Cgyeg3",
+        "heading_3kEPUA",
+        "text_fqgnLU",
+        "caption_tprPrw",
+        "button_atMBkc",
+        "text_mERqif",
+        "text_3P48Uh"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "h3 {font-family: sans-serif; font-weight: 400; letter-spacing: 0.06em;}"
+      ],
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 44,
+        "padding_bottom": 8
+      }
+    },
     "custom_liquid_6JPy4b": {
       "type": "custom-liquid",
       "custom_css": [
@@ -63,6 +140,7 @@
   "order": [
     "main",
     "rich_text_a4rBTC",
+    "rich_text_mzQxJV",
     "custom_liquid_6JPy4b"
   ]
 }
