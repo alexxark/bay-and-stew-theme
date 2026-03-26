@@ -461,9 +461,9 @@
         "collapsible_row_gMKKXC": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Collapsible row",
+            "heading": "Do you offer custom jewelry packaging and branded boxes?",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p>Yes. We design and produce custom jewelry packaging including boxes, handle bags, pouches, and complete packaging systems. Branded packaging helps elevate your unboxing experience and strengthen brand recognition.</p>",
             "page": ""
           }
         }
