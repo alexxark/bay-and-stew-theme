@@ -31,6 +31,7 @@
         "heading_yptLrY",
         "text_7JFmCc"
       ],
+      "disabled": true,
       "name": "t:sections.image-banner.presets.name",
       "settings": {
         "image": "shopify://shop_images/Double-Star-Desktop.jpg",
