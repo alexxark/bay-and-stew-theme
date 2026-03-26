@@ -145,6 +145,7 @@
         },
         "slide_yJEEjD": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Double-Star-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Double-Star-Mobile.jpg",
