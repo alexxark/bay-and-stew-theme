@@ -216,12 +216,42 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_4EQLWJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alaska",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_WNGm4A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arizona",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_Pf4f8V": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arkansas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_8zNXwQ",
         "collapsible_row_f3PfJd",
-        "collapsible_row_JWmQXL"
+        "collapsible_row_JWmQXL",
+        "collapsible_row_4EQLWJ",
+        "collapsible_row_WNGm4A",
+        "collapsible_row_Pf4f8V"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
