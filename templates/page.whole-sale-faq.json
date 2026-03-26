@@ -164,11 +164,21 @@
             "row_content": "<p><strong>Document requirements vary by state. <br/><br/></strong>Please select your state below to view the exact <strong>resale certificate or tax exemption forms required </strong>before submitting your wholesale application.<br/><br/>If you have questions about your documentation, we recommend contacting your state’s Department of Revenue or Tax Agency for guidance.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_pHpVpe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Which states do not require sales tax documentation? 🚫",
+            "icon": "check_mark",
+            "row_content": "<p>If you’re based in one of these states, no documentation is required:<br/></p><ul><li>Delaware</li><li>Montana</li><li>New Hampshire</li><li>Oregon</li><li>Alaska (note: some cities do charge local sales tax)</li></ul>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_NJVPYX",
-        "collapsible_row_ehNzYD"
+        "collapsible_row_ehNzYD",
+        "collapsible_row_pHpVpe"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
