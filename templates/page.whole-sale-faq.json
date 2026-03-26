@@ -297,6 +297,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_ABf3C9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Hawaii",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_kAyLDx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Idaho",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -311,7 +329,9 @@
         "collapsible_row_dECtRy",
         "collapsible_row_DFjeUD",
         "collapsible_row_EzwWPx",
-        "collapsible_row_n4eA3G"
+        "collapsible_row_n4eA3G",
+        "collapsible_row_ABf3C9",
+        "collapsible_row_kAyLDx"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
