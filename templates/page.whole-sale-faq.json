@@ -279,6 +279,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_EzwWPx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Florida",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_n4eA3G": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Georgia",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -291,7 +309,9 @@
         "collapsible_row_VbQbDb",
         "collapsible_row_GdK7Na",
         "collapsible_row_dECtRy",
-        "collapsible_row_DFjeUD"
+        "collapsible_row_DFjeUD",
+        "collapsible_row_EzwWPx",
+        "collapsible_row_n4eA3G"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
