@@ -418,7 +418,6 @@
       "block_order": [
         "caption_6VkJXJ"
       ],
-      "disabled": true,
       "name": "FAQ",
       "settings": {
         "desktop_content_position": "center",
@@ -435,9 +434,9 @@
         "collapsible_row_wc8MWP": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Collapsible row",
+            "heading": "What is private label jewelry production?",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p>Private label jewelry production allows you to create custom-branded products such as permanent jewelry components, charms, packaging, and inserts designed and produced by Bay & Stew under your brand. It is ideal for makers looking to scale with cohesive, professional branding.</p>",
             "page": ""
           }
         },
@@ -475,7 +474,6 @@
         "collapsible_row_mXpPVe",
         "collapsible_row_gMKKXC"
       ],
-      "disabled": true,
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
