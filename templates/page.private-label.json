@@ -466,13 +466,23 @@
             "row_content": "<p>Yes. We design and produce custom jewelry packaging including boxes, handle bags, pouches, and complete packaging systems. Branded packaging helps elevate your unboxing experience and strengthen brand recognition.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_4nNHER": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is the minimum order quantity (MOQ) for private label products?",
+            "icon": "check_mark",
+            "row_content": "<p>MOQ varies depending on the product type, materials, and customization level. Smaller items like inserts or stickers typically have lower MOQs, while custom jewelry components and packaging require higher minimums. Exact MOQs will be provided after reviewing your inquiry.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_wc8MWP",
         "collapsible_row_zmBBXY",
         "collapsible_row_mXpPVe",
-        "collapsible_row_gMKKXC"
+        "collapsible_row_gMKKXC",
+        "collapsible_row_4nNHER"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
