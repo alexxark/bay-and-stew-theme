@@ -53,7 +53,7 @@
             "image_2": "shopify://shop_images/Private_Label_Carousel2.jpg",
             "image_3": "shopify://shop_images/Private_Label_Carousel3.jpg",
             "banner_height": 500,
-            "mobile_banner_height": 500,
+            "mobile_banner_height": 200,
             "desktop_width_percent": 100,
             "padding": 0,
             "image_gap": 0,
