@@ -502,6 +502,15 @@
             "row_content": "<p>Production timelines vary based on order size, customization level, and materials. Once your request is reviewed, we will provide a clear estimated timeline tailored to your project.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_BnMFja": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I request multiple products in one private label order?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes. You can bundle multiple services such as jewelry components, packaging, and inserts into one cohesive private label order. We can help you create a full branded product experience.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -512,7 +521,8 @@
         "collapsible_row_4nNHER",
         "collapsible_row_4iUYxg",
         "collapsible_row_UMA9tr",
-        "collapsible_row_qkYnfy"
+        "collapsible_row_qkYnfy",
+        "collapsible_row_BnMFja"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
