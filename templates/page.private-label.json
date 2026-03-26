@@ -40,7 +40,7 @@
         "color_scheme": "",
         "full_width": true,
         "padding_top": 0,
-        "padding_bottom": 8
+        "padding_bottom": 20
       }
     },
     "1774558438b870edc9": {
@@ -53,7 +53,7 @@
             "image_2": "shopify://shop_images/Private_Label_Carousel2.jpg",
             "image_3": "shopify://shop_images/Private_Label_Carousel3.jpg",
             "banner_height": 400,
-            "mobile_banner_height": 400,
+            "mobile_banner_height": 500,
             "desktop_width_percent": 100,
             "padding": 0,
             "image_gap": 0,
