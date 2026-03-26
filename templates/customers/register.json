@@ -44,7 +44,7 @@
           "type": "button",
           "settings": {
             "button_label": "View Your State Requirements",
-            "button_link": "",
+            "button_link": "https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements",
             "button_style_secondary": false,
             "button_label_2": "",
             "button_link_2": "",
@@ -84,7 +84,7 @@
         "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
         "full_width": true,
         "padding_top": 44,
-        "padding_bottom": 8
+        "padding_bottom": 44
       }
     },
     "rich_text_a4rBTC": {
@@ -100,10 +100,10 @@
           "type": "button",
           "settings": {
             "button_label": "Retail Form",
-            "button_link": "",
+            "button_link": "https://bayandstew.myshopify.com/pages/retail-customers",
             "button_style_secondary": true,
             "button_label_2": "International Form",
-            "button_link_2": "",
+            "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
             "button_style_secondary_2": true
           }
         }
