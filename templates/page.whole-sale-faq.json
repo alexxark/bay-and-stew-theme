@@ -253,7 +253,7 @@
           "settings": {
             "heading": "California",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<ol><li>Completed and signed <a href=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\" title=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\">California Resale Certificate Form (CDTFA-230)</a><br/></li><li>California Seller's Permit</li></ol>",
             "page": ""
           }
         },
