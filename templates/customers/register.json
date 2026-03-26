@@ -90,6 +90,12 @@
     "rich_text_a4rBTC": {
       "type": "rich-text",
       "blocks": {
+        "text_aJRazH": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>Need retail or international support with your application?</h3>"
+          }
+        },
         "button_nUcjiy": {
           "type": "button",
           "settings": {
@@ -100,24 +106,11 @@
             "button_link_2": "",
             "button_style_secondary_2": true
           }
-        },
-        "text_aJRazH": {
-          "type": "text",
-          "settings": {
-            "text": "<p><em>For retail buyers </em><a href=\"https://bayandstew.myshopify.com/pages/retail-customers\" title=\"https://bayandstew.myshopify.com/pages/retailcustomer\"><em>Retail Form</em></a></p>"
-          }
-        },
-        "text_DQYzX8": {
-          "type": "text",
-          "settings": {
-            "text": "<p><em>For international buyers </em><a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" target=\"_blank\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><em>International Form</em></a></p>"
-          }
         }
       },
       "block_order": [
-        "button_nUcjiy",
         "text_aJRazH",
-        "text_DQYzX8"
+        "button_nUcjiy"
       ],
       "disabled": true,
       "settings": {
