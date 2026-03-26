@@ -414,6 +414,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_9FgMHb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Mississippi",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_tPprHB": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Missouri",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -441,7 +459,9 @@
         "collapsible_row_ax8q6H",
         "collapsible_row_Vy3bzy",
         "collapsible_row_rVifYw",
-        "collapsible_row_BkNCPm"
+        "collapsible_row_BkNCPm",
+        "collapsible_row_9FgMHb",
+        "collapsible_row_tPprHB"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
