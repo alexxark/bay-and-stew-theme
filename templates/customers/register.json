@@ -23,15 +23,15 @@
         "heading_Cgyeg3": {
           "type": "heading",
           "settings": {
-            "heading": "U.S. BASED",
-            "heading_size": "h1"
+            "heading": "<strong>U.S. BASED</strong>",
+            "heading_size": "h0"
           }
         },
         "heading_3kEPUA": {
           "type": "heading",
           "settings": {
-            "heading": "WHOLESALE APPLICATION FORM",
-            "heading_size": "h2"
+            "heading": "Wholesale Application Form",
+            "heading_size": "h1"
           }
         },
         "text_fqgnLU": {
@@ -74,7 +74,6 @@
         "text_QqNNH7",
         "caption_tprPrw"
       ],
-      "disabled": true,
       "custom_css": [
         "h3 {font-family: sans-serif; font-weight: 400; letter-spacing: 0.06em;}"
       ],
@@ -112,7 +111,6 @@
         "text_aJRazH",
         "button_nUcjiy"
       ],
-      "disabled": true,
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -142,6 +140,7 @@
         "text_daGM4t",
         "text_GCdNxE"
       ],
+      "disabled": true,
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
