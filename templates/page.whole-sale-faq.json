@@ -289,7 +289,7 @@
           "settings": {
             "heading": "Georgia",
             "icon": "check_mark",
-            "row_content": "<ol><li>Completed and signed Georgia Sales Tax Certificate of Registration (ST-5 Certificate)<br/></li><li>California Seller's Permit</li></ol>",
+            "row_content": "<ol><li>Completed and signed <a href=\"https://drive.google.com/file/d/1-rWiSX2lwNstLVmTpwsJdbDHpNF-9uOG/view\" title=\"https://drive.google.com/file/d/1-rWiSX2lwNstLVmTpwsJdbDHpNF-9uOG/view\">Georgia Sales Tax Certificate of Registration (ST-5 Certificate)</a><br/></li><li>Georgia Sales Tax Certificate of Registration</li></ol>",
             "page": ""
           }
         },
