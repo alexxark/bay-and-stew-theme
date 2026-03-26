@@ -227,15 +227,6 @@
             "page": ""
           }
         },
-        "collapsible_row_4EQLWJ": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Alaska",
-            "icon": "check_mark",
-            "row_content": "",
-            "page": ""
-          }
-        },
         "collapsible_row_WNGm4A": {
           "type": "collapsible_row",
           "settings": {
@@ -276,15 +267,6 @@
           "type": "collapsible_row",
           "settings": {
             "heading": "Connecticut",
-            "icon": "check_mark",
-            "row_content": "",
-            "page": ""
-          }
-        },
-        "collapsible_row_DFjeUD": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Delaware",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
@@ -443,15 +425,6 @@
             "page": ""
           }
         },
-        "collapsible_row_n3r6Hh": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Montana",
-            "icon": "check_mark",
-            "row_content": "",
-            "page": ""
-          }
-        },
         "collapsible_row_rVzfUn": {
           "type": "collapsible_row",
           "settings": {
@@ -475,13 +448,11 @@
         "collapsible_row_8zNXwQ",
         "collapsible_row_f3PfJd",
         "collapsible_row_JWmQXL",
-        "collapsible_row_4EQLWJ",
         "collapsible_row_WNGm4A",
         "collapsible_row_Pf4f8V",
         "collapsible_row_VbQbDb",
         "collapsible_row_GdK7Na",
         "collapsible_row_dECtRy",
-        "collapsible_row_DFjeUD",
         "collapsible_row_EzwWPx",
         "collapsible_row_n4eA3G",
         "collapsible_row_ABf3C9",
@@ -499,7 +470,6 @@
         "collapsible_row_BkNCPm",
         "collapsible_row_9FgMHb",
         "collapsible_row_tPprHB",
-        "collapsible_row_n3r6Hh",
         "collapsible_row_rVzfUn",
         "collapsible_row_HiTNXt"
       ],
