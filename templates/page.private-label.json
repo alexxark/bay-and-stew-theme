@@ -484,6 +484,15 @@
             "row_content": "<p>Yes. Our in-house design team can help you develop your idea from concept to production. Whether you have a rough idea, inspiration, or a full mood board, we can assist with artwork, branding, and design direction.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_UMA9tr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What types of businesses is private label best for?",
+            "icon": "check_mark",
+            "row_content": "<p>Private label services are ideal for permanent jewelry makers, small jewelry brands scaling into wholesale, event-based businesses, educators, workshop hosts, and creators launching or expanding their jewelry line.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -492,7 +501,8 @@
         "collapsible_row_mXpPVe",
         "collapsible_row_gMKKXC",
         "collapsible_row_4nNHER",
-        "collapsible_row_4iUYxg"
+        "collapsible_row_4iUYxg",
+        "collapsible_row_UMA9tr"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
