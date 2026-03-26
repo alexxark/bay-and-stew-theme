@@ -396,6 +396,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_rVifYw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Michigan",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_BkNCPm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Minnesota",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -421,7 +439,9 @@
         "collapsible_row_TVqMpx",
         "collapsible_row_hwHbqb",
         "collapsible_row_ax8q6H",
-        "collapsible_row_Vy3bzy"
+        "collapsible_row_Vy3bzy",
+        "collapsible_row_rVifYw",
+        "collapsible_row_BkNCPm"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
