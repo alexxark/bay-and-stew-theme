@@ -460,6 +460,33 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_MtxDA4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Mexico",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_RFwYgN": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New York",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_9xjnFz": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "North Carolina",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -491,7 +518,10 @@
         "collapsible_row_rVzfUn",
         "collapsible_row_HiTNXt",
         "collapsible_row_TbDWn6",
-        "collapsible_row_UqiFGd"
+        "collapsible_row_UqiFGd",
+        "collapsible_row_MtxDA4",
+        "collapsible_row_RFwYgN",
+        "collapsible_row_9xjnFz"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
