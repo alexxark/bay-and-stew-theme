@@ -159,6 +159,7 @@
     },
     "page_FwEPHh": {
       "type": "page",
+      "disabled": true,
       "custom_css": [
         "{font-size: 36px; text-align: center;}",
         "h2 {font-size: 36px;}"
