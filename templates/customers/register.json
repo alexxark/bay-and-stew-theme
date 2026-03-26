@@ -37,7 +37,7 @@
         "text_fqgnLU": {
           "type": "text",
           "settings": {
-            "text": "<p><strong>REQUIREMENTS BY STATE</strong></p><p>Before applying, check which documents your state <em>requires to avoid delays.</em></p>"
+            "text": "<h3>REQUIREMENTS BY STATE</h3>"
           }
         },
         "button_atMBkc": {
@@ -49,6 +49,12 @@
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
+          }
+        },
+        "text_QqNNH7": {
+          "type": "text",
+          "settings": {
+            "text": "<p></p><p>Before applying, check which documents your state <em>requires to avoid delays.</em></p>"
           }
         },
         "caption_tprPrw": {
@@ -65,6 +71,7 @@
         "heading_3kEPUA",
         "text_fqgnLU",
         "button_atMBkc",
+        "text_QqNNH7",
         "caption_tprPrw"
       ],
       "disabled": true,
@@ -83,6 +90,17 @@
     "rich_text_a4rBTC": {
       "type": "rich-text",
       "blocks": {
+        "button_nUcjiy": {
+          "type": "button",
+          "settings": {
+            "button_label": "Retail Form",
+            "button_link": "",
+            "button_style_secondary": true,
+            "button_label_2": "International Form",
+            "button_link_2": "",
+            "button_style_secondary_2": true
+          }
+        },
         "text_aJRazH": {
           "type": "text",
           "settings": {
@@ -97,8 +115,39 @@
         }
       },
       "block_order": [
+        "button_nUcjiy",
         "text_aJRazH",
         "text_DQYzX8"
+      ],
+      "disabled": true,
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 44,
+        "padding_bottom": 44
+      }
+    },
+    "rich_text_BJ7Ma8": {
+      "type": "rich-text",
+      "blocks": {
+        "text_daGM4t": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For retail buyers </em><a href=\"https://bayandstew.myshopify.com/pages/retail-customers\" title=\"https://bayandstew.myshopify.com/pages/retailcustomer\"><em>Retail Form</em></a></p>"
+          }
+        },
+        "text_GCdNxE": {
+          "type": "text",
+          "settings": {
+            "text": "<p><em>For international buyers </em><a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" target=\"_blank\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><em>International Form</em></a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_daGM4t",
+        "text_GCdNxE"
       ],
       "settings": {
         "desktop_content_position": "center",
@@ -118,7 +167,7 @@
       "settings": {
         "custom_liquid": "<script type=\"text/javascript\" src=\"https://form.jotform.com/jsform/252956455857171\"></script>",
         "color_scheme": "",
-        "padding_top": 40,
+        "padding_top": 0,
         "padding_bottom": 52
       }
     }
@@ -127,6 +176,7 @@
     "main",
     "rich_text_mzQxJV",
     "rich_text_a4rBTC",
+    "rich_text_BJ7Ma8",
     "custom_liquid_6JPy4b"
   ]
 }
