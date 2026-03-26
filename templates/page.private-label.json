@@ -70,7 +70,7 @@
             "dot_active_color": "#121212",
             "dot_inactive_color": "#cccccc",
             "autoplay": true,
-            "autoplay_speed": 9
+            "autoplay_speed": 7
           },
           "blocks": {}
         }
