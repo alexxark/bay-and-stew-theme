@@ -243,6 +243,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_VbQbDb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "California",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_GdK7Na": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Colorado",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -251,7 +269,9 @@
         "collapsible_row_JWmQXL",
         "collapsible_row_4EQLWJ",
         "collapsible_row_WNGm4A",
-        "collapsible_row_Pf4f8V"
+        "collapsible_row_Pf4f8V",
+        "collapsible_row_VbQbDb",
+        "collapsible_row_GdK7Na"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
