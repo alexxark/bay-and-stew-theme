@@ -333,6 +333,24 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_wCVf3H": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Iowa",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_q4hGWf": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kansas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -351,7 +369,9 @@
         "collapsible_row_ABf3C9",
         "collapsible_row_kAyLDx",
         "collapsible_row_xggztw",
-        "collapsible_row_xAWyFx"
+        "collapsible_row_xAWyFx",
+        "collapsible_row_wCVf3H",
+        "collapsible_row_q4hGWf"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
