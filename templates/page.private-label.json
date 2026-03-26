@@ -52,7 +52,7 @@
             "image_1": "shopify://shop_images/Private_Label_Carousel-1.jpg",
             "image_2": "shopify://shop_images/Private_Label_Carousel2.jpg",
             "image_3": "shopify://shop_images/Private_Label_Carousel3.jpg",
-            "banner_height": 300,
+            "banner_height": 400,
             "mobile_banner_height": 400,
             "desktop_width_percent": 100,
             "padding": 0,
@@ -70,7 +70,7 @@
             "dot_active_color": "#121212",
             "dot_inactive_color": "#cccccc",
             "autoplay": true,
-            "autoplay_speed": 8
+            "autoplay_speed": 7
           },
           "blocks": {}
         }
