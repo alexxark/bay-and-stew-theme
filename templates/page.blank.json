@@ -225,6 +225,15 @@
             "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
+        },
+        "collapsible_row_femt3L": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Mississippi",
+            "icon": "check_mark",
+            "row_content": "<p>Mississippi Sales Tax Permit</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -250,7 +259,8 @@
         "collapsible_row_Yyxehw",
         "collapsible_row_iQDArJ",
         "collapsible_row_AfYp7C",
-        "collapsible_row_LWyCGC"
+        "collapsible_row_LWyCGC",
+        "collapsible_row_femt3L"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
