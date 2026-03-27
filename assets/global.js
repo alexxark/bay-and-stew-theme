@@ -746,7 +746,12 @@ class SliderComponent extends HTMLElement {
     this.slidesPerPage = Math.floor(
       (this.slider.clientWidth - this.sliderItemsToShow[0].offsetLeft) / this.sliderItemOffset
     );
-    this.totalPages = this.sliderItemsToShow.length - this.slidesPerPage + 1;
+    this.pageScrollMode = this.hasAttribute('data-page-scroll');
+    if (this.pageScrollMode) {
+      this.totalPages = Math.ceil(this.sliderItemsToShow.length / this.slidesPerPage);
+    } else {
+      this.totalPages = this.sliderItemsToShow.length - this.slidesPerPage + 1;
+    }
     this.update();
   }
 
@@ -761,7 +766,11 @@ class SliderComponent extends HTMLElement {
     if (!this.slider || !this.nextButton) return;
 
     const previousPage = this.currentPage;
-    this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+    if (this.pageScrollMode) {
+      this.currentPage = Math.floor(Math.round(this.slider.scrollLeft / this.sliderItemOffset) / this.slidesPerPage) + 1;
+    } else {
+      this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+    }
 
     if (this.currentPageElement && this.pageTotalElement) {
       this.currentPageElement.textContent = this.currentPage;
@@ -801,7 +810,7 @@ class SliderComponent extends HTMLElement {
 
   onButtonClick(event) {
     event.preventDefault();
-    const step = event.currentTarget.dataset.step || 1;
+    const step = this.pageScrollMode ? this.slidesPerPage : (event.currentTarget.dataset.step || 1);
     this.slideScrollPosition =
       event.currentTarget.name === 'next'
         ? this.slider.scrollLeft + step * this.sliderItemOffset
