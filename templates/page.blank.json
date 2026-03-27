@@ -16,6 +16,29 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_z34ezE": {
+      "type": "rich-text",
+      "blocks": {
+        "text_GVHkQn": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Before You Apply — Please Read Carefully<br/></h2><p><strong>All U.S. wholesale applicants must submit valid resale documentation with their application.</strong><br/><br/>Your application will not be approved without the required form(s). <br/><br/><strong>To submit an application: </strong></p><p><strong>✓ Complete your wholesale application<br/>✓ Find your state below<br/>✓ Upload the required documents<br/>✓ Submit your application</strong><br/><br/>Applications are typically reviewed within 1 business day.<br/><br/>Requirements vary by state. Please locate your state below and upload the correct documentation on application or email it to <a href=\"hello@bayandstew.com\"><strong>hello@bayandstew.com</strong></a></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_GVHkQn"
+      ],
+      "name": "Please Read",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "left",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text_GKTNzB": {
       "type": "rich-text",
       "blocks": {
@@ -48,34 +71,10 @@
         "button_y7LrLh",
         "text_Yypdqk"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "rich_text_z34ezE": {
-      "type": "rich-text",
-      "blocks": {
-        "text_GVHkQn": {
-          "type": "text",
-          "settings": {
-            "text": "<h2>Before You Apply — Please Read Carefully<br/></h2><p><strong>All U.S. wholesale applicants must submit valid resale documentation with their application.</strong><br/><br/>Your application will not be approved without the required form(s). <br/><br/><strong>To submit an application: </strong></p><p><strong>✓ Complete your wholesale application<br/>✓ Find your state below<br/>✓ Upload the required documents<br/>✓ Submit your application</strong><br/><br/>Applications are typically reviewed within 1 business day.<br/><br/>Requirements vary by state. Please locate your state below and upload the correct documentation on application or email it to <a href=\"hello@bayandstew.com\"><strong>hello@bayandstew.com</strong></a></p>"
-          }
-        }
-      },
-      "block_order": [
-        "text_GVHkQn"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "left",
         "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
         "padding_top": 40,
@@ -660,8 +659,8 @@
   },
   "order": [
     "main",
-    "rich_text_GKTNzB",
     "rich_text_z34ezE",
+    "rich_text_GKTNzB",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
     "rich_text_pifMqw"
