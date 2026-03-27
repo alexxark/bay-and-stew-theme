@@ -19,27 +19,20 @@
     "rich_text_GKTNzB": {
       "type": "rich-text",
       "blocks": {
-        "heading_BLJknw": {
-          "type": "heading",
-          "settings": {
-            "heading": "Looking to apply?",
-            "heading_size": "h1"
-          }
-        },
         "text_GTALt6": {
           "type": "text",
           "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+            "text": "<h3>Ready to Apply for Wholesale?</h3><p></p><p>Select your location to get started on your application:</p>"
           }
         },
         "button_y7LrLh": {
           "type": "button",
           "settings": {
-            "button_label": "Button label",
-            "button_link": "",
+            "button_label": "USA",
+            "button_link": "https://bayandstew.com/account/register",
             "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
+            "button_label_2": "Outside of USA",
+            "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
             "button_style_secondary_2": false
           }
         },
@@ -51,7 +44,6 @@
         }
       },
       "block_order": [
-        "heading_BLJknw",
         "text_GTALt6",
         "button_y7LrLh",
         "text_Yypdqk"
