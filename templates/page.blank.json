@@ -142,6 +142,29 @@
         "padding_bottom": 28
       }
     },
+    "rich_text_GKTNzB": {
+      "type": "rich-text",
+      "blocks": {
+        "text_GTALt6": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>STEP 2</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "text_GTALt6"
+      ],
+      "name": "STEP 2:Ready?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
     "collapsible_content_zeEk4Y": {
       "type": "collapsible-content",
       "blocks": {
@@ -660,7 +683,7 @@
         "open_first_collapsible_row": false,
         "image_ratio": "adapt",
         "desktop_layout": "image_second",
-        "padding_top": 36,
+        "padding_top": 20,
         "padding_bottom": 48
       }
     },
@@ -679,16 +702,16 @@
         "padding_bottom": 0
       }
     },
-    "rich_text_GKTNzB": {
+    "rich_text_CPjeY4": {
       "type": "rich-text",
       "blocks": {
-        "text_GTALt6": {
+        "text_gejaYn": {
           "type": "text",
           "settings": {
             "text": "<h2>STEP 2</h2><h3>Ready to Apply for Wholesale?</h3><p></p><p>Select your location to get started on your application:</p>"
           }
         },
-        "button_y7LrLh": {
+        "button_4wrcRQ": {
           "type": "button",
           "settings": {
             "button_label": "USA",
@@ -699,7 +722,7 @@
             "button_style_secondary_2": false
           }
         },
-        "text_Yypdqk": {
+        "text_fKNMwe": {
           "type": "text",
           "settings": {
             "text": "<p>For more information, please visit our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
@@ -707,11 +730,11 @@
         }
       },
       "block_order": [
-        "text_GTALt6",
-        "button_y7LrLh",
-        "text_Yypdqk"
+        "text_gejaYn",
+        "button_4wrcRQ",
+        "text_fKNMwe"
       ],
-      "name": "Ready?",
+      "name": "STEP 2:Ready?",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -766,9 +789,10 @@
     "rich_text_t8Yr8c",
     "multicolumn_FdDAYY",
     "rich_text_RcKJL7",
+    "rich_text_GKTNzB",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
-    "rich_text_GKTNzB",
+    "rich_text_CPjeY4",
     "rich_text_pifMqw"
   ]
 }
