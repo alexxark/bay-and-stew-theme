@@ -57,9 +57,9 @@
         "text_kPG4tD"
       ],
       "custom_css": [
-        "h2 {font-size: 22px; font-family: sans-serif; }"
+        "h2 {font-size: 22px; font-family: sans-serif;}"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "to submit",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
