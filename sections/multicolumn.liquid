@@ -150,12 +150,19 @@
       </ul>
 
       {%- if section.settings.swipe_on_mobile or section.settings.swipe_on_desktop -%}
+        {%- assign mc_columns = section.settings.columns_desktop -%}
+        {%- assign mc_total_pages = section.blocks.size | divided_by: mc_columns -%}
+        {%- assign mc_remainder = section.blocks.size | modulo: mc_columns -%}
+        {%- if mc_remainder > 0 -%}
+          {%- assign mc_total_pages = mc_total_pages | plus: 1 -%}
+        {%- endif -%}
         <div class="slider-buttons ">
           <button
             type="button"
             class="slider-button slider-button--prev"
             name="previous"
             aria-label="{{ 'general.slider.previous_slide' | t }}"
+            data-step="{{ mc_columns }}"
           >
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
@@ -163,13 +170,14 @@
             <span class="slider-counter--current">1</span>
             <span aria-hidden="true"> / </span>
             <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
-            <span class="slider-counter--total">{{ section.blocks.size }}</span>
+            <span class="slider-counter--total">{{ mc_total_pages }}</span>
           </div>
           <button
             type="button"
             class="slider-button slider-button--next"
             name="next"
             aria-label="{{ 'general.slider.next_slide' | t }}"
+            data-step="{{ mc_columns }}"
           >
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
@@ -197,74 +205,34 @@
   (function() {
     var sliderEl = document.getElementById('MulticolumnSlider-{{ section.id }}');
     if (!sliderEl) return;
+    var perPage = {{ section.settings.columns_desktop }};
+    var totalSlides = {{ section.blocks.size }};
+    var totalPages = Math.ceil(totalSlides / perPage);
+    var slider = sliderEl.querySelector('[id^="Slider-"]');
+    var currentEl = sliderEl.querySelector('.slider-counter--current');
+    var totalEl = sliderEl.querySelector('.slider-counter--total');
+    if (!slider || !currentEl) return;
 
-    function patchSlider() {
-      // Wait until the component has initialized its properties
-      if (!sliderEl.slider || !sliderEl.sliderItemsToShow || sliderEl.sliderItemsToShow.length < 2) {
-        return requestAnimationFrame(patchSlider);
+    function updatePageCounter() {
+      var slides = sliderEl.querySelectorAll('[id^="Slide-"]');
+      var visible = [];
+      for (var i = 0; i < slides.length; i++) {
+        if (slides[i].clientWidth > 0) visible.push(slides[i]);
       }
-
-      var perPage = sliderEl.slidesPerPage;
-      if (perPage < 1) perPage = 3;
-      var totalSlides = sliderEl.sliderItemsToShow.length;
-      var totalPages = Math.ceil(totalSlides / perPage);
-      var itemOffset = sliderEl.sliderItemOffset;
-
-      // Patch totalPages so the component's own update() uses it
-      sliderEl.totalPages = totalPages;
-
-      // Override update to use page-based current page
-      sliderEl.update = function() {
-        if (!this.slider || !this.nextButton) return;
-        var previousPage = this.currentPage;
-        var scrollIndex = Math.round(this.slider.scrollLeft / itemOffset);
-        this.currentPage = Math.floor(scrollIndex / perPage) + 1;
-        this.currentPage = Math.max(1, Math.min(this.currentPage, totalPages));
-
-        if (this.currentPageElement) this.currentPageElement.textContent = this.currentPage;
-        if (this.pageTotalElement) this.pageTotalElement.textContent = totalPages;
-
-        if (this.currentPage != previousPage) {
-          this.dispatchEvent(new CustomEvent('slideChanged', {
-            detail: { currentPage: this.currentPage, currentElement: this.sliderItemsToShow[this.currentPage - 1] }
-          }));
-        }
-
-        if (this.slider.scrollLeft <= 0) {
-          this.prevButton.setAttribute('disabled', 'disabled');
-        } else {
-          this.prevButton.removeAttribute('disabled');
-        }
-
-        var lastSlide = this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
-        if (lastSlide.offsetLeft + lastSlide.clientWidth <= this.slider.clientWidth + this.slider.scrollLeft + 2) {
-          this.nextButton.setAttribute('disabled', 'disabled');
-        } else {
-          this.nextButton.removeAttribute('disabled');
-        }
-      };
-
-      // Override button click to scroll by full page
-      sliderEl.onButtonClick = function(event) {
-        event.preventDefault();
-        var scrollAmount = perPage * itemOffset;
-        this.slideScrollPosition = event.currentTarget.name === 'next'
-          ? this.slider.scrollLeft + scrollAmount
-          : this.slider.scrollLeft - scrollAmount;
-        this.setSlidePosition(this.slideScrollPosition);
-      };
-
-      // Trigger initial update
-      sliderEl.update();
+      if (visible.length < 2) return;
+      var itemOffset = visible[1].offsetLeft - visible[0].offsetLeft;
+      if (itemOffset <= 0) return;
+      var scrollIndex = Math.round(slider.scrollLeft / itemOffset);
+      var page = Math.floor(scrollIndex / perPage) + 1;
+      page = Math.max(1, Math.min(page, totalPages));
+      currentEl.textContent = page;
+      totalEl.textContent = totalPages;
     }
 
-    if (customElements.get('slider-component')) {
-      requestAnimationFrame(function() { requestAnimationFrame(patchSlider); });
-    } else {
-      customElements.whenDefined('slider-component').then(function() {
-        requestAnimationFrame(patchSlider);
-      });
-    }
+    slider.addEventListener('scroll', updatePageCounter);
+    // Run on load and after any resize
+    updatePageCounter();
+    new ResizeObserver(updatePageCounter).observe(slider);
   })();
 </script>
 
