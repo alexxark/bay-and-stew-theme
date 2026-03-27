@@ -550,8 +550,8 @@
         "button_L6errj": {
           "type": "button",
           "settings": {
-            "button_label": "Button label",
-            "button_link": "",
+            "button_label": "Contact Us",
+            "button_link": "https://bayandstew.com/pages/contact",
             "button_style_secondary": false,
             "button_label_2": "",
             "button_link_2": "",
@@ -563,7 +563,9 @@
         "text_y6q98z",
         "button_L6errj"
       ],
-      "disabled": true,
+      "custom_css": [
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ color: #73635b; /* brand color */}"
+      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
