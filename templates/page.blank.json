@@ -564,7 +564,7 @@
         "button_L6errj"
       ],
       "custom_css": [
-        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ color: #73635b; /* brand color */}"
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
