@@ -12,8 +12,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        "{font-size: 36px; text-align: center;}",
-        "h2 {font-size: 36px;}"
+        "{font-size: 36px; text-align: center;}"
       ],
       "settings": {
         "padding_top": 36,
@@ -49,7 +48,7 @@
         "text_kPG4tD": {
           "type": "text",
           "settings": {
-            "text": "<h2>To submit an application: </h2>"
+            "text": "<h2>To Submit an Application: </h2>"
           }
         }
       },
@@ -76,7 +75,7 @@
           "type": "column",
           "settings": {
             "title": "<strong>STEP 1</strong>",
-            "text": "<p><strong>Find your state requirements below</strong></p>",
+            "text": "<p>Find your state requirements below</p>",
             "link_label": "",
             "link": ""
           }
@@ -85,7 +84,7 @@
           "type": "column",
           "settings": {
             "title": "<strong>STEP 2</strong>",
-            "text": "<p><strong>Complete your  application & upload the required documents</strong></p>",
+            "text": "<p>Complete your  application & upload the required documents</p>",
             "link_label": "",
             "link": ""
           }
@@ -148,7 +147,7 @@
         "text_GTALt6": {
           "type": "text",
           "settings": {
-            "text": "<h2>STEP 2</h2>"
+            "text": "<h2>STEP 1</h2>"
           }
         }
       },
