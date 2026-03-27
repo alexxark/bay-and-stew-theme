@@ -19,6 +19,68 @@
         "padding_bottom": 0
       }
     },
+    "rich_text_6afELg": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_WwJbhH": {
+          "type": "heading",
+          "settings": {
+            "heading": "Build Your Brand with Us!",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_WwJbhH"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 20
+      }
+    },
+    "1774558438b870edc9": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_32b49b4_gMLd8U": {
+          "type": "ai_gen_block_32b49b4",
+          "settings": {
+            "image_1": "shopify://shop_images/Private_Label_Carousel-1.jpg",
+            "image_2": "shopify://shop_images/Private_Label_Carousel2.jpg",
+            "image_3": "shopify://shop_images/Private_Label_Carousel3.jpg",
+            "banner_height": 500,
+            "mobile_banner_height": 200,
+            "desktop_width_percent": 100,
+            "padding": 0,
+            "image_gap": 0,
+            "border_radius": 0,
+            "image_border_radius": 0,
+            "background_color": "#ffffff",
+            "nav_button_size": 40,
+            "nav_button_offset": 20,
+            "nav_button_color": "#ffffff",
+            "nav_icon_color": "#121212",
+            "show_dots": true,
+            "dots_spacing": 30,
+            "dot_size": 8,
+            "dot_active_color": "#121212",
+            "dot_inactive_color": "#cccccc",
+            "autoplay": true,
+            "autoplay_speed": 10
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_32b49b4_gMLd8U"
+      ],
+      "custom_css": [],
+      "settings": {}
+    },
     "image_banner_rJf3hX": {
       "type": "image-banner",
       "blocks": {
@@ -54,6 +116,7 @@
         "text_k4JLbA",
         "buttons_nXpcfk"
       ],
+      "disabled": true,
       "custom_css": [
         "@media screen and (max-width: 768px) {.banner__text {padding: 15px 20px; }}"
       ],
@@ -91,11 +154,23 @@
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
-        "padding_top": 40,
+        "padding_top": 36,
         "padding_bottom": 8
       }
     },
     "rich_text_DV7iQQ": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_mBQtDB": {
       "type": "rich-text",
       "name": "DIVIDER",
       "settings": {
@@ -117,10 +192,17 @@
             "text_style": "caption-with-letter-spacing",
             "text_size": "medium"
           }
+        },
+        "text_mpgGmK": {
+          "type": "text",
+          "settings": {
+            "text": "<p>From custom jewelry components to artwork and design services, our in-house creative team helps makers bring their product ideas to life. High-quality, collaborative, and hassle-free.</p>"
+          }
         }
       },
       "block_order": [
-        "caption_pJBRik"
+        "caption_pJBRik",
+        "text_mpgGmK"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
@@ -128,7 +210,7 @@
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
-        "padding_top": 8,
+        "padding_top": 16,
         "padding_bottom": 8
       }
     },
@@ -138,8 +220,9 @@
         "column_yfmDRp": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/bay-private-label-02_0429feb3-01bb-440c-aac3-dc937cb9ccd5.png",
             "title": "Artwork & Design Services",
-            "text": "<h4>Design support to help you develop visuals for your brand.</h4><h5>Prints, illustrations, & original artwork</h5>",
+            "text": "<h5>Custom Graphics, Prints, and Illustrations for Marketing Materials</h5><h4>Design support to help you build a cohesive, elevated brand.<br/></h4>",
             "link_label": "",
             "link": ""
           }
@@ -147,17 +230,9 @@
         "column_ibiqXb": {
           "type": "column",
           "settings": {
-            "title": "Branded Paper Goods",
-            "text": "<h4>Custom-designed pieces that elevate your customer experience.</h4><h5>Card Decks/Playing Cards & Stickers <br/><br/><em>(vinyl, die-cut, custom designs)</em></h5>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_mHkLDV": {
-          "type": "column",
-          "settings": {
-            "title": "Custom Apparel & Add-Ons",
-            "text": "<h4>Branded merchandise to expand your product offering.<br/></h4><h5>Custom Hats & Custom Patches<br/><br/><em>(embroidered or screen printed) </em></h5>",
+            "image": "shopify://shop_images/bay-private-label-03.png",
+            "title": "Unique Branded Products",
+            "text": "<h5>Card Decks, Hats, Custom Patches, Shipping Inserts, and Stickers<br/></h5><h4>Custom-designed pieces that enhance your customer experience and expand your brand reach.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -165,8 +240,9 @@
         "column_KKNMHU": {
           "type": "column",
           "settings": {
-            "title": "Permanent Jewelry Components",
-            "text": "<h4>Designed for makers building or scaling their jewelry business. <br/></h4><h5>Custom Charms, Connectors, & Stamps <br/><br/><em>(MOQ VARIES)</em></h5>",
+            "image": "shopify://shop_images/bay-private-label-04.png",
+            "title": "Custom Jewelry Components",
+            "text": "<h5>Custom Charms, Connectors, & Stamps <br/></h5><h4>Thoughtfully designed elements for makers building or scaling their jewelry business.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -174,8 +250,9 @@
         "column_bdjKeE": {
           "type": "column",
           "settings": {
-            "title": "Packaging & Brand Materials",
-            "text": "<h4>Everything you need to create a cohesive, branded unboxing experience.<br/></h4><h5>Custom Boxes, Handle Bags,<br/>& Shipping Inserts/Postcards<br/><br/><em>(MOQ VARIES)</em></h5>",
+            "image": "shopify://shop_images/bay-private-label-05.png",
+            "title": "Jewelry Cases & Packaging",
+            "text": "<h5>Branded boxes, Handle bags, and Fully Custom Packaging Solutions</h5><h4>Everything you need to create a memorable unboxing experience.</h4>",
             "link_label": "",
             "link": ""
           }
@@ -184,13 +261,14 @@
       "block_order": [
         "column_yfmDRp",
         "column_ibiqXb",
-        "column_mHkLDV",
         "column_KKNMHU",
         "column_bdjKeE"
       ],
       "custom_css": [
-        "h3 {font-family: Helvetica, Arial, sans-serif; font-size: 22px; /* adjust heading size */ color: #000000; /* brand color */}",
-        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 18px; /* adjust heading size */ color: #73635b; /* brand color */}"
+        "h3 {font-size: 24px; /* adjust heading size */ color: #000000; /* brand color */}",
+        "h4 {font-family: Helvetica, Arial, sans-serif; font-size: 12px; /* adjust heading size */ color: #73635b; /* brand color */}",
+        "h5 {font-family: Helvetica, Arial, sans-serif; font-size: 16px; color: #000000; /* brand color */}",
+        ".multicolumn-list__item {border: 1px solid #e5e5e5; padding: 20px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
@@ -198,9 +276,9 @@
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
-        "columns_desktop": 3,
+        "columns_desktop": 4,
         "column_alignment": "center",
-        "background_style": "primary",
+        "background_style": "none",
         "button_label": "Request a Custom Product",
         "button_link": "https://form.jotform.com/260715843519159",
         "swipe_on_desktop": false,
@@ -209,47 +287,6 @@
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
-      }
-    },
-    "image_with_text_gwKdWK": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_6hifzJ": {
-          "type": "heading",
-          "settings": {
-            "heading": "Why Work With Us?",
-            "heading_size": "h0"
-          }
-        },
-        "text_8R6NwM": {
-          "type": "text",
-          "settings": {
-            "text": "<h3>A Team That Works for Your Jewelry Business<br/></h3><ul><li>In-house design expertise for custom permanent jewelry and branded materials</li><li>Educational guidance for makers at any experience level</li><li>Efficient process with clear communication and timeline guidance</li><li>High-quality materials and attention to detail</li><li>Collaborative approach tailored to your brand<br/></li></ul>",
-            "text_style": "body"
-          }
-        }
-      },
-      "block_order": [
-        "heading_6hifzJ",
-        "text_8R6NwM"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "h2 {font-size: 20px; color: #73635b; font-family: Helvetica, Arial, sans-serif; text-align: left; text-transform: uppercase; letter-spacing: 3px;}"
-      ],
-      "settings": {
-        "height": "medium",
-        "desktop_image_width": "small",
-        "layout": "image_first",
-        "desktop_content_position": "middle",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-2",
-        "color_scheme": "scheme-2",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 20,
-        "padding_bottom": 24
       }
     },
     "rich_text_7PqGV8": {
@@ -280,48 +317,305 @@
         "heading_JpgdNM": {
           "type": "heading",
           "settings": {
-            "heading": "Why Work With Us?",
+            "heading": "Who This is For?",
             "heading_size": "h1"
-          }
-        },
-        "text_MfCRPF": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
-          }
-        },
-        "button_EyWeph": {
-          "type": "button",
-          "settings": {
-            "button_label": "Button label",
-            "button_link": "",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
           }
         }
       },
       "block_order": [
-        "heading_JpgdNM",
-        "text_MfCRPF",
-        "button_EyWeph"
+        "heading_JpgdNM"
       ],
-      "disabled": true,
+      "name": "Why Work with Us",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 60,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_wtFzft": {
+      "type": "rich-text",
+      "blocks": {
+        "text_FgxNHi": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>Makers looking to launch private label permanent jewelry products</li></ul><p></p><ul><li>Small businesses seeking custom jewelry components or branded packaging</li></ul><p></p><ul><li>Event hosts, educators, and designers needing supplies & personalized products</li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "text_FgxNHi"
+      ],
+      "name": "Why -DESC",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 8,
+        "padding_bottom": 60
+      }
+    },
+    "rich_text_6tMJBQ": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_TVdWfQ": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Work With Us?",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_TVdWfQ"
+      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
         "color_scheme": "",
         "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "padding_top": 60,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_z76c4W": {
+      "type": "rich-text",
+      "name": "DIVIDER",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": false,
+        "padding_top": 0,
+        "padding_bottom": 4
+      }
+    },
+    "rich_text_W37qCB": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_p4kqpt": {
+          "type": "caption",
+          "settings": {
+            "caption": "A Team That Works for Your Jewelry Business",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_p4kqpt"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 16,
+        "padding_bottom": 32
+      }
+    },
+    "rich_text_qg6jic": {
+      "type": "rich-text",
+      "blocks": {
+        "text_wfc9wx": {
+          "type": "text",
+          "settings": {
+            "text": "<ul><li>In-house design expertise for custom permanent jewelry and branded materials</li></ul><p></p><ul><li>Educational guidance for makers at any experience level</li></ul><p></p><ul><li>Efficient process with clear communication and timeline guidance</li></ul><p></p><ul><li>High-quality materials and attention to detail</li></ul><p></p><ul><li>Collaborative approach tailored to your brand<br/></li></ul>"
+          }
+        }
+      },
+      "block_order": [
+        "text_wfc9wx"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 8,
+        "padding_bottom": 60
       }
     },
     "rich_text_ePLd38": {
       "type": "rich-text",
       "blocks": {
-        "caption_zxgGPw": {
+        "heading_aDj6yT": {
+          "type": "heading",
+          "settings": {
+            "heading": "How it Works",
+            "heading_size": "h1"
+          }
+        },
+        "text_iG7qpL": {
+          "type": "text",
+          "settings": {
+            "text": "<p>1. Submit Your Request Form<br/><br/>2. Share your vision—artwork, packaging, or product idea<br/><br/>3. Our team guides you on design, MOQs, and pricing<br/><br/>4. We produce your items with care and quality control<br/><br/>5. Receive and launch your private label permanent jewelry products</p>"
+          }
+        },
+        "button_JMewJd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Request a Custom Product",
+            "button_link": "https://form.jotform.com/260715843519159",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "https://form.jotform.com/260715843519159",
+            "button_style_secondary_2": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_aDj6yT",
+        "text_iG7qpL",
+        "button_JMewJd"
+      ],
+      "name": "How it Works",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_Nei639": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_6VkJXJ": {
+          "type": "caption",
+          "settings": {
+            "caption": "NEW TO PRIVATE LABEL?",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_6VkJXJ"
+      ],
+      "name": "FAQ",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "collapsible_content_yAKnEx": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_wc8MWP": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is private label production?",
+            "icon": "check_mark",
+            "row_content": "<p>Private label production allows you to create custom-branded products such as permanent jewelry components, charms, packaging, and inserts designed and produced by Bay & Stew under your brand. It is ideal for makers looking to scale with cohesive, professional branding.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_zmBBXY": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What types of private label services do you offer?",
+            "icon": "check_mark",
+            "row_content": "<p>We offer full-service private label support including custom permanent jewelry components, branded packaging, jewelry cases, inserts, promotional items, and custom artwork/design services. Each service is tailored to help elevate your brand experience from product to packaging.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_mXpPVe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I create custom jewelry components?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes. We specialize in custom jewelry components such as charms, connectors, and stamped pieces. These can include your logo, symbols, or custom designs to align with your brand identity.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_4nNHER": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What is the minimum order quantity (MOQ) for private label products?",
+            "icon": "check_mark",
+            "row_content": "<p>MOQ varies depending on the product type, materials, and customization level. Smaller items like inserts or stickers typically have lower MOQs, while custom jewelry components and packaging require higher minimums. Exact MOQs will be provided after reviewing your inquiry.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_4iUYxg": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I request design help if I don’t have a finished concept?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes. Our in-house design team can help you develop your idea from concept to production. Whether you have a rough idea, inspiration, or a full mood board, we can assist with artwork, branding, and design direction.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_UMA9tr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "What types of businesses is private label best for?",
+            "icon": "check_mark",
+            "row_content": "<p>Private label services are ideal for permanent jewelry makers, small jewelry brands scaling into wholesale, event-based businesses, educators, workshop hosts, and creators launching or expanding their jewelry line.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_qkYnfy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How long does private label production take?",
+            "icon": "check_mark",
+            "row_content": "<p>Production timelines vary based on order size, customization level, and materials. Once your request is reviewed, we will provide a clear estimated timeline tailored to your project.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_BnMFja": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Can I request multiple products in one private label order?",
+            "icon": "check_mark",
+            "row_content": "<p>Yes. You can bundle multiple services such as jewelry components, packaging, and inserts into one cohesive private label order. We can help you create a full branded product experience.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_wc8MWP",
+        "collapsible_row_zmBBXY",
+        "collapsible_row_mXpPVe",
+        "collapsible_row_4nNHER",
+        "collapsible_row_4iUYxg",
+        "collapsible_row_UMA9tr",
+        "collapsible_row_qkYnfy",
+        "collapsible_row_BnMFja"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 16,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_W3Yn7G": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_awhJzW": {
           "type": "caption",
           "settings": {
             "caption": "NEW TO PRIVATE LABEL?",
@@ -329,7 +623,7 @@
             "text_size": "medium"
           }
         },
-        "caption_jDMfm4": {
+        "caption_y8hAPJ": {
           "type": "caption",
           "settings": {
             "caption": "We guide you through every step—from concept to production—so you can create pieces that feel true to your brand.",
@@ -337,7 +631,7 @@
             "text_size": "medium"
           }
         },
-        "button_JMewJd": {
+        "button_CxUXYX": {
           "type": "button",
           "settings": {
             "button_label": "Frequently Asked Questions",
@@ -350,10 +644,11 @@
         }
       },
       "block_order": [
-        "caption_zxgGPw",
-        "caption_jDMfm4",
-        "button_JMewJd"
+        "caption_awhJzW",
+        "caption_y8hAPJ",
+        "button_CxUXYX"
       ],
+      "disabled": true,
       "name": "New to Private Label?",
       "settings": {
         "desktop_content_position": "center",
@@ -367,14 +662,24 @@
   },
   "order": [
     "main",
+    "rich_text_6afELg",
+    "1774558438b870edc9",
     "image_banner_rJf3hX",
     "rich_text_iQyCAC",
     "rich_text_DV7iQQ",
+    "rich_text_mBQtDB",
     "rich_text_ynHhzV",
     "multicolumn_PQkzWj",
-    "image_with_text_gwKdWK",
     "rich_text_7PqGV8",
     "rich_text_XgGjrc",
-    "rich_text_ePLd38"
+    "rich_text_wtFzft",
+    "rich_text_6tMJBQ",
+    "rich_text_z76c4W",
+    "rich_text_W37qCB",
+    "rich_text_qg6jic",
+    "rich_text_ePLd38",
+    "rich_text_Nei639",
+    "collapsible_content_yAKnEx",
+    "rich_text_W3Yn7G"
   ]
 }

@@ -9,6 +9,44 @@
  */
 {
   "sections": {
+    "image_banner_rLkeNC": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_yptLrY": {
+          "type": "heading",
+          "settings": {
+            "heading": "Double Loyalty Points",
+            "heading_size": "h1"
+          }
+        },
+        "text_7JFmCc": {
+          "type": "text",
+          "settings": {
+            "text": "Makers Circle Rewards members earn double points through March 26",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_yptLrY",
+        "text_7JFmCc"
+      ],
+      "disabled": true,
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Double-Star-Desktop.jpg",
+        "image_overlay_opacity": 60,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": false,
+        "show_text_below": false
+      }
+    },
     "main": {
       "type": "main-page",
       "disabled": true,
@@ -23,8 +61,8 @@
         "bloy_loyalty_rewards_bloy_loyalty_points_program_cAGKHD": {
           "type": "shopify://apps/bloy-loyalty-rewards/blocks/bloy-loyalty-points-program/97e8894d-00f0-41a9-b986-49828146257c",
           "settings": {
-            "primary_color": "#cc9b6e",
-            "background_color": "#e7ded6",
+            "primary_color": "#121212",
+            "background_color": "#cfebfb",
             "image": "shopify://shop_images/Rewards_page_photo.png",
             "heading_text": "Loyalty Rewards",
             "subtitle": "Become a Makers Circle member to earn points and gain exclusive rewards for every purchase you make",
@@ -150,7 +188,7 @@
         "bloy_loyalty_rewards_bloy_loyalty_balance_YeTgwW": {
           "type": "shopify://apps/bloy-loyalty-rewards/blocks/bloy-loyalty-balance/97e8894d-00f0-41a9-b986-49828146257c",
           "settings": {
-            "primary_color": "#b19d8c",
+            "primary_color": "#73635b",
             "background_color": "#ffffff",
             "toast_primary_color": "#001584",
             "heading_text": "Your balance: {x points}",
@@ -201,7 +239,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
@@ -265,7 +303,7 @@
         "button_label": "",
         "button_link": "",
         "swipe_on_desktop": false,
-        "color_scheme": "scheme-5",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
         "columns_mobile": "1",
         "swipe_on_mobile": true,
         "padding_top": 36,
@@ -274,6 +312,7 @@
     }
   },
   "order": [
+    "image_banner_rLkeNC",
     "main",
     "1751907374071531ed",
     "image_banner_fLGfCN",

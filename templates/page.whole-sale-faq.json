@@ -1,0 +1,714 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "custom_css": [
+        "{font-size: 36px; text-align: center;}"
+      ],
+      "settings": {
+        "padding_top": 40,
+        "padding_bottom": 28
+      }
+    },
+    "170500394479d56b7e": {
+      "type": "apps",
+      "blocks": {
+        "bss_b2b_solution_form_HL8fPV": {
+          "type": "shopify://apps/bss-b2b-solution/blocks/form/451233f2-9631-4c49-8b6f-057e4ebcde7f",
+          "disabled": true,
+          "settings": {
+            "form_id": "28360"
+          }
+        }
+      },
+      "block_order": [
+        "bss_b2b_solution_form_HL8fPV"
+      ],
+      "disabled": true,
+      "settings": {
+        "include_margins": true
+      }
+    },
+    "collapsible_content_DRLnPq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_KBwzPm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "🧾 Wholesale & Sales Tax Exemption Requirements",
+            "icon": "check_mark",
+            "row_content": "<p>To purchase <strong>wholesale (tax-exempt)</strong> from us, we need a copy of your resale certificate or exemption form. Requirements vary by state — please review the list below before submitting your documentation.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_RfABMz": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "✅ States That Require a State Resale Certificate",
+            "icon": "check_mark",
+            "row_content": "<p>Submit a <strong>state-issued resale certificate</strong> (or seller’s permit) if you're located in:</p><ul><li><strong>Alabama</strong> – Sales Tax License</li><li><strong>Arizona</strong> – Transaction Privilege Tax (TPT) License</li><li><strong>California</strong> – CDTFA Seller’s Permit</li><li><strong>Colorado</strong> – Sales Tax License</li><li><strong>Connecticut</strong> – Resale Certificate (Form OR-219)</li><li><strong>Florida</strong> – Annual Resale Certificate</li><li><strong>Georgia</strong> – ST-5 Certificate</li><li><strong>Hawaii</strong> – GET License</li><li><strong>Illinois</strong> – CRT-61 Certificate</li><li><strong>Indiana</strong> – ST-105 Certificate</li><li><strong>Iowa</strong> – Sales Tax Exemption Certificate</li><li><strong>Kansas</strong> – ST-28A Certificate</li><li><strong>Kentucky</strong> – 51A105 Resale Certificate</li><li><strong>Louisiana</strong> – R-1042 Certificate</li><li><strong>Maine</strong> – Retail Certificate Number</li><li><strong>Maryland</strong> – Sales & Use License</li><li><strong>Massachusetts</strong> – ST-4 Certificate</li><li><strong>Michigan</strong> – Form 3372</li><li><strong>Minnesota</strong> – ST3 Certificate</li><li><strong>Mississippi</strong> – Sales Tax Permit</li><li><strong>Missouri</strong> – Form 149</li><li><strong>Nebraska</strong> – Form 13</li><li><strong>Nevada</strong> – Sales Tax Permit + Certificate</li><li><strong>New Jersey</strong> – ST-3 Certificate</li><li><strong>New Mexico</strong> – NTTC Certificate</li><li><strong>New York</strong> – ST-120 Certificate</li><li><strong>North Carolina</strong> – E-595E Form</li><li><strong>North Dakota</strong> – Sales Tax Permit</li><li><strong>Ohio</strong> – STEC-U or STEC-B</li><li><strong>Oklahoma</strong> – Resale Permit</li><li><strong>Pennsylvania</strong> – REV-1220 Certificate</li><li><strong>Rhode Island</strong> – Resale Certificate</li><li><strong>South Carolina</strong> – ST-8A Certificate</li><li><strong>South Dakota</strong> – Sales Tax License</li><li><strong>Tennessee</strong> – Certificate of Resale</li><li><strong>Texas</strong> – Form 01-339</li><li><strong>Utah</strong> – TC-721 Certificate</li><li><strong>Vermont</strong> – S-3 Certificate</li><li><strong>Virginia</strong> – ST-10 Certificate</li><li><strong>Washington</strong> – Reseller Permit</li><li><strong>West Virginia</strong> – Exemption Certificate</li><li><strong>Wisconsin</strong> – S-211 Certificate</li><li><strong>Wyoming</strong> – Sales Tax License + Certificate</li></ul>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Qhxbzm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "📄 States That Accept the Multistate Uniform Sales Tax Certificate",
+            "icon": "check_mark",
+            "row_content": "<p>These states allow use of the <strong>MTC Uniform Sales & Use Tax Certificate</strong>:</p><p><em>Alabama, Arizona, Arkansas, California, Colorado, Connecticut, Florida, Hawaii, Idaho, Illinois, Iowa, Kansas, Kentucky, Maine, Maryland, Michigan, Minnesota, Missouri, Nebraska, Nevada, New Jersey, North Carolina, North Dakota, Ohio, Oklahoma, Pennsylvania, Rhode Island, South Dakota, Tennessee, Texas, Utah, Vermont, Washington, West Virginia, Wisconsin, Wyoming</em></p><p><a href=\"https://www.mtc.gov/wp-content/uploads/2023/01/Unif-Resale-Cert-revised-10-14-22.pdf\" title=\"https://www.mtc.gov/wp-content/uploads/2023/01/Unif-Resale-Cert-revised-10-14-22.pdf\">👉 Download the MTC Form (PDF)</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_QUQtgG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "🚫 States With No Sales Tax",
+            "icon": "check_mark",
+            "row_content": "<p>If you’re based in one of these states, no documentation is required:</p><ul><li><strong>Delaware</strong></li><li><strong>Montana</strong></li><li><strong>New Hampshire</strong></li><li><strong>Oregon</strong></li><li><strong>Alaska</strong> <em>(note: some cities do charge local sales tax)</em></li></ul>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_KBwzPm",
+        "collapsible_row_RfABMz",
+        "collapsible_row_Qhxbzm",
+        "collapsible_row_QUQtgG"
+      ],
+      "disabled": true,
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Frequently Asked Questions",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_bhyXp9": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_qXrWQb": {
+          "type": "heading",
+          "disabled": true,
+          "settings": {
+            "heading": "<strong>Need help submitting your documents?</strong>",
+            "heading_size": "h2"
+          }
+        },
+        "text_V3tXPw": {
+          "type": "text",
+          "disabled": true,
+          "settings": {
+            "text": "<p>Email us at <a href=\"mailto:your@email.com\">bayandstew@gmail.com </a>or upload your certificate during your wholesale application checkout.</p>"
+          }
+        },
+        "button_bdiKrj": {
+          "type": "button",
+          "settings": {
+            "button_label": "Contact Us",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_qXrWQb",
+        "text_V3tXPw",
+        "button_bdiKrj"
+      ],
+      "disabled": true,
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "collapsible_content_H9FfFq": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_NJVPYX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I open a wholesale account?",
+            "icon": "check_mark",
+            "row_content": "<p><strong>Applying for a Bay & Stew wholesale account is simple:</strong><br/><br/>1. Complete the<strong> </strong><a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\"><strong>wholesale application form here.</strong></a><br/><br/>2. Submit your <strong>resale certificate or tax exemption documentation.<br/></strong><br/>3. Allow <strong>1–2 business days</strong> for our team to review and verify your application.<br/><br/>Once approved, you’ll receive an activation email with instructions to log in and start placing wholesale orders.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_ehNzYD": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How do I know which documents I need?",
+            "icon": "check_mark",
+            "row_content": "<p><strong>Document requirements vary by state. <br/><br/></strong>Please select your state below to view the exact <strong>resale certificate or tax exemption forms required </strong>before submitting your wholesale application.<br/><br/>If you have questions about your documentation, we recommend contacting your state’s Department of Revenue or Tax Agency for guidance.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_pHpVpe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Which states do not require sales tax documentation? 🚫",
+            "icon": "check_mark",
+            "row_content": "<p>If you’re based in one of these states, no documentation is required:<br/></p><ul><li>Alaska (note: some cities do charge local sales tax)</li><li>Delaware</li><li>Montana</li><li>New Hampshire</li><li>Oregon</li></ul>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_NJVPYX",
+        "collapsible_row_ehNzYD",
+        "collapsible_row_pHpVpe"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Wholesale Accounts",
+        "heading_size": "h2",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "container_color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_zgdCjJ": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_8zNXwQ": {
+          "type": "collapsible_row",
+          "disabled": true,
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_f3PfJd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "International",
+            "icon": "check_mark",
+            "row_content": "<p>Business license issued by your local government or municipality</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_JWmQXL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alabama",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_WNGm4A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arizona",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_Pf4f8V": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arkansas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_VbQbDb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "California",
+            "icon": "check_mark",
+            "row_content": "<ol><li>Completed and signed <a href=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\" title=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\">California Resale Certificate Form (CDTFA-230)</a><br/></li><li>California Seller's Permit</li></ol>",
+            "page": ""
+          }
+        },
+        "collapsible_row_GdK7Na": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Colorado",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_dECtRy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Connecticut",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_EzwWPx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Florida",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_n4eA3G": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Georgia",
+            "icon": "check_mark",
+            "row_content": "<ol><li>Completed and signed <a href=\"https://drive.google.com/file/d/1-rWiSX2lwNstLVmTpwsJdbDHpNF-9uOG/view\" title=\"https://drive.google.com/file/d/1-rWiSX2lwNstLVmTpwsJdbDHpNF-9uOG/view\">Georgia Sales Tax Certificate of Registration (ST-5 Certificate)</a><br/></li><li>Georgia Sales Tax Certificate of Registration</li></ol>",
+            "page": ""
+          }
+        },
+        "collapsible_row_ABf3C9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Hawaii",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_kAyLDx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Idaho",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_xggztw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Illinois",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_xAWyFx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Indiana",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_wCVf3H": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Iowa",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_q4hGWf": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kansas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_yPhYq7": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kentucky",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_TVqMpx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Louisiana",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_hwHbqb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maine",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_ax8q6H": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maryland",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_Vy3bzy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Massachusetts",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_rVifYw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Michigan",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_BkNCPm": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Minnesota",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_9FgMHb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Mississippi",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_tPprHB": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Missouri",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_rVzfUn": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nebraska",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_HiTNXt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nevada",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_TbDWn6": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Jersey",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_UqiFGd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Mexico",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_MtxDA4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Mexico",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_RFwYgN": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New York",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_9xjnFz": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "North Carolina",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_fr4wbd": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Ohio",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_hGyNjX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Oklahoma",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_WbhnUw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Pennsylvania",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_BjVL4d": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Rhode Island",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_neciNn": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "South Carolina",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_MFCGiV": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "South Dakota",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_nwXP3c": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Tennessee",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_7Tfw3L": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Texas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_LECjcJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Utah",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_ax6XeD": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Vermont",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_AtNjjQ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Virginia",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_3bqLM8": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Washington",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_D77nwN": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Washington DC",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_x9TXzg": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "West Virginia",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_iGUz9E": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Wisconsin",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_M68V9p": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Wyoming",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_8zNXwQ",
+        "collapsible_row_f3PfJd",
+        "collapsible_row_JWmQXL",
+        "collapsible_row_WNGm4A",
+        "collapsible_row_Pf4f8V",
+        "collapsible_row_VbQbDb",
+        "collapsible_row_GdK7Na",
+        "collapsible_row_dECtRy",
+        "collapsible_row_EzwWPx",
+        "collapsible_row_n4eA3G",
+        "collapsible_row_ABf3C9",
+        "collapsible_row_kAyLDx",
+        "collapsible_row_xggztw",
+        "collapsible_row_xAWyFx",
+        "collapsible_row_wCVf3H",
+        "collapsible_row_q4hGWf",
+        "collapsible_row_yPhYq7",
+        "collapsible_row_TVqMpx",
+        "collapsible_row_hwHbqb",
+        "collapsible_row_ax8q6H",
+        "collapsible_row_Vy3bzy",
+        "collapsible_row_rVifYw",
+        "collapsible_row_BkNCPm",
+        "collapsible_row_9FgMHb",
+        "collapsible_row_tPprHB",
+        "collapsible_row_rVzfUn",
+        "collapsible_row_HiTNXt",
+        "collapsible_row_TbDWn6",
+        "collapsible_row_UqiFGd",
+        "collapsible_row_MtxDA4",
+        "collapsible_row_RFwYgN",
+        "collapsible_row_9xjnFz",
+        "collapsible_row_fr4wbd",
+        "collapsible_row_hGyNjX",
+        "collapsible_row_WbhnUw",
+        "collapsible_row_BjVL4d",
+        "collapsible_row_neciNn",
+        "collapsible_row_MFCGiV",
+        "collapsible_row_nwXP3c",
+        "collapsible_row_7Tfw3L",
+        "collapsible_row_LECjcJ",
+        "collapsible_row_ax6XeD",
+        "collapsible_row_AtNjjQ",
+        "collapsible_row_3bqLM8",
+        "collapsible_row_D77nwN",
+        "collapsible_row_x9TXzg",
+        "collapsible_row_iGUz9E",
+        "collapsible_row_M68V9p"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Documents by State",
+        "heading_size": "h2",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "170500394479d56b7e",
+    "collapsible_content_DRLnPq",
+    "rich_text_bhyXp9",
+    "collapsible_content_H9FfFq",
+    "collapsible_content_zgdCjJ"
+  ]
+}
