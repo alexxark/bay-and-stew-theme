@@ -195,89 +195,74 @@
 
 <script>
   (function() {
-    var sectionId = '{{ section.id }}';
-    var columnsDesktop = {{ section.settings.columns_desktop }};
-    var sliderEl = document.getElementById('MulticolumnSlider-' + sectionId);
+    var sliderEl = document.getElementById('MulticolumnSlider-{{ section.id }}');
     if (!sliderEl) return;
 
-    function initPageScroll() {
-      var slider = sliderEl.querySelector('[id^="Slider-"]');
-      var slides = sliderEl.querySelectorAll('[id^="Slide-"]');
-      var prevBtn = sliderEl.querySelector('button[name="previous"]');
-      var nextBtn = sliderEl.querySelector('button[name="next"]');
-      var currentEl = sliderEl.querySelector('.slider-counter--current');
-      var totalEl = sliderEl.querySelector('.slider-counter--total');
-
-      if (!slider || slides.length < 2 || !nextBtn) return;
-
-      var visibleSlides = Array.from(slides).filter(function(s) { return s.clientWidth > 0; });
-      if (visibleSlides.length < 2) return;
-
-      var itemOffset = visibleSlides[1].offsetLeft - visibleSlides[0].offsetLeft;
-      var perPage = Math.max(1, Math.floor((slider.clientWidth - visibleSlides[0].offsetLeft) / itemOffset));
-      var totalPages = Math.ceil(visibleSlides.length / perPage);
-      var currentPage = 1;
-
-      function updateCounter() {
-        currentPage = Math.floor(Math.round(slider.scrollLeft / itemOffset) / perPage) + 1;
-        currentPage = Math.max(1, Math.min(currentPage, totalPages));
-        if (currentEl) currentEl.textContent = currentPage;
-        if (totalEl) totalEl.textContent = totalPages;
-
-        if (prevBtn) {
-          if (slider.scrollLeft <= 0) {
-            prevBtn.setAttribute('disabled', 'disabled');
-          } else {
-            prevBtn.removeAttribute('disabled');
-          }
-        }
-        if (nextBtn) {
-          var lastSlide = visibleSlides[visibleSlides.length - 1];
-          var lastVisible = lastSlide.offsetLeft + lastSlide.clientWidth <= slider.clientWidth + slider.scrollLeft + 2;
-          if (lastVisible) {
-            nextBtn.setAttribute('disabled', 'disabled');
-          } else {
-            nextBtn.removeAttribute('disabled');
-          }
-        }
+    function patchSlider() {
+      // Wait until the component has initialized its properties
+      if (!sliderEl.slider || !sliderEl.sliderItemsToShow || sliderEl.sliderItemsToShow.length < 2) {
+        return requestAnimationFrame(patchSlider);
       }
 
-      function scrollByPage(direction) {
+      var perPage = sliderEl.slidesPerPage;
+      if (perPage < 1) perPage = 3;
+      var totalSlides = sliderEl.sliderItemsToShow.length;
+      var totalPages = Math.ceil(totalSlides / perPage);
+      var itemOffset = sliderEl.sliderItemOffset;
+
+      // Patch totalPages so the component's own update() uses it
+      sliderEl.totalPages = totalPages;
+
+      // Override update to use page-based current page
+      sliderEl.update = function() {
+        if (!this.slider || !this.nextButton) return;
+        var previousPage = this.currentPage;
+        var scrollIndex = Math.round(this.slider.scrollLeft / itemOffset);
+        this.currentPage = Math.floor(scrollIndex / perPage) + 1;
+        this.currentPage = Math.max(1, Math.min(this.currentPage, totalPages));
+
+        if (this.currentPageElement) this.currentPageElement.textContent = this.currentPage;
+        if (this.pageTotalElement) this.pageTotalElement.textContent = totalPages;
+
+        if (this.currentPage != previousPage) {
+          this.dispatchEvent(new CustomEvent('slideChanged', {
+            detail: { currentPage: this.currentPage, currentElement: this.sliderItemsToShow[this.currentPage - 1] }
+          }));
+        }
+
+        if (this.slider.scrollLeft <= 0) {
+          this.prevButton.setAttribute('disabled', 'disabled');
+        } else {
+          this.prevButton.removeAttribute('disabled');
+        }
+
+        var lastSlide = this.sliderItemsToShow[this.sliderItemsToShow.length - 1];
+        if (lastSlide.offsetLeft + lastSlide.clientWidth <= this.slider.clientWidth + this.slider.scrollLeft + 2) {
+          this.nextButton.setAttribute('disabled', 'disabled');
+        } else {
+          this.nextButton.removeAttribute('disabled');
+        }
+      };
+
+      // Override button click to scroll by full page
+      sliderEl.onButtonClick = function(event) {
+        event.preventDefault();
         var scrollAmount = perPage * itemOffset;
-        var target = direction === 'next'
-          ? slider.scrollLeft + scrollAmount
-          : slider.scrollLeft - scrollAmount;
-        slider.scrollTo({ left: target, behavior: 'smooth' });
-      }
+        this.slideScrollPosition = event.currentTarget.name === 'next'
+          ? this.slider.scrollLeft + scrollAmount
+          : this.slider.scrollLeft - scrollAmount;
+        this.setSlidePosition(this.slideScrollPosition);
+      };
 
-      // Override the native slider-component button handlers
-      var newPrev = prevBtn.cloneNode(true);
-      var newNext = nextBtn.cloneNode(true);
-      prevBtn.parentNode.replaceChild(newPrev, prevBtn);
-      nextBtn.parentNode.replaceChild(newNext, nextBtn);
-
-      newPrev.addEventListener('click', function(e) {
-        e.preventDefault();
-        scrollByPage('prev');
-      });
-      newNext.addEventListener('click', function(e) {
-        e.preventDefault();
-        scrollByPage('next');
-      });
-
-      slider.addEventListener('scroll', updateCounter);
-      updateCounter();
+      // Trigger initial update
+      sliderEl.update();
     }
 
     if (customElements.get('slider-component')) {
-      // Element already defined, wait for next frame to ensure it's initialized
-      requestAnimationFrame(function() {
-        requestAnimationFrame(initPageScroll);
-      });
+      requestAnimationFrame(function() { requestAnimationFrame(patchSlider); });
     } else {
-      // Wait for the custom element to be defined
       customElements.whenDefined('slider-component').then(function() {
-        requestAnimationFrame(initPageScroll);
+        requestAnimationFrame(patchSlider);
       });
     }
   })();
