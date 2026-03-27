@@ -153,6 +153,15 @@
             "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
+        },
+        "collapsible_row_U9C99T": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kansas",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -170,7 +179,8 @@
         "collapsible_row_fdNLCT",
         "collapsible_row_nYMCen",
         "collapsible_row_mFWztg",
-        "collapsible_row_YLCmXH"
+        "collapsible_row_YLCmXH",
+        "collapsible_row_U9C99T"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
