@@ -547,9 +547,9 @@
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
-        "caption": "FIND YOUR STATE BELOW",
-        "heading": "",
-        "heading_size": "h1",
+        "caption": "",
+        "heading": "FIND YOUR STATE BELOW",
+        "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
         "color_scheme": "",
@@ -593,7 +593,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-2",
+        "color_scheme": "scheme-1",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
