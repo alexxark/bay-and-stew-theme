@@ -78,6 +78,36 @@
         "padding_bottom": 44
       }
     },
+    "rich_text_gzgpec": {
+      "type": "rich-text",
+      "blocks": {
+        "text_qe7bT7": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>IMPORTANT — PLEASE READ BEFORE APPLYING</h3>"
+          }
+        },
+        "text_KJL4Ck": {
+          "type": "text",
+          "settings": {
+            "text": "<p>To be approved for a wholesale account, <strong>you must submit the required resale/tax-exemption documents for your state with your application.</strong> Please refer to our Wholesale Requirements page to find your state-specific documentation.<br/><br/><em>Applications submitted without documentation will not be approved.</em></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_qe7bT7",
+        "text_KJL4Ck"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text_a4rBTC": {
       "type": "rich-text",
       "blocks": {
@@ -159,6 +189,7 @@
   "order": [
     "main",
     "rich_text_mzQxJV",
+    "rich_text_gzgpec",
     "rich_text_a4rBTC",
     "rich_text_BJ7Ma8",
     "custom_liquid_6JPy4b"
