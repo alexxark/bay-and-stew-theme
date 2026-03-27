@@ -1,1 +1,106 @@
-{"sections":{"main":{"type":"main-page","settings":{"padding_top":36,"padding_bottom":36}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "collapsible_content_zeEk4Y": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_maX49W": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "International",
+            "icon": "check_mark",
+            "row_content": "<p>We love working with retailers around the world!<br/><br/>Please complete the international application <a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><strong>here.</strong><br/></a><br/><strong>To apply, please provide:</strong></p><ul><li>Business registration or license</li><li>VAT number or Sales Tax Permit Number / Resale Number (if applicable)</li><li>Proof of business (website, storefront, or social presence)</li></ul>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PLgfY9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alabama",
+            "icon": "check_mark",
+            "row_content": "<p>Multi-State Uniform Sales & Use Tax Certificate (MTC Form, signed)</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_MtdDdr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alaska",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_PGiVpe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arizona",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_MQWJRU": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arkansas",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_YKQqFt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "California",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_maX49W",
+        "collapsible_row_PLgfY9",
+        "collapsible_row_MtdDdr",
+        "collapsible_row_PGiVpe",
+        "collapsible_row_MQWJRU",
+        "collapsible_row_YKQqFt"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "FIND YOUR STATE BELOW",
+        "heading": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "collapsible_content_zeEk4Y"
+  ]
+}
