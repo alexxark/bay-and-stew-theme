@@ -5,3 +5,7 @@
 .multicolumn .slider--everywhere+.slider-buttons {
       display: flex;
   }
+
+.multicolumn .slider--everywhere .multicolumn-list__item {
+      scroll-snap-align: start;
+  }
