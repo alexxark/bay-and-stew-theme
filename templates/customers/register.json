@@ -54,15 +54,7 @@
         "text_QqNNH7": {
           "type": "text",
           "settings": {
-            "text": "<p></p><p>Before applying, check which documents your state <em>requires to avoid delays.</em></p>"
-          }
-        },
-        "caption_tprPrw": {
-          "type": "caption",
-          "settings": {
-            "caption": "Includes resale certificates, MTC forms, and no-sales-tax state requirements.",
-            "text_style": "caption-with-letter-spacing",
-            "text_size": "small"
+            "text": "<p></p><h4>BEFORE APPLYING, CHECK WHICH<br/>DOCUMENTS YOUR STATE <em>REQUIRES</em> TO AVOID DELAYS. </h4>"
           }
         }
       },
@@ -71,11 +63,11 @@
         "heading_3kEPUA",
         "text_fqgnLU",
         "button_atMBkc",
-        "text_QqNNH7",
-        "caption_tprPrw"
+        "text_QqNNH7"
       ],
       "custom_css": [
-        "h3 {font-family: sans-serif; font-weight: 400; letter-spacing: 0.06em;}"
+        "h3 {font-family: sans-serif; font-weight: 400; letter-spacing: 0.06em;}",
+        "h4 {font-family: sans-serif; font-weight: 700; letter-spacing: 0.09em;}"
       ],
       "settings": {
         "desktop_content_position": "center",
