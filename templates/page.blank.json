@@ -429,14 +429,32 @@
           "settings": {
             "heading": "Virginia",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1mHgl8JY4JqmGuKbm9GRrR52Q8WI4gZnU/view\"><span style=\"text-decoration:underline\">ST-10 Resale Certificate</span></a> (signed)</p>",
             "page": ""
           }
         },
         "collapsible_row_xyqTUV": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Vermont",
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_ETazWb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_HDGHqY": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
@@ -490,7 +508,9 @@
         "collapsible_row_UnHbdG",
         "collapsible_row_EWH6QG",
         "collapsible_row_VJGmXr",
-        "collapsible_row_xyqTUV"
+        "collapsible_row_xyqTUV",
+        "collapsible_row_ETazWb",
+        "collapsible_row_HDGHqY"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
