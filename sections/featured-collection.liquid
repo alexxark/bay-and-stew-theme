@@ -95,7 +95,25 @@
         aria-label="{{ 'general.slider.name' | t }}"
       >
         {% assign skip_card_product_styles = false %}
-        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}{% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}<div style="display:none" class="bss-hpc-lock"></div>{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+        {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
+        {%- assign is_b2b_customer = false -%}
+        {%- if customer and customer.tags contains 'B2B' -%}
+          {%- assign is_b2b_customer = true -%}
+        {%- endif -%}
+        {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
+          {%- unless is_b2b_customer -%}
+            {%- assign is_product_locked = false -%}
+            {%- for product_collection in product.collections -%}
+              {%- if locked_collection_handles contains product_collection.handle -%}
+                {%- assign is_product_locked = true -%}
+                {%- break -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if is_product_locked -%}
+              {%- continue -%}
+            {%- endif -%}
+          {%- endunless -%}
+          {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"
             class="grid__item{% if show_mobile_slider or show_desktop_slider %} slider__slide{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -104,7 +122,7 @@
               style="--animation-order: {{ forloop.index }};"
             {% endif %}
           >
-            {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-product',
+            {% render 'card-product',
               card_product: product,
               media_aspect_ratio: section.settings.image_ratio,
               image_shape: section.settings.image_shape,
@@ -136,7 +154,7 @@
                 endcase
               %}
               {%- assign placeholder_image = 'product-apparel-' | append: ridx -%}
-              {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-product',
+              {% render 'card-product',
                 show_vendor: section.settings.show_vendor,
                 media_aspect_ratio: section.settings.image_ratio,
                 image_shape: section.settings.image_shape,

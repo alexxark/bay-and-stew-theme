@@ -60,7 +60,18 @@
             assign columns = 3
           endif
         -%}
-        {%- for block in section.blocks -%}{% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: block, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}<div style="display:none" class="bss-hpc-lock"></div>{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+        {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
+        {%- assign is_b2b_customer = false -%}
+        {%- if customer and customer.tags contains 'B2B' -%}
+          {%- assign is_b2b_customer = true -%}
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- unless is_b2b_customer -%}
+            {%- if block.settings.collection != blank and locked_collection_handles contains block.settings.collection.handle -%}
+              {%- continue -%}
+            {%- endif -%}
+          {%- endunless -%}
+          {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: block, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"
             class="collection-list__item grid__item{% if show_mobile_slider %} slider__slide{% endif %}{% if block.settings.collection.featured_image == nil %} collection-list__item--no-media{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
@@ -72,7 +83,7 @@
           >
             {%- assign placeholder_image_index = forloop.index0 | modulo: 4 | plus: 1 -%}
             {%- assign placeholder_image = 'collection-apparel-' | append: placeholder_image_index -%}
-            {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-collection',
+            {% render 'card-collection',
               card_collection: block.settings.collection,
               media_aspect_ratio: section.settings.image_ratio,
               columns: columns,

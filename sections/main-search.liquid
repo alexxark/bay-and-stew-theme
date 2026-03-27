@@ -257,7 +257,27 @@
                 role="list"
               >
                 {%- assign skip_card_product_styles = false -%}
-                {%- for item in search.results -%}{% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: item, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}<div style="display:none" class="bss-hpc-lock"></div>{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+                {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
+                {%- assign is_b2b_customer = false -%}
+                {%- if customer and customer.tags contains 'B2B' -%}
+                  {%- assign is_b2b_customer = true -%}
+                {%- endif -%}
+                {%- for item in search.results -%}
+                  {%- if item.object_type == 'product' -%}
+                    {%- unless is_b2b_customer -%}
+                      {%- assign is_product_locked = false -%}
+                      {%- for product_collection in item.collections -%}
+                        {%- if locked_collection_handles contains product_collection.handle -%}
+                          {%- assign is_product_locked = true -%}
+                          {%- break -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {%- if is_product_locked -%}
+                        {%- continue -%}
+                      {%- endif -%}
+                    {%- endunless -%}
+                    {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: item, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+                  {%- endif -%}
                   {% assign lazy_load = false %}
                   {%- if forloop.index > 2 -%}
                     {%- assign lazy_load = true -%}
@@ -272,7 +292,7 @@
                     {%- case item.object_type -%}
                       {%- when 'product' -%}
                         {%- capture product_settings -%}{%- if section.settings.product_show_vendor -%}vendor,{%- endif -%}title,price{%- endcapture -%}
-                        {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-product',
+                        {% render 'card-product',
                           card_product: item,
                           media_aspect_ratio: section.settings.image_ratio,
                           image_shape: section.settings.image_shape,

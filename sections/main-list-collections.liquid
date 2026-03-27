@@ -28,7 +28,18 @@
       class="collection-list grid grid--{{ section.settings.columns_desktop }}-col-desktop grid--{{ section.settings.columns_mobile }}-col-tablet-down"
       role="list"
     >
-      {%- for collection in collections -%}{% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: collection, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}<div style="display:none" class="bss-hpc-lock"></div>{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
+      {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
+      {%- assign is_b2b_customer = false -%}
+      {%- if customer and customer.tags contains 'B2B' -%}
+        {%- assign is_b2b_customer = true -%}
+      {%- endif -%}
+      {%- for collection in collections -%}
+        {%- unless is_b2b_customer -%}
+          {%- if locked_collection_handles contains collection.handle -%}
+            {%- continue -%}
+          {%- endif -%}
+        {%- endunless -%}
+        {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: collection, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
         <li
           class="collection-list__item grid__item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
           {% if settings.animations_reveal_on_scroll %}
@@ -36,7 +47,7 @@
             style="--animation-order: {{ forloop.index }};"
           {% endif %}
         >
-          {% comment %}start BSS Commerce Hide Price{% endcomment %}{% if bss_lock_check contains "true" %}{% render 'bss-hide-product-design' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}{% render 'card-collection',
+          {% render 'card-collection',
             card_collection: collection,
             media_aspect_ratio: section.settings.image_ratio,
             columns: 3
