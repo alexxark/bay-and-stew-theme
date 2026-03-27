@@ -315,6 +315,69 @@
             "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
+        },
+        "collapsible_row_DRrWgJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_hYAYQT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_rbXkfy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_DJjTpG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_jTfeB4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_3G3GKT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_9Qyyfb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -350,7 +413,14 @@
         "collapsible_row_jAcqVG",
         "collapsible_row_dpig8A",
         "collapsible_row_p9kxzL",
-        "collapsible_row_8NnGqi"
+        "collapsible_row_8NnGqi",
+        "collapsible_row_DRrWgJ",
+        "collapsible_row_hYAYQT",
+        "collapsible_row_rbXkfy",
+        "collapsible_row_DJjTpG",
+        "collapsible_row_jTfeB4",
+        "collapsible_row_3G3GKT",
+        "collapsible_row_9Qyyfb"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
