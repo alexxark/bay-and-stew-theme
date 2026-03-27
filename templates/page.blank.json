@@ -330,14 +330,14 @@
           "settings": {
             "heading": "Ohio",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
         },
         "collapsible_row_rbXkfy": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "",
+            "heading": "Oklahoma",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
