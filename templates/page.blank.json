@@ -123,7 +123,16 @@
           "settings": {
             "heading": "Idaho",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_nYMCen": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Illinois",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
         }
@@ -140,7 +149,8 @@
         "collapsible_row_HajDKA",
         "collapsible_row_bRpLQE",
         "collapsible_row_kfkTqe",
-        "collapsible_row_fdNLCT"
+        "collapsible_row_fdNLCT",
+        "collapsible_row_nYMCen"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
