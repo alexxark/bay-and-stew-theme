@@ -288,6 +288,15 @@
             "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
             "page": ""
           }
+        },
+        "collapsible_row_dpig8A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Mexico",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://realfile.tax.newmexico.gov/FYI-204.pdf\"><span style=\"text-decoration:underline\">NTTC Certificate</span></a></p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -320,7 +329,8 @@
         "collapsible_row_UQBgVD",
         "collapsible_row_JmcymN",
         "collapsible_row_RY4CCi",
-        "collapsible_row_jAcqVG"
+        "collapsible_row_jAcqVG",
+        "collapsible_row_dpig8A"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
