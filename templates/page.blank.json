@@ -378,6 +378,33 @@
             "row_content": "",
             "page": ""
           }
+        },
+        "collapsible_row_fE3YcG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_hkXhKL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_drM6XT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -420,7 +447,10 @@
         "collapsible_row_DJjTpG",
         "collapsible_row_jTfeB4",
         "collapsible_row_3G3GKT",
-        "collapsible_row_9Qyyfb"
+        "collapsible_row_9Qyyfb",
+        "collapsible_row_fE3YcG",
+        "collapsible_row_hkXhKL",
+        "collapsible_row_drM6XT"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
