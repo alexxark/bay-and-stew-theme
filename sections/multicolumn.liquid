@@ -43,7 +43,7 @@
         {%- endif -%}
       </div>
     {%- endunless -%}
-    <slider-component class="slider-mobile-gutter" data-page-scroll>
+    <slider-component class="slider-mobile-gutter" id="MulticolumnSlider-{{ section.id }}">
       <ul
         class="multicolumn-list contains-content-container grid grid--{{ section.settings.columns_mobile }}-col-tablet-down grid--{{ section.settings.columns_desktop }}-col-desktop{% if show_mobile_slider %} slider slider--tablet grid--peek{% endif %} {% if section.settings.swipe_on_mobile or section.settings.swipe_on_desktop %} slider {% endif %}{% if section.settings.swipe_on_mobile and section.blocks.size > 1 %} slider--mobile grid--peek{% endif %}{% if section.settings.swipe_on_desktop and section.blocks.size > 3 %} slider--everywhere{% endif %}"
         id="Slider-{{ section.id }}"
@@ -192,6 +192,96 @@
     </div>
   </div>
 </div>
+
+<script>
+  (function() {
+    var sectionId = '{{ section.id }}';
+    var columnsDesktop = {{ section.settings.columns_desktop }};
+    var sliderEl = document.getElementById('MulticolumnSlider-' + sectionId);
+    if (!sliderEl) return;
+
+    function initPageScroll() {
+      var slider = sliderEl.querySelector('[id^="Slider-"]');
+      var slides = sliderEl.querySelectorAll('[id^="Slide-"]');
+      var prevBtn = sliderEl.querySelector('button[name="previous"]');
+      var nextBtn = sliderEl.querySelector('button[name="next"]');
+      var currentEl = sliderEl.querySelector('.slider-counter--current');
+      var totalEl = sliderEl.querySelector('.slider-counter--total');
+
+      if (!slider || slides.length < 2 || !nextBtn) return;
+
+      var visibleSlides = Array.from(slides).filter(function(s) { return s.clientWidth > 0; });
+      if (visibleSlides.length < 2) return;
+
+      var itemOffset = visibleSlides[1].offsetLeft - visibleSlides[0].offsetLeft;
+      var perPage = Math.max(1, Math.floor((slider.clientWidth - visibleSlides[0].offsetLeft) / itemOffset));
+      var totalPages = Math.ceil(visibleSlides.length / perPage);
+      var currentPage = 1;
+
+      function updateCounter() {
+        currentPage = Math.floor(Math.round(slider.scrollLeft / itemOffset) / perPage) + 1;
+        currentPage = Math.max(1, Math.min(currentPage, totalPages));
+        if (currentEl) currentEl.textContent = currentPage;
+        if (totalEl) totalEl.textContent = totalPages;
+
+        if (prevBtn) {
+          if (slider.scrollLeft <= 0) {
+            prevBtn.setAttribute('disabled', 'disabled');
+          } else {
+            prevBtn.removeAttribute('disabled');
+          }
+        }
+        if (nextBtn) {
+          var lastSlide = visibleSlides[visibleSlides.length - 1];
+          var lastVisible = lastSlide.offsetLeft + lastSlide.clientWidth <= slider.clientWidth + slider.scrollLeft + 2;
+          if (lastVisible) {
+            nextBtn.setAttribute('disabled', 'disabled');
+          } else {
+            nextBtn.removeAttribute('disabled');
+          }
+        }
+      }
+
+      function scrollByPage(direction) {
+        var scrollAmount = perPage * itemOffset;
+        var target = direction === 'next'
+          ? slider.scrollLeft + scrollAmount
+          : slider.scrollLeft - scrollAmount;
+        slider.scrollTo({ left: target, behavior: 'smooth' });
+      }
+
+      // Override the native slider-component button handlers
+      var newPrev = prevBtn.cloneNode(true);
+      var newNext = nextBtn.cloneNode(true);
+      prevBtn.parentNode.replaceChild(newPrev, prevBtn);
+      nextBtn.parentNode.replaceChild(newNext, nextBtn);
+
+      newPrev.addEventListener('click', function(e) {
+        e.preventDefault();
+        scrollByPage('prev');
+      });
+      newNext.addEventListener('click', function(e) {
+        e.preventDefault();
+        scrollByPage('next');
+      });
+
+      slider.addEventListener('scroll', updateCounter);
+      updateCounter();
+    }
+
+    if (customElements.get('slider-component')) {
+      // Element already defined, wait for next frame to ensure it's initialized
+      requestAnimationFrame(function() {
+        requestAnimationFrame(initPageScroll);
+      });
+    } else {
+      // Wait for the custom element to be defined
+      customElements.whenDefined('slider-component').then(function() {
+        requestAnimationFrame(initPageScroll);
+      });
+    }
+  })();
+</script>
 
 {% schema %}
 {
