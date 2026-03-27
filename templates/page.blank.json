@@ -427,6 +427,15 @@
         "collapsible_row_VJGmXr": {
           "type": "collapsible_row",
           "settings": {
+            "heading": "Virginia",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        },
+        "collapsible_row_xyqTUV": {
+          "type": "collapsible_row",
+          "settings": {
             "heading": "Vermont",
             "icon": "check_mark",
             "row_content": "",
@@ -480,7 +489,8 @@
         "collapsible_row_drM6XT",
         "collapsible_row_UnHbdG",
         "collapsible_row_EWH6QG",
-        "collapsible_row_VJGmXr"
+        "collapsible_row_VJGmXr",
+        "collapsible_row_xyqTUV"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
