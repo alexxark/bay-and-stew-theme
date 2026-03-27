@@ -418,7 +418,16 @@
         "collapsible_row_EWH6QG": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "",
+            "heading": "Vermont",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_VJGmXr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Vermont",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
@@ -470,7 +479,8 @@
         "collapsible_row_hkXhKL",
         "collapsible_row_drM6XT",
         "collapsible_row_UnHbdG",
-        "collapsible_row_EWH6QG"
+        "collapsible_row_EWH6QG",
+        "collapsible_row_VJGmXr"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
