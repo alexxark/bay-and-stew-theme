@@ -688,7 +688,7 @@
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
         "caption": "",
-        "heading": "FIND YOUR STATE BELOW",
+        "heading": "FIND YOUR STATE REQUIREMENTS BELOW",
         "heading_size": "h2",
         "heading_alignment": "center",
         "layout": "none",
