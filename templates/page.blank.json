@@ -757,7 +757,7 @@
           "settings": {
             "button_label": "Contact Us",
             "button_link": "https://bayandstew.com/pages/contact",
-            "button_style_secondary": false,
+            "button_style_secondary": true,
             "button_label_2": "",
             "button_link_2": "",
             "button_style_secondary_2": false
