@@ -16,6 +16,57 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_GKTNzB": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_BLJknw": {
+          "type": "heading",
+          "settings": {
+            "heading": "Looking to apply?",
+            "heading_size": "h1"
+          }
+        },
+        "text_GTALt6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Share information about your brand with your customers. Describe a product, make announcements, or welcome customers to your store.</p>"
+          }
+        },
+        "button_y7LrLh": {
+          "type": "button",
+          "settings": {
+            "button_label": "Button label",
+            "button_link": "",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        },
+        "text_Yypdqk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For more information, please visit our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_BLJknw",
+        "text_GTALt6",
+        "button_y7LrLh",
+        "text_Yypdqk"
+      ],
+      "disabled": true,
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text_z34ezE": {
       "type": "rich-text",
       "blocks": {
@@ -617,6 +668,7 @@
   },
   "order": [
     "main",
+    "rich_text_GKTNzB",
     "rich_text_z34ezE",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
