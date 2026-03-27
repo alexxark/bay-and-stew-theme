@@ -180,6 +180,15 @@
             "row_content": "<p><a href=\"https://revenue.louisiana.gov/tax-education-and-faqs/faqs/louisiana-resale-certificate/who-qualifies-for-a-louisiana-resale-certificate/\"><span style=\"text-decoration:underline\">R-1064 Resale Certificate</span></a></p>",
             "page": ""
           }
+        },
+        "collapsible_row_XFbjEx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maine",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -200,7 +209,8 @@
         "collapsible_row_YLCmXH",
         "collapsible_row_U9C99T",
         "collapsible_row_fFHJqf",
-        "collapsible_row_jRaV4m"
+        "collapsible_row_jRaV4m",
+        "collapsible_row_XFbjEx"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
