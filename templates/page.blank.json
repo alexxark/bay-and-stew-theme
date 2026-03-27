@@ -37,33 +37,81 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
       }
     },
-    "rich_text_z34ezE": {
+    "rich_text_t8Yr8c": {
       "type": "rich-text",
       "blocks": {
-        "text_GVHkQn": {
+        "text_kPG4tD": {
           "type": "text",
           "settings": {
-            "text": "<h2>Before You Apply — Please Read Carefully<br/></h2><p><strong>All U.S. wholesale applicants must submit valid resale documentation with their application.</strong><br/><br/>Your application will not be approved without the required form(s). <br/><br/><strong>To submit an application: </strong></p><p><strong>✓ Complete your wholesale application<br/>✓ Find your state below<br/>✓ Upload the required documents<br/>✓ Submit your application</strong><br/><br/>Applications are typically reviewed within 1 business day.<br/><br/>Requirements vary by state. Please locate your state below and upload the correct documentation on application or email it to <a href=\"hello@bayandstew.com\"><strong>hello@bayandstew.com</strong></a></p>"
+            "text": "<h2>To submit an application: </h2>"
           }
         }
       },
       "block_order": [
-        "text_GVHkQn"
+        "text_kPG4tD"
       ],
-      "name": "Please Read",
+      "custom_css": [
+        "h2 {font-size: 22px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
-        "content_alignment": "left",
-        "color_scheme": "scheme-1",
+        "content_alignment": "center",
+        "color_scheme": "",
         "full_width": true,
         "padding_top": 40,
-        "padding_bottom": 52
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_FdDAYY": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_EUNxGJ": {
+          "type": "column",
+          "settings": {
+            "title": "<strong>STEP 1</strong>",
+            "text": "<p><strong>Find your state requirements below</strong></p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_ajB3aX": {
+          "type": "column",
+          "settings": {
+            "title": "<strong>STEP 2</strong>",
+            "text": "<p><strong>Complete your  application & upload the required documents</strong></p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_EUNxGJ",
+        "column_ajB3aX"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 2,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "collapsible_content_zeEk4Y": {
@@ -687,7 +735,8 @@
   "order": [
     "main",
     "rich_text_7UVxYJ",
-    "rich_text_z34ezE",
+    "rich_text_t8Yr8c",
+    "multicolumn_FdDAYY",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
     "rich_text_GKTNzB",
