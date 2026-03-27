@@ -114,6 +114,34 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_RcKJL7": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_wecXnn": {
+          "type": "caption",
+          "settings": {
+            "caption": "Applications are typically reviewed within 1 business day.",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_wecXnn"
+      ],
+      "custom_css": [
+        "h2 {font-size: 22px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
     "collapsible_content_zeEk4Y": {
       "type": "collapsible-content",
       "blocks": {
@@ -737,6 +765,7 @@
     "rich_text_7UVxYJ",
     "rich_text_t8Yr8c",
     "multicolumn_FdDAYY",
+    "rich_text_RcKJL7",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
     "rich_text_GKTNzB",
