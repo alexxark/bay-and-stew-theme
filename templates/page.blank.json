@@ -686,21 +686,6 @@
         "padding_bottom": 48
       }
     },
-    "rich_text_x6qpmt": {
-      "type": "rich-text",
-      "custom_css": [
-        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
-      ],
-      "name": "divider",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
-        "full_width": true,
-        "padding_top": 4,
-        "padding_bottom": 0
-      }
-    },
     "rich_text_CPjeY4": {
       "type": "rich-text",
       "blocks": {
@@ -741,6 +726,21 @@
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
+      }
+    },
+    "rich_text_x6qpmt": {
+      "type": "rich-text",
+      "custom_css": [
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
+      ],
+      "name": "divider",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
       }
     },
     "rich_text_pifMqw": {
@@ -790,8 +790,8 @@
     "rich_text_RcKJL7",
     "rich_text_GKTNzB",
     "collapsible_content_zeEk4Y",
-    "rich_text_x6qpmt",
     "rich_text_CPjeY4",
+    "rich_text_x6qpmt",
     "rich_text_pifMqw"
   ]
 }
