@@ -42,7 +42,7 @@
           "settings": {
             "heading": "Alaska",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p>State-issued business license or other proof of established business</p>",
             "page": ""
           }
         },
