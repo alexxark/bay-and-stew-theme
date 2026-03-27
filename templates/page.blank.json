@@ -724,7 +724,7 @@
         "text_fKNMwe": {
           "type": "text",
           "settings": {
-            "text": "<p>For more information, please visit our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
+            "text": "<p>For more information, please visit <br/>our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
           }
         }
       },
@@ -769,7 +769,7 @@
         "button_iCmrTd"
       ],
       "custom_css": [
-        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; }"
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400;}"
       ],
       "name": "Questions",
       "settings": {
