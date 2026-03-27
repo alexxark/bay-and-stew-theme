@@ -346,16 +346,16 @@
         "collapsible_row_DJjTpG": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "",
+            "heading": "Oregon",
             "icon": "check_mark",
-            "row_content": "",
+            "row_content": "<p>State-issued business license or other proof of established business</p>",
             "page": ""
           }
         },
         "collapsible_row_jTfeB4": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "",
+            "heading": "Pennsylvania",
             "icon": "check_mark",
             "row_content": "",
             "page": ""
