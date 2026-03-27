@@ -297,6 +297,15 @@
             "row_content": "<p><a href=\"https://realfile.tax.newmexico.gov/FYI-204.pdf\"><span style=\"text-decoration:underline\">NTTC Certificate</span></a></p>",
             "page": ""
           }
+        },
+        "collapsible_row_p9kxzL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New York",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1IlByrhjD9Aapfk4oimOKUlIHKaZqKBzA/view\"><span style=\"text-decoration:underline\">ST-120 Resale Certificate</span></a> (signed)</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -330,7 +339,8 @@
         "collapsible_row_JmcymN",
         "collapsible_row_RY4CCi",
         "collapsible_row_jAcqVG",
-        "collapsible_row_dpig8A"
+        "collapsible_row_dpig8A",
+        "collapsible_row_p9kxzL"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
