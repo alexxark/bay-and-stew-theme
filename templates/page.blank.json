@@ -72,6 +72,15 @@
             "row_content": "<ul><li>California Seller’s Permit</li><li><a href=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\"><span style=\"text-decoration:underline\">CDTFA-230 Resale Certificate</span></a> (signed)</li></ul>",
             "page": ""
           }
+        },
+        "collapsible_row_RyTbPM": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Colorado",
+            "icon": "check_mark",
+            "row_content": "<p><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -80,7 +89,8 @@
         "collapsible_row_MtdDdr",
         "collapsible_row_PGiVpe",
         "collapsible_row_MQWJRU",
-        "collapsible_row_YKQqFt"
+        "collapsible_row_YKQqFt",
+        "collapsible_row_RyTbPM"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
