@@ -20,6 +20,29 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_7UVxYJ": {
+      "type": "rich-text",
+      "blocks": {
+        "text_pD7r7R": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Before You Apply — Please Read Carefully</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "text_pD7r7R"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text_z34ezE": {
       "type": "rich-text",
       "blocks": {
@@ -38,48 +61,6 @@
         "desktop_content_position": "center",
         "content_alignment": "left",
         "color_scheme": "scheme-1",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "rich_text_GKTNzB": {
-      "type": "rich-text",
-      "blocks": {
-        "text_GTALt6": {
-          "type": "text",
-          "settings": {
-            "text": "<h3>Ready to Apply for Wholesale?</h3><p></p><p>Select your location to get started on your application:</p>"
-          }
-        },
-        "button_y7LrLh": {
-          "type": "button",
-          "settings": {
-            "button_label": "USA",
-            "button_link": "https://bayandstew.com/account/register",
-            "button_style_secondary": false,
-            "button_label_2": "Outside of USA",
-            "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
-            "button_style_secondary_2": false
-          }
-        },
-        "text_Yypdqk": {
-          "type": "text",
-          "settings": {
-            "text": "<p>For more information, please visit our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
-          }
-        }
-      },
-      "block_order": [
-        "text_GTALt6",
-        "button_y7LrLh",
-        "text_Yypdqk"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
@@ -612,7 +593,7 @@
       "custom_css": [
         "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "divider",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -620,6 +601,48 @@
         "full_width": true,
         "padding_top": 4,
         "padding_bottom": 0
+      }
+    },
+    "rich_text_GKTNzB": {
+      "type": "rich-text",
+      "blocks": {
+        "text_GTALt6": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>STEP 2</h2><h3>Ready to Apply for Wholesale?</h3><p></p><p>Select your location to get started on your application:</p>"
+          }
+        },
+        "button_y7LrLh": {
+          "type": "button",
+          "settings": {
+            "button_label": "USA",
+            "button_link": "https://bayandstew.com/account/register",
+            "button_style_secondary": false,
+            "button_label_2": "Outside of USA",
+            "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
+            "button_style_secondary_2": false
+          }
+        },
+        "text_Yypdqk": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For more information, please visit our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_GTALt6",
+        "button_y7LrLh",
+        "text_Yypdqk"
+      ],
+      "name": "Ready?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "rich_text_pifMqw": {
@@ -650,7 +673,7 @@
       "custom_css": [
         "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "Questions",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -663,10 +686,11 @@
   },
   "order": [
     "main",
+    "rich_text_7UVxYJ",
     "rich_text_z34ezE",
-    "rich_text_GKTNzB",
     "collapsible_content_zeEk4Y",
     "rich_text_x6qpmt",
+    "rich_text_GKTNzB",
     "rich_text_pifMqw"
   ]
 }
