@@ -162,7 +162,6 @@
             class="slider-button slider-button--prev"
             name="previous"
             aria-label="{{ 'general.slider.previous_slide' | t }}"
-            data-step="{{ mc_columns }}"
           >
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
@@ -177,7 +176,6 @@
             class="slider-button slider-button--next"
             name="next"
             aria-label="{{ 'general.slider.next_slide' | t }}"
-            data-step="{{ mc_columns }}"
           >
             <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
           </button>
@@ -205,34 +203,64 @@
   (function() {
     var sliderEl = document.getElementById('MulticolumnSlider-{{ section.id }}');
     if (!sliderEl) return;
-    var perPage = {{ section.settings.columns_desktop }};
+    var columnsDesktop = {{ section.settings.columns_desktop }};
     var totalSlides = {{ section.blocks.size }};
-    var totalPages = Math.ceil(totalSlides / perPage);
     var slider = sliderEl.querySelector('[id^="Slider-"]');
     var currentEl = sliderEl.querySelector('.slider-counter--current');
     var totalEl = sliderEl.querySelector('.slider-counter--total');
+    var prevBtn = sliderEl.querySelector('button[name="previous"]');
+    var nextBtn = sliderEl.querySelector('button[name="next"]');
     if (!slider || !currentEl) return;
 
+    var desktopMQ = window.matchMedia('(min-width: 990px)');
+
+    function isDesktop() {
+      return desktopMQ.matches;
+    }
+
+    function getPerPage() {
+      return isDesktop() ? columnsDesktop : 1;
+    }
+
+    function applyStep() {
+      var step = getPerPage();
+      if (prevBtn) prevBtn.dataset.step = step;
+      if (nextBtn) nextBtn.dataset.step = step;
+    }
+
     function updatePageCounter() {
-      var slides = sliderEl.querySelectorAll('[id^="Slide-"]');
-      var visible = [];
-      for (var i = 0; i < slides.length; i++) {
-        if (slides[i].clientWidth > 0) visible.push(slides[i]);
-      }
-      if (visible.length < 2) return;
-      var itemOffset = visible[1].offsetLeft - visible[0].offsetLeft;
-      if (itemOffset <= 0) return;
-      var scrollIndex = Math.round(slider.scrollLeft / itemOffset);
-      var page = Math.floor(scrollIndex / perPage) + 1;
-      page = Math.max(1, Math.min(page, totalPages));
-      currentEl.textContent = page;
-      totalEl.textContent = totalPages;
+      // Use setTimeout so this runs AFTER the SliderComponent's own update()
+      setTimeout(function() {
+        var perPage = getPerPage();
+        if (perPage <= 1) return; // Let component handle mobile counter natively
+
+        var slides = sliderEl.querySelectorAll('[id^="Slide-"]');
+        var visible = [];
+        for (var i = 0; i < slides.length; i++) {
+          if (slides[i].clientWidth > 0) visible.push(slides[i]);
+        }
+        if (visible.length < 2) return;
+        var itemOffset = visible[1].offsetLeft - visible[0].offsetLeft;
+        if (itemOffset <= 0) return;
+
+        var pages = Math.ceil(visible.length / perPage);
+        var scrollIndex = Math.round(slider.scrollLeft / itemOffset);
+        var page = Math.floor(scrollIndex / perPage) + 1;
+        page = Math.max(1, Math.min(page, pages));
+        currentEl.textContent = page;
+        totalEl.textContent = pages;
+      }, 0);
+    }
+
+    function onBreakpointChange() {
+      applyStep();
+      updatePageCounter();
     }
 
     slider.addEventListener('scroll', updatePageCounter);
-    // Run on load and after any resize
+    desktopMQ.addEventListener('change', onBreakpointChange);
+    applyStep();
     updatePageCounter();
-    new ResizeObserver(updatePageCounter).observe(slider);
   })();
 </script>
 
