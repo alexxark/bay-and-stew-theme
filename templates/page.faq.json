@@ -198,7 +198,7 @@
           "settings": {
             "heading": "What documentation do I need to provide to open a wholesale account?",
             "icon": "check_mark",
-            "row_content": "<p>To establish a wholesale account, Bay & Stew requires valid resale or tax-exemption documentation based on your state or country.</p><p>Most U.S. applicants will need:</p><ul><li>A resale license or seller’s permit</li><li>A resale or tax exemption certificate (signed)</li></ul><p>Requirements vary by location. Please refer to our <a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><strong>Apply for Wholesale page</strong></a> to find your state-specific documentation.<br/><br/>If you have questions about obtaining these documents, we recommend contacting your state’s tax or licensing agency directly.</p>",
+            "row_content": "<p>To establish a wholesale account, Bay & Stew requires valid resale or tax-exemption documentation based on your state or country.</p><p><strong>Most U.S. applicants will need:</strong></p><ul><li>A resale license or seller’s permit</li><li>A resale or tax exemption certificate (signed)</li></ul><p>Requirements vary by location. <br/><br/>Please refer to our <a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><strong>Apply for Wholesale page</strong></a> to find your state-specific documentation.<br/><br/>If you have questions about obtaining these documents, we recommend contacting your state’s tax or licensing agency directly.</p>",
             "page": ""
           }
         }
