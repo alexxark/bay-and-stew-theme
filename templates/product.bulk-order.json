@@ -55,6 +55,7 @@
           "settings": {
             "layout": "vertical",
             "icon_1": "star",
+            "image_1": "shopify://shop_images/Card-Icon.svg",
             "heading_1": "Free Limited Edition Card Deck <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">with qualifying $100+ purchase, </a>while supplies last.",
             "icon_2": "none",
             "heading_2": "",
@@ -249,6 +250,55 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "177491200086b2cdd4": {
+      "type": "_blocks",
+      "settings": {}
+    },
+    "1774910843ea067923": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_8c1b2d1_jrdBPp": {
+          "type": "ai_gen_block_8c1b2d1",
+          "disabled": true,
+          "settings": {
+            "layout": "column",
+            "gap": 40,
+            "item_gap": 12,
+            "padding": 20,
+            "border_radius": 0,
+            "desktop_width_percent": 100,
+            "icon_size": 48,
+            "icon_color": "#008060",
+            "title_font_size": 16,
+            "title_color": "#121212",
+            "subtext_size": 14,
+            "subtext_color": "#666666",
+            "background_color": "#ffffff",
+            "feature_1_enabled": true,
+            "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
+            "feature_1_title": "Free Limited Edition Card Deck",
+            "feature_1_subtext": "with qualifying $100+ purchase, while supplies last.",
+            "feature_2_enabled": true,
+            "feature_2_title": "Loyalty Rewards",
+            "feature_2_subtext": "Earn points and unlock exclusive rewards made for makers.",
+            "feature_3_enabled": true,
+            "feature_3_title": "Secure checkout",
+            "feature_3_subtext": "SSL encrypted payment",
+            "feature_4_enabled": false,
+            "feature_4_title": "",
+            "feature_4_subtext": "",
+            "feature_5_enabled": false,
+            "feature_5_title": "",
+            "feature_5_subtext": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_8c1b2d1_jrdBPp"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -256,6 +306,8 @@
     "related-products",
     "1750978152f27a8ba5",
     "rich_text_hKUdfr",
-    "multicolumn_WBHDtj"
+    "multicolumn_WBHDtj",
+    "177491200086b2cdd4",
+    "1774910843ea067923"
   ]
 }
