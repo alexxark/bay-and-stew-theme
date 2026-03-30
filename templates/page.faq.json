@@ -210,13 +210,23 @@
             "row_content": "<p>Applications are typically<strong> </strong>reviewed<strong> within 1 business day.<br/></strong><br/>We’ll email you as soon as your account is approved!</p>",
             "page": ""
           }
+        },
+        "collapsible_row_btEQzy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Why was my wholesale application not approved?",
+            "icon": "check_mark",
+            "row_content": "<p>The most common reason is missing or incomplete documentation.<br/><br/>Please ensure you’ve submitted all required forms for your state or country. If anything is missing, our team will reach out with next steps.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_ehNzYD",
         "collapsible_row_NJVPYX",
         "collapsible_row_aQWBz8",
-        "collapsible_row_9h4RmC"
+        "collapsible_row_9h4RmC",
+        "collapsible_row_btEQzy"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
