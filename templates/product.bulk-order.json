@@ -49,6 +49,19 @@
           "type": "shopify://apps/sw-back-in-stock/blocks/product-restore-email/b190bced-3b7b-47da-a05f-6ea4821c3a77",
           "settings": {}
         },
+        "icon_with_text_QdMWJh": {
+          "type": "icon-with-text",
+          "disabled": true,
+          "settings": {
+            "layout": "vertical",
+            "icon_1": "star",
+            "heading_1": "Free Limited Edition Card Deck <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">with qualifying $100+ purchase, </a>while supplies last.",
+            "icon_2": "none",
+            "heading_2": "",
+            "icon_3": "none",
+            "heading_3": ""
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -88,6 +101,7 @@
         "bulk_order_form_bXfHP9",
         "personalization_box_7gEhAP",
         "ecomsend_restock_product_restore_email_MdVpP6",
+        "icon_with_text_QdMWJh",
         "description",
         "9445ca66-0abf-4dff-8633-6def5547ba18",
         "661e5f9d-2379-48b0-a1fe-243797bae4fb",
