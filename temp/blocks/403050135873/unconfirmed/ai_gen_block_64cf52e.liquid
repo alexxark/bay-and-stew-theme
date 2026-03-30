@@ -1,6 +1,456 @@
+{% doc %}
+  @prompt
+    feature checklist with row, gap, icon size, title font size subtext size options, allow for icon image upload for each and icon size options. I want to make sure I have dedicated settings for styling paragraph text styles.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-feature-checklist-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: {{ block.settings.container_padding }}px;
+    background-color: {{ block.settings.background_color }};
+    border-radius: {{ block.settings.border_radius }}px;
+  }
+
+  .ai-feature-checklist__list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    gap: {{ block.settings.gap }}px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .ai-feature-checklist__item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: {{ block.settings.icon_text_gap }}px;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.icon_color }};
+  }
+
+  .ai-feature-checklist__content-{{ ai_gen_id }} {
+    flex-grow: 1;
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_subtext_gap }}px 0;
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: {{ block.settings.title_font_weight }};
+    color: {{ block.settings.title_color }};
+    line-height: 1.3;
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.subtext_font_size }}px;
+    font-weight: {{ block.settings.subtext_font_weight }};
+    color: {{ block.settings.subtext_color }};
+    line-height: {{ block.settings.subtext_line_height }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-feature-checklist__list-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+  }
+{% endstyle %}
+
+<div class="ai-feature-checklist-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <ul class="ai-feature-checklist__list-{{ ai_gen_id }}">
+    {% for i in (1..6) %}
+      {% liquid
+        assign title_key = 'feature_' | append: i | append: '_title'
+        assign subtext_key = 'feature_' | append: i | append: '_subtext'
+        assign icon_key = 'feature_' | append: i | append: '_icon'
+        
+        assign feature_title = block.settings[title_key]
+        assign feature_subtext = block.settings[subtext_key]
+        assign feature_icon = block.settings[icon_key]
+      %}
+      
+      {% if feature_title != blank %}
+        <li class="ai-feature-checklist__item-{{ ai_gen_id }}">
+          <div class="ai-feature-checklist__icon-wrapper-{{ ai_gen_id }}">
+            {% if feature_icon != blank %}
+              <img
+                src="{{ feature_icon | image_url: width: 200 }}"
+                alt="{{ feature_title | escape }}"
+                loading="lazy"
+                width="200"
+                height="200"
+              >
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            {% endif %}
+          </div>
+          <div class="ai-feature-checklist__content-{{ ai_gen_id }}">
+            <h3 class="ai-feature-checklist__title-{{ ai_gen_id }}">{{ feature_title }}</h3>
+            {% if feature_subtext != blank %}
+              <p class="ai-feature-checklist__subtext-{{ ai_gen_id }}">{{ feature_subtext }}</p>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</div>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Feature checklist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "row",
+          "label": "Row"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between items",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "icon_text_gap",
+      "label": "Gap between icon and text",
+      "min": 4,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "title_subtext_gap",
+      "label": "Gap between title and subtext",
+      "min": 0,
+      "max": 20,
+      "step": 2,
+      "unit": "px",
+      "default": 4
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "container_padding",
+      "label": "Container padding",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "border_radius",
+      "label": "Border radius",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Default icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Font size",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "select",
+      "id": "title_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        },
+        {
+          "value": "700",
+          "label": "Bold"
+        }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Subtext style"
+    },
+    {
+      "type": "range",
+      "id": "subtext_font_size",
+      "label": "Font size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "select",
+      "id": "subtext_font_weight",
+      "label": "Font weight",
+      "options": [
+        {
+          "value": "300",
+          "label": "Light"
+        },
+        {
+          "value": "400",
+          "label": "Normal"
+        },
+        {
+          "value": "500",
+          "label": "Medium"
+        },
+        {
+          "value": "600",
+          "label": "Semi-bold"
+        }
+      ],
+      "default": "400"
+    },
+    {
+      "type": "range",
+      "id": "subtext_line_height",
+      "label": "Line height",
+      "min": 1,
+      "max": 2,
+      "step": 0.1,
+      "default": 1.5
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Title",
+      "default": "Premium quality"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_1_subtext",
+      "label": "Subtext",
+      "default": "Crafted with the finest materials for lasting durability"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_icon",
+      "label": "Custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Title",
+      "default": "Fast shipping"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_2_subtext",
+      "label": "Subtext",
+      "default": "Get your order delivered within 2-3 business days"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_icon",
+      "label": "Custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Title",
+      "default": "Easy returns"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_3_subtext",
+      "label": "Subtext",
+      "default": "30-day hassle-free return policy on all purchases"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_icon",
+      "label": "Custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_4_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_icon",
+      "label": "Custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Feature 5"
+    },
+    {
+      "type": "text",
+      "id": "feature_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_5_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_5_icon",
+      "label": "Custom icon"
+    },
+    {
+      "type": "header",
+      "content": "Feature 6"
+    },
+    {
+      "type": "text",
+      "id": "feature_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "feature_6_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_6_icon",
+      "label": "Custom icon"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature checklist"
+    }
+  ]
+}
 {% endschema %}
