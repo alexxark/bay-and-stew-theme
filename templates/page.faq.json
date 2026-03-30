@@ -234,7 +234,7 @@
           "settings": {
             "heading": "Can I place an order before my account is approved?",
             "icon": "check_mark",
-            "row_content": "<p>Orders placed before approval will be processed at retail pricing and applicable sales tax.<br/><br/><strong>We’re unable to adjust or refund orders after they are placed.</strong></p>",
+            "row_content": "<p>Orders placed before approval will be <strong>processed at retail pricing and applicable sales tax.</strong><br/><br/>We’re unable to adjust or refund orders after they are placed.</p>",
             "page": ""
           }
         }
