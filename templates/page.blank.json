@@ -703,6 +703,7 @@
     },
     "custom_liquid_tJBUX9": {
       "type": "custom-liquid",
+      "disabled": true,
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "<a class=\"button btn\" href=\"#shopify-section-template--26201080561985__rich_text_CPjeY4\" style=\"\n    position: fixed;\n   background-color: #ffffff;\nborder: 1px solid #000000;\ncolor: #000000;\n    bottom: 40px;\n    z-index: 3;\n    right: 50%;\n    transform: translateX(50%);\n\">Scroll To Application</a>",
