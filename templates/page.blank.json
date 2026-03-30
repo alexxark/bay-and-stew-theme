@@ -701,6 +701,16 @@
         "padding_bottom": 48
       }
     },
+    "custom_liquid_tJBUX9": {
+      "type": "custom-liquid",
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<a class=\"button btn\" href=\"#shopify-section-template--26201080561985__rich_text_CPjeY4\" style=\"\n    position: fixed;\n    background-color: #000000;\n    bottom: 40px;\n    z-index: 3;\n    right: 50%;\n    transform: translateX(50%);\n\">Scroll To Application</a>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
     "rich_text_CPjeY4": {
       "type": "rich-text",
       "blocks": {
@@ -791,6 +801,7 @@
     "rich_text_x6qpmt",
     "rich_text_GKTNzB",
     "collapsible_content_zeEk4Y",
+    "custom_liquid_tJBUX9",
     "rich_text_CPjeY4",
     "rich_text_pifMqw"
   ]
