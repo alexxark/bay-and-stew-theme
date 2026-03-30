@@ -1,6 +1,521 @@
+{% doc %}
+  @prompt
+    feature checklist with row, gap, icon size, title font size subtext size options, allow for icon image upload for each and icon sizing features.  include dedicated settings for styling headings or links separately in title and subtext fields
+    
+    
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-feature-checklist-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+  }
+
+  .ai-feature-checklist__list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    gap: {{ block.settings.gap }}px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .ai-feature-checklist__item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: {{ block.settings.icon_text_gap }}px;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.default_icon_color }};
+  }
+
+  .ai-feature-checklist__content-{{ ai_gen_id }} {
+    flex-grow: 1;
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} {
+    margin: 0 0 {{ block.settings.title_subtext_gap }}px 0;
+    font-size: {{ block.settings.title_font_size }}px;
+    color: {{ block.settings.title_color }};
+    line-height: 1.3;
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} h1,
+  .ai-feature-checklist__title-{{ ai_gen_id }} h2,
+  .ai-feature-checklist__title-{{ ai_gen_id }} h3,
+  .ai-feature-checklist__title-{{ ai_gen_id }} h4,
+  .ai-feature-checklist__title-{{ ai_gen_id }} h5,
+  .ai-feature-checklist__title-{{ ai_gen_id }} h6 {
+    margin: 0;
+    font-size: {{ block.settings.title_heading_font_size }}px;
+    color: {{ block.settings.title_heading_color }};
+    line-height: 1.2;
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} a {
+    color: {{ block.settings.title_link_color }};
+    text-decoration: {{ block.settings.title_link_underline }};
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.title_link_hover_color }};
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.subtext_font_size }}px;
+    color: {{ block.settings.subtext_color }};
+    line-height: 1.5;
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h1,
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h2,
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h3,
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h4,
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h5,
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} h6 {
+    margin: 0;
+    font-size: {{ block.settings.subtext_heading_font_size }}px;
+    color: {{ block.settings.subtext_heading_color }};
+    line-height: 1.3;
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} a {
+    color: {{ block.settings.subtext_link_color }};
+    text-decoration: {{ block.settings.subtext_link_underline }};
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.subtext_link_hover_color }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-feature-checklist__list-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+  }
+{% endstyle %}
+
+<feature-checklist-{{ ai_gen_id }} class="ai-feature-checklist-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <ul class="ai-feature-checklist__list-{{ ai_gen_id }}">
+    {% for i in (1..6) %}
+      {% liquid
+        assign title_key = 'feature_' | append: i | append: '_title'
+        assign subtext_key = 'feature_' | append: i | append: '_subtext'
+        assign icon_key = 'feature_' | append: i | append: '_icon'
+        
+        assign title = block.settings[title_key]
+        assign subtext = block.settings[subtext_key]
+        assign icon = block.settings[icon_key]
+      %}
+
+      {% if title != blank or subtext != blank %}
+        <li class="ai-feature-checklist__item-{{ ai_gen_id }}">
+          <div class="ai-feature-checklist__icon-wrapper-{{ ai_gen_id }}">
+            {% if icon != blank %}
+              <img
+                src="{{ icon | image_url: width: 200 }}"
+                alt=""
+                loading="lazy"
+                width="{{ block.settings.icon_size }}"
+                height="{{ block.settings.icon_size }}"
+              >
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            {% endif %}
+          </div>
+          <div class="ai-feature-checklist__content-{{ ai_gen_id }}">
+            {% if title != blank %}
+              <div class="ai-feature-checklist__title-{{ ai_gen_id }}">
+                {{ title }}
+              </div>
+            {% endif %}
+            {% if subtext != blank %}
+              <div class="ai-feature-checklist__subtext-{{ ai_gen_id }}">
+                {{ subtext }}
+              </div>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</feature-checklist-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeatureChecklist{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+      }
+    }
+
+    customElements.define('feature-checklist-{{ ai_gen_id }}', FeatureChecklist{{ ai_gen_id }});
+  })();
+</script>
+
 {% schema %}
- {
-   "name": "AI_Block",
-   "tag": "shopify-ai-generated-block"
- }
+{
+  "name": "Feature checklist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout direction",
+      "options": [
+        {
+          "value": "column",
+          "label": "Column"
+        },
+        {
+          "value": "row",
+          "label": "Row"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between items",
+      "min": 0,
+      "max": 60,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "icon_text_gap",
+      "label": "Gap between icon and text",
+      "min": 4,
+      "max": 40,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "title_subtext_gap",
+      "label": "Gap between title and subtext",
+      "min": 0,
+      "max": 30,
+      "step": 2,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "default_icon_color",
+      "label": "Default icon color",
+      "default": "#000000"
+    },
+    {
+      "type": "header",
+      "content": "Title style"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title font size",
+      "min": 12,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "title_heading_font_size",
+      "label": "Title heading font size",
+      "min": 14,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "color",
+      "id": "title_heading_color",
+      "label": "Title heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "title_link_color",
+      "label": "Title link color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "title_link_hover_color",
+      "label": "Title link hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "title_link_underline",
+      "label": "Title link underline",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "header",
+      "content": "Subtext style"
+    },
+    {
+      "type": "range",
+      "id": "subtext_font_size",
+      "label": "Subtext font size",
+      "min": 10,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext color",
+      "default": "#666666"
+    },
+    {
+      "type": "range",
+      "id": "subtext_heading_font_size",
+      "label": "Subtext heading font size",
+      "min": 12,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 18
+    },
+    {
+      "type": "color",
+      "id": "subtext_heading_color",
+      "label": "Subtext heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "subtext_link_color",
+      "label": "Subtext link color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "subtext_link_hover_color",
+      "label": "Subtext link hover color",
+      "default": "#000000"
+    },
+    {
+      "type": "select",
+      "id": "subtext_link_underline",
+      "label": "Subtext link underline",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_title",
+      "label": "Title",
+      "default": "<p>Premium quality materials</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_subtext",
+      "label": "Subtext",
+      "default": "<p>Crafted with the finest materials for lasting durability</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_icon",
+      "label": "Icon image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_title",
+      "label": "Title",
+      "default": "<p>Fast shipping</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_subtext",
+      "label": "Subtext",
+      "default": "<p>Get your order delivered within 2-3 business days</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_icon",
+      "label": "Icon image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_title",
+      "label": "Title",
+      "default": "<p>Easy returns</p>"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_subtext",
+      "label": "Subtext",
+      "default": "<p>30-day hassle-free return policy on all items</p>"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_icon",
+      "label": "Icon image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_icon",
+      "label": "Icon image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 5"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_5_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_5_icon",
+      "label": "Icon image"
+    },
+    {
+      "type": "header",
+      "content": "Feature 6"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_6_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_6_icon",
+      "label": "Icon image"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature checklist"
+    }
+  ]
+}
 {% endschema %}
