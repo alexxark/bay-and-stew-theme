@@ -180,7 +180,7 @@
           "settings": {
             "heading": "Do you offer wholesale accounts?",
             "icon": "check_mark",
-            "row_content": "<p>Yes — Bay & Stew serves both retail and wholesale customers.<br/><br/>To apply, you’ll need a valid seller’s permit and/or sales tax exemption certificate.<br/><br/>You can view full requirements by state or country on our <a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\">Apply for Wholesale page.</a><br/><br/>If you don’t have resale documentation, you can still shop our collection on Etsy at <a href=\"http://bayandstew.etsy.com\" title=\"http://bayandstew.etsy.com\">bayandstew.etsy.com</a></p>",
+            "row_content": "<p>Yes — Bay & Stew serves both retail and wholesale customers.<br/><br/>To apply, you’ll need a valid seller’s permit and/or sales tax exemption certificate.<br/><br/><strong>You can view full requirements by state or country on our </strong><a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><strong>Apply for Wholesale page.</strong></a><br/><br/>If you don’t have resale documentation, you can still shop our collection on Etsy at <a href=\"http://bayandstew.etsy.com\" title=\"http://bayandstew.etsy.com\">bayandstew.etsy.com</a></p>",
             "page": ""
           }
         },
