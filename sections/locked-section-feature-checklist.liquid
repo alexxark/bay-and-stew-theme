@@ -1,0 +1,580 @@
+{%- comment -%}
+  ================================================================
+  Locked Section Feature Checklist
+  Only renders when the current page/product is locked for
+  non-B2B customers (not logged in or missing 'B2B' tag).
+  ================================================================
+{%- endcomment -%}
+
+{%- liquid
+  assign locked_collection_handles = 'bracelet,earrings,necklace,ready-to-wear,rings' | split: ','
+
+  assign is_b2b_customer = false
+  if customer and customer.tags contains 'B2B'
+    assign is_b2b_customer = true
+  endif
+
+  assign show_section = false
+
+  comment
+    Product page: check if product belongs to a locked collection
+  endcomment
+  if product != blank
+    for product_collection in product.collections
+      if locked_collection_handles contains product_collection.handle
+        unless is_b2b_customer
+          assign show_section = true
+        endunless
+        break
+      endif
+    endfor
+  endif
+
+  comment
+    Collection page: check if current collection is locked
+  endcomment
+  if collection != blank
+    if locked_collection_handles contains collection.handle
+      unless is_b2b_customer
+        assign show_section = true
+      endunless
+    endif
+  endif
+
+  comment
+    Also check BSS lock condition if available
+  endcomment
+  if show_section == false and product != blank
+    capture bss_lock_check
+      render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'price', get_content: true, bss_lock_action: 'bss_hide_price'
+    endcapture
+    if bss_lock_check contains 'bss-lock-element'
+      unless is_b2b_customer
+        assign show_section = true
+      endunless
+    endif
+  endif
+-%}
+
+{%- if show_section -%}
+  {%- style -%}
+    .locked-feature-checklist-{{ section.id }} {
+      display: block;
+      width: 100%;
+      padding: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px 0 {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+      background-color: {{ section.settings.background_color }};
+    }
+
+    @media screen and (min-width: 750px) {
+      .locked-feature-checklist-{{ section.id }} {
+        padding: {{ section.settings.padding_top }}px 0 {{ section.settings.padding_bottom }}px;
+      }
+    }
+
+    .locked-feature-checklist__inner-{{ section.id }} {
+      max-width: {{ section.settings.max_width }}px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .locked-feature-checklist__heading-{{ section.id }} {
+      margin: 0 0 {{ section.settings.heading_margin_bottom }}px;
+      font-size: {{ section.settings.heading_font_size | times: 0.85 | round: 0 }}px;
+      font-weight: {{ section.settings.heading_font_weight }};
+      color: {{ section.settings.heading_color }};
+      text-align: {{ section.settings.heading_alignment }};
+    }
+
+    @media screen and (min-width: 750px) {
+      .locked-feature-checklist__heading-{{ section.id }} {
+        font-size: {{ section.settings.heading_font_size }}px;
+      }
+    }
+
+    .locked-feature-checklist__list-{{ section.id }} {
+      display: flex;
+      flex-direction: {{ section.settings.layout }};
+      gap: {{ section.settings.gap }}px;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      flex-wrap: wrap;
+    }
+
+    .locked-feature-checklist__item-{{ section.id }} {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      {% if section.settings.layout == 'row' %}
+        flex: 1 1 auto;
+        min-width: 200px;
+      {% else %}
+        width: 100%;
+      {% endif %}
+    }
+
+    .locked-feature-checklist__icon-wrapper-{{ section.id }} {
+      flex-shrink: 0;
+      width: {{ section.settings.icon_size }}px;
+      height: {{ section.settings.icon_size }}px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .locked-feature-checklist__icon-wrapper-{{ section.id }} img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .locked-feature-checklist__icon-wrapper-{{ section.id }} svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: {{ section.settings.default_icon_color }};
+      stroke-width: 2;
+    }
+
+    .locked-feature-checklist__content-{{ section.id }} {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .locked-feature-checklist__title-{{ section.id }} {
+      margin: 0;
+      font-size: {{ section.settings.title_font_size }}px;
+      font-weight: 600;
+      color: {{ section.settings.title_color }};
+      line-height: 1.3;
+    }
+
+    .locked-feature-checklist__subtext-{{ section.id }} {
+      margin: 0;
+      font-size: {{ section.settings.subtext_size }}px;
+      color: {{ section.settings.subtext_color }};
+      line-height: 1.5;
+    }
+
+    .locked-feature-checklist__subtext-{{ section.id }} a {
+      color: {{ section.settings.link_color }};
+      text-decoration: {{ section.settings.link_style }};
+    }
+
+    .locked-feature-checklist__subtext-{{ section.id }} a:hover {
+      color: {{ section.settings.link_hover_color }};
+      text-decoration: {{ section.settings.link_hover_style }};
+    }
+
+    .locked-feature-checklist__cta-{{ section.id }} {
+      display: inline-block;
+      margin-top: {{ section.settings.cta_margin_top }}px;
+      text-align: {{ section.settings.heading_alignment }};
+    }
+
+    .locked-feature-checklist__cta-{{ section.id }} a {
+      display: inline-block;
+      padding: 10px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      color: {{ section.settings.cta_text_color }};
+      background-color: {{ section.settings.cta_background_color }};
+      border-radius: 4px;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .locked-feature-checklist__cta-{{ section.id }} a:hover {
+      opacity: 0.85;
+    }
+
+    @media screen and (max-width: 749px) {
+      .locked-feature-checklist__list-{{ section.id }} {
+        flex-direction: column;
+      }
+
+      .locked-feature-checklist__item-{{ section.id }} {
+        width: 100%;
+      }
+    }
+  {%- endstyle -%}
+
+  <section class="locked-feature-checklist-{{ section.id }}" {{ section.shopify_attributes }}>
+    <div class="locked-feature-checklist__inner-{{ section.id }}">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="locked-feature-checklist__heading-{{ section.id }}">
+          {{ section.settings.heading | escape }}
+        </h2>
+      {%- endif -%}
+
+      <ul class="locked-feature-checklist__list-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'feature_item' and block.settings.enabled -%}
+            <li class="locked-feature-checklist__item-{{ section.id }}" {{ block.shopify_attributes }}>
+              <div class="locked-feature-checklist__icon-wrapper-{{ section.id }}">
+                {%- if block.settings.icon != blank -%}
+                  <img
+                    src="{{ block.settings.icon | image_url: width: 200 }}"
+                    alt="{{ block.settings.title | escape }}"
+                    loading="lazy"
+                    width="{{ section.settings.icon_size }}"
+                    height="{{ section.settings.icon_size }}"
+                  >
+                {%- else -%}
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                {%- endif -%}
+              </div>
+              <div class="locked-feature-checklist__content-{{ section.id }}">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="locked-feature-checklist__title-{{ section.id }}">{{ block.settings.title | escape }}</h3>
+                {%- endif -%}
+                {%- if block.settings.subtext != blank -%}
+                  <div class="locked-feature-checklist__subtext-{{ section.id }}">{{ block.settings.subtext }}</div>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.cta_text != blank and section.settings.cta_url != blank -%}
+        <div class="locked-feature-checklist__cta-{{ section.id }}">
+          <a href="{{ section.settings.cta_url }}">{{ section.settings.cta_text | escape }}</a>
+        </div>
+      {%- endif -%}
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Locked Feature Checklist",
+  "tag": "section",
+  "class": "locked-section-feature-checklist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Visibility"
+    },
+    {
+      "type": "paragraph",
+      "content": "This section only appears when the current product or collection is locked for non-B2B customers."
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "B2B Wholesale Benefits"
+    },
+    {
+      "type": "range",
+      "id": "heading_font_size",
+      "label": "Heading font size",
+      "min": 16,
+      "max": 48,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "select",
+      "id": "heading_font_weight",
+      "label": "Heading font weight",
+      "options": [
+        { "value": "400", "label": "Normal" },
+        { "value": "600", "label": "Semi-bold" },
+        { "value": "700", "label": "Bold" }
+      ],
+      "default": "600"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#121212"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "range",
+      "id": "heading_margin_bottom",
+      "label": "Space below heading",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout direction",
+      "options": [
+        { "value": "row", "label": "Row" },
+        { "value": "column", "label": "Column" }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between items",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "max_width",
+      "label": "Max content width",
+      "min": 600,
+      "max": 1600,
+      "step": 50,
+      "unit": "px",
+      "default": 1200
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "default_icon_color",
+      "label": "Default icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "subtext_size",
+      "label": "Subtext size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Link style"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "link_style",
+      "label": "Link decoration",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "underline", "label": "Underline" }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "select",
+      "id": "link_hover_style",
+      "label": "Link hover decoration",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "underline", "label": "Underline" }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Apply for Wholesale"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "cta_text_color",
+      "label": "Button text color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "cta_background_color",
+      "label": "Button background color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "cta_margin_top",
+      "label": "Space above button",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature_item",
+      "name": "Feature item",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "enabled",
+          "label": "Enable",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "icon",
+          "label": "Icon image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature"
+        },
+        {
+          "type": "richtext",
+          "id": "subtext",
+          "label": "Subtext",
+          "default": "<p>Description of this feature</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Locked Feature Checklist",
+      "blocks": [
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Wholesale Pricing",
+            "subtext": "<p>Access exclusive B2B pricing on all products</p>"
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Bulk Ordering",
+            "subtext": "<p>Place large orders with volume discounts</p>"
+          }
+        },
+        {
+          "type": "feature_item",
+          "settings": {
+            "title": "Priority Support",
+            "subtext": "<p>Dedicated account manager for your business</p>"
+          }
+        }
+      ]
+    }
+  ],
+  "templates": ["product", "collection"]
+}
+{% endschema %}
