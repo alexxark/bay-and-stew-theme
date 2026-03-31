@@ -135,11 +135,19 @@
             "subtext": "<p>Access exclusive B2B pricing on all products</p>"
           }
         },
+        "feature_item_jWe8hy": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "title": "Tax Exemption at Checkout",
+            "subtext": "<p>Description of this feature</p>"
+          }
+        },
         "feature_item_eVMw8r": {
           "type": "feature_item",
           "settings": {
             "enabled": true,
-            "title": "Bulk Ordering",
+            "title": "Access to Exclusive Products",
             "subtext": "<p>Place large orders with volume discounts</p>"
           }
         },
@@ -154,8 +162,17 @@
       },
       "block_order": [
         "feature_item_rKhweW",
+        "feature_item_jWe8hy",
         "feature_item_eVMw8r",
         "feature_item_3Ayn8B"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "h3 {margin-bottom: -14px;}",
+        ".feature-subtext {margin-top: 0;}",
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 300px; padding-right: 180px;}",
+        "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}",
+        " {background-color: #f2faff;}"
       ],
       "name": "Locked Feature Checklist",
       "settings": {
