@@ -135,7 +135,7 @@
           "settings": {
             "layout": "column",
             "gap": 16,
-            "desktop_width_percent": 85,
+            "desktop_width_percent": 80,
             "icon_size": 60,
             "default_icon_color": "#121212",
             "title_font_size": 18,
