@@ -58,7 +58,6 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
@@ -102,6 +101,7 @@
         },
         "slide_Tfp7Mt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Cards-GWP-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
