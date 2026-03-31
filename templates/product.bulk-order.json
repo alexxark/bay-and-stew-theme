@@ -218,7 +218,7 @@
       "custom_css": [
         "h3 {margin-bottom: -12px;}",
         ".feature-subtext {margin-top: 0;}",
-        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 50px; padding-right: 50px;}"
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 80px; padding-right: 80px;}"
       ],
       "settings": {}
     },
