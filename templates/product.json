@@ -140,7 +140,7 @@
           "settings": {
             "enabled": true,
             "title": "Tax-Free Supply Ordering",
-            "subtext": "<p>Description of this feature</p>"
+            "subtext": "<p>Tax-free purchasing for approved wholesale accounts. </p><p>Not a wholesale partner yet? <a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\">Apply here.</a></p>"
           }
         },
         "feature_item_eVMw8r": {
@@ -148,7 +148,7 @@
           "settings": {
             "enabled": true,
             "title": "Access to Exclusive Products",
-            "subtext": "<p>Place large orders with volume discounts</p>"
+            "subtext": "<p>Jewelry designs not available for retail customers</p>"
           }
         },
         "feature_item_3Ayn8B": {
