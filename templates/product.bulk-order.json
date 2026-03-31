@@ -132,7 +132,6 @@
       "blocks": {
         "ai_gen_block_aeb1d89_wXyJhe": {
           "type": "ai_gen_block_aeb1d89",
-          "disabled": true,
           "settings": {
             "layout": "column",
             "gap": 16,
