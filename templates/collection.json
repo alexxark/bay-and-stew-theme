@@ -40,10 +40,76 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "locked_section_feature_checklist_fAE9At": {
+      "type": "locked-section-feature-checklist",
+      "blocks": {
+        "feature_item_GTXmHc": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Rewards-Icon.svg",
+            "title": "Wholesale Pricing",
+            "subtext": "<p>Access exclusive B2B pricing on all products</p>"
+          }
+        },
+        "feature_item_VQmzT3": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "title": "Bulk Ordering",
+            "subtext": "<p>Place large orders with volume discounts</p>"
+          }
+        },
+        "feature_item_tmRqzt": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "title": "Priority Support",
+            "subtext": "<p>Dedicated account manager for your business</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_item_GTXmHc",
+        "feature_item_VQmzT3",
+        "feature_item_tmRqzt"
+      ],
+      "name": "Locked Feature Checklist",
+      "settings": {
+        "heading": "B2B Wholesale Benefits",
+        "heading_font_size": 28,
+        "heading_font_weight": "600",
+        "heading_color": "#121212",
+        "heading_alignment": "center",
+        "heading_margin_bottom": 36,
+        "layout": "row",
+        "gap": 16,
+        "max_width": 1200,
+        "background_color": "#ffffff",
+        "icon_size": 24,
+        "default_icon_color": "#121212",
+        "title_font_size": 16,
+        "title_color": "#121212",
+        "subtext_size": 14,
+        "subtext_color": "#666666",
+        "link_color": "#121212",
+        "link_hover_color": "#666666",
+        "link_style": "underline",
+        "link_hover_style": "underline",
+        "cta_text": "Apply for Wholesale",
+        "cta_url": "",
+        "cta_text_color": "#ffffff",
+        "cta_background_color": "#121212",
+        "cta_margin_top": 24,
+        "padding_top": 0,
+        "padding_bottom": 40
+      }
     }
   },
   "order": [
     "banner",
-    "product-grid"
+    "product-grid",
+    "locked_section_feature_checklist_fAE9At"
   ]
 }
