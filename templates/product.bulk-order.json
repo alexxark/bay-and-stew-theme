@@ -124,7 +124,7 @@
         "hide_variants": false,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 48
       }
     },
     "1774910843ea067923": {
@@ -220,7 +220,7 @@
         ".feature-subtext {margin-top: 0;}",
         "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 300px; padding-right: 180px;}",
         "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}",
-        " {background-color: #F2FAFF;}"
+        " {background-color: #f2faff;}"
       ],
       "settings": {}
     },
@@ -238,7 +238,7 @@
         "show_vendor": false,
         "show_rating": false,
         "columns_mobile": "2",
-        "padding_top": 36,
+        "padding_top": 48,
         "padding_bottom": 28
       }
     },
