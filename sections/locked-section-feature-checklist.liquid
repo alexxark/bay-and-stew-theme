@@ -17,15 +17,17 @@
   assign show_section = false
 
   comment
-    Product page: on product pages this section is rendered from
-    theme.liquid inside the b2b_product_locked gate, so the layout
-    already guarantees the product is locked. Just confirm the
-    visitor is not a B2B customer.
+    Product page: check if product belongs to a locked collection
   endcomment
-  if template.name == 'product'
-    unless is_b2b_customer
-      assign show_section = true
-    endunless
+  if product != blank
+    for product_collection in product.collections
+      if locked_collection_handles contains product_collection.handle
+        unless is_b2b_customer
+          assign show_section = true
+        endunless
+        break
+      endif
+    endfor
   endif
 
   comment
