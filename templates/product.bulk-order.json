@@ -149,7 +149,7 @@
             "feature_1_enabled": true,
             "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
             "feature_1_title": "Free Limited Edition Card Deck",
-            "feature_1_subtext": "<p>with qualifying $100+ purchase, while supplies last.</p>",
+            "feature_1_subtext": "<p>With qualifying $100+ purchase, while supplies last.</p>",
             "feature_2_enabled": true,
             "feature_2_icon": "shopify://shop_images/Rewards-Icon.svg",
             "feature_2_title": "Loyalty Rewards",
@@ -161,7 +161,7 @@
             "feature_4_enabled": true,
             "feature_4_icon": "shopify://shop_images/Express-Icon.svg",
             "feature_4_title": "Same or Next Day Shipping",
-            "feature_4_subtext": "<p>Free Rush Shipping on Orders $500+</p>",
+            "feature_4_subtext": "<p>Free rush shipping on orders $500+</p>",
             "feature_5_enabled": false,
             "feature_5_title": "",
             "feature_5_subtext": "",
@@ -170,50 +170,10 @@
             "feature_6_subtext": ""
           },
           "blocks": {}
-        },
-        "ai_gen_block_8c1b2d1_jrdBPp": {
-          "type": "ai_gen_block_8c1b2d1",
-          "disabled": true,
-          "settings": {
-            "layout": "column",
-            "gap": 40,
-            "item_gap": 12,
-            "padding": 52,
-            "border_radius": 0,
-            "desktop_width_percent": 100,
-            "icon_size": 48,
-            "icon_color": "#008060",
-            "title_font_size": 16,
-            "title_color": "#121212",
-            "subtext_size": 14,
-            "subtext_color": "#666666",
-            "background_color": "#ffffff",
-            "feature_1_enabled": true,
-            "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
-            "feature_1_title": "Free Limited Edition Card Deck",
-            "feature_1_subtext": "with qualifying $100+ purchase, while supplies last.",
-            "feature_2_enabled": true,
-            "feature_2_icon": "shopify://shop_images/Icons-03.png",
-            "feature_2_title": "Loyalty Rewards",
-            "feature_2_subtext": "Earn points and unlock exclusive rewards made for makers.",
-            "feature_3_enabled": true,
-            "feature_3_icon": "shopify://shop_images/small-shipping.png",
-            "feature_3_title": "Free Shipping on U.S. Orders $35+",
-            "feature_3_subtext": "Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.",
-            "feature_4_enabled": true,
-            "feature_4_icon": "shopify://shop_images/small-same-day-shipping.png",
-            "feature_4_title": "Same or Next Day Shipping",
-            "feature_4_subtext": "Free Rush Shipping on Orders $500+",
-            "feature_5_enabled": false,
-            "feature_5_title": "",
-            "feature_5_subtext": ""
-          },
-          "blocks": {}
         }
       },
       "block_order": [
-        "ai_gen_block_aeb1d89_wXyJhe",
-        "ai_gen_block_8c1b2d1_jrdBPp"
+        "ai_gen_block_aeb1d89_wXyJhe"
       ],
       "disabled": true,
       "custom_css": [
