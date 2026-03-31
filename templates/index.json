@@ -101,13 +101,12 @@
         },
         "slide_Tfp7Mt": {
           "type": "slide",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
+            "image": "shopify://shop_images/Cards-GWP-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
             "allow_sound": true,
             "heading": "",
-            "subheading": "Free Card Deck with $100 Purchase",
+            "subheading": "FREE LIMITED EDITION CARD DECK",
             "highlight_words": "",
             "promo_note": "<strong>NOT AVAILABLE ON ETSY </strong>",
             "promo_link_label": "details",
