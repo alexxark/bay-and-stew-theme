@@ -7,7 +7,7 @@
 {%- endcomment -%}
 
 {%- liquid
-  assign locked_collection_handles = 'bracelet,earrings,necklace,ready-to-wear,rings' | split: ','
+  assign locked_collection_handles = 'bracelet,bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
 
   assign is_b2b_customer = false
   if customer and customer.tags contains 'B2B'

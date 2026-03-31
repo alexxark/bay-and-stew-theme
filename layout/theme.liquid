@@ -348,6 +348,7 @@
           <h2>Wholesale Access Only</h2>
           <p>You must be a B2B customer to access this product. Please <a href="/account/login?checkout_url={{ request.path | url_encode }}">log in</a> or <a href="/pages/wholesale-sales-tax-exemption-requirements?checkout_url={{ request.path | url_encode }}">register here</a>.</p>
         </div>
+        {%- section 'locked-section-feature-checklist' -%}
       {%- else -%}
         {{ content_for_layout }}
       {%- endif -%}
