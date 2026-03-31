@@ -139,7 +139,7 @@
           "type": "feature_item",
           "settings": {
             "enabled": true,
-            "title": "Tax Exemption at Checkout",
+            "title": "Tax-Free Supply Ordering",
             "subtext": "<p>Description of this feature</p>"
           }
         },
@@ -153,6 +153,7 @@
         },
         "feature_item_3Ayn8B": {
           "type": "feature_item",
+          "disabled": true,
           "settings": {
             "enabled": true,
             "title": "Priority Support",
