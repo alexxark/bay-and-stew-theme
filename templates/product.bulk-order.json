@@ -157,7 +157,7 @@
             "feature_3_enabled": true,
             "feature_3_icon": "shopify://shop_images/Shipping-Icon.svg",
             "feature_3_title": "Free Shipping on U.S. Orders $35+",
-            "feature_3_subtext": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
+            "feature_3_subtext": "<p>Enjoy fast, affordable delivery—free standard shipping on orders $35+.</p>",
             "feature_4_enabled": true,
             "feature_4_icon": "shopify://shop_images/Express-Icon.svg",
             "feature_4_title": "Same or Next Day Shipping",
@@ -215,7 +215,6 @@
         "ai_gen_block_aeb1d89_wXyJhe",
         "ai_gen_block_8c1b2d1_jrdBPp"
       ],
-      "disabled": true,
       "custom_css": [
         "h3 {margin-bottom: -12px;}",
         ".feature-subtext {margin-top: 0;}",
