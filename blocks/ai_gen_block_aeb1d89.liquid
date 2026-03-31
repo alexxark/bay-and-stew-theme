@@ -1,0 +1,485 @@
+{% doc %}
+  @prompt
+    feature checklist with row, gap, icon size, title font size subtext size options, allow for icon image upload for each and icon size adjustments.  Include subtext and paragraph style options for text or links.
+{% enddoc %}
+{% assign ai_gen_id = block.id | replace: '_', '' | downcase %}
+
+{% style %}
+  .ai-feature-checklist-{{ ai_gen_id }} {
+    display: block;
+    width: {{ block.settings.desktop_width_percent }}%;
+    max-width: 100%;
+    padding: 20px;
+  }
+
+  .ai-feature-checklist__list-{{ ai_gen_id }} {
+    display: flex;
+    flex-direction: {{ block.settings.layout }};
+    gap: {{ block.settings.gap }}px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  .ai-feature-checklist__item-{{ ai_gen_id }} {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    {% if block.settings.layout == 'row' %}
+      flex: 1 1 auto;
+      min-width: 200px;
+    {% else %}
+      width: 100%;
+    {% endif %}
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} {
+    flex-shrink: 0;
+    width: {{ block.settings.icon_size }}px;
+    height: {{ block.settings.icon_size }}px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .ai-feature-checklist__icon-wrapper-{{ ai_gen_id }} svg {
+    width: 100%;
+    height: 100%;
+    fill: {{ block.settings.default_icon_color }};
+  }
+
+  .ai-feature-checklist__content-{{ ai_gen_id }} {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .ai-feature-checklist__title-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.title_font_size }}px;
+    font-weight: 600;
+    color: {{ block.settings.title_color }};
+    line-height: 1.3;
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} {
+    margin: 0;
+    font-size: {{ block.settings.subtext_size }}px;
+    color: {{ block.settings.subtext_color }};
+    line-height: 1.5;
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} a {
+    color: {{ block.settings.link_color }};
+    text-decoration: {{ block.settings.link_style }};
+  }
+
+  .ai-feature-checklist__subtext-{{ ai_gen_id }} a:hover {
+    color: {{ block.settings.link_hover_color }};
+    text-decoration: {{ block.settings.link_hover_style }};
+  }
+
+  @media screen and (max-width: 749px) {
+    .ai-feature-checklist__list-{{ ai_gen_id }} {
+      flex-direction: column;
+    }
+
+    .ai-feature-checklist__item-{{ ai_gen_id }} {
+      width: 100%;
+    }
+  }
+{% endstyle %}
+
+<feature-checklist-{{ ai_gen_id }} class="ai-feature-checklist-{{ ai_gen_id }}" {{ block.shopify_attributes }}>
+  <ul class="ai-feature-checklist__list-{{ ai_gen_id }}">
+    {% for i in (1..6) %}
+      {% liquid
+        assign title_key = 'feature_' | append: i | append: '_title'
+        assign subtext_key = 'feature_' | append: i | append: '_subtext'
+        assign icon_key = 'feature_' | append: i | append: '_icon'
+        assign enabled_key = 'feature_' | append: i | append: '_enabled'
+
+        assign title = block.settings[title_key]
+        assign subtext = block.settings[subtext_key]
+        assign icon = block.settings[icon_key]
+        assign enabled = block.settings[enabled_key]
+      %}
+
+      {% if enabled %}
+        <li class="ai-feature-checklist__item-{{ ai_gen_id }}">
+          <div class="ai-feature-checklist__icon-wrapper-{{ ai_gen_id }}">
+            {% if icon %}
+              <img
+                src="{{ icon | image_url: width: 200 }}"
+                alt="{{ title | escape }}"
+                loading="lazy"
+                width="{{ block.settings.icon_size }}"
+                height="{{ block.settings.icon_size }}"
+              >
+            {% else %}
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+            {% endif %}
+          </div>
+          <div class="ai-feature-checklist__content-{{ ai_gen_id }}">
+            {% if title != blank %}
+              <h3 class="ai-feature-checklist__title-{{ ai_gen_id }}">{{ title }}</h3>
+            {% endif %}
+            {% if subtext != blank %}
+              <div class="ai-feature-checklist__subtext-{{ ai_gen_id }}">{{ subtext }}</div>
+            {% endif %}
+          </div>
+        </li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+</feature-checklist-{{ ai_gen_id }}>
+
+<script>
+  (function() {
+    class FeatureChecklist{{ ai_gen_id }} extends HTMLElement {
+      constructor() {
+        super();
+      }
+
+      connectedCallback() {
+        this.setupAccessibility();
+      }
+
+      setupAccessibility() {
+        const list = this.querySelector('.ai-feature-checklist__list-{{ ai_gen_id }}');
+        if (list) {
+          list.setAttribute('role', 'list');
+          const items = list.querySelectorAll('.ai-feature-checklist__item-{{ ai_gen_id }}');
+          items.forEach(item => {
+            item.setAttribute('role', 'listitem');
+          });
+        }
+      }
+    }
+
+    customElements.define('feature-checklist-{{ ai_gen_id }}', FeatureChecklist{{ ai_gen_id }});
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Feature checklist",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Layout direction",
+      "options": [
+        {
+          "value": "row",
+          "label": "Row"
+        },
+        {
+          "value": "column",
+          "label": "Column"
+        }
+      ],
+      "default": "column"
+    },
+    {
+      "type": "range",
+      "id": "gap",
+      "label": "Gap between items",
+      "min": 8,
+      "max": 48,
+      "step": 4,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "range",
+      "id": "desktop_width_percent",
+      "label": "Desktop width",
+      "min": 50,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 100
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 16,
+      "max": 64,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "color",
+      "id": "default_icon_color",
+      "label": "Default icon color",
+      "default": "#121212"
+    },
+    {
+      "type": "header",
+      "content": "Text style"
+    },
+    {
+      "type": "range",
+      "id": "title_font_size",
+      "label": "Title size",
+      "min": 12,
+      "max": 32,
+      "step": 1,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "color",
+      "id": "title_color",
+      "label": "Title color",
+      "default": "#121212"
+    },
+    {
+      "type": "range",
+      "id": "subtext_size",
+      "label": "Subtext size",
+      "min": 10,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "color",
+      "id": "subtext_color",
+      "label": "Subtext color",
+      "default": "#666666"
+    },
+    {
+      "type": "header",
+      "content": "Link style"
+    },
+    {
+      "type": "color",
+      "id": "link_color",
+      "label": "Link color",
+      "default": "#121212"
+    },
+    {
+      "type": "color",
+      "id": "link_hover_color",
+      "label": "Link hover color",
+      "default": "#666666"
+    },
+    {
+      "type": "select",
+      "id": "link_style",
+      "label": "Link decoration",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "select",
+      "id": "link_hover_style",
+      "label": "Link hover decoration",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "underline",
+          "label": "Underline"
+        }
+      ],
+      "default": "underline"
+    },
+    {
+      "type": "header",
+      "content": "Feature 1"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_1_enabled",
+      "label": "Enable feature 1",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_1_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_1_title",
+      "label": "Title",
+      "default": "Free shipping"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_1_subtext",
+      "label": "Subtext",
+      "default": "<p>On orders over $50</p>"
+    },
+    {
+      "type": "header",
+      "content": "Feature 2"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_2_enabled",
+      "label": "Enable feature 2",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_2_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_2_title",
+      "label": "Title",
+      "default": "Easy returns"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_2_subtext",
+      "label": "Subtext",
+      "default": "<p>30-day return policy</p>"
+    },
+    {
+      "type": "header",
+      "content": "Feature 3"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_3_enabled",
+      "label": "Enable feature 3",
+      "default": true
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_3_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_3_title",
+      "label": "Title",
+      "default": "Secure checkout"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_3_subtext",
+      "label": "Subtext",
+      "default": "<p>SSL encrypted payment</p>"
+    },
+    {
+      "type": "header",
+      "content": "Feature 4"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_4_enabled",
+      "label": "Enable feature 4",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_4_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_4_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_4_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "header",
+      "content": "Feature 5"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_5_enabled",
+      "label": "Enable feature 5",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_5_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_5_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_5_subtext",
+      "label": "Subtext"
+    },
+    {
+      "type": "header",
+      "content": "Feature 6"
+    },
+    {
+      "type": "checkbox",
+      "id": "feature_6_enabled",
+      "label": "Enable feature 6",
+      "default": false
+    },
+    {
+      "type": "image_picker",
+      "id": "feature_6_icon",
+      "label": "Icon"
+    },
+    {
+      "type": "text",
+      "id": "feature_6_title",
+      "label": "Title"
+    },
+    {
+      "type": "richtext",
+      "id": "feature_6_subtext",
+      "label": "Subtext"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Feature checklist"
+    }
+  ]
+}
+{% endschema %}

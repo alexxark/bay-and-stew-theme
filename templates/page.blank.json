@@ -1,1 +1,809 @@
-{"sections":{"main":{"type":"main-page","settings":{"padding_top":36,"padding_bottom":36}}},"order":["main"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "custom_css": [
+        "{font-size: 36px; text-align: center;}"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_7UVxYJ": {
+      "type": "rich-text",
+      "blocks": {
+        "text_pD7r7R": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>Before You Apply — Please Read Carefully</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "text_pD7r7R"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 8
+      }
+    },
+    "rich_text_t8Yr8c": {
+      "type": "rich-text",
+      "blocks": {
+        "text_kPG4tD": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>To Submit an Application: </h2>"
+          }
+        }
+      },
+      "block_order": [
+        "text_kPG4tD"
+      ],
+      "custom_css": [
+        "h2 {font-size: 20px; font-family: sans-serif;}"
+      ],
+      "name": "to submit",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 8,
+        "padding_bottom": 0
+      }
+    },
+    "multicolumn_FdDAYY": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_EUNxGJ": {
+          "type": "column",
+          "settings": {
+            "title": "<strong>STEP 1</strong>",
+            "text": "<p>Find your state requirements below</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_ajB3aX": {
+          "type": "column",
+          "settings": {
+            "title": "<strong>STEP 2</strong>",
+            "text": "<p>Complete your  application & upload the required documents</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_EUNxGJ",
+        "column_ajB3aX"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 2,
+        "column_alignment": "center",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_RcKJL7": {
+      "type": "rich-text",
+      "blocks": {
+        "caption_wecXnn": {
+          "type": "caption",
+          "settings": {
+            "caption": "Applications are typically reviewed within 1 business day.",
+            "text_style": "caption-with-letter-spacing",
+            "text_size": "medium"
+          }
+        }
+      },
+      "block_order": [
+        "caption_wecXnn"
+      ],
+      "custom_css": [
+        "h2 {font-size: 22px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 28
+      }
+    },
+    "rich_text_x6qpmt": {
+      "type": "rich-text",
+      "custom_css": [
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400; color: #73635b; /* brand color */}"
+      ],
+      "name": "divider",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-e993cf15-6aba-443a-9790-1639e6683028",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_GKTNzB": {
+      "type": "rich-text",
+      "blocks": {
+        "text_GTALt6": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>STEP 1</h2>"
+          }
+        }
+      },
+      "block_order": [
+        "text_GTALt6"
+      ],
+      "name": "STEP 2:Ready?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 0
+      }
+    },
+    "collapsible_content_zeEk4Y": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_maX49W": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "International",
+            "icon": "check_mark",
+            "row_content": "<p>We love working with retailers around the world!<br/><br/>Please complete the international application <a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\"><strong>here.</strong><br/></a><br/><strong>To apply, please provide:</strong></p><ul><li>Business registration or license</li><li>VAT number or Sales Tax Permit Number / Resale Number (if applicable)</li><li>Proof of business (website, storefront, or social presence)</li></ul>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PLgfY9": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alabama",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\" title=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\">Multi-State Uniform Sales & Use Tax Certificate </a>(MTC Form, signed)</p><p><strong>2. </strong><a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_MtdDdr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Alaska",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> State-issued business license or other proof of established business</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_PGiVpe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arizona",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_MQWJRU": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Arkansas",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_YKQqFt": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "California",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. State Requirements</strong></p><ul><li>California Seller’s Permit</li><li><a href=\"https://drive.google.com/file/d/1pJC2VJcTmAmIcQf7eEvjU6gDVPaUfxGe/view\"><span style=\"text-decoration:underline\">CDTFA-230 Resale Certificate</span></a> (signed)<br/></li></ul><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_RyTbPM": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Colorado",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_nqRdmX": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Connecticut",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_HajDKA": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Florida",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_bRpLQE": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Georgia",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-rWiSX2lwNstLVmTpwsJdbDHpNF-9uOG/view\"><span style=\"text-decoration:underline\">ST-5 Certificate</span></a> (signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_kfkTqe": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Hawaii",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_fdNLCT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Idaho",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_nYMCen": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Illinois",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_mFWztg": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Indiana",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/17E8vWelVEotR86XaaGVHXa6iKysmyzLU/view\"><span style=\"text-decoration:underline\">ST-105 Form</span></a> (signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_YLCmXH": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Iowa",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_U9C99T": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kansas",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)<br/><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_fFHJqf": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Kentucky",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_jRaV4m": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Louisiana",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://revenue.louisiana.gov/tax-education-and-faqs/faqs/louisiana-resale-certificate/who-qualifies-for-a-louisiana-resale-certificate/\"><span style=\"text-decoration:underline\">R-1064 Resale Certificate</span></a></p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_XFbjEx": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maine",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_Yyxehw": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Maryland",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_iQDArJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Massachusetts",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/17-yTWuhuBKHaqBuQG3STAQmuq7U8Y7Zm/view\"><span style=\"text-decoration:underline\">ST-4 Certificate</span></a> (signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_AfYp7C": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Michigan",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_LWyCGC": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Minnesota",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_femt3L": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Mississippi",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> Mississippi Sales Tax Permit</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_eDtaGa": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Missouri",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_w4xFe8": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Montana",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> State-issued business license or other proof of established business</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_UQBgVD": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nebraska",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_JmcymN": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Nevada",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_RY4CCi": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Hampshire",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong>State-issued business license or other proof of established business</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_jAcqVG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Jersey",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_dpig8A": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New Mexico",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://realfile.tax.newmexico.gov/FYI-204.pdf\"><span style=\"text-decoration:underline\">NTTC Certificate</span></a></p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_p9kxzL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "New York",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1IlByrhjD9Aapfk4oimOKUlIHKaZqKBzA/view\"><span style=\"text-decoration:underline\">ST-120 Resale Certificate</span></a> (signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_8NnGqi": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "North Carolina",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_DRrWgJ": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "North Dakota",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_hYAYQT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Ohio",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_rbXkfy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Oklahoma",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_DJjTpG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Oregon",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong>State-issued business license or other proof of established business</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_jTfeB4": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Pennsylvania",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_3G3GKT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Rhode Island",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_9Qyyfb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "South Carolina",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1yg_CYE9NIHamU3rUMfeU0KKPEo4TnSvC/view\"><span style=\"text-decoration:underline\">ST-8A Resale Certificate</span></a> (signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_fE3YcG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "South Dakota",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_hkXhKL": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Tennessee",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_drM6XT": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Texas",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_UnHbdG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Utah",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_EWH6QG": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Vermont",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_VJGmXr": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Virginia",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1mHgl8JY4JqmGuKbm9GRrR52Q8WI4gZnU/view\"><span style=\"text-decoration:underline\">ST-10 Resale Certificate</span></a> (signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_xyqTUV": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Washington",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_ETazWb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "West Virginia",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_HDGHqY": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Wisconsin",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1.</strong> <a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_CmnXEh": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Wyoming",
+            "icon": "check_mark",
+            "row_content": "<p><strong>1. </strong><a href=\"https://drive.google.com/file/d/1-56SNBra2BflgCDYibNFHahNsp5Sfwwd/view\"><span style=\"text-decoration:underline\">Multi-State Uniform Sales & Use Tax Certificate</span></a> (MTC Form, signed)</p><p><strong>2.</strong> <a href=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\" title=\"https://bayandstew.com/pages/apply-for-wholesale#shopify-section-template--26201080561985__rich_text_CPjeY4\">Apply for Wholesale</a></p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_maX49W",
+        "collapsible_row_PLgfY9",
+        "collapsible_row_MtdDdr",
+        "collapsible_row_PGiVpe",
+        "collapsible_row_MQWJRU",
+        "collapsible_row_YKQqFt",
+        "collapsible_row_RyTbPM",
+        "collapsible_row_nqRdmX",
+        "collapsible_row_HajDKA",
+        "collapsible_row_bRpLQE",
+        "collapsible_row_kfkTqe",
+        "collapsible_row_fdNLCT",
+        "collapsible_row_nYMCen",
+        "collapsible_row_mFWztg",
+        "collapsible_row_YLCmXH",
+        "collapsible_row_U9C99T",
+        "collapsible_row_fFHJqf",
+        "collapsible_row_jRaV4m",
+        "collapsible_row_XFbjEx",
+        "collapsible_row_Yyxehw",
+        "collapsible_row_iQDArJ",
+        "collapsible_row_AfYp7C",
+        "collapsible_row_LWyCGC",
+        "collapsible_row_femt3L",
+        "collapsible_row_eDtaGa",
+        "collapsible_row_w4xFe8",
+        "collapsible_row_UQBgVD",
+        "collapsible_row_JmcymN",
+        "collapsible_row_RY4CCi",
+        "collapsible_row_jAcqVG",
+        "collapsible_row_dpig8A",
+        "collapsible_row_p9kxzL",
+        "collapsible_row_8NnGqi",
+        "collapsible_row_DRrWgJ",
+        "collapsible_row_hYAYQT",
+        "collapsible_row_rbXkfy",
+        "collapsible_row_DJjTpG",
+        "collapsible_row_jTfeB4",
+        "collapsible_row_3G3GKT",
+        "collapsible_row_9Qyyfb",
+        "collapsible_row_fE3YcG",
+        "collapsible_row_hkXhKL",
+        "collapsible_row_drM6XT",
+        "collapsible_row_UnHbdG",
+        "collapsible_row_EWH6QG",
+        "collapsible_row_VJGmXr",
+        "collapsible_row_xyqTUV",
+        "collapsible_row_ETazWb",
+        "collapsible_row_HDGHqY",
+        "collapsible_row_CmnXEh"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "FIND YOUR STATE REQUIREMENTS BELOW",
+        "heading_size": "h2",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 20,
+        "padding_bottom": 48
+      }
+    },
+    "custom_liquid_tJBUX9": {
+      "type": "custom-liquid",
+      "disabled": true,
+      "name": "t:sections.custom-liquid.presets.name",
+      "settings": {
+        "custom_liquid": "<a class=\"button btn\" href=\"#shopify-section-template--26201080561985__rich_text_CPjeY4\" style=\"\n    position: fixed;\n   background-color: #ffffff;\nborder: 1px solid #000000;\ncolor: #000000;\n    bottom: 40px;\n    z-index: 3;\n    right: 50%;\n    transform: translateX(50%);\n\">Scroll To Application</a>",
+        "color_scheme": "",
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_CPjeY4": {
+      "type": "rich-text",
+      "blocks": {
+        "text_gejaYn": {
+          "type": "text",
+          "settings": {
+            "text": "<h2>STEP 2</h2><h3>Ready to Apply for Wholesale?</h3><p></p><p>Select your location to get started on your application:</p>"
+          }
+        },
+        "button_4wrcRQ": {
+          "type": "button",
+          "settings": {
+            "button_label": "USA",
+            "button_link": "https://bayandstew.com/account/register",
+            "button_style_secondary": false,
+            "button_label_2": "Outside of USA",
+            "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
+            "button_style_secondary_2": false
+          }
+        },
+        "text_fKNMwe": {
+          "type": "text",
+          "settings": {
+            "text": "<p>For more information, please visit <br/>our <a href=\"https://bayandstew.com/pages/faq\"><strong>FAQ page</strong></a><strong>. </strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_gejaYn",
+        "button_4wrcRQ",
+        "text_fKNMwe"
+      ],
+      "name": "STEP 2:Ready?",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_pifMqw": {
+      "type": "rich-text",
+      "blocks": {
+        "text_9yY3Uz": {
+          "type": "text",
+          "settings": {
+            "text": "<h2><strong>Questions? </strong></h2><h3>We’re here to help</h3>"
+          }
+        },
+        "button_iCmrTd": {
+          "type": "button",
+          "settings": {
+            "button_label": "Contact Us",
+            "button_link": "https://bayandstew.com/pages/contact",
+            "button_style_secondary": true,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "text_9yY3Uz",
+        "button_iCmrTd"
+      ],
+      "custom_css": [
+        "h3 {font-family: sans-serif; font-size: 16px; /* adjust heading size */ font-weight: 400;}"
+      ],
+      "name": "Questions",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-1",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    }
+  },
+  "order": [
+    "main",
+    "rich_text_7UVxYJ",
+    "rich_text_t8Yr8c",
+    "multicolumn_FdDAYY",
+    "rich_text_RcKJL7",
+    "rich_text_x6qpmt",
+    "rich_text_GKTNzB",
+    "collapsible_content_zeEk4Y",
+    "custom_liquid_tJBUX9",
+    "rich_text_CPjeY4",
+    "rich_text_pifMqw"
+  ]
+}

@@ -49,6 +49,20 @@
           "type": "shopify://apps/sw-back-in-stock/blocks/product-restore-email/b190bced-3b7b-47da-a05f-6ea4821c3a77",
           "settings": {}
         },
+        "icon_with_text_QdMWJh": {
+          "type": "icon-with-text",
+          "disabled": true,
+          "settings": {
+            "layout": "vertical",
+            "icon_1": "star",
+            "image_1": "shopify://shop_images/Card-Icon.svg",
+            "heading_1": "Free Limited Edition Card Deck <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">with qualifying $100+ purchase, </a>while supplies last.",
+            "icon_2": "none",
+            "heading_2": "",
+            "icon_3": "none",
+            "heading_3": ""
+          }
+        },
         "description": {
           "type": "description",
           "settings": {}
@@ -88,6 +102,7 @@
         "bulk_order_form_bXfHP9",
         "personalization_box_7gEhAP",
         "ecomsend_restock_product_restore_email_MdVpP6",
+        "icon_with_text_QdMWJh",
         "description",
         "9445ca66-0abf-4dff-8633-6def5547ba18",
         "661e5f9d-2379-48b0-a1fe-243797bae4fb",
@@ -109,8 +124,66 @@
         "hide_variants": false,
         "enable_video_looping": false,
         "padding_top": 36,
-        "padding_bottom": 12
+        "padding_bottom": 48
       }
+    },
+    "1774910843ea067923": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_aeb1d89_wXyJhe": {
+          "type": "ai_gen_block_aeb1d89",
+          "settings": {
+            "layout": "column",
+            "gap": 16,
+            "desktop_width_percent": 90,
+            "icon_size": 60,
+            "default_icon_color": "#121212",
+            "title_font_size": 18,
+            "title_color": "#121212",
+            "subtext_size": 14,
+            "subtext_color": "#666666",
+            "link_color": "#121212",
+            "link_hover_color": "#666666",
+            "link_style": "underline",
+            "link_hover_style": "underline",
+            "feature_1_enabled": true,
+            "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
+            "feature_1_title": "Free Limited Edition Card Deck",
+            "feature_1_subtext": "<p>With qualifying $100+ purchase, while supplies last.</p>",
+            "feature_2_enabled": true,
+            "feature_2_icon": "shopify://shop_images/Rewards-Icon.svg",
+            "feature_2_title": "Loyalty Rewards",
+            "feature_2_subtext": "<p>Earn points and unlock exclusive rewards made for makers.</p>",
+            "feature_3_enabled": true,
+            "feature_3_icon": "shopify://shop_images/Shipping-Icon.svg",
+            "feature_3_title": "Free Shipping on U.S. Orders $35+",
+            "feature_3_subtext": "<p>Enjoy fast, affordable delivery—free standard shipping on orders $35+.</p>",
+            "feature_4_enabled": true,
+            "feature_4_icon": "shopify://shop_images/Express-Icon.svg",
+            "feature_4_title": "Same or Next Day Shipping",
+            "feature_4_subtext": "<p>Free rush shipping on orders $500+</p>",
+            "feature_5_enabled": false,
+            "feature_5_title": "",
+            "feature_5_subtext": "",
+            "feature_6_enabled": false,
+            "feature_6_title": "",
+            "feature_6_subtext": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_aeb1d89_wXyJhe"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "h3 {margin-bottom: -12px;}",
+        ".feature-subtext {margin-top: 0;}",
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 300px; padding-right: 180px;}",
+        "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}",
+        " {background-color: #f2faff;}"
+      ],
+      "settings": {}
     },
     "related-products": {
       "type": "related-products",
@@ -126,9 +199,13 @@
         "show_vendor": false,
         "show_rating": false,
         "columns_mobile": "2",
-        "padding_top": 36,
+        "padding_top": 48,
         "padding_bottom": 28
       }
+    },
+    "1774969833c857d591": {
+      "type": "_blocks",
+      "settings": {}
     },
     "1750978152f27a8ba5": {
       "type": "apps",
@@ -235,13 +312,20 @@
         "padding_top": 20,
         "padding_bottom": 20
       }
+    },
+    "177491200086b2cdd4": {
+      "type": "_blocks",
+      "settings": {}
     }
   },
   "order": [
     "main",
+    "1774910843ea067923",
     "related-products",
+    "1774969833c857d591",
     "1750978152f27a8ba5",
     "rich_text_hKUdfr",
-    "multicolumn_WBHDtj"
+    "multicolumn_WBHDtj",
+    "177491200086b2cdd4"
   ]
 }
