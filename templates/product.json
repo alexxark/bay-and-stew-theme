@@ -195,7 +195,7 @@
         "heading_color": "#121212",
         "heading_alignment": "left",
         "heading_margin_bottom": 20,
-        "layout": "column",
+        "layout": "row",
         "gap": 16,
         "max_width": 1200,
         "background_color": "#f2faff",
