@@ -90,8 +90,7 @@
       "custom_css": [
         "h3 {margin-bottom: -14px;}",
         ".feature-subtext {margin-top: 0;}",
-        ".locked-feature-checklist__inner-template--26201080201537__locked_section_feature_checklist_fAE9At {padding-left: 300px; padding-right: 180px;}",
-        "@media screen and (max-width: 749px) {.locked-feature-checklist__inner-template--26201080201537__locked_section_feature_checklist_fAE9At{padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}"
+        "@media screen and (max-width: 749px) {.locked-feature-checklist__inner-template--26201080201537__locked_section_feature_checklist_fAE9At {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}"
       ],
       "name": "Locked Feature Checklist",
       "settings": {
