@@ -52,6 +52,7 @@
         "announcement-bar-0",
         "announcement_FnhcDx"
       ],
+      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
