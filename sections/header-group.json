@@ -32,6 +32,7 @@
         },
         "announcement-bar-0": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "EXTRA 25% OFF ON SALE ITEMS WITH CODE SALEONSALE",
             "link": "shopify://collections/sale-1"
@@ -39,7 +40,6 @@
         },
         "announcement_FnhcDx": {
           "type": "announcement",
-          "disabled": true,
           "settings": {
             "text": "Free Limited Edition Card Deck with $100+ Purchase - While Supplies Last",
             "link": "shopify://pages/offers"
@@ -52,7 +52,6 @@
         "announcement-bar-0",
         "announcement_FnhcDx"
       ],
-      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
