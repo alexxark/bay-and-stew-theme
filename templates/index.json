@@ -704,7 +704,7 @@
         "text_7yKLcq": {
           "type": "text",
           "settings": {
-            "text": "<p>Apply today for access to professional pricing and tax-exempt purchasing for qualified businesses.<br/></p>"
+            "text": "<p>Apply today for access to professional pricing and tax-exempt purchasing <br/>for qualified businesses.<br/></p>"
           }
         },
         "button_C3EKXm": {
@@ -730,8 +730,8 @@
         "content_alignment": "center",
         "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 40
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "featured_collection_BBDHfE": {
