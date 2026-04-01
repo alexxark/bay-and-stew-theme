@@ -202,7 +202,7 @@
         "cta_text_color": "#ffffff",
         "cta_background_color": "#121212",
         "cta_margin_top": 24,
-        "padding_top": 36,
+        "padding_top": 60,
         "padding_bottom": 36
       }
     },
