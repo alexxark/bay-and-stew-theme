@@ -1,1 +1,241 @@
-{"sections":{"main":{"type":"main-product","blocks":{"title":{"type":"title","settings":{}},"loox_reviews_loox_rating_8McCXW":{"type":"shopify://apps/loox-reviews/blocks/loox-rating/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e","settings":{"contentSize":14,"pattern":"([count]) [rating]","hideText":false,"alignment":"","layout":"","textColor":"","starColor":"","showAllReviews":false,"looxOpenFloatingWidget":true,"emptyRatingWidget":true}},"price":{"type":"price","settings":{}},"text_fKXf4N":{"type":"text","settings":{"text":"<em><strong>*Priced per foot*</strong></em>","text_style":"body"}},"variant_picker":{"type":"variant_picker","settings":{"picker_type":"button","swatch_shape":"circle"}},"bulk_order_form_bXfHP9":{"type":"bulk_order_form","settings":{"heading":"Quick Order"}},"personalization_box_7gEhAP":{"type":"personalization_box","settings":{}},"quantity_selector_ihizgf":{"type":"quantity_selector","settings":{}},"buy_buttons":{"type":"buy_buttons","settings":{"show_dynamic_checkout":false,"show_gift_card_recipient":true}},"ecomsend_restock_product_restore_email_zCmTKQ":{"type":"shopify://apps/es-back-in-stock/blocks/product-restore-email/b190bced-3b7b-47da-a05f-6ea4821c3a77","settings":{}},"description":{"type":"description","settings":{}},"9445ca66-0abf-4dff-8633-6def5547ba18":{"type":"collapsible_tab","settings":{"heading":"Materials","icon":"clipboard","content":"<p><strong>14k Gold Filled</strong>: 14k gold over brass, heat & pressure bonded, containing 5% of gold by weight by USA standards</p><p><strong>.925 Sterling Silver</strong>: Solid silver alloy</p><p><strong>18k Gold Plated</strong>: 18k gold over brass</p><p><strong>18k Gold Vermeil</strong>: 2.5 microns 18k gold over .925 sterling silver</p><p></p>","page":""}},"661e5f9d-2379-48b0-a1fe-243797bae4fb":{"type":"collapsible_tab","settings":{"heading":"About Bay & Stew Supplies","icon":"check_mark","content":"<p>We are your go to shop for hand stamping supplies, engraving supplies, permanent jewelry supplies and wholesale/bulk jewelry supplies. Made in our studio in California. USA small business & female owned company.</p>","page":""}}},"block_order":["title","loox_reviews_loox_rating_8McCXW","price","text_fKXf4N","variant_picker","bulk_order_form_bXfHP9","personalization_box_7gEhAP","quantity_selector_ihizgf","buy_buttons","ecomsend_restock_product_restore_email_zCmTKQ","description","9445ca66-0abf-4dff-8633-6def5547ba18","661e5f9d-2379-48b0-a1fe-243797bae4fb"],"custom_css":[".loox-rating {margin-top: -10px; margin-bottom: -10px;}"],"settings":{"enable_sticky_info":true,"color_scheme":"","media_size":"small","constrain_to_viewport":true,"media_fit":"cover","gallery_layout":"thumbnail","media_position":"left","image_zoom":"lightbox","mobile_thumbnails":"hide","hide_variants":false,"enable_video_looping":false,"padding_top":36,"padding_bottom":12}},"related-products":{"type":"related-products","settings":{"heading":"You may also like","heading_size":"h2","products_to_show":4,"columns_desktop":4,"color_scheme":"background-1","image_ratio":"square","image_shape":"default","show_secondary_image":true,"show_vendor":false,"show_rating":false,"columns_mobile":"2","padding_top":36,"padding_bottom":28}},"1750978152f27a8ba5":{"type":"apps","blocks":{"loox_reviews_loox_dynamic_section_EJzeXB":{"type":"shopify://apps/loox-reviews/blocks/loox-dynamic-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e","settings":{"only_photos":false,"aggregated":false,"limit":20,"hide_thumbnails":false,"maxwidth":1080,"is_sample":true}}},"block_order":["loox_reviews_loox_dynamic_section_EJzeXB"],"settings":{"include_margins":true}}},"order":["main","related-products","1750978152f27a8ba5"]}
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "title": {
+          "type": "title",
+          "settings": {}
+        },
+        "loox_reviews_loox_rating_8McCXW": {
+          "type": "shopify://apps/loox-reviews/blocks/loox-rating/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+          "settings": {
+            "contentSize": 14,
+            "pattern": "([count]) [rating]",
+            "hideText": false,
+            "alignment": "",
+            "layout": "",
+            "textColor": "",
+            "starColor": "",
+            "showAllReviews": false,
+            "looxOpenFloatingWidget": true,
+            "emptyRatingWidget": true
+          }
+        },
+        "price": {
+          "type": "price",
+          "settings": {}
+        },
+        "text_fKXf4N": {
+          "type": "text",
+          "settings": {
+            "text": "<em><strong>*Priced per foot*</strong></em>",
+            "text_style": "body"
+          }
+        },
+        "variant_picker": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "bulk_order_form_bXfHP9": {
+          "type": "bulk_order_form",
+          "settings": {
+            "heading": "Quick Order"
+          }
+        },
+        "personalization_box_7gEhAP": {
+          "type": "personalization_box",
+          "settings": {}
+        },
+        "quantity_selector_ihizgf": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": false,
+            "show_gift_card_recipient": true
+          }
+        },
+        "ecomsend_restock_product_restore_email_zCmTKQ": {
+          "type": "shopify://apps/sw-back-in-stock/blocks/product-restore-email/b190bced-3b7b-47da-a05f-6ea4821c3a77",
+          "settings": {}
+        },
+        "description": {
+          "type": "description",
+          "settings": {}
+        },
+        "9445ca66-0abf-4dff-8633-6def5547ba18": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "Materials",
+            "icon": "clipboard",
+            "content": "<p><strong>14k Gold Filled</strong>: 14k gold over brass, heat & pressure bonded, containing 5% of gold by weight by USA standards</p><p><strong>.925 Sterling Silver</strong>: Solid silver alloy</p><p><strong>18k Gold Plated</strong>: 18k gold over brass</p><p><strong>18k Gold Vermeil</strong>: 2.5 microns 18k gold over .925 sterling silver</p><p></p>",
+            "page": ""
+          }
+        },
+        "661e5f9d-2379-48b0-a1fe-243797bae4fb": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "About Bay & Stew Supplies",
+            "icon": "check_mark",
+            "content": "<p>We are your go to shop for hand stamping supplies, engraving supplies, permanent jewelry supplies and wholesale/bulk jewelry supplies. Made in our studio in California. USA small business & female owned company.</p>",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "title",
+        "loox_reviews_loox_rating_8McCXW",
+        "price",
+        "text_fKXf4N",
+        "variant_picker",
+        "bulk_order_form_bXfHP9",
+        "personalization_box_7gEhAP",
+        "quantity_selector_ihizgf",
+        "buy_buttons",
+        "ecomsend_restock_product_restore_email_zCmTKQ",
+        "description",
+        "9445ca66-0abf-4dff-8633-6def5547ba18",
+        "661e5f9d-2379-48b0-a1fe-243797bae4fb"
+      ],
+      "custom_css": [
+        ".loox-rating {margin-top: -10px; margin-bottom: -10px;}"
+      ],
+      "settings": {
+        "enable_sticky_info": true,
+        "color_scheme": "",
+        "media_size": "small",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "gallery_layout": "thumbnail",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "mobile_thumbnails": "hide",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 12
+      }
+    },
+    "blocks_4Ki7FP": {
+      "type": "_blocks",
+      "blocks": {
+        "ai_gen_block_aeb1d89_jy84tX": {
+          "type": "ai_gen_block_aeb1d89",
+          "settings": {
+            "layout": "column",
+            "gap": 16,
+            "desktop_width_percent": 90,
+            "icon_size": 60,
+            "default_icon_color": "#121212",
+            "title_font_size": 16,
+            "title_color": "#121212",
+            "subtext_size": 14,
+            "subtext_color": "#666666",
+            "link_color": "#121212",
+            "link_hover_color": "#666666",
+            "link_style": "underline",
+            "link_hover_style": "underline",
+            "feature_1_enabled": true,
+            "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
+            "feature_1_title": "Free Limited Edition Card Deck",
+            "feature_1_subtext": "<p>With qualifying $100+ purchase, <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">while supplies last.</a></p>",
+            "feature_2_enabled": true,
+            "feature_2_icon": "shopify://shop_images/Rewards-Icon.svg",
+            "feature_2_title": "Loyalty Rewards",
+            "feature_2_subtext": "<p>Earn points and unlock <a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">exclusive rewards</a> made for makers.</p>",
+            "feature_3_enabled": true,
+            "feature_3_icon": "shopify://shop_images/Shipping-Icon.svg",
+            "feature_3_title": "Free Shipping on U.S. Orders $35+",
+            "feature_3_subtext": "<p>Enjoy fast, affordable delivery—free standard shipping on orders $35+.</p>",
+            "feature_4_enabled": true,
+            "feature_4_icon": "shopify://shop_images/Express-Icon.svg",
+            "feature_4_title": "Same or Next Day Shipping",
+            "feature_4_subtext": "<p>Free rush shipping on orders $500+</p>",
+            "feature_5_enabled": false,
+            "feature_5_title": "",
+            "feature_5_subtext": "",
+            "feature_6_enabled": false,
+            "feature_6_title": "",
+            "feature_6_subtext": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "ai_gen_block_aeb1d89_jy84tX"
+      ],
+      "custom_css": [
+        "h3 {margin-bottom: -12px;}",
+        ".feature-subtext {margin-top: 0;}",
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 300px; padding-right: 180px;}",
+        "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}",
+        " {background-color: #f2faff;}"
+      ],
+      "name": "Feature checklist",
+      "settings": {}
+    },
+    "related-products": {
+      "type": "related-products",
+      "settings": {
+        "heading": "You may also like",
+        "heading_size": "h2",
+        "products_to_show": 4,
+        "columns_desktop": 4,
+        "color_scheme": "background-1",
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": true,
+        "show_vendor": false,
+        "show_rating": false,
+        "columns_mobile": "2",
+        "padding_top": 36,
+        "padding_bottom": 28
+      }
+    },
+    "1750978152f27a8ba5": {
+      "type": "apps",
+      "blocks": {
+        "loox_reviews_loox_dynamic_section_EJzeXB": {
+          "type": "shopify://apps/loox-reviews/blocks/loox-dynamic-section/5c3b337f-fd14-4df5-b1d6-80ec13e6e28e",
+          "settings": {
+            "reviews_to_display": "",
+            "default_tab": "automatic",
+            "only_photos": false,
+            "aggregated": false,
+            "limit": 20,
+            "hide_thumbnails": false,
+            "maxwidth": 1080,
+            "is_sample": true
+          }
+        }
+      },
+      "block_order": [
+        "loox_reviews_loox_dynamic_section_EJzeXB"
+      ],
+      "settings": {
+        "include_margins": true
+      }
+    }
+  },
+  "order": [
+    "main",
+    "blocks_4Ki7FP",
+    "related-products",
+    "1750978152f27a8ba5"
+  ]
+}
