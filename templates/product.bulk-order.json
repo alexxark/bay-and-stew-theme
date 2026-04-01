@@ -244,6 +244,7 @@
       "block_order": [
         "heading_mfYxk6"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -293,6 +294,7 @@
         "column_ywkKGW",
         "column_tMTn79"
       ],
+      "disabled": true,
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
         "title": "",
