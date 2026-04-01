@@ -48,21 +48,32 @@
           "type": "feature_item",
           "settings": {
             "enabled": true,
-            "icon": "shopify://shop_images/Rewards-Icon.svg",
+            "icon": "shopify://shop_images/Wholesale-Icon.svg",
             "title": "Wholesale Pricing",
-            "subtext": "<p>Access exclusive B2B pricing on all products</p>"
+            "subtext": "<p>Access exclusive B2B pricing on all products<br/><em>Not a wholesale partner yet? </em><a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><em>Apply here.</em></a></p>"
           }
         },
         "feature_item_VQmzT3": {
           "type": "feature_item",
           "settings": {
             "enabled": true,
-            "title": "Bulk Ordering",
-            "subtext": "<p>Place large orders with volume discounts</p>"
+            "icon": "shopify://shop_images/Tax-Ex-Icon.svg",
+            "title": "Tax-Free Supply Ordering",
+            "subtext": "<p>Tax-free purchasing for approved wholesale accounts. </p>"
           }
         },
         "feature_item_tmRqzt": {
           "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Exlusive-designs-Icon.svg",
+            "title": "Access to Exclusive Products",
+            "subtext": "<p>Jewelry designs not available for retail customers</p>"
+          }
+        },
+        "feature_item_PbNkez": {
+          "type": "feature_item",
+          "disabled": true,
           "settings": {
             "enabled": true,
             "title": "Priority Support",
@@ -73,7 +84,8 @@
       "block_order": [
         "feature_item_GTXmHc",
         "feature_item_VQmzT3",
-        "feature_item_tmRqzt"
+        "feature_item_tmRqzt",
+        "feature_item_PbNkez"
       ],
       "name": "Locked Feature Checklist",
       "settings": {
@@ -83,18 +95,18 @@
         "heading_color": "#121212",
         "heading_alignment": "center",
         "heading_margin_bottom": 36,
-        "layout": "row",
+        "layout": "column",
         "gap": 16,
         "max_width": 1200,
-        "background_color": "#ffffff",
-        "icon_size": 24,
+        "background_color": "#f2faff",
+        "icon_size": 60,
         "default_icon_color": "#121212",
         "title_font_size": 16,
         "title_color": "#121212",
         "subtext_size": 14,
-        "subtext_color": "#666666",
+        "subtext_color": "#121212",
         "link_color": "#121212",
-        "link_hover_color": "#666666",
+        "link_hover_color": "#23a3c1",
         "link_style": "underline",
         "link_hover_style": "underline",
         "cta_text": "Apply for Wholesale",
