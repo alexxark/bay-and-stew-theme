@@ -130,7 +130,7 @@
           "type": "feature_item",
           "settings": {
             "enabled": true,
-            "icon": "shopify://shop_images/Rewards-Icon.svg",
+            "icon": "shopify://shop_images/Wholesale-Icon.svg",
             "title": "Wholesale Pricing",
             "subtext": "<p>Access exclusive B2B pricing on all products<br/><em>Not a wholesale partner yet? </em><a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><em>Apply here.</em></a></p>"
           }
@@ -139,6 +139,7 @@
           "type": "feature_item",
           "settings": {
             "enabled": true,
+            "icon": "shopify://shop_images/Tax-Ex-Icon.svg",
             "title": "Tax-Free Supply Ordering",
             "subtext": "<p>Tax-free purchasing for approved wholesale accounts. </p>"
           }
@@ -147,6 +148,7 @@
           "type": "feature_item",
           "settings": {
             "enabled": true,
+            "icon": "shopify://shop_images/Exlusive-designs-Icon.svg",
             "title": "Access to Exclusive Products",
             "subtext": "<p>Jewelry designs not available for retail customers</p>"
           }
@@ -167,7 +169,6 @@
         "feature_item_eVMw8r",
         "feature_item_3Ayn8B"
       ],
-      "disabled": true,
       "custom_css": [
         "h3 {margin-bottom: -14px;}",
         ".feature-subtext {margin-top: 0;}",
@@ -186,7 +187,7 @@
         "gap": 16,
         "max_width": 1200,
         "background_color": "#f2faff",
-        "icon_size": 24,
+        "icon_size": 60,
         "default_icon_color": "#121212",
         "title_font_size": 16,
         "title_color": "#121212",
@@ -202,6 +203,90 @@
         "cta_background_color": "#121212",
         "cta_margin_top": 24,
         "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "locked_section_feature_checklist_UHQgBU": {
+      "type": "locked-section-feature-checklist",
+      "blocks": {
+        "feature_item_LFmXXa": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Wholesale-Icon.svg",
+            "title": "Wholesale Pricing",
+            "subtext": "<p>Access exclusive B2B pricing on all products<br/><em>Not a wholesale partner yet? </em><a href=\"https://bayandstew.com/pages/apply-for-wholesale\" title=\"https://bayandstew.com/pages/apply-for-wholesale\"><em>Apply here.</em></a></p>"
+          }
+        },
+        "feature_item_PWbyyP": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Tax-Ex-Icon.svg",
+            "title": "Tax-Free Supply Ordering",
+            "subtext": "<p>Tax-free purchasing for approved wholesale accounts. </p>"
+          }
+        },
+        "feature_item_9eCEeG": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Exlusive-designs-Icon.svg",
+            "title": "Access to Exclusive Products",
+            "subtext": "<p>Jewelry designs not available for retail customers</p>"
+          }
+        },
+        "feature_item_46KHyi": {
+          "type": "feature_item",
+          "disabled": true,
+          "settings": {
+            "enabled": true,
+            "title": "Priority Support",
+            "subtext": "<p>Dedicated account manager for your business</p>"
+          }
+        }
+      },
+      "block_order": [
+        "feature_item_LFmXXa",
+        "feature_item_PWbyyP",
+        "feature_item_9eCEeG",
+        "feature_item_46KHyi"
+      ],
+      "disabled": true,
+      "custom_css": [
+        "h3 {margin-bottom: -14px;}",
+        ".feature-subtext {margin-top: 0;}",
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 300px; padding-right: 180px;}",
+        "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}"
+      ],
+      "name": "Locked Feature Checklist",
+      "settings": {
+        "heading": "",
+        "heading_font_size": 24,
+        "heading_font_weight": "600",
+        "heading_color": "#121212",
+        "heading_alignment": "left",
+        "heading_margin_bottom": 20,
+        "layout": "column",
+        "gap": 16,
+        "max_width": 1200,
+        "background_color": "#ffffff",
+        "icon_size": 60,
+        "default_icon_color": "#121212",
+        "title_font_size": 16,
+        "title_color": "#121212",
+        "subtext_size": 14,
+        "subtext_color": "#121212",
+        "link_color": "#121212",
+        "link_hover_color": "#23a3c1",
+        "link_style": "underline",
+        "link_hover_style": "underline",
+        "cta_text": "Apply for Wholesale",
+        "cta_url": "",
+        "cta_text_color": "#ffffff",
+        "cta_background_color": "#121212",
+        "cta_margin_top": 24,
+        "padding_top": 16,
         "padding_bottom": 36
       }
     },
@@ -251,6 +336,7 @@
   "order": [
     "main",
     "locked_section_feature_checklist_YGH3Pa",
+    "locked_section_feature_checklist_UHQgBU",
     "related-products",
     "1750978152f27a8ba5"
   ]
