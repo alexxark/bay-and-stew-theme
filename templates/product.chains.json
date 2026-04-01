@@ -147,7 +147,7 @@
             "subtext_size": 14,
             "subtext_color": "#666666",
             "link_color": "#121212",
-            "link_hover_color": "#666666",
+            "link_hover_color": "#23a3c1",
             "link_style": "underline",
             "link_hover_style": "underline",
             "feature_1_enabled": true,
