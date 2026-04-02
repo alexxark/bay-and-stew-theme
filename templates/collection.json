@@ -71,7 +71,7 @@
             "enabled": true,
             "icon": "shopify://shop_images/Tax-Ex-Icon.svg",
             "title": "Tax-Free Supply Ordering",
-            "subtext": "<p>Tax-free purchasing for approved wholesale accounts. </p>"
+            "subtext": "<p>Tax-free purchasing for approved wholesale <br/>accounts. </p>"
           }
         },
         "feature_item_tmRqzt": {
