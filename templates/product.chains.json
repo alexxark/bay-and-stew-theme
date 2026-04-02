@@ -137,7 +137,7 @@
         "ai_gen_block_aeb1d89_jy84tX": {
           "type": "ai_gen_block_aeb1d89",
           "settings": {
-            "layout": "row",
+            "layout": "column",
             "gap": 16,
             "desktop_width_percent": 90,
             "icon_size": 52,
