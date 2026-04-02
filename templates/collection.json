@@ -134,7 +134,7 @@
         "heading_margin_bottom": 20,
         "layout": "row",
         "gap": 16,
-        "max_width": 1200,
+        "max_width": 950,
         "background_color": "#f2faff",
         "icon_size": 60,
         "default_icon_color": "#121212",
