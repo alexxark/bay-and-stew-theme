@@ -58,6 +58,7 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
@@ -101,7 +102,6 @@
         },
         "slide_Tfp7Mt": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Cards-GWP-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Cards-GWP-Mobile.jpg",
@@ -109,7 +109,7 @@
             "heading": "",
             "subheading": "FREE LIMITED EDITION CARD DECK",
             "highlight_words": "",
-            "promo_note": "<strong>NOT AVAILABLE ON ETSY </strong>",
+            "promo_note": "<strong>WHILE SUPPLIES LAST </strong>|<strong> NOT AVAILABLE ON ETSY</strong>",
             "promo_link_label": "details",
             "promo_details_text": "",
             "heading_size_desktop": 48,
@@ -598,6 +598,40 @@
       "custom_css": [
         "H4 {font-family: sans-serif;}"
       ],
+      "name": "Featured collection",
+      "settings": {
+        "title": "Mother's Day",
+        "heading_size": "h2",
+        "description": "",
+        "show_description": false,
+        "description_style": "body",
+        "collection": "mothers-day",
+        "products_to_show": 5,
+        "columns_desktop": 5,
+        "full_width": false,
+        "show_view_all": true,
+        "view_all_style": "outline",
+        "enable_desktop_slider": false,
+        "color_scheme": "background-1",
+        "image_ratio": "portrait",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "bulk",
+        "columns_mobile": "2",
+        "swipe_on_mobile": true,
+        "padding_top": 28,
+        "padding_bottom": 40
+      }
+    },
+    "featured_collection_YRmdhq": {
+      "type": "featured-collection",
+      "disabled": true,
+      "custom_css": [
+        "H4 {font-family: sans-serif;}"
+      ],
+      "name": "SALE Featured collection",
       "settings": {
         "title": "EXTRA 25% OFF SALE",
         "heading_size": "h2",
@@ -672,75 +706,32 @@
           "settings": {
             "text": "<p>Apply today for access to professional pricing and tax-exempt purchasing for qualified businesses.<br/></p>"
           }
+        },
+        "button_C3EKXm": {
+          "type": "button",
+          "settings": {
+            "button_label": "Apply for Wholesale",
+            "button_link": "shopify://pages/apply-for-wholesale",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
         }
       },
       "block_order": [
         "heading_aMQMzr",
-        "text_7yKLcq"
+        "text_7yKLcq",
+        "button_C3EKXm"
       ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 0
-      }
-    },
-    "multicolumn_baH7TX": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_M7Rxfy": {
-          "type": "column",
-          "settings": {
-            "title": "<a href=\"https://bayandstew.com/account/register\" title=\"https://bayandstew.com/account/register\">US BASED</a>",
-            "text": "",
-            "link_label": "",
-            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
-          }
-        },
-        "column_ggePWP": {
-          "type": "column",
-          "settings": {
-            "title": "<a href=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\" title=\"https://bayandstew.com/pages/wholesale-signup-form-outside-us\">INTERNATIONAL</a>",
-            "text": "",
-            "link_label": "",
-            "link": "https://bayandstew.com/collections/samples"
-          }
-        },
-        "column_97UfjD": {
-          "type": "column",
-          "settings": {
-            "title": "<a href=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\" title=\"https://bayandstew.com/pages/wholesale-sales-tax-exemption-requirements\">REQUIREMENTS</a>",
-            "text": "",
-            "link_label": "",
-            "link": "https://bayandstew.com/collections/shop-all"
-          }
-        }
-      },
-      "block_order": [
-        "column_M7Rxfy",
-        "column_ggePWP",
-        "column_97UfjD"
-      ],
-      "name": "t:sections.multicolumn.presets.name",
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_desktop": false,
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "padding_top": 16,
-        "padding_bottom": 36
+        "padding_top": 60,
+        "padding_bottom": 60
       }
     },
     "featured_collection_BBDHfE": {
@@ -1052,9 +1043,9 @@
     "collection_list_eFLBt6",
     "rich_text_GaGRwE",
     "featured_collection",
+    "featured_collection_YRmdhq",
     "featured_collection_iQH7YA",
     "rich_text_LDLKra",
-    "multicolumn_baH7TX",
     "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
     "multicolumn_t7zdcd",

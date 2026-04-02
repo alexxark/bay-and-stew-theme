@@ -136,24 +136,24 @@
             "layout": "column",
             "gap": 16,
             "desktop_width_percent": 90,
-            "icon_size": 60,
+            "icon_size": 52,
             "default_icon_color": "#121212",
             "title_font_size": 18,
             "title_color": "#121212",
             "subtext_size": 14,
-            "subtext_color": "#666666",
+            "subtext_color": "#121212",
             "link_color": "#121212",
-            "link_hover_color": "#666666",
+            "link_hover_color": "#23a3c1",
             "link_style": "underline",
             "link_hover_style": "underline",
             "feature_1_enabled": true,
             "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
             "feature_1_title": "Free Limited Edition Card Deck",
-            "feature_1_subtext": "<p>With qualifying $100+ purchase, while supplies last.</p>",
+            "feature_1_subtext": "<p>With qualifying $100+ purchase, <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">while supplies last.</a></p>",
             "feature_2_enabled": true,
             "feature_2_icon": "shopify://shop_images/Rewards-Icon.svg",
             "feature_2_title": "Loyalty Rewards",
-            "feature_2_subtext": "<p>Earn points and unlock exclusive rewards made for makers.</p>",
+            "feature_2_subtext": "<p>Earn points and unlock <a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">exclusive rewards</a> made for makers.</p>",
             "feature_3_enabled": true,
             "feature_3_icon": "shopify://shop_images/Shipping-Icon.svg",
             "feature_3_title": "Free Shipping on U.S. Orders $35+",
@@ -162,9 +162,10 @@
             "feature_4_icon": "shopify://shop_images/Express-Icon.svg",
             "feature_4_title": "Same or Next Day Shipping",
             "feature_4_subtext": "<p>Free rush shipping on orders $500+</p>",
-            "feature_5_enabled": false,
-            "feature_5_title": "",
-            "feature_5_subtext": "",
+            "feature_5_enabled": true,
+            "feature_5_icon": "shopify://shop_images/Wholesale-Icon.svg",
+            "feature_5_title": "Wholesale Pricing",
+            "feature_5_subtext": "<p>Access exclusive B2B pricing on all products with an <a href=\"/pages/apply-for-wholesale\" title=\"Apply for Wholesale\">approved wholesale account</a></p>",
             "feature_6_enabled": false,
             "feature_6_title": "",
             "feature_6_subtext": ""
@@ -175,11 +176,10 @@
       "block_order": [
         "ai_gen_block_aeb1d89_wXyJhe"
       ],
-      "disabled": true,
       "custom_css": [
         "h3 {margin-bottom: -12px;}",
         ".feature-subtext {margin-top: 0;}",
-        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {display: block; padding-top: 30px; padding-bottom: 30px; padding-left: 300px; padding-right: 180px;}",
+        "feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {max-width: 1200px; margin: 0 auto; /* fluid side spacing */ padding-left: clamp(20px, 8vw, 120px); padding-right: clamp(20px, 8vw, 120px); padding-top: 12px; padding-bottom: 12px;}",
         "@media screen and (max-width: 749px) {feature-checklist-atgurtjqvai9xrmjbqaigenblockaeb1d89wxyjhe {padding-left: 20px; padding-right: 20px; padding-top: 20px; padding-bottom: 20px; }}",
         " {background-color: #f2faff;}"
       ],
@@ -245,6 +245,7 @@
       "block_order": [
         "heading_mfYxk6"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -294,6 +295,7 @@
         "column_ywkKGW",
         "column_tMTn79"
       ],
+      "disabled": true,
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
         "title": "",
