@@ -32,8 +32,10 @@
   {%- assign has_image = true -%}
 {%- endif -%}
 {%- assign is_collapsible = false -%}
-{%- if section.settings.collapsible_description and has_description -%}
-  {%- assign is_collapsible = true -%}
+{%- if section.settings.collapsible_description -%}
+  {%- if has_description or has_image -%}
+    {%- assign is_collapsible = true -%}
+  {%- endif -%}
 {%- endif -%}
 
 <div class="collection-hero{% if has_image %} collection-hero--with-image{% endif %}{% if is_collapsible %} collection-hero--collapsible{% endif %} color-{{ section.settings.color_scheme }} gradient">
@@ -49,7 +51,9 @@
             <svg class="icon-caret" viewBox="0 0 10 6" xmlns="http://www.w3.org/2000/svg" fill="none" aria-hidden="true"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
           </summary>
           <div class="collection-hero__collapsible-content">
-            <div class="collection-hero__description rte">{{ collection.description }}</div>
+            {%- if has_description -%}
+              <div class="collection-hero__description rte">{{ collection.description }}</div>
+            {%- endif -%}
             {%- if has_image -%}
               <div class="collection-hero__image-container media gradient">
                 {%- render 'collection-hero-image', collection: collection, settings: settings -%}

@@ -95,7 +95,7 @@
     align-self: stretch;
     flex: 1 0 50%;
     margin-left: 2rem;
-    min-height: 12rem;
+    min-height: 15rem;
   }
 }
 
@@ -162,6 +162,17 @@
   gap: 1rem;
 }
 
+.collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
+  overflow: visible;
+  height: auto;
+}
+
+.collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
+  position: relative;
+  width: 100%;
+  height: auto;
+}
+
 @media screen and (min-width: 750px) {
   .collection-hero--collapsible .collection-hero__collapsible-content {
     flex-direction: row;
@@ -176,6 +187,5 @@
   .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
     flex: 1 0 50%;
     margin-left: 0;
-    min-height: 12rem;
   }
 }
