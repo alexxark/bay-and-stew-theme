@@ -137,10 +137,10 @@
         "ai_gen_block_aeb1d89_jy84tX": {
           "type": "ai_gen_block_aeb1d89",
           "settings": {
-            "layout": "column",
+            "layout": "row",
             "gap": 16,
             "desktop_width_percent": 90,
-            "icon_size": 60,
+            "icon_size": 52,
             "default_icon_color": "#121212",
             "title_font_size": 16,
             "title_color": "#121212",
