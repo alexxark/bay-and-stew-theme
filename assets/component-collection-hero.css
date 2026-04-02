@@ -163,14 +163,29 @@
 }
 
 .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
-  overflow: visible;
+  overflow: hidden;
   height: auto;
+  border-radius: var(--media-radius);
 }
 
 .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
   position: relative;
   width: 100%;
   height: auto;
+  object-fit: contain;
+}
+
+@media screen and (max-width: 749px) {
+  .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
+    max-width: 100%;
+    height: auto;
+    max-height: 15rem;
+  }
+
+  .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
+    object-fit: contain;
+    max-height: 15rem;
+  }
 }
 
 @media screen and (min-width: 750px) {
@@ -185,7 +200,13 @@
   }
 
   .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
-    flex: 1 0 50%;
+    flex: 0 1 50%;
     margin-left: 0;
+    max-height: 18rem;
+  }
+
+  .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
+    object-fit: contain;
+    max-height: 18rem;
   }
 }
