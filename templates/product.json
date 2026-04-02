@@ -167,11 +167,29 @@
         },
         "feature_item_3Ayn8B": {
           "type": "feature_item",
-          "disabled": true,
           "settings": {
             "enabled": true,
-            "title": "Priority Support",
-            "subtext": "<p>Dedicated account manager for your business</p>"
+            "icon": "shopify://shop_images/Card-Icon.svg",
+            "title": "Free Limited Edition Card Deck",
+            "subtext": "<p>With qualifying $100+ purchase, <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">while supplies last.</a></p>"
+          }
+        },
+        "feature_item_hQMDcW": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Rewards-Icon.svg",
+            "title": "Loyalty Rewards",
+            "subtext": "<p>Earn points and unlock <a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">exclusive rewards</a>.</p>"
+          }
+        },
+        "feature_item_EamNFy": {
+          "type": "feature_item",
+          "settings": {
+            "enabled": true,
+            "icon": "shopify://shop_images/Shipping-Icon.svg",
+            "title": "Fast & Free Shipping",
+            "subtext": "<p>Free standard shipping on U.S. orders $35+, <br/>plus free rush shipping on orders $500+.</p>"
           }
         }
       },
@@ -179,7 +197,9 @@
         "feature_item_rKhweW",
         "feature_item_jWe8hy",
         "feature_item_eVMw8r",
-        "feature_item_3Ayn8B"
+        "feature_item_3Ayn8B",
+        "feature_item_hQMDcW",
+        "feature_item_EamNFy"
       ],
       "custom_css": [
         "h3 {margin-bottom: -14px;}",
@@ -197,7 +217,7 @@
         "heading_margin_bottom": 20,
         "layout": "row",
         "gap": 16,
-        "max_width": 1200,
+        "max_width": 1150,
         "background_color": "#f2faff",
         "icon_size": 60,
         "default_icon_color": "#121212",
