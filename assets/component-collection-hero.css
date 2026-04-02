@@ -95,6 +95,7 @@
     align-self: stretch;
     flex: 1 0 50%;
     margin-left: 2rem;
+    min-height: 12rem;
   }
 }
 
@@ -175,5 +176,6 @@
   .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
     flex: 1 0 50%;
     margin-left: 0;
+    min-height: 12rem;
   }
 }
