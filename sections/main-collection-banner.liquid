@@ -55,7 +55,7 @@
               <div class="collection-hero__description rte">{{ collection.description }}</div>
             {%- endif -%}
             {%- if has_image -%}
-              <div class="collection-hero__image-container media gradient">
+              <div class="collection-hero__image-container collection-hero__image-container--collapsible">
                 {%- render 'collection-hero-image', collection: collection, settings: settings -%}
               </div>
             {%- endif -%}

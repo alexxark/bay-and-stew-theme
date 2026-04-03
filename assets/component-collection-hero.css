@@ -162,20 +162,19 @@
   gap: 1rem;
 }
 
-.collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
-  overflow: hidden;
+.collection-hero__image-container--collapsible {
+  border: none;
+  box-shadow: none;
   border-radius: var(--media-radius);
-  background: none;
+  overflow: hidden;
 }
 
-.collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
-  position: relative;
+.collection-hero__image-container--collapsible > img {
   display: block;
   width: auto;
   max-width: 100%;
   height: auto;
   max-height: 12rem;
-  object-fit: contain;
 }
 
 @media screen and (min-width: 750px) {
@@ -189,12 +188,12 @@
     flex: 1 1 50%;
   }
 
-  .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container {
+  .collection-hero__image-container--collapsible {
     flex: 0 1 50%;
     margin-left: 0;
   }
 
-  .collection-hero--collapsible .collection-hero__collapsible-content .collection-hero__image-container > img {
+  .collection-hero__image-container--collapsible > img {
     max-height: 16rem;
   }
 }
