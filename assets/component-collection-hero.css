@@ -80,7 +80,7 @@
 }
 
 @media screen and (max-width: 749px) {
-  .collection-hero__image-container {
+  .collection-hero__image-container:not(.collection-hero__image-container--collapsible) {
     height: 15rem;
   }
 }
