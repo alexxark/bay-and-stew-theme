@@ -167,19 +167,19 @@
   box-shadow: none;
   border-radius: var(--media-radius);
   overflow: hidden;
+  position: relative;
 }
 
 .collection-hero__image-container--collapsible > img {
   display: block;
-  width: auto;
-  max-width: 100%;
+  width: 100%;
   height: auto;
 }
 
 @media screen and (min-width: 750px) {
   .collection-hero--collapsible .collection-hero__collapsible-content {
     flex-direction: row;
-    align-items: flex-start;
+    align-items: stretch;
     gap: 2rem;
   }
 
@@ -190,5 +190,14 @@
   .collection-hero__image-container--collapsible {
     flex: 0 1 50%;
     margin-left: 0;
+  }
+
+  .collection-hero__image-container--collapsible > img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
   }
 }
