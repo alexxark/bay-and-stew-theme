@@ -336,48 +336,53 @@
 {%- comment -%}
   ================================================================
   LOAD MORE JAVASCRIPT
-  Fetches the next page and appends product cards to the grid.
+  Uses event delegation so it works after filter changes replace the DOM.
   ADA compliant with screen reader announcements.
   ================================================================
 {%- endcomment -%}
 <script>
-  // Global function to initialize Load More button (called on page load and after filter changes)
-  window.initializeLoadMoreButton = function() {
-    const loadMoreBtn = document.getElementById('load-more-btn');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const loadMoreWrapper = document.getElementById('load-more-wrapper');
-    const productGrid = document.getElementById('product-grid');
+  (function() {
+    // Use event delegation - attach to document body so it survives DOM replacements
+    var loadMoreListenerAttached = false;
 
-    if (!loadMoreBtn || !productGrid) return;
+    function handleLoadMoreClick(e) {
+      var btn = e.target.closest('#load-more-btn');
+      if (!btn) return;
 
-    // Remove any existing listener to prevent duplicates (use a named function reference)
-    loadMoreBtn.removeEventListener('click', window.handleLoadMoreClick);
-
-    // Define the handler as a global reference so we can remove it later
-    window.handleLoadMoreClick = function(e) {
       e.preventDefault();
 
+      var loadingSpinner = document.getElementById('loading-spinner');
+      var loadMoreWrapper = document.getElementById('load-more-wrapper');
+      var productGrid = document.getElementById('product-grid');
+
+      if (!productGrid) return;
+
       // Disable button and show spinner
-      loadMoreBtn.disabled = true;
-      loadMoreBtn.setAttribute('aria-busy', 'true');
+      btn.disabled = true;
+      btn.setAttribute('aria-busy', 'true');
       if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
 
-      const nextUrl = loadMoreBtn.dataset.nextUrl;
+      var nextUrl = btn.dataset.nextUrl;
+      if (!nextUrl) {
+        console.error('Load more: No next URL found');
+        btn.disabled = false;
+        return;
+      }
 
       fetch(nextUrl)
-        .then(function (response) {
+        .then(function(response) {
           return response.text();
         })
-        .then(function (html) {
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
 
           // Get new product list items from the fetched page
-          const newItems = doc.querySelectorAll('#product-grid > li');
+          var newItems = doc.querySelectorAll('#product-grid > li');
 
           if (newItems.length > 0) {
-            newItems.forEach(function (item, index) {
-              const cloned = item.cloneNode(true);
+            newItems.forEach(function(item, index) {
+              var cloned = item.cloneNode(true);
 
               // Add fade-in animation class
               cloned.classList.add('load-more-fade-in');
@@ -396,50 +401,57 @@
             announceLoadMoreToScreenReader(newItems.length + ' new products loaded');
           }
 
-          // Check if there's another page to load
-          const newLoadMoreBtn = doc.querySelector('#load-more-btn');
-          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl) {
-            loadMoreBtn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
-            loadMoreBtn.disabled = false;
-            loadMoreBtn.setAttribute('aria-busy', 'false');
-            if (loadingSpinner) loadingSpinner.style.display = 'none';
+          // Check if there's another page to load - get fresh reference to button
+          var currentBtn = document.getElementById('load-more-btn');
+          var currentSpinner = document.getElementById('loading-spinner');
+          var currentWrapper = document.getElementById('load-more-wrapper');
+          var newLoadMoreBtn = doc.querySelector('#load-more-btn');
+
+          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl && currentBtn) {
+            currentBtn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
+            currentBtn.disabled = false;
+            currentBtn.setAttribute('aria-busy', 'false');
+            if (currentSpinner) currentSpinner.style.display = 'none';
           } else {
             // No more pages — hide the button
-            if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
-            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            if (currentWrapper) currentWrapper.style.display = 'none';
+            if (currentSpinner) currentSpinner.style.display = 'none';
           }
         })
-        .catch(function (error) {
+        .catch(function(error) {
           console.error('Load more error:', error);
-          loadMoreBtn.disabled = false;
-          loadMoreBtn.setAttribute('aria-busy', 'false');
-          if (loadingSpinner) loadingSpinner.style.display = 'none';
+          var currentBtn = document.getElementById('load-more-btn');
+          var currentSpinner = document.getElementById('loading-spinner');
+          if (currentBtn) {
+            currentBtn.disabled = false;
+            currentBtn.setAttribute('aria-busy', 'false');
+          }
+          if (currentSpinner) currentSpinner.style.display = 'none';
         });
-    };
-
-    loadMoreBtn.addEventListener('click', window.handleLoadMoreClick);
-  };
-
-  function announceLoadMoreToScreenReader(message) {
-    var announcer = document.getElementById('load-more-announcer');
-    if (!announcer) {
-      announcer = document.createElement('div');
-      announcer.id = 'load-more-announcer';
-      announcer.className = 'load-more-sr-only';
-      announcer.setAttribute('role', 'status');
-      announcer.setAttribute('aria-live', 'polite');
-      document.body.appendChild(announcer);
     }
-    announcer.textContent = '';
-    setTimeout(function () {
-      announcer.textContent = message;
-    }, 100);
-  }
 
-  // Initialize on page load
-  document.addEventListener('DOMContentLoaded', function () {
-    window.initializeLoadMoreButton();
-  });
+    function announceLoadMoreToScreenReader(message) {
+      var announcer = document.getElementById('load-more-announcer');
+      if (!announcer) {
+        announcer = document.createElement('div');
+        announcer.id = 'load-more-announcer';
+        announcer.className = 'load-more-sr-only';
+        announcer.setAttribute('role', 'status');
+        announcer.setAttribute('aria-live', 'polite');
+        document.body.appendChild(announcer);
+      }
+      announcer.textContent = '';
+      setTimeout(function() {
+        announcer.textContent = message;
+      }, 100);
+    }
+
+    // Attach delegated listener once to document body - survives any DOM replacement
+    if (!loadMoreListenerAttached) {
+      document.addEventListener('click', handleLoadMoreClick);
+      loadMoreListenerAttached = true;
+    }
+  })();
 </script>
 
 {% schema %}

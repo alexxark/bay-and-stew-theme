@@ -90,11 +90,6 @@ class FacetFiltersForm extends HTMLElement {
       .forEach((element) => {
         element.classList.add('scroll-trigger--cancel');
       });
-
-    // Re-initialize Load More button after filter changes replace the product grid
-    if (typeof window.initializeLoadMoreButton === 'function') {
-      window.initializeLoadMoreButton();
-    }
   }
 
   static renderProductCount(html) {
