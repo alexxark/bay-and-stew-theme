@@ -58,6 +58,16 @@
   
   /* Ensure prices render immediately */
   .price-item { display: inline-block; }
+  
+  /* Optimize grid item rendering - each item is isolated */
+  #product-grid > li {
+    contain: layout style paint;
+  }
+  
+  /* Faster fade-in animation */
+  .load-more-fade-in {
+    animation: loadMoreFadeIn 0.25s ease-out forwards;
+  }
 </style>
 
 {% if section.settings.image_shape == 'blob' %}
@@ -132,14 +142,10 @@
     to { transform: rotate(360deg); }
   }
 
-  /* Fade-in for newly loaded products */
-  .load-more-fade-in {
-    animation: loadMoreFadeIn 0.5s ease-in;
-  }
-
+  /* Fade-in for newly loaded products - GPU accelerated */
   @keyframes loadMoreFadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { opacity: 0; transform: translate3d(0, 8px, 0); }
+    to { opacity: 1; transform: translate3d(0, 0, 0); }
   }
 
   /* Screen reader only */
@@ -363,12 +369,12 @@
   ================================================================
   LOAD MORE JAVASCRIPT
   Uses event delegation so it works after filter changes replace the DOM.
+  Optimized for performance with batched DOM updates.
   ADA compliant with screen reader announcements.
   ================================================================
 {%- endcomment -%}
 <script>
   (function() {
-    // Use event delegation - attach to document body so it survives DOM replacements
     var loadMoreListenerAttached = false;
 
     function handleLoadMoreClick(e) {
@@ -383,7 +389,6 @@
 
       if (!productGrid) return;
 
-      // Disable button and show spinner
       btn.disabled = true;
       btn.setAttribute('aria-busy', 'true');
       if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
@@ -402,32 +407,37 @@
         .then(function(html) {
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
-
-          // Get new product list items from the fetched page
           var newItems = doc.querySelectorAll('#product-grid > li');
 
           if (newItems.length > 0) {
-            newItems.forEach(function(item, index) {
-              var cloned = item.cloneNode(true);
-
-              // Add fade-in animation class
-              cloned.classList.add('load-more-fade-in');
-
-              // Stagger the animation slightly for each product
-              cloned.style.animationDelay = (index * 0.05) + 's';
-
-              // Make sure reveal animations show immediately
-              cloned.style.opacity = '1';
-              cloned.style.transform = 'translateY(0px)';
-              cloned.classList.remove('scroll-trigger');
-
-              productGrid.appendChild(cloned);
+            // Use DocumentFragment for batched DOM insertion (single reflow)
+            var fragment = document.createDocumentFragment();
+            
+            // Process all items before touching the DOM
+            var itemsArray = Array.from(newItems);
+            itemsArray.forEach(function(item, index) {
+              // Skip cloning - move the parsed node directly (faster)
+              item.classList.add('load-more-fade-in');
+              item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + (index * 0.03) + 's';
+              item.classList.remove('scroll-trigger');
+              fragment.appendChild(item);
             });
 
-            announceLoadMoreToScreenReader(newItems.length + ' new products loaded');
+            // Single DOM insertion - triggers only one reflow
+            requestAnimationFrame(function() {
+              productGrid.appendChild(fragment);
+              
+              // Lazy load images that just entered the viewport
+              if ('IntersectionObserver' in window) {
+                var lazyImages = productGrid.querySelectorAll('img[loading="lazy"]');
+                // Browser handles lazy loading automatically
+              }
+              
+              announceLoadMoreToScreenReader(itemsArray.length + ' new products loaded');
+            });
           }
 
-          // Check if there's another page to load - get fresh reference to button
+          // Update button state
           var currentBtn = document.getElementById('load-more-btn');
           var currentSpinner = document.getElementById('loading-spinner');
           var currentWrapper = document.getElementById('load-more-wrapper');
@@ -439,7 +449,6 @@
             currentBtn.setAttribute('aria-busy', 'false');
             if (currentSpinner) currentSpinner.style.display = 'none';
           } else {
-            // No more pages — hide the button
             if (currentWrapper) currentWrapper.style.display = 'none';
             if (currentSpinner) currentSpinner.style.display = 'none';
           }
