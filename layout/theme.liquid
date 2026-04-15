@@ -7,9 +7,18 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="">
     <link rel="canonical" href="{{ canonical_url }}">
+
+    {%- comment -%} Early resource hints for faster loading {%- endcomment -%}
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
     <link rel="dns-prefetch" href="https://cdn.shopify.com">
     <link rel="dns-prefetch" href="https://fonts.shopifycdn.com">
     <link rel="dns-prefetch" href="https://api.bloy.io">
+
+    {%- comment -%} Preload critical fonts {%- endcomment -%}
+    {%- unless settings.type_body_font.system? -%}
+      <link rel="preload" as="font" href="{{ settings.type_body_font | font_url }}" type="font/woff2" crossorigin>
+    {%- endunless -%}
+
     <link rel="stylesheet" href="{{ 'bss-lock-settings.css' | asset_url }}" media="print" onload="this.media='all'">
 
     {%- if settings.favicon != blank -%}

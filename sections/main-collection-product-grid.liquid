@@ -30,9 +30,35 @@
     <p>You must be a B2B customer to access this collection. Please <a href="/account/login?checkout_url={{ request.path | url_encode }}">log in</a> or <a href="/pages/wholesale-sales-tax-exemption-requirements?checkout_url={{ request.path | url_encode }}">register here</a>.</p>
   </div>
 {%- else -%}
+{%- comment -%} Preload critical CSS for faster initial render {%- endcomment -%}
+<link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style">
+<link rel="preload" href="{{ 'component-card.css' | asset_url }}" as="style">
+
 {{ 'template-collection.css' | asset_url | stylesheet_tag }}
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- comment -%} Critical inline CSS to prevent layout shifts during price loading {%- endcomment -%}
+<style>
+  /* Reserve space for price to prevent CLS */
+  .price { min-height: 1.4em; }
+  .price__container { min-height: 1.2em; }
+  
+  /* CSS containment for better rendering performance */
+  .product-card-wrapper {
+    contain: layout style;
+    content-visibility: auto;
+    contain-intrinsic-size: auto 350px;
+  }
+  
+  /* Optimize repaints during hover */
+  .card__media img {
+    will-change: transform;
+  }
+  
+  /* Ensure prices render immediately */
+  .price-item { display: inline-block; }
+</style>
 
 {% if section.settings.image_shape == 'blob' %}
   {{ 'mask-blobs.css' | asset_url | stylesheet_tag }}
