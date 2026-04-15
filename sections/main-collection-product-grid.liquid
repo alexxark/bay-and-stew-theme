@@ -68,6 +68,30 @@
   .load-more-fade-in {
     animation: loadMoreFadeIn 0.25s ease-out forwards;
   }
+  
+  /* Price loading skeleton for BSS B2B processing */
+  .load-more-fade-in .price__container:empty::before,
+  .load-more-fade-in [bss-b2b-product-price]:empty::before {
+    content: '';
+    display: inline-block;
+    width: 60px;
+    height: 1em;
+    background: linear-gradient(90deg, #e0e0e0 25%, #f0f0f0 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: priceShimmer 1.2s infinite;
+    border-radius: 3px;
+  }
+  
+  @keyframes priceShimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  
+  /* Once BSS populates the price, hide skeleton */
+  .bss-b2b-collection-item-vat:not(:empty) .bss-b2b-product-vat-price-no-vat:not(:empty)::before,
+  .bss-b2b-collection-item-vat:not(:empty) .bss-b2b-product-vat-price-has-vat:not(:empty)::before {
+    display: none;
+  }
 </style>
 
 {% if section.settings.image_shape == 'blob' %}
@@ -427,11 +451,8 @@
             requestAnimationFrame(function() {
               productGrid.appendChild(fragment);
               
-              // Lazy load images that just entered the viewport
-              if ('IntersectionObserver' in window) {
-                var lazyImages = productGrid.querySelectorAll('img[loading="lazy"]');
-                // Browser handles lazy loading automatically
-              }
+              // Trigger BSS B2B price refresh for newly added items
+              triggerBSSPriceRefresh(productGrid);
               
               announceLoadMoreToScreenReader(itemsArray.length + ' new products loaded');
             });
@@ -463,6 +484,82 @@
           }
           if (currentSpinner) currentSpinner.style.display = 'none';
         });
+    }
+
+    // Trigger BSS B2B and other third-party apps to process new price elements
+    function triggerBSSPriceRefresh(container) {
+      // Method 1: Dispatch Shopify section events that apps listen to
+      var sectionEvent = new CustomEvent('shopify:section:load', {
+        bubbles: true,
+        detail: { sectionId: container.closest('[data-section-id]')?.dataset.sectionId }
+      });
+      document.dispatchEvent(sectionEvent);
+      
+      // Method 2: Dispatch a generic DOM content loaded event for apps using that
+      var contentEvent = new CustomEvent('bss:content:updated', { bubbles: true });
+      container.dispatchEvent(contentEvent);
+      
+      // Method 3: Call BSS global refresh functions if they exist
+      if (typeof window.BSSB2B !== 'undefined' && typeof window.BSSB2B.refresh === 'function') {
+        window.BSSB2B.refresh();
+      }
+      if (typeof window.BSSCommerce !== 'undefined' && typeof window.BSSCommerce.initPrices === 'function') {
+        window.BSSCommerce.initPrices(container);
+      }
+      
+      // Method 4: Re-trigger the page's price calculation scripts
+      // Some apps use MutationObserver but need a "poke" to notice changes
+      var priceElements = container.querySelectorAll('[bss-b2b-product-price]');
+      priceElements.forEach(function(el) {
+        // Toggle an attribute to trigger MutationObserver
+        el.setAttribute('data-bss-refresh', Date.now());
+      });
+      
+      // Method 5: Dispatch custom event commonly used by pricing apps
+      document.dispatchEvent(new CustomEvent('price:refresh', { 
+        detail: { container: container }
+      }));
+      
+      // Method 6: For tax display VAT elements
+      var vatElements = container.querySelectorAll('.bss-b2b-collection-item-vat');
+      if (vatElements.length > 0 && typeof window.BssB2BTax !== 'undefined') {
+        if (typeof window.BssB2BTax.calculate === 'function') {
+          window.BssB2BTax.calculate();
+        }
+      }
+      
+      // Method 7: Retry mechanism - wait for BSS scripts to be ready
+      var retryCount = 0;
+      var maxRetries = 5;
+      function retryBSSInit() {
+        retryCount++;
+        if (retryCount > maxRetries) return;
+        
+        // Check if prices are still empty
+        var emptyPrices = container.querySelectorAll('.load-more-fade-in .bss-b2b-collection-item-vat');
+        var hasEmptyVat = false;
+        emptyPrices.forEach(function(el) {
+          var noVat = el.querySelector('.bss-b2b-product-vat-price-no-vat');
+          var hasVat = el.querySelector('.bss-b2b-product-vat-price-has-vat');
+          if ((noVat && !noVat.textContent.trim()) || (hasVat && !hasVat.textContent.trim())) {
+            hasEmptyVat = true;
+          }
+        });
+        
+        if (hasEmptyVat) {
+          // Retry triggers
+          document.dispatchEvent(new CustomEvent('shopify:section:load', { bubbles: true }));
+          if (typeof window.BSSB2B !== 'undefined' && window.BSSB2B.refresh) window.BSSB2B.refresh();
+          if (typeof window.BSSCommerce !== 'undefined' && window.BSSCommerce.init) window.BSSCommerce.init();
+          if (typeof window.BssB2BTax !== 'undefined' && window.BssB2BTax.calculate) window.BssB2BTax.calculate();
+          
+          // Try again after delay
+          setTimeout(retryBSSInit, 500 * retryCount);
+        }
+      }
+      
+      // Start retry after initial delay
+      setTimeout(retryBSSInit, 300);
     }
 
     function announceLoadMoreToScreenReader(message) {
