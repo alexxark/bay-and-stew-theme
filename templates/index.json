@@ -518,8 +518,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/Express-shipping.png",
-            "title": "Same or Next Day Shipping",
-            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
+            "title": "Free RUSH Shipping on U.S Orders $500+",
+            "text": "<p>Free Rush Shipping on U.S Orders $500+. We ship fast so you can keep creating without delay.</p>",
             "link_label": "",
             "link": ""
           }
