@@ -392,14 +392,86 @@
 {%- comment -%}
   ================================================================
   LOAD MORE JAVASCRIPT
-  Uses event delegation so it works after filter changes replace the DOM.
-  Optimized for performance with batched DOM updates.
-  ADA compliant with screen reader announcements.
+  Prefetches next page in background so prices are ready instantly.
+  Uses event delegation so it works after filter changes.
   ================================================================
 {%- endcomment -%}
 <script>
   (function() {
     var loadMoreListenerAttached = false;
+    
+    // Prefetch cache - stores pre-loaded and pre-processed items
+    var prefetchCache = {
+      url: null,
+      items: null,        // Array of DOM elements ready to insert
+      nextUrl: null,      // URL for the page after that
+      isLoading: false,
+      isReady: false
+    };
+    
+    // Hidden container for prefetched items (allows BSS to process them)
+    var prefetchContainer = null;
+    
+    function createPrefetchContainer() {
+      if (prefetchContainer) return prefetchContainer;
+      prefetchContainer = document.createElement('div');
+      prefetchContainer.id = 'load-more-prefetch';
+      prefetchContainer.setAttribute('aria-hidden', 'true');
+      prefetchContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;visibility:hidden;pointer-events:none;';
+      document.body.appendChild(prefetchContainer);
+      return prefetchContainer;
+    }
+    
+    // Prefetch the next page in the background
+    function prefetchNextPage(url) {
+      if (!url || prefetchCache.isLoading || prefetchCache.url === url) return;
+      
+      prefetchCache.isLoading = true;
+      prefetchCache.url = url;
+      prefetchCache.isReady = false;
+      
+      fetch(url)
+        .then(function(response) { return response.text(); })
+        .then(function(html) {
+          var parser = new DOMParser();
+          var doc = parser.parseFromString(html, 'text/html');
+          var newItems = doc.querySelectorAll('#product-grid > li');
+          var nextBtn = doc.querySelector('#load-more-btn');
+          
+          // Store the next page's URL
+          prefetchCache.nextUrl = nextBtn ? nextBtn.dataset.nextUrl : null;
+          
+          // Create hidden container and add items for BSS to process
+          var container = createPrefetchContainer();
+          container.innerHTML = '';
+          
+          // Create a hidden product grid structure so BSS recognizes it
+          var hiddenGrid = document.createElement('ul');
+          hiddenGrid.id = 'prefetch-product-grid';
+          hiddenGrid.className = 'product-grid';
+          
+          Array.from(newItems).forEach(function(item) {
+            hiddenGrid.appendChild(item);
+          });
+          
+          container.appendChild(hiddenGrid);
+          
+          // Trigger BSS to process the prefetched items
+          triggerBSSPriceRefresh(container);
+          
+          // Mark as ready after giving BSS time to process
+          setTimeout(function() {
+            prefetchCache.items = Array.from(hiddenGrid.querySelectorAll('li'));
+            prefetchCache.isReady = true;
+            prefetchCache.isLoading = false;
+          }, 800); // Give BSS time to fetch and populate prices
+        })
+        .catch(function(error) {
+          console.error('Prefetch error:', error);
+          prefetchCache.isLoading = false;
+          prefetchCache.url = null;
+        });
+    }
 
     function handleLoadMoreClick(e) {
       var btn = e.target.closest('#load-more-btn');
@@ -413,93 +485,120 @@
 
       if (!productGrid) return;
 
+      var nextUrl = btn.dataset.nextUrl;
+      if (!nextUrl) {
+        console.error('Load more: No next URL found');
+        return;
+      }
+      
+      // Check if we have prefetched data ready
+      if (prefetchCache.isReady && prefetchCache.url === nextUrl && prefetchCache.items) {
+        // Use cached items - instant display!
+        displayPrefetchedItems(productGrid, prefetchCache.items, btn, loadingSpinner, loadMoreWrapper);
+        
+        // Start prefetching the next page
+        if (prefetchCache.nextUrl) {
+          btn.dataset.nextUrl = prefetchCache.nextUrl;
+          prefetchCache.url = null; // Reset for next prefetch
+          prefetchCache.items = null;
+          prefetchCache.isReady = false;
+          prefetchNextPage(prefetchCache.nextUrl);
+        } else {
+          // No more pages
+          if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
+        }
+        return;
+      }
+
+      // Fallback: fetch normally if prefetch isn't ready
       btn.disabled = true;
       btn.setAttribute('aria-busy', 'true');
       if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
 
-      var nextUrl = btn.dataset.nextUrl;
-      if (!nextUrl) {
-        console.error('Load more: No next URL found');
-        btn.disabled = false;
-        return;
-      }
-
       fetch(nextUrl)
-        .then(function(response) {
-          return response.text();
-        })
+        .then(function(response) { return response.text(); })
         .then(function(html) {
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var newItems = doc.querySelectorAll('#product-grid > li');
 
           if (newItems.length > 0) {
-            // Use DocumentFragment for batched DOM insertion (single reflow)
             var fragment = document.createDocumentFragment();
-            
-            // Process all items before touching the DOM
             var itemsArray = Array.from(newItems);
+            
             itemsArray.forEach(function(item, index) {
-              // Skip cloning - move the parsed node directly (faster)
               item.classList.add('load-more-fade-in');
               item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + (index * 0.03) + 's';
               item.classList.remove('scroll-trigger');
               fragment.appendChild(item);
             });
 
-            // Single DOM insertion - triggers only one reflow
             requestAnimationFrame(function() {
               productGrid.appendChild(fragment);
-              
-              // Trigger BSS B2B price refresh for newly added items
               triggerBSSPriceRefresh(productGrid);
-              
               announceLoadMoreToScreenReader(itemsArray.length + ' new products loaded');
             });
           }
 
           // Update button state
-          var currentBtn = document.getElementById('load-more-btn');
-          var currentSpinner = document.getElementById('loading-spinner');
-          var currentWrapper = document.getElementById('load-more-wrapper');
           var newLoadMoreBtn = doc.querySelector('#load-more-btn');
-
-          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl && currentBtn) {
-            currentBtn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
-            currentBtn.disabled = false;
-            currentBtn.setAttribute('aria-busy', 'false');
-            if (currentSpinner) currentSpinner.style.display = 'none';
+          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl) {
+            btn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
+            btn.disabled = false;
+            btn.setAttribute('aria-busy', 'false');
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
+            
+            // Start prefetching the next page
+            prefetchNextPage(newLoadMoreBtn.dataset.nextUrl);
           } else {
-            if (currentWrapper) currentWrapper.style.display = 'none';
-            if (currentSpinner) currentSpinner.style.display = 'none';
+            if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
+            if (loadingSpinner) loadingSpinner.style.display = 'none';
           }
         })
         .catch(function(error) {
           console.error('Load more error:', error);
-          var currentBtn = document.getElementById('load-more-btn');
-          var currentSpinner = document.getElementById('loading-spinner');
-          if (currentBtn) {
-            currentBtn.disabled = false;
-            currentBtn.setAttribute('aria-busy', 'false');
-          }
-          if (currentSpinner) currentSpinner.style.display = 'none';
+          btn.disabled = false;
+          btn.setAttribute('aria-busy', 'false');
+          if (loadingSpinner) loadingSpinner.style.display = 'none';
         });
+    }
+    
+    // Display prefetched items instantly
+    function displayPrefetchedItems(productGrid, items, btn, spinner, wrapper) {
+      if (!items || items.length === 0) return;
+      
+      var fragment = document.createDocumentFragment();
+      
+      items.forEach(function(item, index) {
+        item.classList.add('load-more-fade-in');
+        item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + (index * 0.02) + 's';
+        item.classList.remove('scroll-trigger');
+        fragment.appendChild(item);
+      });
+      
+      requestAnimationFrame(function() {
+        productGrid.appendChild(fragment);
+        announceLoadMoreToScreenReader(items.length + ' new products loaded');
+      });
+      
+      // Button stays enabled, no spinner needed
+      btn.disabled = false;
+      btn.setAttribute('aria-busy', 'false');
+      if (spinner) spinner.style.display = 'none';
     }
 
     // Trigger BSS B2B and other third-party apps to process new price elements
     function triggerBSSPriceRefresh(container) {
-      // Method 1: Dispatch Shopify section events that apps listen to
-      var sectionEvent = new CustomEvent('shopify:section:load', {
+      // Dispatch Shopify section events that apps listen to
+      document.dispatchEvent(new CustomEvent('shopify:section:load', {
         bubbles: true,
         detail: { sectionId: container.closest('[data-section-id]')?.dataset.sectionId }
-      });
-      document.dispatchEvent(sectionEvent);
+      }));
       
-      // Method 2: Dispatch a generic DOM content loaded event for apps using that
-      var contentEvent = new CustomEvent('bss:content:updated', { bubbles: true });
-      container.dispatchEvent(contentEvent);
+      // Dispatch content updated event
+      container.dispatchEvent(new CustomEvent('bss:content:updated', { bubbles: true }));
       
-      // Method 3: Call BSS global refresh functions if they exist
+      // Call BSS global refresh functions if they exist
       if (typeof window.BSSB2B !== 'undefined' && typeof window.BSSB2B.refresh === 'function') {
         window.BSSB2B.refresh();
       }
@@ -507,59 +606,19 @@
         window.BSSCommerce.initPrices(container);
       }
       
-      // Method 4: Re-trigger the page's price calculation scripts
-      // Some apps use MutationObserver but need a "poke" to notice changes
+      // Poke MutationObserver
       var priceElements = container.querySelectorAll('[bss-b2b-product-price]');
       priceElements.forEach(function(el) {
-        // Toggle an attribute to trigger MutationObserver
         el.setAttribute('data-bss-refresh', Date.now());
       });
       
-      // Method 5: Dispatch custom event commonly used by pricing apps
-      document.dispatchEvent(new CustomEvent('price:refresh', { 
-        detail: { container: container }
-      }));
+      // Dispatch price refresh event
+      document.dispatchEvent(new CustomEvent('price:refresh', { detail: { container: container } }));
       
-      // Method 6: For tax display VAT elements
-      var vatElements = container.querySelectorAll('.bss-b2b-collection-item-vat');
-      if (vatElements.length > 0 && typeof window.BssB2BTax !== 'undefined') {
-        if (typeof window.BssB2BTax.calculate === 'function') {
-          window.BssB2BTax.calculate();
-        }
+      // Tax display
+      if (typeof window.BssB2BTax !== 'undefined' && typeof window.BssB2BTax.calculate === 'function') {
+        window.BssB2BTax.calculate();
       }
-      
-      // Method 7: Retry mechanism - wait for BSS scripts to be ready
-      var retryCount = 0;
-      var maxRetries = 5;
-      function retryBSSInit() {
-        retryCount++;
-        if (retryCount > maxRetries) return;
-        
-        // Check if prices are still empty
-        var emptyPrices = container.querySelectorAll('.load-more-fade-in .bss-b2b-collection-item-vat');
-        var hasEmptyVat = false;
-        emptyPrices.forEach(function(el) {
-          var noVat = el.querySelector('.bss-b2b-product-vat-price-no-vat');
-          var hasVat = el.querySelector('.bss-b2b-product-vat-price-has-vat');
-          if ((noVat && !noVat.textContent.trim()) || (hasVat && !hasVat.textContent.trim())) {
-            hasEmptyVat = true;
-          }
-        });
-        
-        if (hasEmptyVat) {
-          // Retry triggers
-          document.dispatchEvent(new CustomEvent('shopify:section:load', { bubbles: true }));
-          if (typeof window.BSSB2B !== 'undefined' && window.BSSB2B.refresh) window.BSSB2B.refresh();
-          if (typeof window.BSSCommerce !== 'undefined' && window.BSSCommerce.init) window.BSSCommerce.init();
-          if (typeof window.BssB2BTax !== 'undefined' && window.BssB2BTax.calculate) window.BssB2BTax.calculate();
-          
-          // Try again after delay
-          setTimeout(retryBSSInit, 500 * retryCount);
-        }
-      }
-      
-      // Start retry after initial delay
-      setTimeout(retryBSSInit, 300);
     }
 
     function announceLoadMoreToScreenReader(message) {
@@ -573,16 +632,40 @@
         document.body.appendChild(announcer);
       }
       announcer.textContent = '';
-      setTimeout(function() {
-        announcer.textContent = message;
-      }, 100);
+      setTimeout(function() { announcer.textContent = message; }, 100);
     }
 
-    // Attach delegated listener once to document body - survives any DOM replacement
+    // Attach delegated listener
     if (!loadMoreListenerAttached) {
       document.addEventListener('click', handleLoadMoreClick);
       loadMoreListenerAttached = true;
     }
+    
+    // Start prefetching after page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      var btn = document.getElementById('load-more-btn');
+      if (btn && btn.dataset.nextUrl) {
+        // Delay prefetch to not compete with initial page resources
+        setTimeout(function() {
+          prefetchNextPage(btn.dataset.nextUrl);
+        }, 1500);
+      }
+    });
+    
+    // Also prefetch when filters change (facets update the grid)
+    document.addEventListener('facets:updated', function() {
+      // Reset cache since filters changed
+      prefetchCache.url = null;
+      prefetchCache.items = null;
+      prefetchCache.isReady = false;
+      
+      setTimeout(function() {
+        var btn = document.getElementById('load-more-btn');
+        if (btn && btn.dataset.nextUrl) {
+          prefetchNextPage(btn.dataset.nextUrl);
+        }
+      }, 1000);
+    });
   })();
 </script>
 

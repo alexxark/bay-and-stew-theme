@@ -90,6 +90,9 @@ class FacetFiltersForm extends HTMLElement {
       .forEach((element) => {
         element.classList.add('scroll-trigger--cancel');
       });
+    
+    // Dispatch event so Load More can reset prefetch cache
+    document.dispatchEvent(new CustomEvent('facets:updated', { bubbles: true }));
   }
 
   static renderProductCount(html) {
