@@ -102,6 +102,7 @@
         },
         "slide_Tfp7Mt": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Cards-GWP-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Cards-GWP-Mobile.jpg",
@@ -145,15 +146,14 @@
         },
         "slide_yJEEjD": {
           "type": "slide",
-          "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Double-Star-Desktop.jpg",
-            "image_mobile": "shopify://shop_images/Double-Star-Mobile.jpg",
+            "image": "shopify://shop_images/MM-Chains-Banner2.jpg",
+            "image_mobile": "shopify://shop_images/MMChain-Banner-Mobile.jpg",
             "allow_sound": true,
-            "heading": "Double Loyalty Points",
-            "subheading": "<a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">MAKERS CIRCLE EXCLUSIVE</a>",
+            "heading": "Jewelry Supplies",
+            "subheading": "Hand Stamping, Engraving & Permanent Jewelry Supplies",
             "highlight_words": "",
-            "promo_note": "<a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">Exclusions Apply</a>",
+            "promo_note": "",
             "promo_link_label": "",
             "promo_details_text": "",
             "heading_size_desktop": 48,
@@ -170,7 +170,7 @@
             "button_1_link": "shopify://collections/shop-all",
             "button_1_style": "solid",
             "button_1_background": "#121212",
-            "button_1_text_color": "#cfebfb",
+            "button_1_text_color": "#f3f3f3",
             "button_2_text": "",
             "button_2_link": "",
             "button_2_style": "outline",
