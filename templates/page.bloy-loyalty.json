@@ -22,7 +22,7 @@
         "text_7JFmCc": {
           "type": "text",
           "settings": {
-            "text": "Makers Circle Rewards members earn double points through March 26",
+            "text": "Makers Circle Rewards members earn double points through April 23rd",
             "text_style": "body"
           }
         }
@@ -31,7 +31,6 @@
         "heading_yptLrY",
         "text_7JFmCc"
       ],
-      "disabled": true,
       "name": "t:sections.image-banner.presets.name",
       "settings": {
         "image": "shopify://shop_images/Double-Star-Desktop.jpg",
