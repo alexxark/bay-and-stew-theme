@@ -100,24 +100,24 @@
             "text_alignment_mobile": "center"
           }
         },
-        "slide_Tfp7Mt": {
+        "slide_yJEEjD": {
           "type": "slide",
           "settings": {
-            "image": "shopify://shop_images/Cards-GWP-Desktop.jpg",
-            "image_mobile": "shopify://shop_images/Cards-GWP-Mobile.jpg",
+            "image": "shopify://shop_images/MM-Chains-Banner2.jpg",
+            "image_mobile": "shopify://shop_images/MMChain-Banner-Mobile.jpg",
             "allow_sound": true,
-            "heading": "",
-            "subheading": "FREE LIMITED EDITION CARD DECK",
+            "heading": "Jewelry Supplies",
+            "subheading": "Hand Stamping, Engraving & Permanent Jewelry Supplies",
             "highlight_words": "",
-            "promo_note": "<strong>WHILE SUPPLIES LAST </strong>|<strong> NOT AVAILABLE ON ETSY</strong>",
-            "promo_link_label": "details",
+            "promo_note": "",
+            "promo_link_label": "",
             "promo_details_text": "",
             "heading_size_desktop": 48,
             "heading_size_mobile": 32,
             "subheading_size_desktop": 16,
             "subheading_size_mobile": 14,
-            "gap_before_subheading": 54,
-            "mobile_gap_before_subheading": -22,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
             "gap_after_subheading": 10,
             "gap_after_title": 4,
             "gap_after_promo_note": 12,
@@ -126,32 +126,31 @@
             "button_1_link": "shopify://collections/shop-all",
             "button_1_style": "solid",
             "button_1_background": "#121212",
-            "button_1_text_color": "#cfebfb",
+            "button_1_text_color": "#f3f3f3",
             "button_2_text": "",
             "button_2_link": "",
             "button_2_style": "outline",
             "button_2_background": "#ffffff",
-            "button_2_text_color": "#000000",
+            "button_2_text_color": "#ffffff",
             "box_align": "middle-center",
             "show_text_box": false,
             "text_alignment": "center",
             "image_overlay_opacity": 0,
-            "color_scheme": "",
+            "color_scheme": "scheme-1",
             "mobile_box_align": "middle-center",
             "mobile_horizontal_padding": 12,
             "mobile_button_size": 14,
             "text_alignment_mobile": "center"
           }
         },
-        "slide_yJEEjD": {
+        "slide_3JP33a": {
           "type": "slide",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Double-Star-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Double-Star-Mobile.jpg",
             "allow_sound": true,
             "heading": "Double Loyalty Points",
-            "subheading": "<a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">MAKERS CIRCLE EXCLUSIVE</a>",
+            "subheading": "MAKERS CIRCLE EXCLUSIVE - Earn <strong>2X Points </strong>",
             "highlight_words": "",
             "promo_note": "<a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">Exclusions Apply</a>",
             "promo_link_label": "",
@@ -170,7 +169,7 @@
             "button_1_link": "shopify://collections/shop-all",
             "button_1_style": "solid",
             "button_1_background": "#121212",
-            "button_1_text_color": "#cfebfb",
+            "button_1_text_color": "#f3f3f3",
             "button_2_text": "",
             "button_2_link": "",
             "button_2_style": "outline",
@@ -235,8 +234,8 @@
       "block_order": [
         "slide_QLwpGt",
         "slide_8LMkQB",
-        "slide_Tfp7Mt",
         "slide_yJEEjD",
+        "slide_3JP33a",
         "slide_GNpfTB"
       ],
       "custom_css": [
@@ -277,179 +276,6 @@
         "full_width": true,
         "padding_top": 16,
         "padding_bottom": 16
-      }
-    },
-    "rich_text_AVqiJP": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_Nk6FNg": {
-          "type": "heading",
-          "settings": {
-            "heading": "Why Bay & Stew?",
-            "heading_size": "h1"
-          }
-        }
-      },
-      "block_order": [
-        "heading_Nk6FNg"
-      ],
-      "custom_css": [
-        "{margin-top: 8px; margin-bottom: -40px;}"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
-    "multicolumn_6q6KPE": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_z7arMH": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-03.png",
-            "title": "<strong>Loyalty Rewards</strong>",
-            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_EBTbGa": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
-            "title": "Free Shipping on U.S. Orders $35+",
-            "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_36Q47y": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Express-shipping.png",
-            "title": "Same or Next Day Shipping",
-            "text": "<p>Free Rush Shipping on Orders $500+. We ship fast so you can keep creating without delay.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_faLJ4k": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-04.png",
-            "title": "Wholesale Pricing – <strong> $35 Minimum</strong>",
-            "text": "<p>Designed for makers and businesses, our $35 minimum unlocks access to premium supplies at wholesale prices.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_ah8MXK": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-05.png",
-            "title": "Made for Makers Like You",
-            "text": "<p>Our supplies are trusted by permanent jewelry artists, hand stampers, engravers, and more—whether you're a hobbyist or a seasoned pro.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_YLKyGi": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-06.png",
-            "title": "Exclusive In-House Designs",
-            "text": "<p>We design and manufacture our own unique products that you won’t find anywhere else.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_3dhCHN": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Icons-07.png",
-            "title": "Reliable Quality, Every Time",
-            "text": "<p>We source high-quality materials so you can count on consistency with every order.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column_z7arMH",
-        "column_EBTbGa",
-        "column_36Q47y",
-        "column_faLJ4k",
-        "column_ah8MXK",
-        "column_YLKyGi",
-        "column_3dhCHN"
-      ],
-      "name": "t:sections.multicolumn.presets.name",
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "half",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "center",
-        "background_style": "none",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_desktop": true,
-        "color_scheme": "",
-        "columns_mobile": "1",
-        "swipe_on_mobile": true,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "rich_text_cjJbya": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_zDhxWD": {
-          "type": "heading",
-          "settings": {
-            "heading": "Permanent Jewelry Supplies for Professional Makers",
-            "heading_size": "h2"
-          }
-        },
-        "text_HewVVU": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Shop high-quality permanent jewelry chains, connectors, charms, and findings designed for jewelry artists, studios, and event-based permanent jewelry businesses. <br/><br/>Our gold-filled and sterling silver materials are trusted by makers who need reliable supplies for permanent jewelry bracelets, anklets, and custom pieces.</p>"
-          }
-        },
-        "button_WJWTcb": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop Here",
-            "button_link": "shopify://pages/permanent-jewelry",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_zDhxWD",
-        "text_HewVVU",
-        "button_WJWTcb"
-      ],
-      "custom_css": [],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
       }
     },
     "multicolumn_B3nNV7": {
@@ -623,6 +449,191 @@
         "swipe_on_mobile": true,
         "padding_top": 28,
         "padding_bottom": 40
+      }
+    },
+    "rich_text_7DqNLW": {
+      "type": "rich-text",
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_AVqiJP": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_Nk6FNg": {
+          "type": "heading",
+          "settings": {
+            "heading": "Why Bay & Stew?",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_Nk6FNg"
+      ],
+      "custom_css": [
+        "{margin-top: 8px; margin-bottom: -40px;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
+    },
+    "multicolumn_6q6KPE": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_z7arMH": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-03.png",
+            "title": "<strong>Loyalty Rewards</strong>",
+            "text": "<p>Our way of saying thanks for keeping us linked. Earn points every time you shop and unlock exclusive rewards made for makers.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_EBTbGa": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/shipping_f4359e24-b8b0-45bb-bdbf-8100b4fdb49e.png",
+            "title": "Free Shipping on U.S. Orders $35+",
+            "text": "<p>Enjoy fast, affordable delivery—and free standard shipping when you spend $35 or more.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_36Q47y": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Express-shipping.png",
+            "title": "Free RUSH Shipping on U.S Orders $500+",
+            "text": "<p>Free Rush Shipping on U.S Orders $500+. We ship fast so you can keep creating without delay.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_faLJ4k": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-04.png",
+            "title": "Wholesale Pricing – <strong> $35 Minimum</strong>",
+            "text": "<p>Designed for makers and businesses, our $35 minimum unlocks access to premium supplies at wholesale prices.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_ah8MXK": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-05.png",
+            "title": "Made for Makers Like You",
+            "text": "<p>Our supplies are trusted by permanent jewelry artists, hand stampers, engravers, and more—whether you're a hobbyist or a seasoned pro.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_YLKyGi": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-06.png",
+            "title": "Exclusive In-House Designs",
+            "text": "<p>We design and manufacture our own unique products that you won’t find anywhere else.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_3dhCHN": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Icons-07.png",
+            "title": "Reliable Quality, Every Time",
+            "text": "<p>We source high-quality materials so you can count on consistency with every order.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_z7arMH",
+        "column_EBTbGa",
+        "column_36Q47y",
+        "column_faLJ4k",
+        "column_ah8MXK",
+        "column_YLKyGi",
+        "column_3dhCHN"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "half",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "center",
+        "background_style": "none",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": true,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "rich_text_cjJbya": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_zDhxWD": {
+          "type": "heading",
+          "settings": {
+            "heading": "Permanent Jewelry Supplies for Professional Makers",
+            "heading_size": "h2"
+          }
+        },
+        "text_HewVVU": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Shop high-quality permanent jewelry chains, connectors, charms, and findings designed for jewelry artists, studios, and event-based permanent jewelry businesses. <br/><br/>Our gold-filled and sterling silver materials are trusted by makers who need reliable supplies for permanent jewelry bracelets, anklets, and custom pieces.</p>"
+          }
+        },
+        "button_WJWTcb": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Here",
+            "button_link": "shopify://pages/permanent-jewelry",
+            "button_style_secondary": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_zDhxWD",
+        "text_HewVVU",
+        "button_WJWTcb"
+      ],
+      "custom_css": [],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-2",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "featured_collection_YRmdhq": {
@@ -1036,13 +1047,14 @@
   "order": [
     "slideshow_Hg9TMx",
     "rich_text_fyyfM3",
-    "rich_text_AVqiJP",
-    "multicolumn_6q6KPE",
-    "rich_text_cjJbya",
     "multicolumn_B3nNV7",
     "collection_list_eFLBt6",
     "rich_text_GaGRwE",
     "featured_collection",
+    "rich_text_7DqNLW",
+    "rich_text_AVqiJP",
+    "multicolumn_6q6KPE",
+    "rich_text_cjJbya",
     "featured_collection_YRmdhq",
     "featured_collection_iQH7YA",
     "rich_text_LDLKra",

@@ -189,7 +189,7 @@
             "enabled": true,
             "icon": "shopify://shop_images/Shipping-Icon.svg",
             "title": "Fast & Free Shipping",
-            "subtext": "<p>Free standard shipping on U.S. orders $35+, <br/>plus free rush shipping on orders $500+.</p>"
+            "subtext": "<p>Free standard shipping on U.S. orders $35+, <br/>plus free rush shipping on  U.S. orders $500+.</p>"
           }
         }
       },

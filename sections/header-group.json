@@ -16,7 +16,6 @@
       "blocks": {
         "announcement_iihNqX": {
           "type": "announcement",
-          "disabled": true,
           "settings": {
             "text": "DOUBLE LOYALTY POINTS ON ANY PURCHASE – MAKERS CIRCLE EXCLUSIVE",
             "link": "https://bayandstew.com/pages/about?view=bloy-loyalty"
@@ -40,6 +39,7 @@
         },
         "announcement_FnhcDx": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "Free Limited Edition Card Deck with $100+ Purchase - While Supplies Last",
             "link": "shopify://pages/offers"
@@ -78,7 +78,7 @@
         "announcement_CWnHeh": {
           "type": "announcement",
           "settings": {
-            "text": "Free RUSH Shipping on Orders $500+",
+            "text": "Free RUSH Shipping on U.S Orders $500+",
             "link": ""
           }
         }

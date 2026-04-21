@@ -301,7 +301,7 @@
           "settings": {
             "heading": "How quickly do you ship orders?",
             "icon": "check_mark",
-            "row_content": "<p>We ship<strong> same day or next business day on most orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
+            "row_content": "<p>We ship<strong> same day or next business day on most U.S. orders</strong>. During<strong> high-volume times</strong> (like product launches or sales), <strong>shipping may take a little longer</strong> — but we always work hard to get your supplies out fast.</p>",
             "page": ""
           }
         }
