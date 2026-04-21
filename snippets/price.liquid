@@ -125,8 +125,9 @@
       </small>
     </div>
     {%- if show_badges -%}
+      {%- assign product_type_downcase = product.type | downcase -%}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
-        {%- if product.type | downcase == 'Pack' -%}
+        {%- if product_type_downcase == 'pack' -%}
           Save 10%
         {%- else -%}
           {{ 'products.product.on_sale' | t }}
