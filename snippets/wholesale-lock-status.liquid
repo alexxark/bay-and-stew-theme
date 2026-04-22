@@ -51,3 +51,31 @@
     endif
   endif
 -%}
+{%- comment -%}
+  When the current product is wholesale-locked for this customer,
+  emit CSS that hides the BSS B2B quantity-discount table (rendered
+  client-side by the BSS app) and any other volume / bulk pricing
+  UI. This style block is small and harmless if emitted multiple
+  times on a page (the cascade dedupes it).
+{%- endcomment -%}
+{%- if product != blank and wholesale_is_b2b_customer == false -%}
+  {%- assign _wholesale_emit_hide_css = false -%}
+  {%- for wholesale_check_collection in product.collections -%}
+    {%- if wholesale_locked_handles contains wholesale_check_collection.handle -%}
+      {%- assign _wholesale_emit_hide_css = true -%}
+      {%- break -%}
+    {%- endif -%}
+  {%- endfor -%}
+  {%- if _wholesale_emit_hide_css -%}
+    <style>
+      .bss-b2b-qty-table-wrapper,
+      .bss-b2b-cart-item-qty-table,
+      .quantity_break_table,
+      [bss-b2b-qty-table],
+      .volume-pricing,
+      .bulk-order-form {
+        display: none !important;
+      }
+    </style>
+  {%- endif -%}
+{%- endif -%}

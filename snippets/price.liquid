@@ -7,7 +7,7 @@
 {%- capture wholesale_lock -%}{%- render 'wholesale-lock-status', product: product -%}{%- endcapture -%}
 {%- if wholesale_lock contains 'product-locked' -%}
   <div class="price price--wholesale-locked{% if price_class %} {{ price_class }}{% endif %}">
-    <span class="price-item price-item--wholesale">
+    <span class="price-item price-item--wholesale" style="font-size: 0.85rem; font-weight: 400;">
       Apply for <a href="https://bayandstew.com/pages/apply-for-wholesale">wholesale</a> to purchase
     </span>
   </div>

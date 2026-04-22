@@ -494,7 +494,13 @@
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'bulk_order_form' -%}
   <div {{ block.shopify_attributes }}>
-    {%- if product.tags contains '0ALPHABET' or product.tags contains '0BIRTHSTHONES' or product.tags contains 'SAMPLES' or product.tags contains '0ZODIAC' or product.tags contains '0BIRTHFLOWERS' or product.type == 'Rings' -%}
+    {%- if wholesale_lock contains 'product-locked' -%}
+      {%- comment -%}
+        Non-B2B customer on a wholesale-only product:
+        hide the bulk/quick order form. The price snippet
+        already shows an "Apply for wholesale" CTA.
+      {%- endcomment -%}
+    {%- elsif product.tags contains '0ALPHABET' or product.tags contains '0BIRTHSTHONES' or product.tags contains 'SAMPLES' or product.tags contains '0ZODIAC' or product.tags contains '0BIRTHFLOWERS' or product.type == 'Rings' -%}
 
       <div class="bulk-order-form" id="BulkOrderForm-{{ section.id }}">
         <div class="bulk-order-form__header">
@@ -1020,6 +1026,12 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     margin-bottom: 10px !important;
   }
 </style>
+{%- comment -%}
+  Wholesale-lock CSS (hides BSS qty table, volume pricing, bulk
+  order form for non-B2B customers on locked products) is emitted
+  by the `wholesale-lock-status` snippet — see the capture at the
+  top of this file.
+{%- endcomment -%}
 <style>
   .product-form__input--personalization {
     margin-bottom: 1.5rem;
