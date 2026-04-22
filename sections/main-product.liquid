@@ -1026,12 +1026,24 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     margin-bottom: 10px !important;
   }
 </style>
-{%- comment -%}
-  Wholesale-lock CSS (hides BSS qty table, volume pricing, bulk
-  order form for non-B2B customers on locked products) is emitted
-  by the `wholesale-lock-status` snippet — see the capture at the
-  top of this file.
-{%- endcomment -%}
+{%- if wholesale_lock contains 'product-locked' -%}
+  {%- comment -%}
+    Non-B2B customer on a wholesale-only product: hide the BSS B2B
+    quantity-discount table (rendered client-side by the BSS app)
+    along with any volume-pricing / bulk-order UI. The price snippet
+    already shows an "Apply for wholesale" CTA in their place.
+  {%- endcomment -%}
+  <style>
+    .bss-b2b-qty-table-wrapper,
+    .bss-b2b-cart-item-qty-table,
+    .quantity_break_table,
+    [bss-b2b-qty-table],
+    .volume-pricing,
+    .bulk-order-form {
+      display: none !important;
+    }
+  </style>
+{%- endif -%}
 <style>
   .product-form__input--personalization {
     margin-bottom: 1.5rem;
