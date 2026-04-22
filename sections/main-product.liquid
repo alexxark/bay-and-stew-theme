@@ -1039,8 +1039,13 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     .quantity_break_table,
     [bss-b2b-qty-table],
     .volume-pricing,
-    .bulk-order-form {
+    .bulk-order-form,
+    #shopify-installments,
+    .shopify-payment-terms,
+    shopify-payment-terms {
       display: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
     }
   </style>
 {%- endif -%}
