@@ -95,24 +95,7 @@
         aria-label="{{ 'general.slider.name' | t }}"
       >
         {% assign skip_card_product_styles = false %}
-        {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
-        {%- assign is_b2b_customer = false -%}
-        {%- if customer and customer.tags contains 'B2B' -%}
-          {%- assign is_b2b_customer = true -%}
-        {%- endif -%}
         {%- for product in section.settings.collection.products limit: section.settings.products_to_show -%}
-          {%- unless is_b2b_customer -%}
-            {%- assign is_product_locked = false -%}
-            {%- for product_collection in product.collections -%}
-              {%- if locked_collection_handles contains product_collection.handle -%}
-                {%- assign is_product_locked = true -%}
-                {%- break -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- if is_product_locked -%}
-              {%- continue -%}
-            {%- endif -%}
-          {%- endunless -%}
           {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"

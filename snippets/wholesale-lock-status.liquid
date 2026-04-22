@@ -1,0 +1,53 @@
+{%- comment -%}
+  ================================================================
+  Wholesale lock status
+  Single source of truth for the "wholesale-only" gating logic.
+
+  Because `render` creates an isolated variable scope, this snippet
+  works by OUTPUTTING a sentinel string. Callers capture the output
+  and check whether it contains the relevant marker.
+
+  Inputs (one of):
+    - product:    product object to evaluate
+    - collection: collection object to evaluate
+
+  Output markers (any combination, space-separated):
+    - "is-b2b"             customer has the 'B2B' tag
+    - "product-locked"     product belongs to a wholesale-only collection
+                           AND customer is not B2B
+    - "collection-locked"  collection is a wholesale-only collection
+                           AND customer is not B2B
+
+  Usage:
+    {%- capture wholesale_lock -%}
+      {%- render 'wholesale-lock-status', product: card_product -%}
+    {%- endcapture -%}
+    {%- if wholesale_lock contains 'product-locked' -%} ... {%- endif -%}
+  ================================================================
+{%- endcomment -%}
+{%- liquid
+  assign wholesale_locked_handles = 'bracelet,bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
+
+  assign wholesale_is_b2b_customer = false
+  if customer and customer.tags contains 'B2B'
+    assign wholesale_is_b2b_customer = true
+  endif
+
+  if wholesale_is_b2b_customer
+    echo 'is-b2b'
+  else
+    if product != blank
+      for wholesale_check_collection in product.collections
+        if wholesale_locked_handles contains wholesale_check_collection.handle
+          echo ' product-locked'
+          break
+        endif
+      endfor
+    endif
+    if collection != blank
+      if wholesale_locked_handles contains collection.handle
+        echo ' collection-locked'
+      endif
+    endif
+  endif
+-%}

@@ -60,17 +60,7 @@
             assign columns = 3
           endif
         -%}
-        {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
-        {%- assign is_b2b_customer = false -%}
-        {%- if customer and customer.tags contains 'B2B' -%}
-          {%- assign is_b2b_customer = true -%}
-        {%- endif -%}
         {%- for block in section.blocks -%}
-          {%- unless is_b2b_customer -%}
-            {%- if block.settings.collection != blank and locked_collection_handles contains block.settings.collection.handle -%}
-              {%- continue -%}
-            {%- endif -%}
-          {%- endunless -%}
           {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: block, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
           <li
             id="Slide-{{ section.id }}-{{ forloop.index }}"

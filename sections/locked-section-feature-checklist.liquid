@@ -6,39 +6,16 @@
   ================================================================
 {%- endcomment -%}
 
+{%- capture wholesale_lock -%}
+  {%- render 'wholesale-lock-status', product: product, collection: collection -%}
+{%- endcapture -%}
 {%- liquid
-  assign locked_collection_handles = 'bracelet,bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
-
-  assign is_b2b_customer = false
-  if customer and customer.tags contains 'B2B'
-    assign is_b2b_customer = true
-  endif
-
   assign show_section = false
-
-  comment
-    Product page: check if product belongs to a locked collection
-  endcomment
-  if product != blank
-    for product_collection in product.collections
-      if locked_collection_handles contains product_collection.handle
-        unless is_b2b_customer
-          assign show_section = true
-        endunless
-        break
-      endif
-    endfor
+  if wholesale_lock contains 'product-locked'
+    assign show_section = true
   endif
-
-  comment
-    Collection page: check if current collection is locked
-  endcomment
-  if collection != blank
-    if locked_collection_handles contains collection.handle
-      unless is_b2b_customer
-        assign show_section = true
-      endunless
-    endif
+  if wholesale_lock contains 'collection-locked'
+    assign show_section = true
   endif
 -%}
 

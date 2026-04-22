@@ -1,35 +1,10 @@
 {%- comment -%}
   ================================================================
-  1. LOCKING LOGIC
-  This block determines if the entire collection page is locked.
+  Wholesale gating for non-B2B customers is now handled inline by
+  the `price` snippet (price replaced with an "Apply for wholesale"
+  CTA). The collection page is shown to everyone.
   ================================================================
 {%- endcomment -%}
-{%- liquid
-  assign locked_collection_handles = 'bracelet,earrings,necklace,ready-to-wear,rings' | split: ','
-
-  assign is_b2b_customer = false
-  if customer and customer.tags contains 'B2B'
-    assign is_b2b_customer = true
-  endif
-
-  assign is_page_locked = false
-  if locked_collection_handles contains collection.handle and is_b2b_customer == false
-    assign is_page_locked = true
-  endif
--%}
-
-{%- comment -%}
-  ================================================================
-  2. PAGE DISPLAY
-  Shows either the "Access Denied" message or the product grid.
-  ================================================================
-{%- endcomment -%}
-{%- if is_page_locked -%}
-  <div class="page-width" style="text-align: center; padding: 50px 0 100px;">
-    <h2>Wholesale Access Only</h2>
-    <p>You must be a B2B customer to access this collection. Please <a href="/account/login?checkout_url={{ request.path | url_encode }}">log in</a> or <a href="/pages/wholesale-sales-tax-exemption-requirements?checkout_url={{ request.path | url_encode }}">register here</a>.</p>
-  </div>
-{%- else -%}
 {%- comment -%} Preload critical CSS for faster initial render {%- endcomment -%}
 <link rel="preload" href="{{ 'component-price.css' | asset_url }}" as="style">
 <link rel="preload" href="{{ 'component-card.css' | asset_url }}" as="style">
@@ -304,31 +279,13 @@
               "
             >
               {%- comment -%}
-                Locked collection handles for B2B gating.
-                Non-B2B customers won't see products from these collections.
+                Wholesale gating for non-B2B customers is handled inline by
+                the `price` snippet (price replaced with an "Apply for
+                wholesale" CTA). Products are shown to everyone here.
               {%- endcomment -%}
-              {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
-              {%- assign is_b2b_customer = false -%}
-              {%- if customer and customer.tags contains 'B2B' -%}
-                {%- assign is_b2b_customer = true -%}
-              {%- endif -%}
 
               {% assign skip_card_product_styles = false %}
               {%- for product in collection.products -%}
-                {%- comment -%} B2B lock check: skip the entire <li> if product is locked {%- endcomment -%}
-                {%- unless is_b2b_customer -%}
-                  {%- assign is_product_locked = false -%}
-                  {%- for product_collection in product.collections -%}
-                    {%- if locked_collection_handles contains product_collection.handle -%}
-                      {%- assign is_product_locked = true -%}
-                      {%- break -%}
-                    {%- endif -%}
-                  {%- endfor -%}
-                  {%- if is_product_locked -%}
-                    {%- continue -%}
-                  {%- endif -%}
-                {%- endunless -%}
-
                 {%- comment -%}start BSS Commerce Hide Price{%- endcomment -%}
                 {%- capture bss_lock_check -%}{%- render 'bss-lock-condition', scope: 'subject', subject: product, variable: 'transparent' -%}{%- endcapture -%}
                 {%- if bss_lock_check contains 'true' -%}{%- continue -%}{%- endif -%}
@@ -387,7 +344,6 @@
     {{ 'mask-arch.svg' | inline_asset_content }}
   {%- endif -%}
 </div>
-{%- endif -%}
 
 {%- comment -%}
   ================================================================

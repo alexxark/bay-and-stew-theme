@@ -1,4 +1,17 @@
 {%- comment %}BSS Login{% endcomment -%}{% capture bss_lock_check %} {% render 'bss-lock-condition', scope: 'subject', subject: product, subject_parent: product, variable: 'price', get_content: true, bss_lock_action: 'bss_hide_price' %} {% endcapture %} {% if bss_lock_check contains 'bss-lock-element' %} {{ bss_lock_check }} {% break %} {% endif %}{%- comment %}BSS-Login{% endcomment -%}
+{%- comment -%}
+  Wholesale price gating: hide the price for non-B2B customers when
+  the product belongs to a wholesale-only collection and replace it
+  with an "Apply for wholesale" CTA.
+{%- endcomment -%}
+{%- capture wholesale_lock -%}{%- render 'wholesale-lock-status', product: product -%}{%- endcapture -%}
+{%- if wholesale_lock contains 'product-locked' -%}
+  <div class="price price--wholesale-locked{% if price_class %} {{ price_class }}{% endif %}">
+    <span class="price-item price-item--wholesale">
+      Apply for <a href="https://bayandstew.com/pages/apply-for-wholesale">wholesale</a> to purchase
+    </span>
+  </div>
+{%- else -%}
 {% comment %}
   Renders a list of product's price (regular, sale)
 
@@ -140,3 +153,4 @@
     {%- endif -%}
   </div>
 {% endunless %}
+{%- endif -%}

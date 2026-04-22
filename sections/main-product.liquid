@@ -1,33 +1,13 @@
 {%- comment -%}
   ================================================================
-  B2B Product Page Locking Logic
+  Wholesale gating for non-B2B customers is now handled inline by
+  the `price` snippet (price replaced with an "Apply for wholesale"
+  CTA). The full product page is shown to everyone, but the buy
+  buttons are hidden for non-B2B customers on wholesale-only
+  products (see the `buy_buttons` block below).
   ================================================================
 {%- endcomment -%}
-{%- liquid
-  assign locked_collection_handles = 'bracelet,bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
-
-  assign is_b2b_customer = false
-  if customer and customer.tags contains 'B2B'
-    assign is_b2b_customer = true
-  endif
-
-  assign is_product_page_locked = false
-  for product_collection in product.collections
-    if locked_collection_handles contains product_collection.handle
-      unless is_b2b_customer
-        assign is_product_page_locked = true
-      endunless
-      break
-    endif
-  endfor
--%}
-
-{%- if is_product_page_locked -%}
-  <div class="page-width" style="text-align: center; padding: 50px 0 100px;">
-    <h2>Wholesale Access Only</h2>
-    <p>You must be a B2B customer to access this product. Please <a href="/account/login?checkout_url={{ request.path | url_encode }}">log in</a> or <a href="/pages/wholesale-sales-tax-exemption-requirements?checkout_url={{ request.path | url_encode }}">register here</a>.</p>
-  </div>
-{%- else -%}
+{%- capture wholesale_lock -%}{%- render 'wholesale-lock-status', product: product -%}{%- endcapture -%}
 {%- comment %}BSS Login{% endcomment -%}{%- assign bss_product__has_only_default_variant = false %} {% assign _variants_count = 0 %} {% assign bss_product__first_available_variant = nil %} {% assign bss_product__selected_variant = nil %} {% assign bss_product__selected_or_first_available_variant = nil %} {% assign use_variant = true %} {% for variant in product.variants %} {% capture var %} {% render 'bss-lock-condition', scope: 'subject', subject: variant, subject_parent: product, bss_lock_action: 'handle-variant-default' %} {% endcapture %} {% if var contains "true" %} {% continue %} {% endif %} {% assign _variants_count = _variants_count | plus: 1 %} {% if bss_product__first_available_variant == nil and variant.available %} {% assign bss_product__first_available_variant = variant %} {% endif %} {% if bss_product__selected_variant == nil and variant.selected %} {% assign bss_product__selected_variant = variant %} {% endif %} {% if variant == product.selected_or_first_available_variant %} {% assign bss_product__selected_or_first_available_variant = product.selected_or_first_available_variant %} {% endif %} {% endfor %} {% if _variants_count == 1 %} {% assign bss_product__has_only_default_variant = true %} {% endif %} {% if bss_product__selected_or_first_available_variant == nil %} {% assign bss_product__selected_or_first_available_variant = bss_product__first_available_variant %} {% endif -%}{%- comment %}BSS-Login{% endcomment -%}
 <product-info
   id="MainProduct-{{ section.id }}"
@@ -764,13 +744,21 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     {%- endif -%}
   </div>
               {%- when 'buy_buttons' -%}
-                {%- render 'buy-buttons',
-                  block: block,
-                  product: product,
-                  product_form_id: product_form_id,
-                  section_id: section.id,
-                  show_pickup_availability: true
-                -%}
+                {%- if wholesale_lock contains 'product-locked' -%}
+                  {%- comment -%}
+                    Non-B2B customer on a wholesale-only product:
+                    hide the add-to-cart / buy buttons. The price
+                    snippet already shows an "Apply for wholesale" CTA.
+                  {%- endcomment -%}
+                {%- else -%}
+                  {%- render 'buy-buttons',
+                    block: block,
+                    product: product,
+                    product_form_id: product_form_id,
+                    section_id: section.id,
+                    show_pickup_availability: true
+                  -%}
+                {%- endif -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -1043,7 +1031,6 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     border-radius: var(--inputs-radius);
   }
 </style>
-{%- endif -%}
 {% schema %}
 {
   "name": "t:sections.main-product.name",

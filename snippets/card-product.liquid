@@ -1,27 +1,17 @@
 {%- comment -%}
   ================================================================
-  1. LOCKING LOGIC (Corrected)
+  1. CARD HELPERS
   ================================================================
 {%- endcomment -%}
+{%- capture wholesale_lock -%}{%- render 'wholesale-lock-status', product: card_product -%}{%- endcapture -%}
 {%- liquid
-  assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ','
-
-  assign is_in_locked_collection = false
-  for product_collection in card_product.collections
-    if locked_collection_handles contains product_collection.handle
-      assign is_in_locked_collection = true
-      break
-    endif
-  endfor
-
-  assign is_b2b_customer = false
-  if customer and customer.tags contains 'B2B'
-    assign is_b2b_customer = true
-  endif
-
-  assign show_product = true
-  if is_in_locked_collection and is_b2b_customer == false
-    assign show_product = false
+  comment
+    Hide quick-add (add-to-cart) on cards for non-B2B customers
+    when the product is in a wholesale-only collection. The price
+    snippet already shows an "Apply for wholesale" CTA.
+  endcomment
+  if wholesale_lock contains 'product-locked'
+    assign quick_add = 'none'
   endif
 
   assign has_sale_tag = false
@@ -43,10 +33,8 @@
 {%- comment -%}
   ================================================================
   2. WRAPPER
-  This "if" statement wraps your original code.
   ================================================================
 {%- endcomment -%}
-{%- if show_product -%}
 {% comment %}
   Renders a product card
 
@@ -678,4 +666,3 @@
     </div>
   </div>
 {%- endif -%}
-  {%- endif -%}

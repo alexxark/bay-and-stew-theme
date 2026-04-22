@@ -36,24 +36,7 @@
         role="list"
       >
         {% assign skip_card_product_styles = false %}
-        {%- assign locked_collection_handles = 'bracelets,earrings,necklace,ready-to-wear,rings' | split: ',' -%}
-        {%- assign is_b2b_customer = false -%}
-        {%- if customer and customer.tags contains 'B2B' -%}
-          {%- assign is_b2b_customer = true -%}
-        {%- endif -%}
         {% for recommendation in recommendations.products %}
-          {%- unless is_b2b_customer -%}
-            {%- assign is_product_locked = false -%}
-            {%- for product_collection in recommendation.collections -%}
-              {%- if locked_collection_handles contains product_collection.handle -%}
-                {%- assign is_product_locked = true -%}
-                {%- break -%}
-              {%- endif -%}
-            {%- endfor -%}
-            {%- if is_product_locked -%}
-              {%- continue -%}
-            {%- endif -%}
-          {%- endunless -%}
           {% comment %}start BSS Commerce Hide Price{% endcomment %}{% capture bss_lock_check %}{% render 'bss-lock-condition', scope: 'subject', subject: recommendation, variable: 'transparent' %}{% endcapture %}{% if bss_lock_check contains 'true' %}{% continue %}{% endif %}{% comment %}end BSS Commerce Hide Price{% endcomment %}
           <li class="grid__item">
             {% render 'card-product',
