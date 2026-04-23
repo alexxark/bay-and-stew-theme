@@ -1,0 +1,283 @@
+{%- comment -%}
+  PJ (Permanent Jewelry) Pricing Calculator
+
+  Accepts:
+    - product: {Object} the product object
+    - section_id: {String} the parent section id (used to read volume-pricing & price elements)
+
+  Behavior:
+    - Reads the current per-foot chain price from the rendered #price-{section_id}
+      block and updates live when the variant or quantity changes.
+    - If the variant has volume (quantity) price breaks, it will pick the price
+      that applies to the currently selected quantity.
+{%- endcomment -%}
+
+{%- liquid
+  assign sid = section_id | default: section.id
+-%}
+
+<div
+  class="pj-pricing-calculator"
+  data-pj-calculator
+  data-section-id="{{ sid }}"
+  data-product-id="{{ product.id }}"
+>
+  <table class="pj-calc__table">
+    <tbody>
+      <tr>
+        <th scope="row">Chain cost ($ per foot)</th>
+        <td><span data-pj-foot>$0.00</span></td>
+      </tr>
+      <tr>
+        <th scope="row">Chain cost ($ per inch)</th>
+        <td><span data-pj-inch>$0.00</span></td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="PJCalc-Multiplier-{{ sid }}">Markup Multiplier</label>
+        </th>
+        <td>
+          <div class="pj-calc__slider-row">
+            <input
+              type="range"
+              id="PJCalc-Multiplier-{{ sid }}"
+              data-pj-multiplier
+              min="3"
+              max="6"
+              step="0.1"
+              value="3"
+            >
+            <span data-pj-multiplier-display>3.0x</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Selling Price (per inch)</th>
+        <td><span data-pj-selling-inch>$0.00</span></td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="PJCalc-Length-{{ sid }}">
+            <span data-pj-length-display>7</span>-inch bracelet
+          </label>
+        </th>
+        <td>
+          <div class="pj-calc__inline-row">
+            <select id="PJCalc-Length-{{ sid }}" data-pj-length>
+              {% for i in (4..10) -%}
+                <option value="{{ i }}"{% if i == 7 %} selected{% endif %}>{{ i }}"</option>
+              {%- endfor %}
+            </select>
+            <span data-pj-bracelet-price>$0.00</span>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="PJCalc-Other-{{ sid }}">Other Material Costs ($)</label>
+        </th>
+        <td>
+          <input
+            type="number"
+            id="PJCalc-Other-{{ sid }}"
+            data-pj-other
+            min="0"
+            step="0.01"
+            value="2.00"
+          >
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="PJCalc-Labor-{{ sid }}">Labor + Etc.</label>
+        </th>
+        <td>
+          <input
+            type="number"
+            id="PJCalc-Labor-{{ sid }}"
+            data-pj-labor
+            min="0"
+            step="0.01"
+            placeholder="0.00"
+          >
+        </td>
+      </tr>
+      <tr>
+        <th scope="row">Bracelet Total Cost</th>
+        <td><span data-pj-total-cost>$0.00</span></td>
+      </tr>
+      <tr class="pj-calc__retail">
+        <th scope="row">Retail Price</th>
+        <td><strong data-pj-retail>$0.00</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+{%- unless request.design_mode -%}{%- endunless -%}
+
+<style>
+  .pj-pricing-calculator { font-size: 0.95rem; }
+  .pj-calc__table { width: 100%; border-collapse: collapse; }
+  .pj-calc__table th,
+  .pj-calc__table td {
+    padding: 8px 6px;
+    text-align: left;
+    vertical-align: middle;
+    border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+  }
+  .pj-calc__table th { font-weight: 500; }
+  .pj-calc__table td { text-align: right; }
+  .pj-calc__inline-row,
+  .pj-calc__slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .pj-calc__slider-row input[type='range'] { flex: 1; max-width: 180px; }
+  .pj-pricing-calculator input[type='number'],
+  .pj-pricing-calculator select {
+    width: 90px;
+    padding: 4px 6px;
+    border: 1px solid rgba(var(--color-foreground), 0.3);
+    border-radius: 4px;
+    text-align: right;
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+  }
+  .pj-calc__retail th,
+  .pj-calc__retail td {
+    font-size: 1.05rem;
+    border-top: 2px solid rgba(var(--color-foreground), 0.4);
+    border-bottom: none;
+    padding-top: 12px;
+  }
+</style>
+
+<script>
+  (function () {
+    var root = document.currentScript.previousElementSibling;
+    while (root && !(root.matches && root.matches('[data-pj-calculator]'))) {
+      root = root.previousElementSibling;
+    }
+    if (!root) return;
+
+    var sectionId = root.dataset.sectionId;
+
+    var els = {
+      foot: root.querySelector('[data-pj-foot]'),
+      inch: root.querySelector('[data-pj-inch]'),
+      multiplier: root.querySelector('[data-pj-multiplier]'),
+      multiplierDisplay: root.querySelector('[data-pj-multiplier-display]'),
+      sellingInch: root.querySelector('[data-pj-selling-inch]'),
+      length: root.querySelector('[data-pj-length]'),
+      lengthDisplay: root.querySelector('[data-pj-length-display]'),
+      braceletPrice: root.querySelector('[data-pj-bracelet-price]'),
+      other: root.querySelector('[data-pj-other]'),
+      labor: root.querySelector('[data-pj-labor]'),
+      totalCost: root.querySelector('[data-pj-total-cost]'),
+      retail: root.querySelector('[data-pj-retail]'),
+    };
+
+    function fmt(n) {
+      if (!isFinite(n)) n = 0;
+      return '$' + n.toFixed(2);
+    }
+
+    function parsePriceText(text) {
+      if (!text) return 0;
+      var match = String(text).replace(/,/g, '').match(/-?\d+(\.\d+)?/);
+      return match ? parseFloat(match[0]) : 0;
+    }
+
+    function getQuantity() {
+      var input = document.getElementById('Quantity-' + sectionId);
+      if (input) {
+        var q = parseInt(input.value, 10);
+        if (q > 0) return q;
+      }
+      return 1;
+    }
+
+    // Reads the per-foot chain price from the rendered price block,
+    // taking volume pricing into account if available.
+    function getCurrentFootPrice() {
+      var qty = getQuantity();
+
+      var volume = document.getElementById('Volume-' + sectionId);
+      if (volume) {
+        var rows = [];
+        volume.querySelectorAll('li').forEach(function (li) {
+          var qSpan = li.querySelector('span:first-child');
+          var pSpan = li.querySelector('span:not(:first-child):last-child');
+          if (!qSpan || !pSpan) return;
+          var minQty = parseInt(qSpan.textContent, 10);
+          var priceText = pSpan.dataset.text || pSpan.textContent;
+          if (!isNaN(minQty)) {
+            rows.push([minQty, parsePriceText(priceText)]);
+          }
+        });
+        rows.sort(function (a, b) { return b[0] - a[0]; });
+        for (var i = 0; i < rows.length; i++) {
+          if (qty >= rows[i][0]) return rows[i][1];
+        }
+      }
+
+      var priceEl = document.querySelector(
+        '#price-' + sectionId + ' .price__regular .price-item--regular'
+      ) || document.querySelector('#price-' + sectionId + ' .price-item');
+      if (priceEl) return parsePriceText(priceEl.textContent);
+
+      return 0;
+    }
+
+    function recalc() {
+      var footPrice = getCurrentFootPrice();
+      var inchPrice = footPrice / 12;
+      var mult = parseFloat(els.multiplier.value) || 0;
+      var sellingInch = inchPrice * mult;
+      var length = parseInt(els.length.value, 10) || 0;
+      var braceletChainPrice = sellingInch * length;
+      var other = parseFloat(els.other.value) || 0;
+      var labor = parseFloat(els.labor.value) || 0;
+      var totalCost = braceletChainPrice + other + labor;
+      var retail = totalCost * mult;
+
+      els.foot.textContent = fmt(footPrice);
+      els.inch.textContent = fmt(inchPrice);
+      els.multiplierDisplay.textContent = mult.toFixed(1) + 'x';
+      els.sellingInch.textContent = fmt(sellingInch);
+      els.lengthDisplay.textContent = length;
+      els.braceletPrice.textContent = fmt(braceletChainPrice);
+      els.totalCost.textContent = fmt(totalCost);
+      els.retail.textContent = fmt(retail);
+    }
+
+    ['input', 'change'].forEach(function (evt) {
+      root.addEventListener(evt, recalc);
+    });
+
+    // Listen for variant changes from theme pub/sub.
+    if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+      subscribe(PUB_SUB_EVENTS.variantChange, function () {
+        // Wait for DOM updates from product-info to land.
+        setTimeout(recalc, 50);
+      });
+    }
+
+    // Listen for quantity changes outside the calculator.
+    var qtyInput = document.getElementById('Quantity-' + sectionId);
+    if (qtyInput) {
+      qtyInput.addEventListener('change', recalc);
+      qtyInput.addEventListener('input', recalc);
+    }
+
+    // Initial calculation (defer slightly so the price block is in the DOM).
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', recalc);
+    } else {
+      setTimeout(recalc, 0);
+    }
+  })();
+</script>

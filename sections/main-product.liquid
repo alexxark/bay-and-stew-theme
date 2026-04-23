@@ -245,6 +245,9 @@
                     <div class="accordion__content rte" id="ProductAccordion-{{ block.id }}-{{ section.id }}">
                       {{ block.settings.content }}
                       {{ block.settings.page.content }}
+                      {%- if block.settings.heading == 'PJ Pricing Calculator' -%}
+                        {%- render 'pj-pricing-calculator', product: product, section_id: section.id -%}
+                      {%- endif -%}
                     </div>
                   </details>
                 </div>
