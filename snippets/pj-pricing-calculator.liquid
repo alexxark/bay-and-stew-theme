@@ -41,6 +41,24 @@
     }
   </script>
 
+  <script type="application/json" data-pj-connectors>
+    [
+      {%- assign connector_collection = collections.connectors -%}
+      {%- for p in connector_collection.products -%}
+        {%- for v in p.variants -%}
+          {
+            "id": "{{ v.id }}",
+            "label": {{ p.title | append: ' – ' | append: v.title | json }},
+            "product": {{ p.title | json }},
+            "variant": {{ v.title | json }},
+            "price": {{ v.price | divided_by: 100.0 | json }},
+            "available": {{ v.available | json }}
+          }{%- unless forloop.last and forloop.parentloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      {%- endfor -%}
+    ]
+  </script>
+
   <table class="pj-calc__table">
     <tbody>
       <tr>
@@ -50,29 +68,6 @@
       <tr>
         <th scope="row">Chain cost ($ per inch)</th>
         <td><span data-pj-inch>$0.00</span></td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <label for="PJCalc-Multiplier-{{ sid }}">Markup Multiplier</label>
-        </th>
-        <td>
-          <div class="pj-calc__slider-row">
-            <input
-              type="range"
-              id="PJCalc-Multiplier-{{ sid }}"
-              data-pj-multiplier
-              min="3"
-              max="6"
-              step="0.1"
-              value="4"
-            >
-            <span data-pj-multiplier-display>4.0x</span>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">Selling Price (per inch)</th>
-        <td><span data-pj-selling-inch>$0.00</span></td>
       </tr>
       <tr>
         <th scope="row">
@@ -93,17 +88,22 @@
       </tr>
       <tr>
         <th scope="row">
-          <label for="PJCalc-Other-{{ sid }}">Other Material Costs ($)</label>
+          <label for="PJCalc-Connector-{{ sid }}">Connector</label>
         </th>
         <td>
-          <input
-            type="number"
-            id="PJCalc-Other-{{ sid }}"
-            data-pj-other
-            min="0"
-            step="0.01"
-            value="2.00"
-          >
+          <div class="pj-calc__combobox" data-pj-combobox>
+            <div class="pj-calc__combo-input-row">
+              <input
+                type="text"
+                id="PJCalc-Connector-{{ sid }}"
+                data-pj-connector-input
+                placeholder="Search connectors…"
+                autocomplete="off"
+              >
+              <span data-pj-connector-price>$0.00</span>
+            </div>
+            <ul class="pj-calc__combo-list" data-pj-connector-list hidden></ul>
+          </div>
         </td>
       </tr>
       <tr>
@@ -124,6 +124,25 @@
       <tr>
         <th scope="row">Bracelet Total Cost</th>
         <td><span data-pj-total-cost>$0.00</span></td>
+      </tr>
+      <tr>
+        <th scope="row">
+          <label for="PJCalc-Multiplier-{{ sid }}">Markup Multiplier</label>
+        </th>
+        <td>
+          <div class="pj-calc__slider-row">
+            <input
+              type="range"
+              id="PJCalc-Multiplier-{{ sid }}"
+              data-pj-multiplier
+              min="3"
+              max="6"
+              step="0.1"
+              value="4"
+            >
+            <span data-pj-multiplier-display>4.0x</span>
+          </div>
+        </td>
       </tr>
       <tr class="pj-calc__retail">
         <th scope="row">Retail Price</th>
@@ -172,6 +191,58 @@
     border-bottom: none;
     padding-top: 14px;
   }
+  .pj-calc__combobox { position: relative; width: 100%; max-width: 280px; margin-left: auto; }
+  .pj-calc__combo-input-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: flex-end;
+  }
+  .pj-calc__combo-input-row input[type='text'] {
+    flex: 1;
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid rgba(var(--color-foreground), 0.3);
+    border-radius: 4px;
+    background: rgb(var(--color-background));
+    color: rgb(var(--color-foreground));
+    font-size: 1.4rem;
+    text-align: left;
+  }
+  .pj-calc__combo-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin: 2px 0 0;
+    padding: 0;
+    list-style: none;
+    background: rgb(var(--color-background));
+    border: 1px solid rgba(var(--color-foreground), 0.3);
+    border-radius: 4px;
+    max-height: 240px;
+    overflow-y: auto;
+    z-index: 50;
+    text-align: left;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  .pj-calc__combo-list li {
+    padding: 8px 10px;
+    cursor: pointer;
+    font-size: 1.3rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .pj-calc__combo-list li:hover,
+  .pj-calc__combo-list li.is-active {
+    background: rgba(var(--color-foreground), 0.06);
+  }
+  .pj-calc__combo-list li.is-empty {
+    cursor: default;
+    color: rgba(var(--color-foreground), 0.6);
+    justify-content: center;
+  }
 </style>
 
 <script>
@@ -197,15 +268,23 @@
       inch: root.querySelector('[data-pj-inch]'),
       multiplier: root.querySelector('[data-pj-multiplier]'),
       multiplierDisplay: root.querySelector('[data-pj-multiplier-display]'),
-      sellingInch: root.querySelector('[data-pj-selling-inch]'),
       length: root.querySelector('[data-pj-length]'),
       lengthDisplay: root.querySelector('[data-pj-length-display]'),
       braceletPrice: root.querySelector('[data-pj-bracelet-price]'),
-      other: root.querySelector('[data-pj-other]'),
+      connectorInput: root.querySelector('[data-pj-connector-input]'),
+      connectorList: root.querySelector('[data-pj-connector-list]'),
+      connectorPrice: root.querySelector('[data-pj-connector-price]'),
       labor: root.querySelector('[data-pj-labor]'),
       totalCost: root.querySelector('[data-pj-total-cost]'),
       retail: root.querySelector('[data-pj-retail]'),
     };
+
+    var connectors = [];
+    try {
+      connectors = JSON.parse(root.querySelector('[data-pj-connectors]').textContent) || [];
+    } catch (e) { connectors = []; }
+
+    var selectedConnectorPrice = 0;
 
     function fmt(n) {
       if (!isFinite(n)) n = 0;
@@ -241,17 +320,17 @@
       var sellingInch = inchPrice * mult;
       var length = parseInt(els.length.value, 10) || 0;
       var braceletChainPrice = sellingInch * length;
-      var other = parseFloat(els.other.value) || 0;
+      var connectorCost = selectedConnectorPrice || 0;
       var labor = parseFloat(els.labor.value) || 0;
-      var totalCost = (inchPrice * length) + other + labor;
+      var totalCost = (inchPrice * length) + connectorCost + labor;
       var retail = totalCost * mult;
 
       els.foot.textContent = fmt(footPrice);
       els.inch.textContent = fmt(inchPrice);
       els.multiplierDisplay.textContent = mult.toFixed(1) + 'x';
-      els.sellingInch.textContent = fmt(sellingInch);
       els.lengthDisplay.textContent = length;
       els.braceletPrice.textContent = fmt(braceletChainPrice);
+      els.connectorPrice.textContent = fmt(connectorCost);
       els.totalCost.textContent = fmt(totalCost);
       els.retail.textContent = fmt(retail);
     }
@@ -273,6 +352,61 @@
     if (qtyInput) {
       qtyInput.addEventListener('change', recalc);
       qtyInput.addEventListener('input', recalc);
+    }
+
+    // ---- Connector combobox ----
+    function renderConnectorList(query) {
+      var q = (query || '').trim().toLowerCase();
+      var matches = connectors.filter(function (c) {
+        if (!q) return true;
+        return c.label.toLowerCase().indexOf(q) !== -1;
+      }).slice(0, 50);
+
+      els.connectorList.innerHTML = '';
+      if (!matches.length) {
+        var empty = document.createElement('li');
+        empty.className = 'is-empty';
+        empty.textContent = connectors.length ? 'No matches' : 'No connectors found';
+        els.connectorList.appendChild(empty);
+        els.connectorList.hidden = false;
+        return;
+      }
+      matches.forEach(function (c) {
+        var li = document.createElement('li');
+        var name = document.createElement('span');
+        name.textContent = c.label;
+        var price = document.createElement('span');
+        price.textContent = fmt(c.price);
+        li.appendChild(name);
+        li.appendChild(price);
+        li.dataset.id = c.id;
+        li.dataset.price = c.price;
+        li.addEventListener('mousedown', function (e) {
+          e.preventDefault();
+          selectedConnectorPrice = parseFloat(c.price) || 0;
+          els.connectorInput.value = c.label;
+          els.connectorList.hidden = true;
+          recalc();
+        });
+        els.connectorList.appendChild(li);
+      });
+      els.connectorList.hidden = false;
+    }
+
+    if (els.connectorInput) {
+      els.connectorInput.addEventListener('focus', function () {
+        renderConnectorList(els.connectorInput.value);
+      });
+      els.connectorInput.addEventListener('input', function () {
+        // Typing clears the previously selected connector cost.
+        selectedConnectorPrice = 0;
+        renderConnectorList(els.connectorInput.value);
+        recalc();
+      });
+      els.connectorInput.addEventListener('blur', function () {
+        // Delay so that mousedown on a list item can fire first.
+        setTimeout(function () { els.connectorList.hidden = true; }, 120);
+      });
     }
 
     recalc();
