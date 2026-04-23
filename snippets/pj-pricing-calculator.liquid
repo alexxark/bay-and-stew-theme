@@ -28,7 +28,7 @@
       "default_variant_id": {{ product.selected_or_first_available_variant.id | json }},
       "variants": {
         {%- for v in product.variants -%}
-          {{ v.id | json }}: {
+          "{{ v.id }}": {
             "price": {{ v.price | divided_by: 100.0 | json }},
             "breaks": [
               {%- for b in v.quantity_price_breaks -%}
@@ -64,9 +64,9 @@
               min="3"
               max="6"
               step="0.1"
-              value="3"
+              value="4"
             >
-            <span data-pj-multiplier-display>3.0x</span>
+            <span data-pj-multiplier-display>4.0x</span>
           </div>
         </td>
       </tr>
