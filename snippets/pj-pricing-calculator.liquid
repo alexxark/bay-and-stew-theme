@@ -3,13 +3,14 @@
 
   Accepts:
     - product: {Object} the product object
-    - section_id: {String} the parent section id (used to read volume-pricing & price elements)
+    - section_id: {String} the parent section id
 
   Behavior:
-    - Reads the current per-foot chain price from the rendered #price-{section_id}
-      block and updates live when the variant or quantity changes.
-    - If the variant has volume (quantity) price breaks, it will pick the price
-      that applies to the currently selected quantity.
+    - Reads the per-foot chain price from a server-injected JSON map of
+      variants (so it works regardless of B2B/wholesale price locks).
+    - If the variant has volume (quantity) price breaks, picks the price
+      that applies to the current quantity input.
+    - Markup multiplier only applies to the final Retail Price.
 {%- endcomment -%}
 
 {%- liquid
@@ -22,6 +23,24 @@
   data-section-id="{{ sid }}"
   data-product-id="{{ product.id }}"
 >
+  <script type="application/json" data-pj-variants>
+    {
+      "default_variant_id": {{ product.selected_or_first_available_variant.id | json }},
+      "variants": {
+        {%- for v in product.variants -%}
+          {{ v.id | json }}: {
+            "price": {{ v.price | divided_by: 100.0 | json }},
+            "breaks": [
+              {%- for b in v.quantity_price_breaks -%}
+                { "min": {{ b.minimum_quantity | json }}, "price": {{ b.price | divided_by: 100.0 | json }} }{%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      }
+    }
+  </script>
+
   <table class="pj-calc__table">
     <tbody>
       <tr>
@@ -114,17 +133,16 @@
   </table>
 </div>
 
-{%- unless request.design_mode -%}{%- endunless -%}
-
 <style>
-  .pj-pricing-calculator { font-size: 0.95rem; }
+  .pj-pricing-calculator { font-size: 1.4rem; }
   .pj-calc__table { width: 100%; border-collapse: collapse; }
   .pj-calc__table th,
   .pj-calc__table td {
-    padding: 8px 6px;
+    padding: 10px 6px;
     text-align: left;
     vertical-align: middle;
     border-bottom: 1px solid rgba(var(--color-foreground), 0.1);
+    font-size: 1.4rem;
   }
   .pj-calc__table th { font-weight: 500; }
   .pj-calc__table td { text-align: right; }
@@ -138,32 +156,41 @@
   .pj-calc__slider-row input[type='range'] { flex: 1; max-width: 180px; }
   .pj-pricing-calculator input[type='number'],
   .pj-pricing-calculator select {
-    width: 90px;
-    padding: 4px 6px;
+    width: 100px;
+    padding: 6px 8px;
     border: 1px solid rgba(var(--color-foreground), 0.3);
     border-radius: 4px;
     text-align: right;
     background: rgb(var(--color-background));
     color: rgb(var(--color-foreground));
+    font-size: 1.4rem;
   }
   .pj-calc__retail th,
   .pj-calc__retail td {
-    font-size: 1.05rem;
+    font-size: 1.6rem;
     border-top: 2px solid rgba(var(--color-foreground), 0.4);
     border-bottom: none;
-    padding-top: 12px;
+    padding-top: 14px;
   }
 </style>
 
 <script>
   (function () {
-    var root = document.currentScript.previousElementSibling;
-    while (root && !(root.matches && root.matches('[data-pj-calculator]'))) {
-      root = root.previousElementSibling;
-    }
-    if (!root) return;
+    var calculators = document.querySelectorAll('[data-pj-calculator]');
+    var root = calculators[calculators.length - 1];
+    if (!root || root.dataset.pjInit === '1') return;
+    root.dataset.pjInit = '1';
 
     var sectionId = root.dataset.sectionId;
+
+    var data;
+    try {
+      data = JSON.parse(root.querySelector('[data-pj-variants]').textContent);
+    } catch (e) {
+      data = { default_variant_id: null, variants: {} };
+    }
+
+    var currentVariantId = data.default_variant_id;
 
     var els = {
       foot: root.querySelector('[data-pj-foot]'),
@@ -185,12 +212,6 @@
       return '$' + n.toFixed(2);
     }
 
-    function parsePriceText(text) {
-      if (!text) return 0;
-      var match = String(text).replace(/,/g, '').match(/-?\d+(\.\d+)?/);
-      return match ? parseFloat(match[0]) : 0;
-    }
-
     function getQuantity() {
       var input = document.getElementById('Quantity-' + sectionId);
       if (input) {
@@ -200,43 +221,25 @@
       return 1;
     }
 
-    // Reads the per-foot chain price from the rendered price block,
-    // taking volume pricing into account if available.
     function getCurrentFootPrice() {
+      var variant = data.variants[String(currentVariantId)];
+      if (!variant) return 0;
       var qty = getQuantity();
-
-      var volume = document.getElementById('Volume-' + sectionId);
-      if (volume) {
-        var rows = [];
-        volume.querySelectorAll('li').forEach(function (li) {
-          var qSpan = li.querySelector('span:first-child');
-          var pSpan = li.querySelector('span:not(:first-child):last-child');
-          if (!qSpan || !pSpan) return;
-          var minQty = parseInt(qSpan.textContent, 10);
-          var priceText = pSpan.dataset.text || pSpan.textContent;
-          if (!isNaN(minQty)) {
-            rows.push([minQty, parsePriceText(priceText)]);
-          }
-        });
-        rows.sort(function (a, b) { return b[0] - a[0]; });
-        for (var i = 0; i < rows.length; i++) {
-          if (qty >= rows[i][0]) return rows[i][1];
+      if (variant.breaks && variant.breaks.length) {
+        var sorted = variant.breaks.slice().sort(function (a, b) { return b.min - a.min; });
+        for (var i = 0; i < sorted.length; i++) {
+          if (qty >= sorted[i].min) return sorted[i].price;
         }
       }
-
-      var priceEl = document.querySelector(
-        '#price-' + sectionId + ' .price__regular .price-item--regular'
-      ) || document.querySelector('#price-' + sectionId + ' .price-item');
-      if (priceEl) return parsePriceText(priceEl.textContent);
-
-      return 0;
+      return variant.price || 0;
     }
 
     function recalc() {
       var footPrice = getCurrentFootPrice();
       var inchPrice = footPrice / 12;
       var mult = parseFloat(els.multiplier.value) || 0;
-      var sellingInch = inchPrice * mult;
+      // Per spec: multiplier only affects the final Retail Price.
+      var sellingInch = inchPrice;
       var length = parseInt(els.length.value, 10) || 0;
       var braceletChainPrice = sellingInch * length;
       var other = parseFloat(els.other.value) || 0;
@@ -258,26 +261,21 @@
       root.addEventListener(evt, recalc);
     });
 
-    // Listen for variant changes from theme pub/sub.
     if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
-      subscribe(PUB_SUB_EVENTS.variantChange, function () {
-        // Wait for DOM updates from product-info to land.
-        setTimeout(recalc, 50);
+      subscribe(PUB_SUB_EVENTS.variantChange, function (event) {
+        if (event && event.data && event.data.variant && event.data.variant.id) {
+          currentVariantId = event.data.variant.id;
+        }
+        recalc();
       });
     }
 
-    // Listen for quantity changes outside the calculator.
     var qtyInput = document.getElementById('Quantity-' + sectionId);
     if (qtyInput) {
       qtyInput.addEventListener('change', recalc);
       qtyInput.addEventListener('input', recalc);
     }
 
-    // Initial calculation (defer slightly so the price block is in the DOM).
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', recalc);
-    } else {
-      setTimeout(recalc, 0);
-    }
+    recalc();
   })();
 </script>
