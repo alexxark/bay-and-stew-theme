@@ -131,7 +131,7 @@
                 {%- if template.suffix == 'chains' -%}
                   <style>
                     #price-{{ section.id }}.product__price--with-suffix { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
-                    #price-{{ section.id }}.product__price--with-suffix > .price { display: inline-flex; width: auto; flex: 0 0 auto; }
+                    #price-{{ section.id }}.product__price--with-suffix > .price { display: inline-flex; width: auto; flex: 0 0 auto; align-items: baseline; gap: 8px; }
                     #price-{{ section.id }}.product__price--with-suffix .product__price-suffix { font-size: 0.65em; font-style: italic; font-weight: bold; white-space: nowrap; }
                   </style>
                 {%- endif -%}
