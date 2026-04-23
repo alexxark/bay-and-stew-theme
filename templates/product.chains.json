@@ -71,6 +71,15 @@
           "type": "description",
           "settings": {}
         },
+        "collapsible_tab_MLgWiU": {
+          "type": "collapsible_tab",
+          "settings": {
+            "heading": "PJ Pricing Calculator",
+            "icon": "price_tag",
+            "content": "",
+            "page": ""
+          }
+        },
         "9445ca66-0abf-4dff-8633-6def5547ba18": {
           "type": "collapsible_tab",
           "settings": {
@@ -101,6 +110,7 @@
         "buy_buttons",
         "ecomsend_restock_product_restore_email_zCmTKQ",
         "description",
+        "collapsible_tab_MLgWiU",
         "9445ca66-0abf-4dff-8633-6def5547ba18",
         "661e5f9d-2379-48b0-a1fe-243797bae4fb"
       ],
