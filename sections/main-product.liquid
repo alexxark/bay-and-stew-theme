@@ -124,6 +124,9 @@
                     show_badges: true,
                     price_class: 'price--large'
                   -%}
+                  {%- if template.suffix == 'chains' -%}
+                    <span class="product__price-suffix" style="display:inline-block;vertical-align:middle;margin-left:8px;font-size:0.65em;"><em><strong>*Priced per foot*</strong></em></span>
+                  {%- endif -%}
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
