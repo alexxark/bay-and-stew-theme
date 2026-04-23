@@ -117,7 +117,7 @@
                   </a>
                 </div>
               {%- when 'price' -%}
-                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}{% if template.suffix == 'chains' %} style="display:flex;align-items:baseline;flex-wrap:wrap;gap:8px;"{% endif %}>
+                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}{% if template.suffix == 'chains' %} class="product__price--with-suffix"{% endif %}>
                   {%- render 'price',
                     product: product,
                     use_variant: true,
@@ -125,9 +125,16 @@
                     price_class: 'price--large'
                   -%}
                   {%- if template.suffix == 'chains' -%}
-                    <span class="product__price-suffix" style="font-size:0.65em;font-style:italic;font-weight:bold;">*Priced per foot*</span>
+                    <span class="product__price-suffix">*Priced per foot*</span>
                   {%- endif -%}
                 </div>
+                {%- if template.suffix == 'chains' -%}
+                  <style>
+                    #price-{{ section.id }}.product__price--with-suffix { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
+                    #price-{{ section.id }}.product__price--with-suffix > .price { display: inline-flex; width: auto; flex: 0 0 auto; }
+                    #price-{{ section.id }}.product__price--with-suffix .product__price-suffix { font-size: 0.65em; font-style: italic; font-weight: bold; white-space: nowrap; }
+                  </style>
+                {%- endif -%}
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>
