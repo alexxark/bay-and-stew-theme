@@ -35,13 +35,6 @@
           "type": "price",
           "settings": {}
         },
-        "text_fKXf4N": {
-          "type": "text",
-          "settings": {
-            "text": "<em><strong>*Priced per foot*</strong></em>",
-            "text_style": "body"
-          }
-        },
         "variant_picker": {
           "type": "variant_picker",
           "settings": {
@@ -101,7 +94,6 @@
         "title",
         "loox_reviews_loox_rating_8McCXW",
         "price",
-        "text_fKXf4N",
         "variant_picker",
         "bulk_order_form_bXfHP9",
         "personalization_box_7gEhAP",
