@@ -153,7 +153,7 @@
 </div>
 
 <style>
-  .pj-pricing-calculator { font-size: 1.4rem; }
+  .pj-pricing-calculator { font-size: 1.4rem; --pj-control-width: 160px; }
   .pj-calc__table { width: 100%; border-collapse: collapse; table-layout: fixed; }
   .pj-calc__table th,
   .pj-calc__table td {
@@ -187,7 +187,7 @@
   .pj-calc__slider-row [data-pj-multiplier-display] { flex: 0 0 auto; min-width: 3.5em; text-align: right; }
   .pj-pricing-calculator input[type='number'],
   .pj-pricing-calculator select {
-    width: 90px;
+    width: var(--pj-control-width);
     max-width: 100%;
     padding: 6px 8px;
     border: 1px solid rgba(var(--color-foreground), 0.3);
@@ -205,7 +205,7 @@
     border-bottom: none;
     padding-top: 14px;
   }
-  .pj-calc__combobox { position: relative; width: 100%; }
+  .pj-calc__combobox { position: relative; width: var(--pj-control-width); max-width: 100%; margin-left: auto; }
   .pj-calc__combo-input-row input[type='text'] {
     flex: 1 1 auto;
     min-width: 0;
@@ -278,7 +278,9 @@
     .pj-calc__slider-row,
     .pj-calc__combo-input-row { justify-content: space-between; }
     .pj-calc__slider-row input[type='range'] { max-width: none; }
-    .pj-pricing-calculator input[type='number'] { width: 110px; }
+    .pj-pricing-calculator input[type='number'],
+    .pj-pricing-calculator select { width: var(--pj-control-width); }
+    .pj-calc__combobox { margin-left: 0; }
     .pj-calc__retail th,
     .pj-calc__retail td {
       font-size: 1.5rem;
