@@ -205,11 +205,12 @@
     border-bottom: none;
     padding-top: 14px;
   }
-  .pj-calc__combobox { position: relative; width: var(--pj-control-width); max-width: 100%; margin-left: auto; }
+  .pj-calc__combobox { position: relative; width: 100%; }
   .pj-calc__combo-input-row input[type='text'] {
-    flex: 1 1 auto;
+    flex: 0 0 var(--pj-control-width);
+    width: var(--pj-control-width);
+    max-width: 100%;
     min-width: 0;
-    width: 100%;
     padding: 6px 8px;
     border: 1px solid rgba(var(--color-foreground), 0.3);
     border-radius: 4px;
@@ -218,6 +219,10 @@
     font-size: 1.4rem;
     text-align: left;
     box-sizing: border-box;
+  }
+  .pj-calc__combo-input-row [data-pj-connector-price] {
+    flex: 0 0 auto;
+    text-align: right;
   }
   .pj-calc__combo-input-row [data-pj-connector-price] { flex: 0 0 auto; }
   .pj-calc__combo-list {
@@ -280,7 +285,6 @@
     .pj-calc__slider-row input[type='range'] { max-width: none; }
     .pj-pricing-calculator input[type='number'],
     .pj-pricing-calculator select { width: var(--pj-control-width); }
-    .pj-calc__combobox { margin-left: 0; }
     .pj-calc__retail th,
     .pj-calc__retail td {
       font-size: 1.5rem;
