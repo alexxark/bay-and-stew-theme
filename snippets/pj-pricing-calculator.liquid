@@ -238,8 +238,7 @@
       var footPrice = getCurrentFootPrice();
       var inchPrice = footPrice / 12;
       var mult = parseFloat(els.multiplier.value) || 0;
-      // Per spec: multiplier only affects the final Retail Price.
-      var sellingInch = inchPrice;
+      var sellingInch = inchPrice * mult;
       var length = parseInt(els.length.value, 10) || 0;
       var braceletChainPrice = sellingInch * length;
       var other = parseFloat(els.other.value) || 0;
