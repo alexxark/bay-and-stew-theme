@@ -59,55 +59,6 @@
         "padding_bottom": 0
       }
     },
-    "image_with_text_btPUQR": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_Q3hk6b": {
-          "type": "heading",
-          "settings": {
-            "heading": "DOUBLE LOYALTY POINTS",
-            "heading_size": "h1"
-          }
-        },
-        "text_RQetUt": {
-          "type": "text",
-          "settings": {
-            "text": "<h3><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Exclusive Makers Circle Rewards Members</a><br/></h3><p><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Makers Circle loyalty rewards member</a>s will earn <strong>double points on every purchase from April 21 through April 23.</strong> It is the perfect time to stock up on supplies, earn rewards faster, and maximize your studio purchasing power. <br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/><strong>TERMS</strong>: Valid April 21, 2026 through April 23, 2026 at 11:59 PM PST. Double points will be automatically applied to qualifying purchases. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
-            "text_style": "body"
-          }
-        },
-        "button_C8XcVD": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop All",
-            "button_link": "shopify://collections/shop-all",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_Q3hk6b",
-        "text_RQetUt",
-        "button_C8XcVD"
-      ],
-      "custom_css": [],
-      "name": "Double Loyalty-Img w text",
-      "settings": {
-        "image": "shopify://shop_images/Double-Loyalty-Points.jpg",
-        "height": "small",
-        "desktop_image_width": "small",
-        "layout": "image_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 60
-      }
-    },
     "image_with_text_aiRX6U": {
       "type": "image-with-text",
       "blocks": {
@@ -212,7 +163,7 @@
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Save an additional 25% on all sale items</a><br/></h3><p><strong>Valid 05/01/2026 through 05/05/2026 at 11:59pm PS</strong>, take an extra 25% off all sale items at Bay & Stew <strong>with code</strong> <strong>SALEONSALE</strong>. We have also added new styles to the sale section, making it the perfect opportunity to restock tools, supplies, and studio essentials at even better pricing.<br/><br/><strong>APPLY CODE AT CHECKOUT:</strong> SALEONSALE</p><h6><br/><strong>TERMS</strong>: Valid 05/01/2026 through 05/05/2026 at 11:59pm PST. Use code SALEONSALE at checkout to receive the discount on eligible merchandise marked “Sale” only. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Take an additional 25% off on all sale items</a><br/></h3><p>For a limited time, enjoy an <strong>extra 25% off </strong>all sale styles at Bay & Stew. It’s the perfect moment to restock your go-to tools, supplies, and studio essentials at even better value. <br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>TERMS: Valid 05/01/2026 through 05/05/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
             "text_style": "body"
           }
         },
@@ -242,6 +193,55 @@
         "content_layout": "no-overlap",
         "section_color_scheme": "scheme-1",
         "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
+    "image_with_text_btPUQR": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_Q3hk6b": {
+          "type": "heading",
+          "settings": {
+            "heading": "TRIPLE LOYALTY POINTS",
+            "heading_size": "h1"
+          }
+        },
+        "text_RQetUt": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Exclusive to Makers Circle Rewards Members</a><br/></h3><p><a href=\"https://bayandstew.com/pages/about?view=bloy-loyalty\" target=\"_blank\" title=\"https://bayandstew.com/pages/about?view=bloy-loyalty\">Makers Circle Rewards members</a> will earn <strong>triple points on every purchase</strong> from May 19th through May 21st. It’s the perfect time to stock up on supplies, accelerate your rewards, and get more from every dollar you spend.<br/><br/><strong>NO CODE NEEDED:</strong> Points automatically applied at checkout.</p><h6><br/>TERMS: Valid May 19, 2026 through May 21, 2026 at 11:59 PM PST. Triple points will be automatically applied to qualifying purchases. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_C8XcVD": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop All",
+            "button_link": "shopify://collections/shop-all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_Q3hk6b",
+        "text_RQetUt",
+        "button_C8XcVD"
+      ],
+      "custom_css": [],
+      "name": "Double Loyalty-Img w text",
+      "settings": {
+        "image": "shopify://shop_images/Triple-Loyalty-Points.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 36,
@@ -383,11 +383,11 @@
   "order": [
     "image_banner_tayJNr",
     "main",
-    "image_with_text_btPUQR",
     "image_with_text_aiRX6U",
     "rich_text_dXNmG6",
     "rich_text_RxzLeU",
     "image_with_text_yziiii",
+    "image_with_text_btPUQR",
     "image_with_text_YztMxr",
     "rich_text_zU3mja",
     "multicolumn_BJB7wL"
