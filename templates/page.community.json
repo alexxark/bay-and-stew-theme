@@ -248,6 +248,56 @@
         "padding_bottom": 60
       }
     },
+    "image_with_text_8qBzHE": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_DqgmxL": {
+          "type": "heading",
+          "settings": {
+            "heading": "<strong>MEMORIAL DAY SALE</strong> — 10% OFF SITEWIDE",
+            "heading_size": "h1"
+          }
+        },
+        "text_khN6Lz": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>One Day Only • May 25<br/></h3><p>Celebrate Memorial Day with 10% off sitewide for one day only. Stock up on your favorite supplies and save while you create.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid 05/25/2026 from 12:00am to 11:59pm PDT. Discount applies to eligible merchandise and is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_EMX98j": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Sale",
+            "button_link": "shopify://collections/sale-1",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_DqgmxL",
+        "text_khN6Lz",
+        "button_EMX98j"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "MEMORIAL SALE",
+      "settings": {
+        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
     "image_with_text_YztMxr": {
       "type": "image-with-text",
       "blocks": {
@@ -388,6 +438,7 @@
     "rich_text_RxzLeU",
     "image_with_text_yziiii",
     "image_with_text_btPUQR",
+    "image_with_text_8qBzHE",
     "image_with_text_YztMxr",
     "rich_text_zU3mja",
     "multicolumn_BJB7wL"
