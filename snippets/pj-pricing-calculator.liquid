@@ -368,12 +368,11 @@
       var footPrice = getCurrentFootPrice();
       var inchPrice = footPrice / 12;
       var mult = parseFloat(els.multiplier.value) || 0;
-      var sellingInch = inchPrice * mult;
       var length = parseInt(els.length.value, 10) || 0;
-      var braceletChainPrice = sellingInch * length;
+      var braceletChainPrice = inchPrice * length;
       var connectorCost = selectedConnectorPrice || 0;
       var labor = parseFloat(els.labor.value) || 0;
-      var totalCost = (inchPrice * length) + connectorCost + labor;
+      var totalCost = braceletChainPrice + connectorCost + labor;
       var retail = totalCost * mult;
 
       els.foot.textContent = fmt(footPrice);
