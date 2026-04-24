@@ -279,11 +279,10 @@
         "text_khN6Lz",
         "button_EMX98j"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "MEMORIAL SALE",
       "settings": {
-        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "image": "shopify://shop_images/sale-2.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
