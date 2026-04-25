@@ -70,6 +70,16 @@
             if bss_product__selected_or_first_available_variant.quantity_rule.min > bss_product__selected_or_first_available_variant.inventory_quantity and check_against_inventory
               assign quantity_rule_soldout = true
             endif
+            # Treat the variant as "max in cart" when the customer already has
+            # the entire tracked inventory in their cart. Disables the submit
+            # button and swaps the label so they can't try to add more.
+            assign bss_max_in_cart = false
+            if check_against_inventory
+              assign bss_btn_cart_qty = cart | item_count_for_variant: bss_product__selected_or_first_available_variant.id
+              if bss_btn_cart_qty > 0 and bss_btn_cart_qty >= bss_product__selected_or_first_available_variant.inventory_quantity
+                assign bss_max_in_cart = true
+              endif
+            endif
           -%}
           <button
             id="ProductSubmitButton-{{ section_id }}"
@@ -78,6 +88,7 @@
             class="product-form__submit button button--full-width {% if show_dynamic_checkout %}button--secondary{% else %}button--primary{% endif %}"
             {% if bss_product__selected_or_first_available_variant.available == false
               or quantity_rule_soldout
+              or bss_max_in_cart
               or bss_product__selected_or_first_available_variant == null
             %}
               disabled
@@ -88,6 +99,8 @@
                 {{ 'products.product.unavailable' | t }}
               {%- elsif bss_product__selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
                 {{ 'products.product.sold_out' | t }}
+              {%- elsif bss_max_in_cart -%}
+                Max in cart
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}

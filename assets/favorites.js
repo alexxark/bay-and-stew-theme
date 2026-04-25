@@ -454,6 +454,21 @@
     const img = product.featured_image
       ? '<img src="' + product.featured_image + '" alt="' + escapeHtml(product.title) + '" loading="lazy">'
       : '';
+    // If every variant is either sold out or already maxed in the cart,
+    // there's nothing the customer can add — hide the Add to cart button.
+    const noneAddable = product.variants.every((v) => {
+      if (!v.available) return true;
+      const inv = getVariantInventory(product.handle, v.id);
+      let invMax = null;
+      if (inv && inv.tracked) invMax = Math.max(0, parseInt(inv.qty, 10) || 0);
+      else if (
+        v.inventory_management === 'shopify' &&
+        v.inventory_policy !== 'continue' &&
+        typeof v.inventory_quantity === 'number'
+      ) invMax = Math.max(0, v.inventory_quantity);
+      if (invMax === null) return false;
+      return Math.max(0, invMax - getCartQty(v.id)) === 0;
+    });
     li.innerHTML =
       '<div class="bs-fav-item__media"><a href="' + product.url + '">' + img + '</a></div>' +
       '<div class="bs-fav-item__body">' +
@@ -462,9 +477,11 @@
         '<div class="bs-fav-item__variants">' +
           product.variants.map((v) => buildVariantRow(v, product.handle)).join('') +
         '</div>' +
-        '<div class="bs-fav-item__actions">' +
-          '<button type="button" class="button button--primary bs-fav-item__add" data-fav-add>Add to cart</button>' +
-        '</div>' +
+        (noneAddable
+          ? ''
+          : '<div class="bs-fav-item__actions">' +
+              '<button type="button" class="button button--primary bs-fav-item__add" data-fav-add>Add to cart</button>' +
+            '</div>') +
         '<p class="bs-fav-item__status" hidden></p>' +
       '</div>';
     return li;

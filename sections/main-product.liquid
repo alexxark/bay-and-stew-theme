@@ -309,11 +309,15 @@
                       # from inventory.
                       assign bss_qty_rule_max = bss_product__selected_or_first_available_variant.quantity_rule.max
                       assign bss_inv_cap = nil
+                      assign bss_max_in_cart = false
                       if bss_product__selected_or_first_available_variant.inventory_management == 'shopify' and bss_product__selected_or_first_available_variant.inventory_policy != 'continue'
                         assign bss_inv_qty = bss_product__selected_or_first_available_variant.inventory_quantity | default: 0
                         assign bss_inv_cap = bss_inv_qty | minus: cart_qty
                         if bss_inv_cap < 0
                           assign bss_inv_cap = 0
+                        endif
+                        if bss_inv_cap == 0 and cart_qty > 0
+                          assign bss_max_in_cart = true
                         endif
                       endif
                       assign bss_effective_max = bss_qty_rule_max
@@ -323,6 +327,12 @@
                         endif
                       endif
                     -%}
+                    {%- if bss_max_in_cart -%}
+                      <div class="quantity__max-in-cart" role="status">
+                        <span class="quantity__max-in-cart-badge">Max in cart</span>
+                        <p class="quantity__max-in-cart-note">You already have all available stock in your cart.</p>
+                      </div>
+                    {%- else -%}
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                       <button class="quantity__button" name="minus" type="button">
                         <span class="visually-hidden">
@@ -357,6 +367,7 @@
                         </span>
                       </button>
                     </quantity-input>
+                    {%- endif -%}
                     {%- liquid
                       assign volume_pricing_array = bss_product__selected_or_first_available_variant.quantity_price_breaks | sort: 'quantity' | reverse
                       assign current_qty_for_volume_pricing = cart_qty | plus: bss_product__selected_or_first_available_variant.quantity_rule.min
