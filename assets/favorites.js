@@ -151,32 +151,48 @@
     return out;
   }
 
-  // Bootstrap on load: server (Liquid) ⇒ merge into local ⇒ optional fresh pull.
+  // Bootstrap on load.
+  //
+  // For a logged-in customer the server (metafield) is the authoritative
+  // source of truth. Otherwise a deletion made on Device A would be
+  // resurrected on Device B because B's stale cache would merge back in.
+  //
+  // Algorithm:
+  //   1. Trust the Liquid-rendered bootstrap list (no network round-trip).
+  //   2. Special case: if the server is empty AND local has items, the local
+  //      list is treated as a one-time guest-import — push it up to seed.
+  //   3. Always re-pull from the endpoint shortly after to catch changes
+  //      made on another device after this page started rendering.
   function hydrate() {
     if (!getCustomerId()) return;
     const local = readAll();
     const bootstrap = readBootstrap();
+
     if (bootstrap && bootstrap.length) {
-      const merged = mergeLists(bootstrap, local);
-      const localChanged = JSON.stringify(local) !== JSON.stringify(merged);
-      const serverNeedsLocal = local.some((h) => bootstrap.indexOf(h) === -1);
-      if (localChanged) writeAll(merged, { skipSync: !serverNeedsLocal });
+      // Server has data → server wins. Replace local cache (do NOT merge).
+      if (JSON.stringify(local) !== JSON.stringify(bootstrap)) {
+        writeAll(bootstrap, { skipSync: true });
+      }
       lastSyncedJson = JSON.stringify({ handles: bootstrap });
+    } else if (bootstrap && bootstrap.length === 0 && local.length === 0) {
+      // Both sides empty — nothing to do.
+      lastSyncedJson = JSON.stringify({ handles: [] });
     } else if (local.length && getSyncEndpoint()) {
-      // Customer has nothing on server yet but has a local list — push it up.
+      // Server is empty but local has items (e.g. items added while logged out
+      // on this device). Seed the server one-time so cross-device works going
+      // forward.
       scheduleSync(local);
     }
 
-    // Optionally also pull fresh in case bootstrap is stale (e.g. updated on
-    // another device after this page started rendering).
+    // Pull fresh in case the bootstrap is stale (e.g. another device updated
+    // the metafield after this page started rendering). Server wins again.
     if (getSyncEndpoint()) {
       pullFromServer().then((serverList) => {
         if (!serverList) return;
         const current = readAll();
-        const merged = mergeLists(serverList, current);
-        if (JSON.stringify(merged) !== JSON.stringify(current)) {
-          writeAll(merged, { skipSync: true });
-          lastSyncedJson = JSON.stringify({ handles: merged });
+        if (JSON.stringify(serverList) !== JSON.stringify(current)) {
+          writeAll(serverList, { skipSync: true });
+          lastSyncedJson = JSON.stringify({ handles: serverList });
         }
       });
     }
