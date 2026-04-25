@@ -1,0 +1,29 @@
+{%- comment -%}
+  Renders the customer account status badge ("Signed Out", "Signed in (Wholesale)", etc.).
+
+  Accepts:
+    - class: {String} optional extra class name(s) to apply to the badge
+{%- endcomment -%}
+{%- liquid
+  assign status_class = 'status-badge--out'
+  assign status_text = 'Signed Out'
+
+  if customer
+    assign tag_str = customer.tags | join: ',' | downcase
+    if tag_str contains 'b2b'
+      assign status_class = 'status-badge--wholesale'
+      assign status_text = 'Signed in (Wholesale)'
+    elsif tag_str contains 'shop' or tag_str contains 'retail'
+      assign status_class = 'status-badge--retail'
+      assign status_text = 'Signed in (Retail)'
+    else
+      assign status_class = 'status-badge--retail'
+      assign status_text = 'Signed in'
+    endif
+  endif
+-%}
+{%- if customer -%}
+  <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
+{%- else -%}
+  <a href="{{ routes.account_login_url }}" class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</a>
+{%- endif -%}

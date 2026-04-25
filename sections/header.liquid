@@ -112,6 +112,11 @@
       padding: 0.25rem 0.5rem;
     }
   }
+
+  /* Hide header badge on mobile; it is shown next to the product price instead. */
+  @media (max-width: 749px) {
+    .status-badge--header { display: none; }
+  }
 </style>
 
 {%- style -%}
@@ -266,28 +271,10 @@
           </localization-form>
         {%- endif -%}
       </div>
-      {%- liquid
-      assign status_class = 'status-badge--out'
-      assign status_text = 'Signed Out'
-
-      if customer
-        assign tag_str = customer.tags | join: ',' | downcase
-        if tag_str contains 'b2b'
-          assign status_class = 'status-badge--wholesale'
-          assign status_text = 'Signed in (Wholesale)'
-        elsif tag_str contains 'shop' or tag_str contains 'retail'
-          assign status_class = 'status-badge--retail'
-          assign status_text = 'Signed in (Retail)'
-        else
-          assign status_class = 'status-badge--retail'
-          assign status_text = 'Signed in'
-        endif
-      endif
-    -%}
 
     <div class="search-with-status">
       {% render 'header-search', input_id: 'Search-In-Modal' %}
-      <span class="status-badge {{ status_class }}">{{ status_text }}</span>
+      {% render 'customer-status-badge', class: 'status-badge--header' %}
     </div>
 
       {%- if shop.customer_accounts_enabled -%}

@@ -117,7 +117,7 @@
                   </a>
                 </div>
               {%- when 'price' -%}
-                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}{% if template.suffix == 'chains' %} class="product__price--with-suffix"{% endif %}>
+                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }} class="product__price-row{% if template.suffix == 'chains' %} product__price--with-suffix{% endif %}">
                   {%- render 'price',
                     product: product,
                     use_variant: true,
@@ -127,7 +127,14 @@
                   {%- if template.suffix == 'chains' -%}
                     <span class="product__price-suffix">*Priced per foot*</span>
                   {%- endif -%}
+                  {% render 'customer-status-badge', class: 'status-badge--pdp' %}
                 </div>
+                {%- style -%}
+                  #price-{{ section.id }}.product__price-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
+                  @media screen and (min-width: 750px) {
+                    .status-badge--pdp { display: none; }
+                  }
+                {%- endstyle -%}
                 {%- if template.suffix == 'chains' -%}
                   <style>
                     #price-{{ section.id }}.product__price--with-suffix { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px; }
