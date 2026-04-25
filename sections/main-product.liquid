@@ -133,9 +133,9 @@
                   #price-{{ section.id }}.product__price-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
                   #price-{{ section.id }}.product__price-row .price { gap: 0 !important; }
                   #price-{{ section.id }}.product__price-row .price .price-item { margin: 0 !important; }
-                  #price-{{ section.id }}.product__price-row .price__sale { display: inline-flex !important; align-items: baseline; gap: 0; }
-                  #price-{{ section.id }}.product__price-row .price__sale .visually-hidden { display: none !important; }
-                  #price-{{ section.id }}.product__price-row .price__sale .price-item--sale { margin-left: 0.4rem !important; }
+                  #price-{{ section.id }}.product__price-row .price--on-sale .price__sale { display: inline-flex !important; align-items: baseline; gap: 0; }
+                  #price-{{ section.id }}.product__price-row .price--on-sale .price__sale .visually-hidden { display: none !important; }
+                  #price-{{ section.id }}.product__price-row .price--on-sale .price__sale .price-item--sale { margin-left: 0.4rem !important; }
                 {%- endstyle -%}
                 {%- if template.suffix == 'chains' -%}
                   <style>
