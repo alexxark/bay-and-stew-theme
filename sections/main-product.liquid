@@ -302,6 +302,27 @@
                     </span>
                   </label>
                   <div class="price-per-item__container">
+                    {%- liquid
+                      # Compute an effective qty cap that respects both the
+                      # quantity rule max AND tracked inventory. The qty input
+                      # represents what's being ADDED, so subtract cart_qty
+                      # from inventory.
+                      assign bss_qty_rule_max = bss_product__selected_or_first_available_variant.quantity_rule.max
+                      assign bss_inv_cap = nil
+                      if bss_product__selected_or_first_available_variant.inventory_management == 'shopify' and bss_product__selected_or_first_available_variant.inventory_policy != 'continue'
+                        assign bss_inv_qty = bss_product__selected_or_first_available_variant.inventory_quantity | default: 0
+                        assign bss_inv_cap = bss_inv_qty | minus: cart_qty
+                        if bss_inv_cap < 0
+                          assign bss_inv_cap = 0
+                        endif
+                      endif
+                      assign bss_effective_max = bss_qty_rule_max
+                      if bss_inv_cap != nil
+                        if bss_effective_max == nil or bss_inv_cap < bss_effective_max
+                          assign bss_effective_max = bss_inv_cap
+                        endif
+                      endif
+                    -%}
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                       <button class="quantity__button" name="minus" type="button">
                         <span class="visually-hidden">
@@ -319,9 +340,9 @@
                         data-cart-quantity="{{ cart_qty }}"
                         data-min="{{ bss_product__selected_or_first_available_variant.quantity_rule.min }}"
                         min="{{ bss_product__selected_or_first_available_variant.quantity_rule.min }}"
-                        {% if bss_product__selected_or_first_available_variant.quantity_rule.max != null %}
-                          data-max="{{ bss_product__selected_or_first_available_variant.quantity_rule.max }}"
-                          max="{{ bss_product__selected_or_first_available_variant.quantity_rule.max }}"
+                        {% if bss_effective_max != nil %}
+                          data-max="{{ bss_effective_max }}"
+                          max="{{ bss_effective_max }}"
                         {% endif %}
                         step="{{ bss_product__selected_or_first_available_variant.quantity_rule.increment }}"
                         value="{{ bss_product__selected_or_first_available_variant.quantity_rule.min }}"
