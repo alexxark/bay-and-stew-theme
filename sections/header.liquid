@@ -112,11 +112,6 @@
       padding: 0.25rem 0.5rem;
     }
   }
-
-  /* Hide header badge on mobile; it is shown next to the product price instead. */
-  @media (max-width: 749px) {
-    .status-badge--header { display: none; }
-  }
 </style>
 
 {%- style -%}
@@ -274,7 +269,6 @@
 
     <div class="search-with-status">
       {% render 'header-search', input_id: 'Search-In-Modal' %}
-      {% render 'customer-status-badge', class: 'status-badge--header' %}
     </div>
 
       {%- if shop.customer_accounts_enabled -%}
