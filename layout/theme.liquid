@@ -60,8 +60,13 @@
     <meta name="bs-login-url" content="{{ routes.account_login_url }}">
     <meta name="bs-favorites-endpoint" content="/apps/favorites">
     {%- if customer -%}
+      {%- assign bs_fav_value = customer.metafields.favorites.handles.value -%}
       <script id="bs-favorites-bootstrap" type="application/json">
-        {{ customer.metafields.favorites.handles.value | json }}
+        {%- if bs_fav_value == blank -%}
+          []
+        {%- else -%}
+          {{ bs_fav_value | json }}
+        {%- endif -%}
       </script>
     {%- endif -%}
     {{ 'favorites.css' | asset_url | stylesheet_tag }}

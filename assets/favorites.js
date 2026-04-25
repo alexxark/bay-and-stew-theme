@@ -53,9 +53,16 @@
   function readBootstrap() {
     const node = document.getElementById('bs-favorites-bootstrap');
     if (!node) return null;
+    const text = (node.textContent || '').trim();
+    if (!text) return null;
     try {
-      const parsed = JSON.parse(node.textContent);
-      return Array.isArray(parsed) ? parsed : null;
+      let parsed = JSON.parse(text);
+      // Shopify sometimes returns list metafields as a JSON-encoded string
+      // (e.g. "[\"handle-a\",\"handle-b\"]"). Decode a second time if needed.
+      if (typeof parsed === 'string') {
+        try { parsed = JSON.parse(parsed); } catch (e) { /* leave as-is */ }
+      }
+      return Array.isArray(parsed) ? parsed.filter((h) => typeof h === 'string') : null;
     } catch (e) {
       return null;
     }
