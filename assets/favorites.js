@@ -401,39 +401,40 @@
   }
 
   function addItemsToCart(items) {
-    const cartDrawer = document.querySelector('cart-drawer');
-    const sectionIds = cartDrawer
-      ? cartDrawer.getSectionsToRender().map((s) => s.id)
-      : ['cart-icon-bubble'];
-
     return fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ items: items, sections: sectionIds, sections_url: window.location.pathname }),
+      body: JSON.stringify({ items: items }),
     }).then((r) => {
       if (!r.ok) return r.json().then((err) => Promise.reject(err));
       return r.json();
     });
   }
 
-  function refreshCartUI(parsedState) {
+  function fetchCartSections(sectionIds) {
+    const url = '/?sections=' + sectionIds.join(',');
+    return fetch(url, { headers: { Accept: 'application/json' } }).then((r) => r.json());
+  }
+
+  function refreshCartUI() {
     const cartDrawer = document.querySelector('cart-drawer');
-    if (cartDrawer && parsedState && parsedState.sections) {
-      // Re-render the drawer contents with the data we already received,
-      // then open it so the customer sees the just-added items.
-      cartDrawer.renderContents(parsedState);
-      return;
+    if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
+      const sections = cartDrawer.getSectionsToRender().map((s) => s.id);
+      return fetchCartSections(sections).then((sectionMap) => {
+        cartDrawer.renderContents({ sections: sectionMap });
+      });
     }
 
     const cartNotification = document.querySelector('cart-notification');
-    if (cartNotification && parsedState && parsedState.sections) {
-      cartNotification.renderContents(parsedState);
-      return;
+    if (cartNotification && typeof cartNotification.renderContents === 'function') {
+      const sections = cartNotification.getSectionsToRender().map((s) => s.id);
+      return fetchCartSections(sections).then((sectionMap) => {
+        cartNotification.renderContents({ sections: sectionMap });
+      });
     }
 
     // Fallback: at minimum, refresh the cart icon bubble.
-    fetch('/?sections=cart-icon-bubble')
-      .then((r) => r.json())
+    return fetchCartSections(['cart-icon-bubble'])
       .then((data) => {
         const bubble = document.getElementById('cart-icon-bubble');
         if (bubble && data['cart-icon-bubble']) {
@@ -473,10 +474,10 @@
         addBtn.disabled = true;
         setStatus(itemEl, 'Adding to cart…', null);
         addItemsToCart(items)
-          .then((response) => {
+          .then(() => {
             setStatus(itemEl, 'Added to cart.', 'success');
             itemEl.querySelectorAll('input[type="number"]').forEach((i) => (i.value = 0));
-            refreshCartUI(response);
+            return refreshCartUI();
           })
           .catch((err) => {
             setStatus(itemEl, (err && err.description) || 'Could not add to cart.', 'error');
