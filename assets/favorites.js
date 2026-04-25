@@ -442,8 +442,11 @@
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
           // BSS B2B attributes let the wholesale-pricing app overwrite the
           // displayed price for signed-in wholesale customers. We render the
-          // public storefront price as a fallback for everyone else.
+          // public storefront price as a fallback for everyone else, and
+          // mirror the formatted price into `data-text` since BSS uses that
+          // attribute as the label to render back into the element.
           '<span class="bs-fav-variant__price"' +
+            ' data-text="' + escapeHtml(formatMoney(variant.price)) + '"' +
             ' bss-b2b-product-id="' + variant.product_id + '"' +
             ' bss-b2b-product-price' +
             ' bss-b2b-variant-price' +
@@ -698,27 +701,18 @@
     });
   }
 
-  // Tell the BSS B2B wholesale-pricing app to repaint prices on the given
-  // container. Mirrors the recipe used by the collection grid's load-more.
+  // Lightly notify the BSS B2B wholesale-pricing app that new price elements
+  // were added to the DOM. We intentionally avoid calling BSSCommerce.initPrices
+  // / BSSB2B.refresh directly — those wipe the inner text in some states,
+  // which left guest customers staring at empty price slots. The custom
+  // events below are enough for BSS's own MutationObserver / listeners to
+  // pick the new nodes up when wholesale rules apply.
   function triggerBSSPriceRefresh(container) {
     if (!container) return;
     try {
-      document.dispatchEvent(
-        new CustomEvent('shopify:section:load', { bubbles: true })
-      );
       container.dispatchEvent(
         new CustomEvent('bss:content:updated', { bubbles: true })
       );
-      if (window.BSSB2B && typeof window.BSSB2B.refresh === 'function') {
-        window.BSSB2B.refresh();
-      }
-      if (window.BSSCommerce && typeof window.BSSCommerce.initPrices === 'function') {
-        window.BSSCommerce.initPrices(container);
-      }
-      // Poke any MutationObserver-based listeners.
-      container.querySelectorAll('[bss-b2b-product-price]').forEach((el) => {
-        el.setAttribute('data-bss-refresh', Date.now());
-      });
       document.dispatchEvent(
         new CustomEvent('price:refresh', { detail: { container: container } })
       );
