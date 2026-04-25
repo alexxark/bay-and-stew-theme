@@ -1883,6 +1883,36 @@ input[type='checkbox'] {
   min-height: calc((var(--inputs-border-width) * 2) + 4.5rem);
 }
 
+quantity-input {
+  position: relative;
+  display: inline-block;
+}
+
+.quantity__warning {
+  position: absolute;
+  top: calc(100% + 0.4rem);
+  right: 0;
+  z-index: 5;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: rgb(var(--color-foreground));
+  background: rgb(var(--color-background));
+  border: 0.1rem solid rgba(var(--color-foreground), 0.15);
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.4rem;
+  box-shadow: 0 2px 6px rgba(var(--color-foreground), 0.08);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(-2px);
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.quantity__warning.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .quantity:after {
   pointer-events: none;
   content: '';

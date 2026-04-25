@@ -239,15 +239,27 @@ class QuantityInput extends HTMLElement {
   }
 
   onInputChange(event) {
-    this.clampToMax();
+    const before = this.input.dataset._lastValue || '';
+    this.clampToMax(before);
+    this.input.dataset._lastValue = this.input.value;
     this.validateQtyRules();
   }
 
   onButtonClick(event) {
     event.preventDefault();
     const previousValue = this.input.value;
+    const max = parseInt(this.input.max, 10);
+    const current = parseInt(this.input.value, 10) || 0;
+    const isPlus = event.target.name === 'plus' || !!event.target.closest('button[name="plus"]');
 
-    if (event.target.name === 'plus') {
+    // Already at the cap and the user pressed +: surface the warning
+    // ourselves since stepUp() will be a no-op.
+    if (isPlus && !isNaN(max) && current >= max) {
+      this.flashMaxWarning(max);
+      return;
+    }
+
+    if (isPlus) {
       if (parseInt(this.input.dataset.min) > parseInt(this.input.step) && this.input.value == 0) {
         this.input.value = this.input.dataset.min;
       } else {
@@ -257,7 +269,7 @@ class QuantityInput extends HTMLElement {
       this.input.stepDown();
     }
 
-    this.clampToMax();
+    this.clampToMax(previousValue);
 
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
 
@@ -266,14 +278,43 @@ class QuantityInput extends HTMLElement {
     }
   }
 
-  clampToMax() {
+  clampToMax(previousValue) {
     // <input type="number"> does not enforce max for typed values, only for
     // stepUp(). Manually cap the input so customers cannot exceed available
     // inventory or quantity-rule maximums.
     const max = parseInt(this.input.max, 10);
     if (!isNaN(max) && parseInt(this.input.value, 10) > max) {
       this.input.value = max;
+      // Only flash if the value actually changed from what the user had.
+      if (previousValue === undefined || previousValue != this.input.value) {
+        this.flashMaxWarning(max);
+      }
     }
+  }
+
+  flashMaxWarning(max) {
+    let warn = this.querySelector('.quantity__warning');
+    if (!warn) {
+      warn = document.createElement('span');
+      warn.className = 'quantity__warning';
+      warn.setAttribute('role', 'status');
+      warn.setAttribute('aria-live', 'polite');
+      warn.hidden = true;
+      this.appendChild(warn);
+    }
+    warn.textContent = max > 0 ? 'Only ' + max + ' available' : 'Max quantity reached';
+    warn.hidden = false;
+    // Force reflow so the transition replays on rapid clicks.
+    // eslint-disable-next-line no-unused-expressions
+    warn.offsetHeight;
+    warn.classList.add('is-visible');
+    if (this._warnTimer) clearTimeout(this._warnTimer);
+    this._warnTimer = setTimeout(() => {
+      warn.classList.remove('is-visible');
+      setTimeout(() => {
+        if (warn && !warn.classList.contains('is-visible')) warn.hidden = true;
+      }, 250);
+    }, 2200);
   }
 
   validateQtyRules() {

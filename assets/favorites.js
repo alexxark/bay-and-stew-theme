@@ -568,7 +568,7 @@
     const warn = row.querySelector('.bs-fav-variant__warning');
     if (!warn) return;
     warn.textContent =
-      max > 0 ? 'Only ' + max + ' more available' : 'Max quantity reached';
+      max > 0 ? 'Only ' + max + ' available' : 'Max quantity reached';
     warn.hidden = false;
     // Force reflow so the transition plays even on rapid clicks.
     // eslint-disable-next-line no-unused-expressions
