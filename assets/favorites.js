@@ -353,10 +353,13 @@
 
   function buildVariantRow(variant) {
     const sold = !variant.available;
-    // Cap the qty at real inventory when Shopify is tracking and overselling
-    // is disabled. Otherwise leave open-ended.
+    // Cap the qty at real inventory when Shopify is tracking, overselling is
+    // disabled, AND inventory_quantity is actually exposed in the product JSON
+    // (it's often omitted on the storefront). Otherwise leave open-ended so we
+    // don't accidentally clamp to 0 and brick the plus button.
     const tracked = variant.inventory_management === 'shopify' && variant.inventory_policy !== 'continue';
-    const invMax = tracked ? Math.max(0, variant.inventory_quantity || 0) : null;
+    const hasInvCount = tracked && typeof variant.inventory_quantity === 'number';
+    const invMax = hasInvCount ? Math.max(0, variant.inventory_quantity) : null;
     const maxAttr = invMax !== null ? ' max="' + invMax + '" data-inventory-max="' + invMax + '"' : '';
     return (
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
