@@ -1,0 +1,12 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-favorites",
+      "settings": {
+        "title": "My Favorites",
+        "signin_text": "Please sign in to view and manage your favorites."
+      }
+    }
+  },
+  "order": ["main"]
+}

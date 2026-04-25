@@ -1,0 +1,48 @@
+{{ 'favorites.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'favorites.js' | asset_url }}" defer="defer"></script>
+
+<div
+  class="bs-favorites"
+  data-bs-favorites-page
+  data-logged-in="{% if customer %}true{% else %}false{% endif %}"
+>
+  <h1 class="bs-favorites__title">{{ section.settings.title | default: 'My Favorites' }}</h1>
+
+  {%- unless customer -%}
+    <div class="bs-favorites__signin">
+      <p>{{ section.settings.signin_text | default: 'Please sign in to view and manage your favorites.' }}</p>
+      <a class="button button--primary" href="{{ routes.account_login_url }}?checkout_url={{ request.path | url_encode }}">
+        {{ 'customer.log_in' | t }}
+      </a>
+    </div>
+  {%- else -%}
+    <div data-bs-favorites-root>
+      <p class="bs-favorites__loading">Loading your favorites…</p>
+    </div>
+  {%- endunless -%}
+</div>
+
+{% schema %}
+{
+  "name": "Favorites",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Page title",
+      "default": "My Favorites"
+    },
+    {
+      "type": "text",
+      "id": "signin_text",
+      "label": "Sign-in prompt",
+      "default": "Please sign in to view and manage your favorites."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Favorites"
+    }
+  ]
+}
+{% endschema %}

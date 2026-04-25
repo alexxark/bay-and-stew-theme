@@ -1,0 +1,308 @@
+/* ---------- Heart icon on Add-to-Cart ---------- */
+.product-form__buttons {
+  display: flex;
+  gap: 0.5rem;
+  align-items: stretch;
+}
+
+.product-form__buttons > .product-form__submit {
+  flex: 0 0 75%;
+  width: 75%;
+}
+
+.product-form__favorite {
+  flex: 0 0 calc(25% - 0.5rem);
+  width: calc(25% - 0.5rem);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid rgba(var(--color-foreground), 0.3);
+  border-radius: var(--buttons-radius, 0);
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.product-form__favorite:hover {
+  background: rgba(var(--color-foreground), 0.05);
+  border-color: rgba(var(--color-foreground), 0.6);
+}
+
+.product-form__favorite .icon-heart {
+  width: 22px;
+  height: 22px;
+  fill: transparent;
+  stroke: rgb(var(--color-foreground));
+  stroke-width: 1.4;
+}
+
+.product-form__favorite.is-active .icon-heart,
+.bs-favorite-icon-btn.is-active .icon-heart {
+  fill: rgb(var(--color-foreground));
+}
+
+/* When dynamic checkout is shown the buttons stack — keep heart inline */
+.product-form__buttons .shopify-payment-button {
+  flex: 1 0 100%;
+}
+
+/* ---------- Header heart icon ---------- */
+.header__icon--favorites .icon-heart {
+  width: 22px;
+  height: 22px;
+  fill: transparent;
+  stroke: rgb(var(--color-foreground));
+  stroke-width: 1.4;
+}
+
+/* ---------- Sign-in modal ---------- */
+.bs-favorite-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+
+.bs-favorite-modal.is-open {
+  display: flex;
+}
+
+.bs-favorite-modal__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.bs-favorite-modal__panel {
+  position: relative;
+  background: rgb(var(--color-background, 255 255 255));
+  color: rgb(var(--color-foreground, 0 0 0));
+  padding: 2.5rem 2rem 2rem;
+  max-width: 420px;
+  width: calc(100% - 2rem);
+  border-radius: 8px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+  text-align: center;
+}
+
+.bs-favorite-modal__close {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  background: transparent;
+  border: 0;
+  font-size: 1.75rem;
+  line-height: 1;
+  cursor: pointer;
+  color: inherit;
+}
+
+.bs-favorite-modal__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.4rem;
+}
+
+.bs-favorite-modal__text {
+  margin: 0 0 1.5rem;
+}
+
+.bs-favorite-modal__actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bs-favorite-modal__actions .button {
+  min-width: 120px;
+}
+
+/* ---------- Favorites page ---------- */
+.bs-favorites {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+.bs-favorites__title {
+  margin: 0 0 2rem;
+}
+
+.bs-favorites__empty,
+.bs-favorites__signin {
+  text-align: center;
+  padding: 3rem 1rem;
+  border: 1px dashed rgba(var(--color-foreground), 0.2);
+  border-radius: 8px;
+}
+
+.bs-favorites__list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bs-fav-item {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  border: 1px solid rgba(var(--color-foreground), 0.12);
+  border-radius: 8px;
+  background: rgb(var(--color-background, 255 255 255));
+}
+
+@media (max-width: 600px) {
+  .bs-fav-item {
+    grid-template-columns: 100px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+.bs-fav-item__media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+.bs-fav-item__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bs-fav-item__title {
+  margin: 0 0 0.25rem;
+  font-size: 1.15rem;
+}
+
+.bs-fav-item__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.bs-fav-item__title a:hover {
+  text-decoration: underline;
+}
+
+.bs-fav-item__remove {
+  align-self: flex-start;
+  background: transparent;
+  border: 0;
+  color: rgba(var(--color-foreground), 0.6);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  margin-bottom: 0.75rem;
+  text-decoration: underline;
+}
+
+.bs-fav-item__remove:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.bs-fav-item__variants {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin: 0.5rem 0 1rem;
+}
+
+.bs-fav-variant {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-top: 1px solid rgba(var(--color-foreground), 0.08);
+}
+
+.bs-fav-variant:first-child {
+  border-top: 0;
+}
+
+.bs-fav-variant__label {
+  display: flex;
+  flex-direction: column;
+}
+
+.bs-fav-variant__name {
+  font-weight: 500;
+}
+
+.bs-fav-variant__price {
+  font-size: 0.9rem;
+  color: rgba(var(--color-foreground), 0.7);
+}
+
+.bs-fav-variant__sold-out {
+  color: rgba(var(--color-foreground), 0.5);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.bs-fav-qty {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid rgba(var(--color-foreground), 0.3);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.bs-fav-qty button {
+  width: 32px;
+  height: 32px;
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.bs-fav-qty input {
+  width: 44px;
+  height: 32px;
+  border: 0;
+  text-align: center;
+  -moz-appearance: textfield;
+}
+
+.bs-fav-qty input::-webkit-outer-spin-button,
+.bs-fav-qty input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.bs-fav-item__actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bs-fav-item__add {
+  min-width: 180px;
+}
+
+.bs-fav-item__status {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.bs-fav-item__status.is-error {
+  color: #c0392b;
+}
+
+.bs-fav-item__status.is-success {
+  color: #1e8449;
+}

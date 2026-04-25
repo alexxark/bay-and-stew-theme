@@ -271,6 +271,16 @@
       {% render 'header-search', input_id: 'Search-In-Modal' %}
     </div>
 
+      <a
+        href="/pages/favorites"
+        class="header__icon header__icon--favorites link focus-inset"
+        aria-label="Favorites"
+        title="Favorites"
+      >
+        <span class="svg-wrapper">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+        <span class="visually-hidden">Favorites</span>
+      </a>
+
       {%- if shop.customer_accounts_enabled -%}
         <a
           href="{%- if customer -%}{{ routes.account_url }}{%- else -%}{{ routes.account_login_url }}?checkout_url={{ request.path | url_encode }}{%- endif -%}"

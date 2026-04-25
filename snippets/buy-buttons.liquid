@@ -94,6 +94,17 @@
             </span>
             {%- render 'loading-spinner' -%}
           </button>
+          <button
+            type="button"
+            class="product-form__favorite"
+            data-bs-favorite-toggle
+            data-product-handle="{{ product.handle }}"
+            aria-pressed="false"
+            aria-label="Add to favorites"
+            title="Add to favorites"
+          >
+            <span class="svg-wrapper">{{ 'icon-heart.svg' | inline_asset_content }}</span>
+          </button>
           {%- if show_dynamic_checkout -%}
             {{ form | payment_button }}
           {%- endif -%}

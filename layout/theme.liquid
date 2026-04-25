@@ -56,6 +56,17 @@
 
     {{ content_for_header }}
 
+    <meta name="bs-customer-id" content="{% if customer %}{{ customer.id }}{% endif %}">
+    <meta name="bs-login-url" content="{{ routes.account_login_url }}">
+    <meta name="bs-favorites-endpoint" content="/apps/favorites">
+    {%- if customer -%}
+      <script id="bs-favorites-bootstrap" type="application/json">
+        {{ customer.metafields.favorites.handles.value | json }}
+      </script>
+    {%- endif -%}
+    {{ 'favorites.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'favorites.js' | asset_url }}" defer="defer"></script>
+
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
       assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
