@@ -6,15 +6,18 @@
 }
 
 .product-form__buttons > .product-form__submit {
-  flex: 0 0 75%;
-  width: 75%;
+  flex: 0 0 83.3333%;
+  width: 83.3333%;
   min-width: 0;
+  margin: 0;
 }
 
 .product-form__favorite {
-  flex: 0 0 25%;
-  width: 25%;
+  flex: 0 0 16.6667%;
+  width: 16.6667%;
   align-self: stretch;
+  height: auto;
+  min-height: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -23,6 +26,7 @@
   border-radius: var(--buttons-radius, 0);
   cursor: pointer;
   padding: 0;
+  margin: 0;
   transition: background 0.15s ease;
 }
 
