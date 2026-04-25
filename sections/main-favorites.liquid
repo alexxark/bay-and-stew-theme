@@ -38,9 +38,7 @@
             {%- for v in p.variants -%}
               "{{ v.id }}":{
                 "tracked":{% if v.inventory_management == 'shopify' and v.inventory_policy != 'continue' %}true{% else %}false{% endif %},
-                "qty":{{ v.inventory_quantity | default: 0 }},
-                "price":{{ v.price | default: 0 }},
-                "compare_at_price":{% if v.compare_at_price %}{{ v.compare_at_price }}{% else %}null{% endif %}
+                "qty":{{ v.inventory_quantity | default: 0 }}
               }{% unless forloop.last %},{% endunless %}
             {%- endfor -%}
             }{% unless forloop.last %},{% endunless %}
@@ -49,6 +47,40 @@
         }
       {%- endcapture -%}
       <script type="application/json" data-bs-favorites-inventory>{{ fav_inventory_json }}</script>
+
+      {%- comment -%}
+        Hidden price bootstrap: render the standard BSS-aware price markup
+        for every favorited variant. The BSS B2B app naturally observes
+        these elements at page load and rewrites them with the customer's
+        wholesale price. The favorites JS then clones the already-correct
+        HTML into each visible variant row, so wholesale pricing "just
+        works" without us having to hand off to BSS at runtime.
+      {%- endcomment -%}
+      <div data-bs-favorites-prices hidden aria-hidden="true" style="display:none">
+        {%- for handle in fav_handles -%}
+          {%- assign p = all_products[handle] -%}
+          {%- if p and p.id -%}
+            {%- for v in p.variants -%}
+              <span
+                data-bs-fav-price
+                data-bs-handle="{{ handle }}"
+                data-bs-variant="{{ v.id }}"
+                bss-b2b-product-id="{{ p.id }}"
+                bss-b2b-product-price
+                bss-b2b-variant-price
+                bss-b2b-variant-id="{{ v.id }}"
+              >
+                {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+                  <s class="bs-fav-variant__compare">{{ v.compare_at_price | money }}</s>
+                  <span class="bs-fav-variant__sale">{{ v.price | money }}</span>
+                {%- else -%}
+                  {{ v.price | money }}
+                {%- endif -%}
+              </span>
+            {%- endfor -%}
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
     {%- endif -%}
   {%- endunless -%}
 </div>

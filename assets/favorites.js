@@ -440,7 +440,11 @@
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
-          '<span class="bs-fav-variant__price">' +
+          '<span class="bs-fav-variant__price"' +
+            ' data-bs-fav-price-mirror' +
+            ' data-bs-handle="' + escapeHtml(productHandle) + '"' +
+            ' data-bs-variant="' + variant.id + '"' +
+          '>' +
             buildPriceHtml(variant, productHandle) +
           '</span>' +
         '</div>' +
@@ -453,19 +457,34 @@
   // pricing for the signed-in customer) when available, falling back to the
   // public price from /products/handle.js for guests.
   function buildPriceHtml(variant, productHandle) {
-    const inv = getVariantInventory(productHandle, variant.id);
-    let price = variant.price;
-    let compareAt = variant.compare_at_price;
-    if (inv && typeof inv.price === 'number') price = inv.price;
-    if (inv && typeof inv.compare_at_price === 'number') compareAt = inv.compare_at_price;
-    const onSale = compareAt && compareAt > price;
+    // Prefer the BSS-aware Liquid bootstrap, which has been observed and
+    // potentially rewritten by the BSS B2B app on page load with the
+    // customer's wholesale price.
+    const bootstrap = document.querySelector(
+      '[data-bs-fav-price][data-bs-handle="' +
+        cssEscape(productHandle) +
+        '"][data-bs-variant="' +
+        variant.id +
+        '"]'
+    );
+    if (bootstrap) return bootstrap.innerHTML.trim();
+
+    // Fallback: storefront public price (used for products that weren't in
+    // the bootstrap, e.g. items added to favorites after page load).
+    const compareAt = variant.compare_at_price;
+    const onSale = compareAt && compareAt > variant.price;
     if (onSale) {
       return (
         '<s class="bs-fav-variant__compare">' + formatMoney(compareAt) + '</s> ' +
-        '<span class="bs-fav-variant__sale">' + formatMoney(price) + '</span>'
+        '<span class="bs-fav-variant__sale">' + formatMoney(variant.price) + '</span>'
       );
     }
-    return formatMoney(price);
+    return formatMoney(variant.price);
+  }
+
+  function cssEscape(str) {
+    if (window.CSS && typeof CSS.escape === 'function') return CSS.escape(str);
+    return String(str).replace(/(["\\])/g, '\\$1');
   }
 
   function buildItemElement(product) {
@@ -714,6 +733,7 @@
     const page = document.querySelector('[data-bs-favorites-page]');
     if (!page) return;
     if (page.getAttribute('data-logged-in') !== 'true') return;
+    initBssPriceMirroring();
     renderFavoritesPage();
     // Re-render on any external change (e.g. server pull bringing new items).
     document.addEventListener(EVENT_CHANGED, () => {
@@ -726,6 +746,56 @@
         renderFavoritesPage();
       });
     }
+  }
+
+  // Watch the hidden BSS price bootstrap. When the BSS B2B app rewrites a
+  // bootstrap span with the wholesale price, mirror that HTML into every
+  // visible favorites row that displays the same variant. This keeps the
+  // favorites page in sync regardless of whether BSS finishes before or
+  // after we render rows from /products/handle.js.
+  function initBssPriceMirroring() {
+    const bootstrap = document.querySelector('[data-bs-favorites-prices]');
+    if (!bootstrap || typeof MutationObserver === 'undefined') return;
+    const sync = (sourceEl) => {
+      if (!sourceEl) return;
+      const handle = sourceEl.getAttribute('data-bs-handle');
+      const variantId = sourceEl.getAttribute('data-bs-variant');
+      if (!handle || !variantId) return;
+      const html = sourceEl.innerHTML.trim();
+      if (!html) return;
+      document
+        .querySelectorAll(
+          '[data-bs-fav-price-mirror][data-bs-handle="' +
+            cssEscape(handle) +
+            '"][data-bs-variant="' +
+            variantId +
+            '"]'
+        )
+        .forEach((target) => {
+          if (target.innerHTML.trim() !== html) target.innerHTML = html;
+        });
+    };
+    const observer = new MutationObserver((mutations) => {
+      const seen = new Set();
+      mutations.forEach((m) => {
+        const el = m.target.closest && m.target.closest('[data-bs-fav-price]');
+        if (el && !seen.has(el)) {
+          seen.add(el);
+          sync(el);
+        }
+      });
+    });
+    observer.observe(bootstrap, {
+      subtree: true,
+      childList: true,
+      characterData: true,
+      attributes: true,
+    });
+    // Also do an initial sync on a short delay so any synchronous BSS work
+    // that ran before our observer attached still gets mirrored.
+    setTimeout(() => {
+      bootstrap.querySelectorAll('[data-bs-fav-price]').forEach(sync);
+    }, 250);
   }
 
   document.addEventListener('DOMContentLoaded', initFavoritesPageIfPresent);
