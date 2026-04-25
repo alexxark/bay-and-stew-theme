@@ -43,15 +43,14 @@
 .product-form__favorite .icon-heart {
   width: 22px;
   height: 22px;
-  fill: transparent;
-  stroke: rgb(var(--color-foreground));
-  stroke-width: 1.4;
+  color: rgb(var(--color-foreground));
+  fill: none;
   transition: fill 0.15s ease;
 }
 
 .product-form__favorite.is-active .icon-heart,
 .bs-favorite-icon-btn.is-active .icon-heart {
-  fill: rgb(var(--color-foreground));
+  fill: currentColor;
 }
 
 /* When dynamic checkout is shown the buttons stack — keep heart inline */
@@ -63,9 +62,12 @@
 .header__icon--favorites .icon-heart {
   width: 22px;
   height: 22px;
-  fill: transparent;
-  stroke: rgb(var(--color-foreground));
-  stroke-width: 1.4;
+  color: rgb(var(--color-foreground));
+  fill: none;
+}
+
+.header__icon--favorites.is-active .icon-heart {
+  fill: currentColor;
 }
 
 /* ---------- Sign-in modal ---------- */
