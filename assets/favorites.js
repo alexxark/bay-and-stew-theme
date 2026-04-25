@@ -440,7 +440,15 @@
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
-          '<span class="bs-fav-variant__price">' + formatMoney(variant.price) + '</span>' +
+          // BSS B2B attributes let the wholesale-pricing app overwrite the
+          // displayed price for signed-in wholesale customers. We render the
+          // public storefront price as a fallback for everyone else.
+          '<span class="bs-fav-variant__price"' +
+            ' bss-b2b-product-id="' + variant.product_id + '"' +
+            ' bss-b2b-product-price' +
+            ' bss-b2b-variant-price' +
+            ' bss-b2b-variant-id="' + variant.id + '"' +
+          '>' + formatMoney(variant.price) + '</span>' +
         '</div>' +
         control +
       '</div>'
@@ -680,6 +688,7 @@
             const el = buildItemElement(product);
             attachItemHandlers(el);
             list.appendChild(el);
+            triggerBSSPriceRefresh(el);
           })
           .catch(() => {
             /* product missing — silently skip and clean storage */
@@ -687,6 +696,35 @@
           });
       });
     });
+  }
+
+  // Tell the BSS B2B wholesale-pricing app to repaint prices on the given
+  // container. Mirrors the recipe used by the collection grid's load-more.
+  function triggerBSSPriceRefresh(container) {
+    if (!container) return;
+    try {
+      document.dispatchEvent(
+        new CustomEvent('shopify:section:load', { bubbles: true })
+      );
+      container.dispatchEvent(
+        new CustomEvent('bss:content:updated', { bubbles: true })
+      );
+      if (window.BSSB2B && typeof window.BSSB2B.refresh === 'function') {
+        window.BSSB2B.refresh();
+      }
+      if (window.BSSCommerce && typeof window.BSSCommerce.initPrices === 'function') {
+        window.BSSCommerce.initPrices(container);
+      }
+      // Poke any MutationObserver-based listeners.
+      container.querySelectorAll('[bss-b2b-product-price]').forEach((el) => {
+        el.setAttribute('data-bss-refresh', Date.now());
+      });
+      document.dispatchEvent(
+        new CustomEvent('price:refresh', { detail: { container: container } })
+      );
+    } catch (e) {
+      /* non-fatal */
+    }
   }
 
   function initFavoritesPageIfPresent() {
