@@ -13,8 +13,12 @@ if (!customElements.get('product-info')) {
 
       constructor() {
         super();
+      }
 
-        this.quantityInput = this.querySelector('.quantity__input');
+      // Always re-query so we pick up the current input after the qty form
+      // has been re-rendered (e.g. swapping between input and "max in cart").
+      get quantityInput() {
+        return this.querySelector('.quantity__input');
       }
 
       connectedCallback() {
@@ -34,14 +38,15 @@ if (!customElements.get('product-info')) {
       }
 
       initQuantityHandlers() {
-        if (!this.quantityInput) return;
-
         this.quantityForm = this.querySelector('.product-form__quantity');
-        if (!this.quantityForm) return;
-
-        this.setQuantityBoundries();
+        // Always subscribe to cart updates so that even when the qty input is
+        // hidden (e.g. when "max in cart" was rendered server-side), removing
+        // the item from the cart re-fetches the section and restores the UI.
         if (!this.dataset.originalSection) {
           this.cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, this.fetchQuantityRules.bind(this));
+        }
+        if (this.quantityInput && this.quantityForm) {
+          this.setQuantityBoundries();
         }
       }
 
@@ -339,41 +344,50 @@ if (!customElements.get('product-info')) {
         const currentVariantId = this.productForm?.variantIdInput?.value;
         if (!currentVariantId) return;
 
-        this.querySelector('.quantity__rules-cart .loading__spinner').classList.remove('hidden');
+        const spinner = this.querySelector('.quantity__rules-cart .loading__spinner');
+        spinner?.classList.remove('hidden');
         fetch(`${this.dataset.url}?variant=${currentVariantId}&section_id=${this.dataset.section}`)
           .then((response) => response.text())
           .then((responseText) => {
             const html = new DOMParser().parseFromString(responseText, 'text/html');
             this.updateQuantityRules(this.dataset.section, html);
+            this.refreshSubmitButtonFromHtml(html);
           })
           .catch((e) => console.error(e))
-          .finally(() => this.querySelector('.quantity__rules-cart .loading__spinner').classList.add('hidden'));
+          .finally(() => spinner?.classList.add('hidden'));
+      }
+
+      // Re-render the qty form area entirely so that toggling between
+      // <quantity-input> and the "max in cart" text works in both directions
+      // without relying on the existing input being present.
+      refreshQuantityFormFromHtml(sectionId, html) {
+        const containerId = `Quantity-Form-${sectionId}`;
+        const current = this.querySelector(`#${containerId}`);
+        const updated = html.getElementById(containerId);
+        if (!current || !updated) return false;
+        current.innerHTML = updated.innerHTML;
+        // Reacquire references after DOM swap.
+        this.quantityForm = this.querySelector('.product-form__quantity');
+        return true;
+      }
+
+      // Re-sync the submit button label/disabled state from a freshly fetched
+      // section. Used on cart updates so "Sold out" / "Add to cart" reflects
+      // the latest cart-vs-inventory state without a full page reload.
+      refreshSubmitButtonFromHtml(html) {
+        const updatedBtn = html.getElementById(`ProductSubmitButton-${this.dataset.section}`);
+        if (!updatedBtn || !this.productForm) return;
+        const disabled = updatedBtn.hasAttribute('disabled');
+        const label = updatedBtn.querySelector('span')?.textContent?.trim() || '';
+        this.productForm.toggleSubmitButton(disabled, label);
       }
 
       updateQuantityRules(sectionId, html) {
+        // Always re-render the entire quantity form so that input <-> badge
+        // swaps work cleanly.
+        this.refreshQuantityFormFromHtml(sectionId, html);
         if (!this.quantityInput) return;
         this.setQuantityBoundries();
-
-        const quantityFormUpdated = html.getElementById(`Quantity-Form-${sectionId}`);
-        const selectors = ['.quantity__input', '.quantity__rules', '.quantity__label'];
-        for (let selector of selectors) {
-          const current = this.quantityForm.querySelector(selector);
-          const updated = quantityFormUpdated.querySelector(selector);
-          if (!current || !updated) continue;
-          if (selector === '.quantity__input') {
-            const attributes = ['data-cart-quantity', 'data-min', 'data-max', 'step'];
-            for (let attribute of attributes) {
-              const valueUpdated = updated.getAttribute(attribute);
-              if (valueUpdated !== null) {
-                current.setAttribute(attribute, valueUpdated);
-              } else {
-                current.removeAttribute(attribute);
-              }
-            }
-          } else {
-            current.innerHTML = updated.innerHTML;
-          }
-        }
       }
 
       get productForm() {

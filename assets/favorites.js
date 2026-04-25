@@ -698,6 +698,13 @@
     document.addEventListener(EVENT_CHANGED, () => {
       renderFavoritesPage();
     });
+    // Re-render when the cart changes (item removed, qty edited, etc.) so
+    // inventory caps and "Max in cart" badges stay accurate without a reload.
+    if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+      subscribe(PUB_SUB_EVENTS.cartUpdate, () => {
+        renderFavoritesPage();
+      });
+    }
   }
 
   document.addEventListener('DOMContentLoaded', initFavoritesPageIfPresent);

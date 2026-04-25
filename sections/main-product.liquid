@@ -328,10 +328,7 @@
                       endif
                     -%}
                     {%- if bss_max_in_cart -%}
-                      <div class="quantity__max-in-cart" role="status">
-                        <span class="quantity__max-in-cart-badge">Max in cart</span>
-                        <p class="quantity__max-in-cart-note">You already have all available stock in your cart.</p>
-                      </div>
+                      <p class="quantity__max-in-cart-note" role="status">All available stock in cart</p>
                     {%- else -%}
                     <quantity-input class="quantity" data-url="{{ product.url }}" data-section="{{ section.id }}">
                       <button class="quantity__button" name="minus" type="button">

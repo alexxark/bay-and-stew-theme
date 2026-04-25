@@ -97,10 +97,8 @@
             <span>
               {%- if bss_product__selected_or_first_available_variant == null -%}
                 {{ 'products.product.unavailable' | t }}
-              {%- elsif bss_product__selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+              {%- elsif bss_product__selected_or_first_available_variant.available == false or quantity_rule_soldout or bss_max_in_cart -%}
                 {{ 'products.product.sold_out' | t }}
-              {%- elsif bss_max_in_cart -%}
-                Max in cart
               {%- else -%}
                 {{ 'products.product.add_to_cart' | t }}
               {%- endif -%}
