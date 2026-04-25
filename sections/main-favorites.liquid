@@ -19,6 +19,34 @@
     <div data-bs-favorites-root>
       <p class="bs-favorites__loading">Loading your favorites…</p>
     </div>
+
+    {%- comment -%}
+      Server-rendered inventory map for the customer's favorited products.
+      Storefront product JSON (/products/handle.js) does NOT expose
+      inventory_quantity, so we emit it from Liquid here for the JS to use
+      when enforcing the qty cap.
+    {%- endcomment -%}
+    {%- assign fav_handles = customer.metafields.favorites.handles.value -%}
+    {%- if fav_handles -%}
+      {%- capture fav_inventory_json -%}
+        {
+        {%- for handle in fav_handles -%}
+          {%- assign p = all_products[handle] -%}
+          {%- if p and p.id -%}
+            "{{ handle }}":{
+            {%- for v in p.variants -%}
+              "{{ v.id }}":{
+                "tracked":{% if v.inventory_management == 'shopify' and v.inventory_policy != 'continue' %}true{% else %}false{% endif %},
+                "qty":{{ v.inventory_quantity | default: 0 }}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endif -%}
+        {%- endfor -%}
+        }
+      {%- endcapture -%}
+      <script type="application/json" data-bs-favorites-inventory>{{ fav_inventory_json }}</script>
+    {%- endif -%}
   {%- endunless -%}
 </div>
 

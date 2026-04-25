@@ -351,15 +351,40 @@
     });
   }
 
-  function buildVariantRow(variant) {
+  // Server-rendered inventory map (handle -> variantId -> {tracked, qty}).
+  // Storefront product JSON omits inventory_quantity, so we rely on this.
+  let __invMap = null;
+  function getInventoryMap() {
+    if (__invMap) return __invMap;
+    const node = document.querySelector('script[data-bs-favorites-inventory]');
+    if (!node) { __invMap = {}; return __invMap; }
+    try { __invMap = JSON.parse(node.textContent || '{}'); }
+    catch (e) { __invMap = {}; }
+    return __invMap;
+  }
+  function getVariantInventory(handle, variantId) {
+    const map = getInventoryMap();
+    const p = map && map[handle];
+    if (!p) return null;
+    return p[variantId] || null;
+  }
+
+  function buildVariantRow(variant, productHandle) {
     const sold = !variant.available;
-    // Cap the qty at real inventory when Shopify is tracking, overselling is
-    // disabled, AND inventory_quantity is actually exposed in the product JSON
-    // (it's often omitted on the storefront). Otherwise leave open-ended so we
+    // Prefer server-rendered inventory (Liquid). Fall back to product JSON
+    // when present. If neither tells us the count, leave open-ended so we
     // don't accidentally clamp to 0 and brick the plus button.
-    const tracked = variant.inventory_management === 'shopify' && variant.inventory_policy !== 'continue';
-    const hasInvCount = tracked && typeof variant.inventory_quantity === 'number';
-    const invMax = hasInvCount ? Math.max(0, variant.inventory_quantity) : null;
+    const inv = getVariantInventory(productHandle, variant.id);
+    let invMax = null;
+    if (inv && inv.tracked) {
+      invMax = Math.max(0, parseInt(inv.qty, 10) || 0);
+    } else if (
+      variant.inventory_management === 'shopify' &&
+      variant.inventory_policy !== 'continue' &&
+      typeof variant.inventory_quantity === 'number'
+    ) {
+      invMax = Math.max(0, variant.inventory_quantity);
+    }
     const maxAttr = invMax !== null ? ' max="' + invMax + '" data-inventory-max="' + invMax + '"' : '';
     return (
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
@@ -392,7 +417,7 @@
         '<button type="button" class="bs-fav-item__remove" data-fav-remove>Remove from favorites</button>' +
         '<h2 class="bs-fav-item__title"><a href="' + product.url + '">' + escapeHtml(product.title) + '</a></h2>' +
         '<div class="bs-fav-item__variants">' +
-          product.variants.map(buildVariantRow).join('') +
+          product.variants.map((v) => buildVariantRow(v, product.handle)).join('') +
         '</div>' +
         '<div class="bs-fav-item__actions">' +
           '<button type="button" class="button button--primary bs-fav-item__add" data-fav-add>Add to cart</button>' +
