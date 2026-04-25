@@ -369,6 +369,29 @@
     return p[variantId] || null;
   }
 
+  // Live cart map: variantId -> quantity already in cart. Used to subtract
+  // from the inventory cap so users can't add more than what's left.
+  let __cartMap = {};
+  function loadCartMap() {
+    return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+      .then((r) => r.json())
+      .then((c) => {
+        const next = {};
+        (c.items || []).forEach((i) => {
+          next[i.id] = (next[i.id] || 0) + i.quantity;
+        });
+        __cartMap = next;
+        return __cartMap;
+      })
+      .catch(() => {
+        __cartMap = {};
+        return __cartMap;
+      });
+  }
+  function getCartQty(variantId) {
+    return (__cartMap && __cartMap[variantId]) || 0;
+  }
+
   function buildVariantRow(variant, productHandle) {
     const sold = !variant.available;
     // Prefer server-rendered inventory (Liquid). Fall back to product JSON
@@ -385,21 +408,41 @@
     ) {
       invMax = Math.max(0, variant.inventory_quantity);
     }
-    const maxAttr = invMax !== null ? ' max="' + invMax + '" data-inventory-max="' + invMax + '"' : '';
+    // Subtract whatever the customer already has in their cart for this
+    // variant so the qty cap reflects what they can still add.
+    const inCart = getCartQty(variant.id);
+    const remaining = invMax !== null ? Math.max(0, invMax - inCart) : null;
+    const maxedOut = invMax !== null && remaining === 0 && inCart > 0;
+    const maxAttr =
+      remaining !== null
+        ? ' max="' + remaining + '" data-inventory-max="' + remaining + '"'
+        : '';
+
+    let control;
+    if (sold) {
+      control = '<span class="bs-fav-variant__sold-out">Sold out</span>';
+    } else if (maxedOut) {
+      control = '<span class="bs-fav-variant__sold-out" title="You already have the maximum quantity in your cart.">Max in cart</span>';
+    } else {
+      control =
+        '<div class="bs-fav-variant__control">' +
+          '<div class="bs-fav-qty" data-qty>' +
+            '<button type="button" data-qty-step="-1" aria-label="Decrease">−</button>' +
+            '<input type="number" min="0" step="1" value="0"' + maxAttr +
+              ' aria-label="Quantity for ' + escapeHtml(variant.title) + '">' +
+            '<button type="button" data-qty-step="1" aria-label="Increase">+</button>' +
+          '</div>' +
+          '<span class="bs-fav-variant__warning" role="status" aria-live="polite" hidden></span>' +
+        '</div>';
+    }
+
     return (
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
           '<span class="bs-fav-variant__price">' + formatMoney(variant.price) + '</span>' +
         '</div>' +
-        (sold
-          ? '<span class="bs-fav-variant__sold-out">Sold out</span>'
-          : '<div class="bs-fav-qty" data-qty>' +
-              '<button type="button" data-qty-step="-1" aria-label="Decrease">−</button>' +
-              '<input type="number" min="0" step="1" value="0"' + maxAttr +
-                ' aria-label="Quantity for ' + escapeHtml(variant.title) + '">' +
-              '<button type="button" data-qty-step="1" aria-label="Increase">+</button>' +
-            '</div>') +
+        control +
       '</div>'
     );
   }
@@ -510,8 +553,35 @@
     let v = parseInt(input.value, 10);
     if (isNaN(v) || v < 0) v = 0;
     const max = parseInt(input.max, 10);
-    if (!isNaN(max) && v > max) v = max;
+    let clamped = false;
+    if (!isNaN(max) && v > max) {
+      v = max;
+      clamped = true;
+    }
     input.value = v;
+    if (clamped) flashQtyWarning(input, max);
+  }
+
+  function flashQtyWarning(input, max) {
+    const row = input.closest('.bs-fav-variant');
+    if (!row) return;
+    const warn = row.querySelector('.bs-fav-variant__warning');
+    if (!warn) return;
+    warn.textContent =
+      max > 0 ? 'Only ' + max + ' more available' : 'Max quantity reached';
+    warn.hidden = false;
+    // Force reflow so the transition plays even on rapid clicks.
+    // eslint-disable-next-line no-unused-expressions
+    warn.offsetHeight;
+    warn.classList.add('is-visible');
+    if (warn._t) clearTimeout(warn._t);
+    warn._t = setTimeout(() => {
+      warn.classList.remove('is-visible');
+      // Hide after fade-out completes.
+      setTimeout(() => {
+        if (!warn.classList.contains('is-visible')) warn.hidden = true;
+      }, 250);
+    }, 2200);
   }
 
   function attachItemHandlers(itemEl) {
@@ -523,7 +593,15 @@
       if (step) {
         const input = step.parentElement.querySelector('input');
         const dir = parseInt(step.getAttribute('data-qty-step'), 10);
-        const next = Math.max(0, (parseInt(input.value, 10) || 0) + dir);
+        const current = parseInt(input.value, 10) || 0;
+        const max = parseInt(input.max, 10);
+        // If pressing + while already at the inventory cap, surface the
+        // warning ourselves — clampQty would be a no-op.
+        if (dir > 0 && !isNaN(max) && current >= max) {
+          flashQtyWarning(input, max);
+          return;
+        }
+        const next = Math.max(0, current + dir);
         input.value = next;
         clampQty(input);
         return;
@@ -549,7 +627,11 @@
           .then(() => {
             setStatus(itemEl, 'Added to cart.', 'success');
             itemEl.querySelectorAll('input[type="number"]').forEach((i) => (i.value = 0));
-            return refreshCartUI();
+            // Refresh both the drawer and our local cart map, then re-render
+            // the favorites list so updated caps + "Max in cart" badges show.
+            return Promise.all([refreshCartUI(), loadCartMap()]).then(() => {
+              renderFavoritesPage();
+            });
           })
           .catch((err) => {
             setStatus(itemEl, (err && err.description) || 'Could not add to cart.', 'error');
@@ -572,17 +654,21 @@
     }
     root.innerHTML = '<ul class="bs-favorites__list"></ul>';
     const list = root.querySelector('.bs-favorites__list');
-    handles.forEach((handle) => {
-      fetchProduct(handle)
-        .then((product) => {
-          const el = buildItemElement(product);
-          attachItemHandlers(el);
-          list.appendChild(el);
-        })
-        .catch(() => {
-          /* product missing — silently skip and clean storage */
-          remove(handle);
-        });
+    // Refresh the cart map first so inventory caps subtract what's already
+    // in the cart and "Max in cart" badges render correctly.
+    loadCartMap().then(() => {
+      handles.forEach((handle) => {
+        fetchProduct(handle)
+          .then((product) => {
+            const el = buildItemElement(product);
+            attachItemHandlers(el);
+            list.appendChild(el);
+          })
+          .catch(() => {
+            /* product missing — silently skip and clean storage */
+            remove(handle);
+          });
+      });
     });
   }
 
