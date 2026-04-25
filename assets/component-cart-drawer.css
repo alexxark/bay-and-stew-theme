@@ -7,12 +7,19 @@
   height: 100%;
   display: flex;
   justify-content: flex-end;
-  background-color: rgba(var(--color-foreground), 0.5);
-  transition: visibility var(--duration-default) ease;
+  background-color: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-default) ease,
+              background-color var(--duration-default) ease,
+              visibility var(--duration-default) ease;
 }
 
 .drawer.active {
   visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  background-color: rgba(var(--color-foreground), 0.5);
 }
 
 .drawer__inner {
