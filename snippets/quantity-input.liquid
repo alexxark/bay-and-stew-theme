@@ -10,6 +10,33 @@
   {% render 'quantity-input' variant: variant %}
 {% endcomment %}
 
+{%- liquid
+  # Cap the max based on real inventory when Shopify is tracking inventory
+  # and overselling is not allowed. Falls back to the merchant-set
+  # quantity_rule.max otherwise.
+  assign rule_max = variant.quantity_rule.max
+  assign inventory_max = nil
+  if variant.inventory_management == 'shopify' and variant.inventory_policy != 'continue'
+    assign inventory_max = variant.inventory_quantity
+    if inventory_max < 0
+      assign inventory_max = 0
+    endif
+  endif
+
+  assign effective_max = nil
+  if rule_max != null and inventory_max != null
+    if rule_max < inventory_max
+      assign effective_max = rule_max
+    else
+      assign effective_max = inventory_max
+    endif
+  elsif rule_max != null
+    assign effective_max = rule_max
+  elsif inventory_max != null
+    assign effective_max = inventory_max
+  endif
+-%}
+
 <quantity-input class="quantity cart-quantity">
   <button class="quantity__button" name="minus" type="button">
     <span class="visually-hidden">
@@ -27,8 +54,11 @@
     data-cart-quantity="{{ cart | item_count_for_variant: variant.id }}"
     min="{{ min }}"
     data-min="{{ variant.quantity_rule.min }}"
-    {% if variant.quantity_rule.max != null %}
-      max="{{ variant.quantity_rule.max }}"
+    {% if effective_max != null %}
+      max="{{ effective_max }}"
+    {% endif %}
+    {% if inventory_max != null %}
+      data-inventory-max="{{ inventory_max }}"
     {% endif %}
     step="{{ variant.quantity_rule.increment }}"
     {% # theme-check-enable %}

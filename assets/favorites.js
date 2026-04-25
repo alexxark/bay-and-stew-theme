@@ -353,6 +353,11 @@
 
   function buildVariantRow(variant) {
     const sold = !variant.available;
+    // Cap the qty at real inventory when Shopify is tracking and overselling
+    // is disabled. Otherwise leave open-ended.
+    const tracked = variant.inventory_management === 'shopify' && variant.inventory_policy !== 'continue';
+    const invMax = tracked ? Math.max(0, variant.inventory_quantity || 0) : null;
+    const maxAttr = invMax !== null ? ' max="' + invMax + '" data-inventory-max="' + invMax + '"' : '';
     return (
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
@@ -363,7 +368,8 @@
           ? '<span class="bs-fav-variant__sold-out">Sold out</span>'
           : '<div class="bs-fav-qty" data-qty>' +
               '<button type="button" data-qty-step="-1" aria-label="Decrease">−</button>' +
-              '<input type="number" min="0" step="1" value="0" aria-label="Quantity for ' + escapeHtml(variant.title) + '">' +
+              '<input type="number" min="0" step="1" value="0"' + maxAttr +
+                ' aria-label="Quantity for ' + escapeHtml(variant.title) + '">' +
               '<button type="button" data-qty-step="1" aria-label="Increase">+</button>' +
             '</div>') +
       '</div>'
@@ -472,7 +478,18 @@
       .catch(() => {});
   }
 
+  function clampQty(input) {
+    let v = parseInt(input.value, 10);
+    if (isNaN(v) || v < 0) v = 0;
+    const max = parseInt(input.max, 10);
+    if (!isNaN(max) && v > max) v = max;
+    input.value = v;
+  }
+
   function attachItemHandlers(itemEl) {
+    itemEl.addEventListener('input', (e) => {
+      if (e.target.matches('.bs-fav-qty input')) clampQty(e.target);
+    });
     itemEl.addEventListener('click', (e) => {
       const step = e.target.closest('[data-qty-step]');
       if (step) {
@@ -480,6 +497,7 @@
         const dir = parseInt(step.getAttribute('data-qty-step'), 10);
         const next = Math.max(0, (parseInt(input.value, 10) || 0) + dir);
         input.value = next;
+        clampQty(input);
         return;
       }
       if (e.target.closest('[data-fav-remove]')) {

@@ -239,6 +239,7 @@ class QuantityInput extends HTMLElement {
   }
 
   onInputChange(event) {
+    this.clampToMax();
     this.validateQtyRules();
   }
 
@@ -256,10 +257,22 @@ class QuantityInput extends HTMLElement {
       this.input.stepDown();
     }
 
+    this.clampToMax();
+
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
 
     if (this.input.dataset.min === previousValue && event.target.name === 'minus') {
       this.input.value = parseInt(this.input.min);
+    }
+  }
+
+  clampToMax() {
+    // <input type="number"> does not enforce max for typed values, only for
+    // stepUp(). Manually cap the input so customers cannot exceed available
+    // inventory or quantity-rule maximums.
+    const max = parseInt(this.input.max, 10);
+    if (!isNaN(max) && parseInt(this.input.value, 10) > max) {
+      this.input.value = max;
     }
   }
 
