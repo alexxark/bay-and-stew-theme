@@ -274,6 +274,16 @@
   color: rgba(var(--color-foreground), 0.7);
 }
 
+.bs-fav-variant__compare {
+  color: rgba(var(--color-foreground), 0.5);
+  margin-right: 0.35rem;
+}
+
+.bs-fav-variant__sale {
+  color: rgb(var(--color-sale-price, var(--color-foreground)));
+  font-weight: 600;
+}
+
 .bs-fav-variant__sold-out {
   color: rgba(var(--color-foreground), 0.5);
   font-size: 0.85rem;

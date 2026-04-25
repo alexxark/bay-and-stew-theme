@@ -440,22 +440,32 @@
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
-          // BSS B2B attributes let the wholesale-pricing app overwrite the
-          // displayed price for signed-in wholesale customers. We render the
-          // public storefront price as a fallback for everyone else, and
-          // mirror the formatted price into `data-text` since BSS uses that
-          // attribute as the label to render back into the element.
-          '<span class="bs-fav-variant__price"' +
-            ' data-text="' + escapeHtml(formatMoney(variant.price)) + '"' +
-            ' bss-b2b-product-id="' + variant.product_id + '"' +
-            ' bss-b2b-product-price' +
-            ' bss-b2b-variant-price' +
-            ' bss-b2b-variant-id="' + variant.id + '"' +
-          '>' + formatMoney(variant.price) + '</span>' +
+          '<span class="bs-fav-variant__price">' +
+            buildPriceHtml(variant, productHandle) +
+          '</span>' +
         '</div>' +
         control +
       '</div>'
     );
+  }
+
+  // Use the server-rendered price map (which respects wholesale / B2B
+  // pricing for the signed-in customer) when available, falling back to the
+  // public price from /products/handle.js for guests.
+  function buildPriceHtml(variant, productHandle) {
+    const inv = getVariantInventory(productHandle, variant.id);
+    let price = variant.price;
+    let compareAt = variant.compare_at_price;
+    if (inv && typeof inv.price === 'number') price = inv.price;
+    if (inv && typeof inv.compare_at_price === 'number') compareAt = inv.compare_at_price;
+    const onSale = compareAt && compareAt > price;
+    if (onSale) {
+      return (
+        '<s class="bs-fav-variant__compare">' + formatMoney(compareAt) + '</s> ' +
+        '<span class="bs-fav-variant__sale">' + formatMoney(price) + '</span>'
+      );
+    }
+    return formatMoney(price);
   }
 
   function buildItemElement(product) {
@@ -691,7 +701,6 @@
             const el = buildItemElement(product);
             attachItemHandlers(el);
             list.appendChild(el);
-            triggerBSSPriceRefresh(el);
           })
           .catch(() => {
             /* product missing — silently skip and clean storage */
@@ -699,26 +708,6 @@
           });
       });
     });
-  }
-
-  // Lightly notify the BSS B2B wholesale-pricing app that new price elements
-  // were added to the DOM. We intentionally avoid calling BSSCommerce.initPrices
-  // / BSSB2B.refresh directly — those wipe the inner text in some states,
-  // which left guest customers staring at empty price slots. The custom
-  // events below are enough for BSS's own MutationObserver / listeners to
-  // pick the new nodes up when wholesale rules apply.
-  function triggerBSSPriceRefresh(container) {
-    if (!container) return;
-    try {
-      container.dispatchEvent(
-        new CustomEvent('bss:content:updated', { bubbles: true })
-      );
-      document.dispatchEvent(
-        new CustomEvent('price:refresh', { detail: { container: container } })
-      );
-    } catch (e) {
-      /* non-fatal */
-    }
   }
 
   function initFavoritesPageIfPresent() {

@@ -21,10 +21,11 @@
     </div>
 
     {%- comment -%}
-      Server-rendered inventory map for the customer's favorited products.
-      Storefront product JSON (/products/handle.js) does NOT expose
-      inventory_quantity, so we emit it from Liquid here for the JS to use
-      when enforcing the qty cap.
+      Server-rendered inventory + price map for the customer's favorited
+      products. Storefront product JSON (/products/handle.js) does NOT expose
+      inventory_quantity AND returns the public price, ignoring B2B /
+      wholesale rules. Liquid sees the signed-in customer, so we emit both
+      from Liquid here for the JS to use.
     {%- endcomment -%}
     {%- assign fav_handles = customer.metafields.favorites.handles.value -%}
     {%- if fav_handles -%}
@@ -37,7 +38,9 @@
             {%- for v in p.variants -%}
               "{{ v.id }}":{
                 "tracked":{% if v.inventory_management == 'shopify' and v.inventory_policy != 'continue' %}true{% else %}false{% endif %},
-                "qty":{{ v.inventory_quantity | default: 0 }}
+                "qty":{{ v.inventory_quantity | default: 0 }},
+                "price":{{ v.price | default: 0 }},
+                "compare_at_price":{% if v.compare_at_price %}{{ v.compare_at_price }}{% else %}null{% endif %}
               }{% unless forloop.last %},{% endunless %}
             {%- endfor -%}
             }{% unless forloop.last %},{% endunless %}
