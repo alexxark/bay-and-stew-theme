@@ -401,24 +401,46 @@
   }
 
   function addItemsToCart(items) {
+    const cartDrawer = document.querySelector('cart-drawer');
+    const sectionIds = cartDrawer
+      ? cartDrawer.getSectionsToRender().map((s) => s.id)
+      : ['cart-icon-bubble'];
+
     return fetch('/cart/add.js', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify({ items: items }),
+      body: JSON.stringify({ items: items, sections: sectionIds, sections_url: window.location.pathname }),
     }).then((r) => {
       if (!r.ok) return r.json().then((err) => Promise.reject(err));
       return r.json();
     });
   }
 
-  function refreshCartUI() {
-    // Best-effort: refresh cart bubble / drawer if present.
-    const bubbles = document.querySelectorAll('cart-drawer, cart-notification, #cart-icon-bubble');
-    if (bubbles.length === 0) return;
-    fetch('/cart.js')
+  function refreshCartUI(parsedState) {
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer && parsedState && parsedState.sections) {
+      // Re-render the drawer contents with the data we already received,
+      // then open it so the customer sees the just-added items.
+      cartDrawer.renderContents(parsedState);
+      return;
+    }
+
+    const cartNotification = document.querySelector('cart-notification');
+    if (cartNotification && parsedState && parsedState.sections) {
+      cartNotification.renderContents(parsedState);
+      return;
+    }
+
+    // Fallback: at minimum, refresh the cart icon bubble.
+    fetch('/?sections=cart-icon-bubble')
       .then((r) => r.json())
-      .then((cart) => {
-        document.dispatchEvent(new CustomEvent('cart:refresh', { detail: cart }));
+      .then((data) => {
+        const bubble = document.getElementById('cart-icon-bubble');
+        if (bubble && data['cart-icon-bubble']) {
+          bubble.innerHTML = new DOMParser()
+            .parseFromString(data['cart-icon-bubble'], 'text/html')
+            .querySelector('.shopify-section').innerHTML;
+        }
       })
       .catch(() => {});
   }
@@ -451,10 +473,10 @@
         addBtn.disabled = true;
         setStatus(itemEl, 'Adding to cart…', null);
         addItemsToCart(items)
-          .then(() => {
+          .then((response) => {
             setStatus(itemEl, 'Added to cart.', 'success');
             itemEl.querySelectorAll('input[type="number"]').forEach((i) => (i.value = 0));
-            refreshCartUI();
+            refreshCartUI(response);
           })
           .catch((err) => {
             setStatus(itemEl, (err && err.description) || 'Could not add to cart.', 'error');
