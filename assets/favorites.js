@@ -422,6 +422,16 @@
       const sections = cartDrawer.getSectionsToRender().map((s) => s.id);
       return fetchCartSections(sections).then((sectionMap) => {
         cartDrawer.renderContents({ sections: sectionMap });
+        // Mirror what product-form.js does: drop the is-empty class on the
+        // host element once items have been added, otherwise CSS hides the
+        // drawer header / items area.
+        if (cartDrawer.classList.contains('is-empty')) {
+          cartDrawer.classList.remove('is-empty');
+        }
+        const inner = cartDrawer.querySelector('.drawer__inner');
+        if (inner && inner.classList.contains('is-empty')) {
+          inner.classList.remove('is-empty');
+        }
       });
     }
 
