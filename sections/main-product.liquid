@@ -132,7 +132,8 @@
                 {%- style -%}
                   #price-{{ section.id }}.product__price-row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.8rem; }
                   #price-{{ section.id }}.product__price-row .price .price-item { margin-right: 0; }
-                  #price-{{ section.id }}.product__price-row .price__sale { display: inline-flex; align-items: baseline; gap: 0.5rem; }
+                  #price-{{ section.id }}.product__price-row .price__sale { display: inline-block; }
+                  #price-{{ section.id }}.product__price-row .price__sale .price-item--sale { margin-left: 0.5rem; }
                 {%- endstyle -%}
                 {%- if template.suffix == 'chains' -%}
                   <style>
