@@ -337,6 +337,22 @@
                                       {{- 'icon-minus.svg' | inline_asset_content -}}
                                     </span>
                                   </button>
+                                  {%- liquid
+                                    assign bss_qty_rule_max = item.variant.quantity_rule.max
+                                    assign bss_inv_cap = nil
+                                    if item.variant.inventory_management == 'shopify' and item.variant.inventory_policy != 'continue'
+                                      assign bss_inv_cap = item.variant.inventory_quantity | default: 0
+                                      if bss_inv_cap < 0
+                                        assign bss_inv_cap = 0
+                                      endif
+                                    endif
+                                    assign bss_effective_max = bss_qty_rule_max
+                                    if bss_inv_cap != nil
+                                      if bss_effective_max == nil or bss_inv_cap < bss_effective_max
+                                        assign bss_effective_max = bss_inv_cap
+                                      endif
+                                    endif
+                                  -%}
                                   <input
                                     class="quantity__input"
                                     type="number"
@@ -347,8 +363,8 @@
                                     data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
                                     min="0"
                                     data-min="{{ item.variant.quantity_rule.min }}"
-                                    {% if item.variant.quantity_rule.max != null %}
-                                      max="{{ item.variant.quantity_rule.max }}"
+                                    {% if bss_effective_max != nil %}
+                                      max="{{ bss_effective_max }}"
                                     {% endif %}
                                     step="{{ item.variant.quantity_rule.increment }}"
                                     {% # theme-check-enable %}
