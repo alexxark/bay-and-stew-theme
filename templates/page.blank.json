@@ -725,7 +725,7 @@
           "type": "button",
           "settings": {
             "button_label": "USA",
-            "button_link": "https://bayandstew.com/account/register",
+            "button_link": "https://bayandstew.com/pages/wholesale-signup-form-us-based",
             "button_style_secondary": false,
             "button_label_2": "Outside of USA",
             "button_link_2": "https://bayandstew.com/pages/wholesale-signup-form-outside-us",
