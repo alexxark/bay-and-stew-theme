@@ -106,6 +106,7 @@
         "featured_collection_8hLWVW",
         "featured_collection_9a4rzP"
       ],
+      "disabled": true,
       "name": "Mega collection display",
       "settings": {
         "title": "",
@@ -307,13 +308,13 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "mega_collection_display_4mCxM7",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_wGH9Cc",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_4P4mxa",
     "pj_collection_highlight_GdFPYJ",
     "pj_collection_highlight_ge7fTB",
-    "pj_collection_highlight_NMwNTG"
+    "pj_collection_highlight_NMwNTG",
+    "mega_collection_display_4mCxM7"
   ]
 }
