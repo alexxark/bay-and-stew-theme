@@ -16,13 +16,13 @@
           "type": "slide",
           "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Hat-Banner-Relaunch.jpg",
-            "image_mobile": "shopify://shop_images/Hat-Banner-Relaunch-mobile.jpg",
+            "image": "shopify://shop_images/11_-_Memorial_Day_Sale-02_c4bbf157-a90f-49bd-90e2-6d7790b022c5.jpg",
+            "image_mobile": "shopify://shop_images/11_-_Memorial_Day_Sale-01.jpg",
             "allow_sound": true,
-            "heading": "Back by Popular Demand",
-            "subheading": "<strong>FREE TRUCKER HAT</strong> WITH <strong>ANY $150+ PURCHASE</strong>",
+            "heading": "10% Off Sitewide",
+            "subheading": "<strong>One Day Only Memorial Day Sale</strong>",
             "highlight_words": "",
-            "promo_note": "while supplies last",
+            "promo_note": "",
             "promo_link_label": "",
             "promo_details_text": "",
             "heading_size_desktop": 48,
@@ -31,7 +31,7 @@
             "subheading_size_mobile": 14,
             "gap_before_subheading": 0,
             "mobile_gap_before_subheading": 0,
-            "gap_after_subheading": 10,
+            "gap_after_subheading": 20,
             "gap_after_title": 4,
             "gap_after_promo_note": 12,
             "gap_before_buttons": -8,
@@ -49,8 +49,8 @@
             "show_text_box": false,
             "text_alignment": "left",
             "image_overlay_opacity": 0,
-            "color_scheme": "scheme-4a571c7e-f4f7-435a-a53f-bbc12c6a14e3",
-            "mobile_box_align": "top-center",
+            "color_scheme": "scheme-1",
+            "mobile_box_align": "middle-center",
             "mobile_horizontal_padding": 12,
             "mobile_button_size": 14,
             "text_alignment_mobile": "center"
@@ -150,8 +150,8 @@
             "image": "shopify://shop_images/Double-Star-Desktop.jpg",
             "image_mobile": "shopify://shop_images/Double-Star-Mobile.jpg",
             "allow_sound": true,
-            "heading": "Double Loyalty Points",
-            "subheading": "MAKERS CIRCLE EXCLUSIVE - Earn <strong>2X Points </strong>",
+            "heading": "Triple Loyalty Points",
+            "subheading": "MAKERS CIRCLE EXCLUSIVE - Earn <strong>3X Points </strong>",
             "highlight_words": "",
             "promo_note": "<a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">Exclusions Apply</a>",
             "promo_link_label": "",
@@ -288,7 +288,7 @@
             "title": "",
             "text": "",
             "link_label": "NEW",
-            "link": "https://bayandstew.com/collections/shop-all?sort_by=created-descending&filter.v.price.gte=&filter.v.price.lte="
+            "link": "https://bayandstew.com/collections/new"
           }
         },
         "column_PHjJCg": {
@@ -633,8 +633,8 @@
         "content_alignment": "center",
         "color_scheme": "scheme-2",
         "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
+        "padding_top": 48,
+        "padding_bottom": 40
       }
     },
     "featured_collection_YRmdhq": {
