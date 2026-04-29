@@ -123,11 +123,10 @@
     },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
-      "disabled": true,
       "name": "PJ Collection Highlight",
       "settings": {
         "title": "Gold Filled",
-        "heading_size": "h1",
+        "heading_size": "h2",
         "subtitle": "Shop the collection",
         "collection": "gold-filled-1",
         "image_link": "",
