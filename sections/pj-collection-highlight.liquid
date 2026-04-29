@@ -32,6 +32,15 @@
     gap: 1.2rem;
     margin-bottom: 2.4rem;
   }
+  .pj-highlight-{{ section.id }}[data-alignment='left'] .pj-highlight__header {
+    justify-content: flex-start;
+    text-align: left;
+  }
+  .pj-highlight-{{ section.id }}[data-alignment='right'] .pj-highlight__header {
+    justify-content: flex-end;
+    text-align: right;
+    flex-direction: row-reverse;
+  }
   .pj-highlight-{{ section.id }} .pj-highlight__title {
     margin: 0;
   }
@@ -117,6 +126,7 @@
   <div
     class="pj-highlight-{{ section.id }} page-width section-{{ section.id }}-padding"
     id="pj-highlight-{{ section.id }}"
+    data-alignment="{{ section.settings.alignment }}"
   >
     <div class="pj-highlight__header">
       {%- if section.settings.title != blank -%}
@@ -130,78 +140,88 @@
     </div>
 
     <ul class="pj-highlight__grid">
-      <li class="pj-highlight__image-cell">
-        {%- if section.settings.image != blank -%}
-          {%- if section.settings.image_link != blank -%}
-            <a href="{{ section.settings.image_link }}" class="pj-highlight__image">
-              <img
-                src="{{ section.settings.image | image_url: width: 1500 }}"
-                srcset="
-                  {{ section.settings.image | image_url: width: 540 }} 540w,
-                  {{ section.settings.image | image_url: width: 720 }} 720w,
-                  {{ section.settings.image | image_url: width: 1100 }} 1100w,
-                  {{ section.settings.image | image_url: width: 1500 }} 1500w
-                "
-                sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
-                alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
-                width="{{ section.settings.image.width }}"
-                height="{{ section.settings.image.height }}"
-                loading="lazy"
-              >
-            </a>
+      {%- capture image_cell -%}
+        <li class="pj-highlight__image-cell">
+          {%- if section.settings.image != blank -%}
+            {%- if section.settings.image_link != blank -%}
+              <a href="{{ section.settings.image_link }}" class="pj-highlight__image">
+                <img
+                  src="{{ section.settings.image | image_url: width: 1500 }}"
+                  srcset="
+                    {{ section.settings.image | image_url: width: 540 }} 540w,
+                    {{ section.settings.image | image_url: width: 720 }} 720w,
+                    {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                    {{ section.settings.image | image_url: width: 1500 }} 1500w
+                  "
+                  sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
+                  alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
+                  width="{{ section.settings.image.width }}"
+                  height="{{ section.settings.image.height }}"
+                  loading="lazy"
+                >
+              </a>
+            {%- else -%}
+              <div class="pj-highlight__image">
+                <img
+                  src="{{ section.settings.image | image_url: width: 1500 }}"
+                  srcset="
+                    {{ section.settings.image | image_url: width: 540 }} 540w,
+                    {{ section.settings.image | image_url: width: 720 }} 720w,
+                    {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                    {{ section.settings.image | image_url: width: 1500 }} 1500w
+                  "
+                  sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
+                  alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
+                  width="{{ section.settings.image.width }}"
+                  height="{{ section.settings.image.height }}"
+                  loading="lazy"
+                >
+              </div>
+            {%- endif -%}
           {%- else -%}
             <div class="pj-highlight__image">
-              <img
-                src="{{ section.settings.image | image_url: width: 1500 }}"
-                srcset="
-                  {{ section.settings.image | image_url: width: 540 }} 540w,
-                  {{ section.settings.image | image_url: width: 720 }} 720w,
-                  {{ section.settings.image | image_url: width: 1100 }} 1100w,
-                  {{ section.settings.image | image_url: width: 1500 }} 1500w
-                "
-                sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
-                alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
-                width="{{ section.settings.image.width }}"
-                height="{{ section.settings.image.height }}"
-                loading="lazy"
-              >
+              <div class="pj-highlight__image-placeholder">
+                {{ 'image' | placeholder_svg_tag }}
+              </div>
             </div>
           {%- endif -%}
-        {%- else -%}
-          <div class="pj-highlight__image">
-            <div class="pj-highlight__image-placeholder">
-              {{ 'image' | placeholder_svg_tag }}
-            </div>
-          </div>
-        {%- endif -%}
-      </li>
+        </li>
+      {%- endcapture -%}
 
-      {%- if collection != blank and collection.products.size > 0 -%}
-        {%- assign rendered = 0 -%}
-        {%- for product in collection.products limit: product_slots -%}
-          <li class="grid__item">
-            {% render 'card-product',
-              card_product: product,
-              media_aspect_ratio: section.settings.image_ratio,
-              image_shape: section.settings.image_shape,
-              show_secondary_image: section.settings.show_secondary_image,
-              show_vendor: section.settings.show_vendor,
-              show_rating: section.settings.show_rating,
-              lazy_load: true,
-              skip_styles: skip_card_product_styles,
-              quick_add: section.settings.quick_add,
-              section_id: section.id
-            %}
-          </li>
-          {%- assign skip_card_product_styles = true -%}
-          {%- assign rendered = rendered | plus: 1 -%}
-        {%- endfor -%}
+      {%- capture product_cells -%}
+        {%- if collection != blank and collection.products.size > 0 -%}
+          {%- for product in collection.products limit: product_slots -%}
+            <li class="grid__item">
+              {% render 'card-product',
+                card_product: product,
+                media_aspect_ratio: section.settings.image_ratio,
+                image_shape: section.settings.image_shape,
+                show_secondary_image: section.settings.show_secondary_image,
+                show_vendor: section.settings.show_vendor,
+                show_rating: section.settings.show_rating,
+                lazy_load: true,
+                skip_styles: skip_card_product_styles,
+                quick_add: section.settings.quick_add,
+                section_id: section.id
+              %}
+            </li>
+            {%- assign skip_card_product_styles = true -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- for i in (1..product_slots) -%}
+            <li class="grid__item">
+              {% render 'card-product', show_vendor: section.settings.show_vendor %}
+            </li>
+          {%- endfor -%}
+        {%- endif -%}
+      {%- endcapture -%}
+
+      {%- if section.settings.alignment == 'right' -%}
+        {{ product_cells }}
+        {{ image_cell }}
       {%- else -%}
-        {%- for i in (1..product_slots) -%}
-          <li class="grid__item">
-            {% render 'card-product', show_vendor: section.settings.show_vendor %}
-          </li>
-        {%- endfor -%}
+        {{ image_cell }}
+        {{ product_cells }}
       {%- endif -%}
     </ul>
 
@@ -244,6 +264,17 @@
       "default": "Shop the collection",
       "label": "Side text",
       "info": "Smaller text shown next to the heading."
+    },
+    {
+      "type": "select",
+      "id": "alignment",
+      "options": [
+        { "value": "left", "label": "Left (image on left)" },
+        { "value": "right", "label": "Right (image on right)" }
+      ],
+      "default": "left",
+      "label": "Alignment",
+      "info": "Aligns the heading and moves the highlight image to the matching side."
     },
     {
       "type": "collection",
