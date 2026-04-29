@@ -140,7 +140,7 @@
       "settings": {
         "title": "Charms",
         "heading_size": "h2",
-        "subtitle": "Shop the collection",
+        "subtitle": "",
         "alignment": "left",
         "collection": "charms-pj",
         "image": "shopify://shop_images/IMG_8326.jpg",
@@ -166,7 +166,7 @@
       "settings": {
         "title": "Findings",
         "heading_size": "h2",
-        "subtitle": "Shop the collection",
+        "subtitle": "",
         "alignment": "right",
         "collection": "findings-pj",
         "image": "shopify://shop_images/f2.jpg",
@@ -192,7 +192,7 @@
       "settings": {
         "title": "Jump Rings",
         "heading_size": "h2",
-        "subtitle": "Shop the collection",
+        "subtitle": "",
         "alignment": "left",
         "collection": "jump-rings-pj",
         "image": "shopify://shop_images/JRSP-3.webp",
