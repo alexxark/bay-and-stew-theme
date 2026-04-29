@@ -13,6 +13,24 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'component-price.css' | asset_url | stylesheet_tag }}
 
+<style>
+  .collection-showcase-item { list-style: none; }
+  .collection-showcase {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--media-radius, 0);
+  }
+  .collection-showcase > img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+</style>
+
 {%- comment -%} Critical inline CSS to prevent layout shifts during price loading {%- endcomment -%}
 <style>
   /* Reserve space for price to prevent CLS */
@@ -316,6 +334,55 @@
                   %}
                 </li>
                 {%- assign skip_card_product_styles = true -%}
+
+                {%- comment -%}
+                  Collection Showcases: render image/gif tiles after a configured
+                  product position. Tiles take the same grid slot/aspect ratio as
+                  product cards so the grid layout stays intact.
+                {%- endcomment -%}
+                {%- assign current_position = forloop.index -%}
+                {%- for showcase_i in (1..5) -%}
+                  {%- assign showcase_pos_key = 'showcase_' | append: showcase_i | append: '_position' -%}
+                  {%- assign showcase_img_key = 'showcase_' | append: showcase_i | append: '_image' -%}
+                  {%- assign showcase_pos = section.settings[showcase_pos_key] -%}
+                  {%- assign showcase_img = section.settings[showcase_img_key] -%}
+                  {%- if showcase_img != blank and showcase_pos > 0 and showcase_pos == current_position -%}
+                    {%- assign showcase_ratio = 1 -%}
+                    {%- if section.settings.image_ratio == 'portrait' -%}
+                      {%- assign showcase_ratio = 0.8 -%}
+                    {%- elsif section.settings.image_ratio == 'adapt' and showcase_img.aspect_ratio -%}
+                      {%- assign showcase_ratio = showcase_img.aspect_ratio -%}
+                    {%- endif -%}
+                    <li
+                      class="grid__item collection-showcase-item{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+                      {% if settings.animations_reveal_on_scroll %}
+                        data-cascade
+                        style="--animation-order: {{ forloop.index }};"
+                      {% endif %}
+                    >
+                      <div
+                        class="collection-showcase ratio"
+                        style="--ratio-percent: {{ 1 | divided_by: showcase_ratio | times: 100 }}%;"
+                      >
+                        <img
+                          src="{{ showcase_img | image_url: width: 1100 }}"
+                          srcset="
+                            {{ showcase_img | image_url: width: 360 }} 360w,
+                            {{ showcase_img | image_url: width: 540 }} 540w,
+                            {{ showcase_img | image_url: width: 720 }} 720w,
+                            {{ showcase_img | image_url: width: 900 }} 900w,
+                            {{ showcase_img | image_url: width: 1100 }} 1100w
+                          "
+                          sizes="(min-width: 1200px) calc((100vw - 10rem) / {{ section.settings.columns_desktop }}), (min-width: 750px) calc((100vw - 10rem) / {{ section.settings.columns_desktop }}), calc((100vw - 3rem) / {{ section.settings.columns_mobile }})"
+                          alt="{{ showcase_img.alt | default: collection.title | escape }}"
+                          width="{{ showcase_img.width }}"
+                          height="{{ showcase_img.height }}"
+                          loading="lazy"
+                        >
+                      </div>
+                    </li>
+                  {%- endif -%}
+                {%- endfor -%}
               {%- endfor -%}
             </ul>
 
@@ -817,6 +884,81 @@
           "label": "t:sections.main-collection-product-grid.settings.columns_mobile.options__2.label"
         }
       ]
+    },
+    {
+      "type": "header",
+      "content": "Collection Showcases (Images/GIFs)",
+      "info": "Insert an image or GIF tile into the product grid after a chosen product position. Set position to 0 to disable a slot."
+    },
+    {
+      "type": "range",
+      "id": "showcase_1_position",
+      "min": 0,
+      "max": 36,
+      "step": 1,
+      "default": 0,
+      "label": "Showcase 1 - Product Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_1_image",
+      "label": "Showcase 1 - Image/GIF"
+    },
+    {
+      "type": "range",
+      "id": "showcase_2_position",
+      "min": 0,
+      "max": 36,
+      "step": 1,
+      "default": 0,
+      "label": "Showcase 2 - Product Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_2_image",
+      "label": "Showcase 2 - Image/GIF"
+    },
+    {
+      "type": "range",
+      "id": "showcase_3_position",
+      "min": 0,
+      "max": 36,
+      "step": 1,
+      "default": 0,
+      "label": "Showcase 3 - Product Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_3_image",
+      "label": "Showcase 3 - Image/GIF"
+    },
+    {
+      "type": "range",
+      "id": "showcase_4_position",
+      "min": 0,
+      "max": 36,
+      "step": 1,
+      "default": 0,
+      "label": "Showcase 4 - Product Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_4_image",
+      "label": "Showcase 4 - Image/GIF"
+    },
+    {
+      "type": "range",
+      "id": "showcase_5_position",
+      "min": 0,
+      "max": 36,
+      "step": 1,
+      "default": 0,
+      "label": "Showcase 5 - Product Position"
+    },
+    {
+      "type": "image_picker",
+      "id": "showcase_5_image",
+      "label": "Showcase 5 - Image/GIF"
     },
     {
       "type": "header",
