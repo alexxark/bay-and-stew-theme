@@ -1,0 +1,400 @@
+{%- comment -%}
+  ================================================================
+  PJ Collection Highlight
+  ----------------------------------------------------------------
+  Renders a heading row (large title + smaller side text) followed
+  by a single row of product cards from a chosen collection. The
+  first two card slots are replaced by one image that spans those
+  two cells (same height as a product card).
+  ================================================================
+{%- endcomment -%}
+
+<link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="{{ 'component-price.css' | asset_url }}" media="print" onload="this.media='all'">
+
+{%- style -%}
+  .section-{{ section.id }}-padding {
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    .section-{{ section.id }}-padding {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+
+  .pj-highlight-{{ section.id }} .pj-highlight__header {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 2.4rem;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__title {
+    margin: 0;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__subtitle {
+    margin: 0;
+    font-size: 1.4rem;
+    opacity: 0.75;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-mobile-horizontal-spacing, 1rem);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  @media screen and (min-width: 750px) {
+    .pj-highlight-{{ section.id }} .pj-highlight__grid {
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      gap: var(--grid-desktop-horizontal-spacing, 1.5rem);
+    }
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__image-cell {
+    grid-column: span 2;
+    grid-row: span 1;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__image {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    overflow: hidden;
+    border-radius: var(--media-radius, 0);
+    display: block;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__image img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__image-placeholder {
+    width: 100%;
+    height: 100%;
+    background: rgba(var(--color-foreground), 0.04);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__image-placeholder svg {
+    width: 60%;
+    height: auto;
+    fill: rgba(var(--color-foreground), 0.2);
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__view-all {
+    display: flex;
+    justify-content: center;
+    margin-top: 2.4rem;
+  }
+{%- endstyle -%}
+
+{%- liquid
+  assign collection = section.settings.collection
+  assign products_to_show = section.settings.products_to_show
+  assign columns_desktop = section.settings.columns_desktop
+  assign image_slots = 2
+  assign product_slots = columns_desktop | minus: image_slots
+  assign skip_card_product_styles = false
+-%}
+
+<div class="color-{{ section.settings.color_scheme }} isolate gradient">
+  <div
+    class="pj-highlight-{{ section.id }} page-width section-{{ section.id }}-padding"
+    id="pj-highlight-{{ section.id }}"
+  >
+    <div class="pj-highlight__header">
+      {%- if section.settings.title != blank -%}
+        <h2 class="pj-highlight__title title inline-richtext {{ section.settings.heading_size }}">
+          {{ section.settings.title }}
+        </h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="pj-highlight__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    <ul class="pj-highlight__grid">
+      <li class="pj-highlight__image-cell">
+        {%- if section.settings.image != blank -%}
+          {%- if section.settings.image_link != blank -%}
+            <a href="{{ section.settings.image_link }}" class="pj-highlight__image">
+              <img
+                src="{{ section.settings.image | image_url: width: 1500 }}"
+                srcset="
+                  {{ section.settings.image | image_url: width: 540 }} 540w,
+                  {{ section.settings.image | image_url: width: 720 }} 720w,
+                  {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                  {{ section.settings.image | image_url: width: 1500 }} 1500w
+                "
+                sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
+                alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
+                width="{{ section.settings.image.width }}"
+                height="{{ section.settings.image.height }}"
+                loading="lazy"
+              >
+            </a>
+          {%- else -%}
+            <div class="pj-highlight__image">
+              <img
+                src="{{ section.settings.image | image_url: width: 1500 }}"
+                srcset="
+                  {{ section.settings.image | image_url: width: 540 }} 540w,
+                  {{ section.settings.image | image_url: width: 720 }} 720w,
+                  {{ section.settings.image | image_url: width: 1100 }} 1100w,
+                  {{ section.settings.image | image_url: width: 1500 }} 1500w
+                "
+                sizes="(min-width: 750px) calc((100vw - 10rem) * (2 / {{ columns_desktop }})), 100vw"
+                alt="{{ section.settings.image.alt | default: section.settings.title | escape }}"
+                width="{{ section.settings.image.width }}"
+                height="{{ section.settings.image.height }}"
+                loading="lazy"
+              >
+            </div>
+          {%- endif -%}
+        {%- else -%}
+          <div class="pj-highlight__image">
+            <div class="pj-highlight__image-placeholder">
+              {{ 'image' | placeholder_svg_tag }}
+            </div>
+          </div>
+        {%- endif -%}
+      </li>
+
+      {%- if collection != blank and collection.products.size > 0 -%}
+        {%- assign rendered = 0 -%}
+        {%- for product in collection.products limit: product_slots -%}
+          <li class="grid__item">
+            {% render 'card-product',
+              card_product: product,
+              media_aspect_ratio: section.settings.image_ratio,
+              image_shape: section.settings.image_shape,
+              show_secondary_image: section.settings.show_secondary_image,
+              show_vendor: section.settings.show_vendor,
+              show_rating: section.settings.show_rating,
+              lazy_load: true,
+              skip_styles: skip_card_product_styles,
+              quick_add: section.settings.quick_add,
+              section_id: section.id
+            %}
+          </li>
+          {%- assign skip_card_product_styles = true -%}
+          {%- assign rendered = rendered | plus: 1 -%}
+        {%- endfor -%}
+      {%- else -%}
+        {%- for i in (1..product_slots) -%}
+          <li class="grid__item">
+            {% render 'card-product', show_vendor: section.settings.show_vendor %}
+          </li>
+        {%- endfor -%}
+      {%- endif -%}
+    </ul>
+
+    {%- if section.settings.show_view_all and collection != blank -%}
+      <div class="pj-highlight__view-all">
+        <a href="{{ collection.url }}" class="button">
+          {{ section.settings.view_all_text | default: 'View all' }}
+        </a>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "PJ Collection Highlight",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "inline_richtext",
+      "id": "title",
+      "default": "Gold Filled",
+      "label": "Heading"
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "options": [
+        { "value": "h2", "label": "Small" },
+        { "value": "h1", "label": "Medium" },
+        { "value": "h0", "label": "Large" }
+      ],
+      "default": "h1",
+      "label": "Heading size"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "default": "Shop the collection",
+      "label": "Side text",
+      "info": "Smaller text shown next to the heading."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection"
+    },
+    {
+      "type": "header",
+      "content": "Highlight image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image / GIF",
+      "info": "Spans the first two card slots in the row. Same height as a product card."
+    },
+    {
+      "type": "url",
+      "id": "image_link",
+      "label": "Image link"
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "columns_desktop",
+      "min": 4,
+      "max": 8,
+      "step": 1,
+      "default": 6,
+      "label": "Total columns (desktop)",
+      "info": "Image takes 2 columns; remaining columns show products."
+    },
+    {
+      "type": "range",
+      "id": "products_to_show",
+      "min": 2,
+      "max": 12,
+      "step": 1,
+      "default": 4,
+      "label": "Max products to show",
+      "info": "Capped by available product slots after the image."
+    },
+    {
+      "type": "header",
+      "content": "Product card"
+    },
+    {
+      "type": "select",
+      "id": "image_ratio",
+      "options": [
+        { "value": "adapt", "label": "Adapt to image" },
+        { "value": "portrait", "label": "Portrait" },
+        { "value": "square", "label": "Square" }
+      ],
+      "default": "square",
+      "label": "Image ratio"
+    },
+    {
+      "type": "select",
+      "id": "image_shape",
+      "options": [
+        { "value": "default", "label": "Default" },
+        { "value": "arch", "label": "Arch" },
+        { "value": "blob", "label": "Blob" },
+        { "value": "chevronleft", "label": "Chevron left" },
+        { "value": "chevronright", "label": "Chevron right" },
+        { "value": "diamond", "label": "Diamond" },
+        { "value": "parallelogram", "label": "Parallelogram" },
+        { "value": "round", "label": "Round" }
+      ],
+      "default": "default",
+      "label": "Image shape"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_secondary_image",
+      "default": false,
+      "label": "Show second image on hover"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "default": false,
+      "label": "Show vendor"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_rating",
+      "default": false,
+      "label": "Show rating"
+    },
+    {
+      "type": "select",
+      "id": "quick_add",
+      "default": "none",
+      "label": "Quick add",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "standard", "label": "Standard" },
+        { "value": "bulk", "label": "Bulk" }
+      ]
+    },
+    {
+      "type": "header",
+      "content": "View all"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_view_all",
+      "default": true,
+      "label": "Show 'View all' button"
+    },
+    {
+      "type": "text",
+      "id": "view_all_text",
+      "default": "View all",
+      "label": "Button text"
+    },
+    {
+      "type": "header",
+      "content": "Colors"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding top",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "label": "Padding bottom",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "PJ Collection Highlight"
+    }
+  ]
+}
+{% endschema %}
