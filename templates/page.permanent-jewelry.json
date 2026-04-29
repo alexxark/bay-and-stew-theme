@@ -123,11 +123,13 @@
     },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
+      "disabled": true,
       "name": "PJ Collection Highlight",
       "settings": {
         "title": "Gold Filled",
         "heading_size": "h2",
         "subtitle": "Shop the collection",
+        "alignment": "left",
         "collection": "gold-filled-1",
         "image_link": "",
         "columns_desktop": 6,
@@ -147,11 +149,13 @@
     },
     "pj_collection_highlight_wGH9Cc": {
       "type": "pj-collection-highlight",
+      "disabled": true,
       "name": "PJ Collection Highlight",
       "settings": {
         "title": "Gold Filled",
         "heading_size": "h2",
         "subtitle": "Shop the collection",
+        "alignment": "left",
         "collection": "gold-filled-1",
         "image_link": "",
         "columns_desktop": 6,
