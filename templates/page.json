@@ -50,7 +50,6 @@
     },
     "custom_liquid_aT7XDJ": {
       "type": "custom-liquid",
-      "disabled": true,
       "name": "t:sections.custom-liquid.presets.name",
       "settings": {
         "custom_liquid": "<!-- Elfsight Flipbook | Bay & Stew Catalog Edition 1 -->\n<script src=\"https://elfsightcdn.com/platform.js\" async></script>\n<div class=\"elfsight-app-aef19984-ba41-4013-8be0-e7549ebf8ab4\" data-elfsight-app-lazy></div>",
