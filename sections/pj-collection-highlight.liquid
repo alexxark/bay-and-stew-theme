@@ -42,7 +42,7 @@
   }
   .pj-highlight-{{ section.id }} .pj-highlight__grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: var(--grid-mobile-horizontal-spacing, 1rem);
     list-style: none;
     padding: 0;
@@ -50,9 +50,16 @@
   }
   @media screen and (min-width: 750px) {
     .pj-highlight-{{ section.id }} .pj-highlight__grid {
-      grid-template-columns: repeat({{ section.settings.columns_desktop }}, 1fr);
+      grid-template-columns: repeat({{ section.settings.columns_desktop }}, minmax(0, 1fr));
       gap: var(--grid-desktop-horizontal-spacing, 1.5rem);
     }
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__grid > li {
+    min-width: 0;
+  }
+  .pj-highlight-{{ section.id }} .pj-highlight__grid > li > .card-wrapper,
+  .pj-highlight-{{ section.id }} .pj-highlight__grid > li > .product-card-wrapper {
+    width: 100%;
   }
   .pj-highlight-{{ section.id }} .pj-highlight__image-cell {
     grid-column: span 2;
