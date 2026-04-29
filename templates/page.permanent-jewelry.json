@@ -123,6 +123,7 @@
     },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
+      "disabled": true,
       "name": "PJ Collection Highlight",
       "settings": {
         "title": "Gold Filled",
