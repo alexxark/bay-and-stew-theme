@@ -26,7 +26,7 @@
         "heading_tM3E4U": {
           "type": "heading",
           "settings": {
-            "heading": "Permanent Jewelry Supply Catalog",
+            "heading": "Jewelry Supply Catalog",
             "heading_size": "h1"
           }
         },
@@ -83,7 +83,6 @@
         "heading_4wrHEw",
         "text_ipMqWC"
       ],
-      "disabled": true,
       "name": "t:sections.image-with-text.presets.name",
       "settings": {
         "image": "shopify://shop_images/image_73e1e6b3-9357-4850-94d8-c25699c3dd60.jpg",
