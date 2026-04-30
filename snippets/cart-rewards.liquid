@@ -370,15 +370,24 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           /* Track which desired gifts already have a real row */
           const presentVids = new Set();
 
-          /* Walk every gift row in BOTH drawer and cart page */
+          /* Walk every gift row in BOTH drawer and cart page.
+             Important: REMOVE rows we don't want instead of just hiding
+             them with display:none. The BSS B2B app reads every
+             [bss-b2b-cart-item-key] / [bss-b2b-final-line-price] element
+             from the DOM regardless of visibility and sums them into the
+             VAT subtotal — hidden rows would still be double-counted. */
           document.querySelectorAll('.cart-item--reward-gift').forEach((row) => {
             const key = row.dataset.cartItemKey || '';
             /* Shopify key format: {variant_id}:{hash} — placeholder rows use just the vid */
             const vid = key.split(':')[0];
             const entry = desired.get(vid);
             const shouldShow = entry?.shouldShow ?? false;
-            row.style.display = shouldShow ? '' : 'none';
-            if (shouldShow) presentVids.add(vid);
+            if (shouldShow) {
+              row.style.display = '';
+              presentVids.add(vid);
+            } else {
+              row.remove();
+            }
           });
 
           /* Inject placeholder rows for gifts that should be visible but aren't in the DOM */
