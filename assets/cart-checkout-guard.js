@@ -157,18 +157,19 @@
     _layer1InFlight = true;
     try {
       const cart = await fetchLiveCart();
-      const rendered = readRenderedCartTotal();
       const renderedLines = readRenderedLineCount();
-      const liveTotal = typeof cart.total_price === 'number' ? cart.total_price : null;
       const liveLines = (cart.items || []).length;
 
-      const totalMismatch = rendered !== null && liveTotal !== null && rendered !== liveTotal;
+      /* NOTE: We deliberately do NOT compare /cart.js total_price against
+         the rendered total. BSS B2B applies custom volume / tier discounts
+         that /cart.js does not know about, so those two numbers legitimately
+         differ. Line count is a reliable staleness signal — if the server
+         has fewer lines than the DOM (e.g. cart-rewards removed a gift),
+         we still need to refresh. */
       const lineMismatch = renderedLines > 0 && liveLines !== renderedLines;
 
-      if (totalMismatch || lineMismatch) {
+      if (lineMismatch) {
         console.warn('[cart-checkout-guard] stale drawer detected', {
-          renderedTotal: rendered,
-          liveTotal,
           renderedLines,
           liveLines,
         });
@@ -234,17 +235,40 @@
    * previous cart state. That cached span survives our section refresh
    * because BLOY re-injects it on every cart-drawer mutation.
    *
-   * We intercept it: cache the most-recent /cart.js total, then watch
-   * .totals__total-value for any childList/characterData mutation. When the
-   * displayed text doesn't match the live total, overwrite it.
+   * Source of truth: BSS B2B writes the *real* checkout-accurate total
+   * (including its custom volume / tier discounts) into
+   *   <... class="bss-b2b-cart-vat-subtotal" data-cart-total-price="…">
+   * via the bss-b2b-tax-cart-subtotal snippet. /cart.js does NOT know
+   * about those discounts, so we cannot rely on it here. We mirror the
+   * BSS-baked value (or, when present, the BSS subtotal text) into the
+   * native .totals__total-value element so it can never disagree with
+   * what the customer will actually pay at checkout.
    */
 
+  function readBssTotalCents() {
+    const el = document.querySelector('.bss-b2b-cart-vat-subtotal[data-cart-total-price]');
+    if (!el) return null;
+    const v = parseInt(el.getAttribute('data-cart-total-price'), 10);
+    return isNaN(v) ? null : v;
+  }
+
+  function readBssTotalText() {
+    /* BSS renders a formatted price element it controls. Prefer its
+       displayed string so currency formatting matches the rest of the
+       BSS UI exactly. */
+    const el = document.querySelector(
+      '.bss-b2b-cart-vat-subtotal .bss-b2b-cart-subtotal-price, .bss-b2b-cart-vat-subtotal [bss-b2b-final-cart-price]'
+    );
+    if (!el) return null;
+    const txt = (el.textContent || '').trim();
+    return txt || null;
+  }
+
   const moneyFormat =
+    (window.theme && window.theme.moneyFormat) ||
     (window.Shopify && window.Shopify.currency && window.Shopify.currency.active === 'USD'
       ? '${{amount}}'
-      : null) ||
-    (window.theme && window.theme.moneyFormat) ||
-    '${{amount}}';
+      : '${{amount}}');
 
   function formatMoney(cents) {
     if (typeof cents !== 'number' || isNaN(cents)) return null;
@@ -259,22 +283,26 @@
     return moneyFormat.replace(/\{\{\s*amount(?:_no_decimals)?\s*\}\}/, value);
   }
 
-  let _liveTotalCents = null;
-
   function totalElements() {
     return document.querySelectorAll('.totals__total-value');
   }
 
+  function getAuthoritativeTotalText() {
+    /* 1. Prefer the BSS-rendered text (matches BSS formatting). */
+    const bssText = readBssTotalText();
+    if (bssText) return bssText;
+    /* 2. Fall back to BSS data-cart-total-price + Shopify money formatter. */
+    const bssCents = readBssTotalCents();
+    if (bssCents !== null) return formatMoney(bssCents);
+    return null;
+  }
+
   function correctTotalElements() {
-    if (_liveTotalCents === null) return;
-    const expected = formatMoney(_liveTotalCents);
+    const expected = getAuthoritativeTotalText();
     if (!expected) return;
     totalElements().forEach((el) => {
-      /* Strip any wrapper spans BLOY injects and force the correct text. */
       const current = (el.textContent || '').trim();
       if (current === expected) return;
-      /* Only overwrite if the displayed value actually differs in numeric
-         meaning (avoids fighting Shopify formatting differences). */
       const currentDigits = current.replace(/[^0-9.]/g, '');
       const expectedDigits = expected.replace(/[^0-9.]/g, '');
       if (currentDigits === expectedDigits) return;
@@ -285,24 +313,6 @@
       el.textContent = expected;
     });
   }
-
-  /* Wrap fetchLiveCart so every call updates the cached cents. */
-  const _origFetchLiveCart = fetchLiveCart;
-  // eslint-disable-next-line no-func-assign
-  fetchLiveCart = async function () {
-    const cart = await _origFetchLiveCart();
-    if (cart && typeof cart.total_price === 'number') {
-      _liveTotalCents = cart.total_price;
-      /* Defer to next tick so any in-progress section render finishes first. */
-      setTimeout(correctTotalElements, 0);
-    }
-    return cart;
-  };
-
-  /* Also poll /cart.js when the drawer opens so we have a fresh number even
-     if no other code path has fetched recently. The drawer-open observer
-     above already calls syncIfStale which calls fetchLiveCart, so this is
-     just a belt-and-braces immediate refresh on first interaction. */
 
   /* Watch the totals element(s) for any mutation by BLOY (or anything else)
      and re-apply the correct value. */
@@ -317,8 +327,27 @@
     });
   }
 
-  /* The total element gets replaced when sections refresh, so re-attach
-     watchers whenever the cart-drawer subtree mutates. */
+  /* Watch the BSS subtotal element so when BSS recalculates we re-mirror
+     its new value into the native total. */
+  function attachBssWatchers() {
+    document.querySelectorAll('.bss-b2b-cart-vat-subtotal').forEach((el) => {
+      if (el.__guardBssWatched) return;
+      el.__guardBssWatched = true;
+      const obs = new MutationObserver(() => {
+        correctTotalElements();
+      });
+      obs.observe(el, {
+        attributes: true,
+        attributeFilter: ['data-cart-total-price'],
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
+    });
+  }
+
+  /* Total / BSS elements get replaced when sections refresh, so re-attach
+     watchers whenever the cart-drawer / cart-footer subtree mutates. */
   function installFooterObserver() {
     const drawerEl = document.querySelector('cart-drawer');
     const cartPageEl = document.getElementById('main-cart-footer');
@@ -327,6 +356,7 @@
       root.__guardFooterWatched = true;
       const obs = new MutationObserver(() => {
         attachTotalWatchers();
+        attachBssWatchers();
         correctTotalElements();
       });
       obs.observe(root, { childList: true, subtree: true });
@@ -335,9 +365,12 @@
 
   function bootLayer3() {
     attachTotalWatchers();
+    attachBssWatchers();
     installFooterObserver();
-    /* Prime the cache once on load. */
-    fetchLiveCart().catch(() => {});
+    /* Run a few times in case BSS / BLOY are still initialising. */
+    setTimeout(correctTotalElements, 100);
+    setTimeout(correctTotalElements, 500);
+    setTimeout(correctTotalElements, 1500);
   }
 
   if (document.readyState === 'complete' || document.readyState === 'interactive') {
