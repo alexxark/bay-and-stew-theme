@@ -288,5 +288,124 @@
     },
     true /* capture phase */
   );
+
+  /* ---------- Layer 3: overwrite stale total injected by BLOY app ----------
+   *
+   * The BLOY loyalty app (cart.bloy.js) injects a bare <span> child into
+   * <p class="totals__total-value"> with a CACHED total computed from a
+   * previous cart state. That cached span survives our section refresh
+   * because BLOY re-injects it on every cart-drawer mutation.
+   *
+   * We intercept it: cache the most-recent /cart.js total, then watch
+   * .totals__total-value for any childList/characterData mutation. When the
+   * displayed text doesn't match the live total, overwrite it.
+   */
+
+  const moneyFormat =
+    (window.Shopify && window.Shopify.currency && window.Shopify.currency.active === 'USD'
+      ? '${{amount}}'
+      : null) ||
+    (window.theme && window.theme.moneyFormat) ||
+    '${{amount}}';
+
+  function formatMoney(cents) {
+    if (typeof cents !== 'number' || isNaN(cents)) return null;
+    if (window.Shopify && typeof window.Shopify.formatMoney === 'function') {
+      try {
+        return window.Shopify.formatMoney(cents, moneyFormat);
+      } catch (e) {
+        /* fall through */
+      }
+    }
+    const value = (cents / 100).toFixed(2);
+    return moneyFormat.replace(/\{\{\s*amount(?:_no_decimals)?\s*\}\}/, value);
+  }
+
+  let _liveTotalCents = null;
+
+  function totalElements() {
+    return document.querySelectorAll('.totals__total-value');
+  }
+
+  function correctTotalElements() {
+    if (_liveTotalCents === null) return;
+    const expected = formatMoney(_liveTotalCents);
+    if (!expected) return;
+    totalElements().forEach((el) => {
+      /* Strip any wrapper spans BLOY injects and force the correct text. */
+      const current = (el.textContent || '').trim();
+      if (current === expected) return;
+      /* Only overwrite if the displayed value actually differs in numeric
+         meaning (avoids fighting Shopify formatting differences). */
+      const currentDigits = current.replace(/[^0-9.]/g, '');
+      const expectedDigits = expected.replace(/[^0-9.]/g, '');
+      if (currentDigits === expectedDigits) return;
+      console.warn('[cart-checkout-guard] correcting stale total', {
+        was: current,
+        now: expected,
+      });
+      el.textContent = expected;
+    });
+  }
+
+  /* Wrap fetchLiveCart so every call updates the cached cents. */
+  const _origFetchLiveCart = fetchLiveCart;
+  // eslint-disable-next-line no-func-assign
+  fetchLiveCart = async function () {
+    const cart = await _origFetchLiveCart();
+    if (cart && typeof cart.total_price === 'number') {
+      _liveTotalCents = cart.total_price;
+      /* Defer to next tick so any in-progress section render finishes first. */
+      setTimeout(correctTotalElements, 0);
+    }
+    return cart;
+  };
+
+  /* Also poll /cart.js when the drawer opens so we have a fresh number even
+     if no other code path has fetched recently. The drawer-open observer
+     above already calls syncIfStale which calls fetchLiveCart, so this is
+     just a belt-and-braces immediate refresh on first interaction. */
+
+  /* Watch the totals element(s) for any mutation by BLOY (or anything else)
+     and re-apply the correct value. */
+  function attachTotalWatchers() {
+    totalElements().forEach((el) => {
+      if (el.__guardWatched) return;
+      el.__guardWatched = true;
+      const obs = new MutationObserver(() => {
+        correctTotalElements();
+      });
+      obs.observe(el, { childList: true, characterData: true, subtree: true });
+    });
+  }
+
+  /* The total element gets replaced when sections refresh, so re-attach
+     watchers whenever the cart-drawer subtree mutates. */
+  function installFooterObserver() {
+    const drawerEl = document.querySelector('cart-drawer');
+    const cartPageEl = document.getElementById('main-cart-footer');
+    [drawerEl, cartPageEl].forEach((root) => {
+      if (!root || root.__guardFooterWatched) return;
+      root.__guardFooterWatched = true;
+      const obs = new MutationObserver(() => {
+        attachTotalWatchers();
+        correctTotalElements();
+      });
+      obs.observe(root, { childList: true, subtree: true });
+    });
+  }
+
+  function bootLayer3() {
+    attachTotalWatchers();
+    installFooterObserver();
+    /* Prime the cache once on load. */
+    fetchLiveCart().catch(() => {});
+  }
+
+  if (document.readyState === 'complete' || document.readyState === 'interactive') {
+    setTimeout(bootLayer3, 0);
+  } else {
+    document.addEventListener('DOMContentLoaded', bootLayer3, { once: true });
+  }
 })();
 
