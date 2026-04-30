@@ -218,76 +218,14 @@
     }
   }
 
-  function showStaleNotice() {
-    const errorContainer =
-      document.getElementById('CartDrawer-CartErrors') || document.getElementById('cart-errors');
-    if (errorContainer) {
-      errorContainer.textContent =
-        'Your cart was out of date and has been refreshed. Please review and click Check out again.';
-    }
-  }
-
-  document.addEventListener(
-    'click',
-    function (event) {
-      const button = getCheckoutButton(event.target);
-      if (!button) return;
-      if (button.dataset.guardPassed === '1') {
-        delete button.dataset.guardPassed;
-        return;
-      }
-
-      const form =
-        button.form ||
-        (button.getAttribute('form') ? document.getElementById(button.getAttribute('form')) : null);
-      if (!form) return;
-
-      event.preventDefault();
-      event.stopPropagation();
-      setButtonLoading(button, true);
-
-      const formItemCount = sumFormUpdates(form);
-
-      fetchLiveCart()
-        .then((cart) => {
-          const liveItemCount = cart && typeof cart.item_count === 'number' ? cart.item_count : null;
-          const updatesInputs = form.querySelectorAll('input[name="updates[]"]');
-          const liveLineCount = (cart.items || []).length;
-
-          const inSync =
-            liveItemCount !== null &&
-            formItemCount === liveItemCount &&
-            updatesInputs.length === liveLineCount;
-
-          if (inSync) {
-            setButtonLoading(button, false);
-            button.dataset.guardPassed = '1';
-            if (typeof form.requestSubmit === 'function') {
-              form.requestSubmit(button);
-            } else {
-              button.click();
-            }
-            return;
-          }
-
-          return refreshSectionsFromServer().finally(() => {
-            setButtonLoading(button, false);
-            showStaleNotice();
-          });
-        })
-        .catch((err) => {
-          console.error('[cart-checkout-guard] verification failed', err);
-          setButtonLoading(button, false);
-          button.dataset.guardPassed = '1';
-          if (typeof form.requestSubmit === 'function') {
-            form.requestSubmit(button);
-          } else {
-            button.click();
-          }
-        });
-    },
-    true /* capture phase */
-  );
+  /* ---------- Layer 2: pre-checkout sync ----------
+   * Disabled: Layer 1 (drawer-open sync) plus Layer 3 (BLOY total correction)
+   * keep the form in sync without blocking checkout. The previous click
+   * intercept could prevent submission if /cart.js was momentarily slow,
+   * which the user reported as a checkout blocker. Leaving the helpers
+   * (fetchLiveCart, refreshSectionsFromServer) in place because Layers 1
+   * and 3 still use them.
+   */
 
   /* ---------- Layer 3: overwrite stale total injected by BLOY app ----------
    *
