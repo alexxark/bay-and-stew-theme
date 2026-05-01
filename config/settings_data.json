@@ -130,9 +130,10 @@
     "reward_1_label": "Free standard shipping!",
     "reward_2_threshold": "500",
     "reward_2_label": "Free rush shipping!",
-    "reward_3_threshold": "100",
-    "reward_3_label": "card deck",
-    "reward_3_product": "bay-stew-playing-card-deck",
+    "reward_3_threshold": "",
+    "reward_3_label": "",
+    "reward_3_message": "",
+    "reward_3_product": "",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
