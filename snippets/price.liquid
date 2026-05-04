@@ -149,7 +149,13 @@
           {%- assign bundle_discount_percent = product_tag | strip -%}
         {%- endif -%}
       {%- endfor -%}
-      <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
+      {%- assign sale_badge_visible = false -%}
+      {%- if available and compare_at_price > price and product.quantity_price_breaks_configured? != true -%}
+        {%- assign sale_badge_visible = true -%}
+      {%- elsif available and compare_at_price > price and product.quantity_price_breaks_configured? -%}
+        {%- assign sale_badge_visible = true -%}
+      {%- endif -%}
+      <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}{% if sale_badge_visible %} price__badge-sale--visible{% endif %}">
         {%- if has_bundles_tag and bundle_discount_percent != '' -%}
           Save {{ bundle_discount_percent }}
         {%- elsif product_type_downcase == 'pack' -%}
