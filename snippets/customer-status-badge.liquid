@@ -25,5 +25,13 @@
 {%- if customer -%}
   <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
 {%- else -%}
-  <a href="{{ routes.account_login_url }}" class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</a>
+  <span class="status-badge-wrapper {{ class }}">
+    <a href="{{ routes.account_login_url }}" class="status-badge {{ status_class }}">{{ status_text }}</a>
+    <span class="status-badge-info" tabindex="0" aria-label="Wholesale information">
+      *
+      <span class="status-badge-info__tooltip" role="tooltip">
+        Sign in to wholesale account or apply for wholesale <a href="https://bayandstew.com/pages/apply-for-wholesale">here</a> for tax free purchasing and updated pricing
+      </span>
+    </span>
+  </span>
 {%- endif -%}

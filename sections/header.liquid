@@ -87,6 +87,74 @@
     line-height: 1;
     letter-spacing: normal;
     border: 1.5px solid transparent;
+    text-decoration: none;
+  }
+
+  a.status-badge,
+  a.status-badge:hover,
+  a.status-badge:focus {
+    text-decoration: none;
+  }
+
+  .status-badge-wrapper {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    position: relative;
+  }
+
+  .status-badge-info {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    background: transparent;
+    color: inherit;
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+    cursor: help;
+    user-select: none;
+    position: relative;
+  }
+
+  .status-badge-info__tooltip {
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    bottom: calc(100% + 0.6rem);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 20;
+    width: max-content;
+    max-width: 28rem;
+    padding: 0.8rem 1rem;
+    background: #1f1f1f;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: normal;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    text-align: left;
+    transition: opacity 0.15s ease-in-out;
+  }
+
+  .status-badge-info__tooltip a {
+    color: #9cc8ff;
+    text-decoration: underline;
+  }
+
+  .status-badge-info:hover .status-badge-info__tooltip,
+  .status-badge-info:focus .status-badge-info__tooltip,
+  .status-badge-info:focus-within .status-badge-info__tooltip {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
   }
 
   .status-badge--out {
