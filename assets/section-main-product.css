@@ -291,6 +291,7 @@ a.product__text {
    which can be stripped by BSS B2B price re-rendering. */
 .product .price .price__badge-sale.price__badge-sale--visible {
   display: inline-block;
+  margin-left: 0.8rem;
 }
 .product .price--sold-out .price__badge-sale.price__badge-sale--visible {
   display: none;
