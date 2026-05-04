@@ -90,6 +90,7 @@
         "text_AfDa6P",
         "button_8cbpjb"
       ],
+      "disabled": true,
       "custom_css": [],
       "settings": {
         "image": "shopify://shop_images/Deck-of-cards.jpg",
@@ -432,10 +433,10 @@
   "order": [
     "image_banner_tayJNr",
     "main",
+    "image_with_text_yziiii",
     "image_with_text_aiRX6U",
     "rich_text_dXNmG6",
     "rich_text_RxzLeU",
-    "image_with_text_yziiii",
     "image_with_text_btPUQR",
     "image_with_text_8qBzHE",
     "image_with_text_YztMxr",
