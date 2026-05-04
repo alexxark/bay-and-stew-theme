@@ -99,25 +99,13 @@
   .status-badge-wrapper {
     display: inline-flex;
     align-items: center;
-    gap: 0.1rem;
     position: relative;
   }
 
-  .status-badge-info {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 1.6rem;
-    height: 1.6rem;
-    border-radius: 50%;
-    background: transparent;
-    color: inherit;
-    font-size: 1.4rem;
+  .status-badge__asterisk {
+    margin-left: 0.2rem;
     font-weight: 700;
     line-height: 1;
-    cursor: help;
-    user-select: none;
-    position: relative;
   }
 
   .status-badge-info__tooltip {
@@ -144,7 +132,7 @@
     transition: opacity 0.15s ease-in-out;
   }
 
-  /* Invisible bridge so the cursor can travel from the * into the tooltip
+  /* Invisible bridge so the cursor can travel from the badge into the tooltip
      without crossing a gap that would close it. */
   .status-badge-info__tooltip::after {
     content: '';
@@ -160,9 +148,8 @@
     text-decoration: underline;
   }
 
-  .status-badge-info:hover .status-badge-info__tooltip,
-  .status-badge-info:focus .status-badge-info__tooltip,
-  .status-badge-info:focus-within .status-badge-info__tooltip,
+  .status-badge-wrapper:hover .status-badge-info__tooltip,
+  .status-badge-wrapper:focus-within .status-badge-info__tooltip,
   .status-badge-info__tooltip:hover {
     visibility: visible;
     opacity: 1;
