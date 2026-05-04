@@ -139,8 +139,20 @@
     </div>
     {%- if show_badges -%}
       {%- assign product_type_downcase = product.type | downcase -%}
+      {%- assign has_bundles_tag = false -%}
+      {%- assign bundle_discount_percent = '' -%}
+      {%- for product_tag in product.tags -%}
+        {%- assign normalized_bundle_tag = product_tag | downcase | strip -%}
+        {%- if normalized_bundle_tag == 'bundles' -%}
+          {%- assign has_bundles_tag = true -%}
+        {%- elsif normalized_bundle_tag contains '%' -%}
+          {%- assign bundle_discount_percent = product_tag | strip -%}
+        {%- endif -%}
+      {%- endfor -%}
       <span class="badge price__badge-sale color-{{ settings.sale_badge_color_scheme }}">
-        {%- if product_type_downcase == 'pack' -%}
+        {%- if has_bundles_tag and bundle_discount_percent != '' -%}
+          Save {{ bundle_discount_percent }}
+        {%- elsif product_type_downcase == 'pack' -%}
           Save 10%
         {%- else -%}
           {{ 'products.product.on_sale' | t }}
