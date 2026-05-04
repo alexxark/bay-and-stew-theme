@@ -117,15 +117,52 @@
                   </a>
                 </div>
               {%- when 'price' -%}
+                {%- liquid
+                  assign pdp_target = product.selected_or_first_available_variant
+                  assign pdp_compare_at_price = pdp_target.compare_at_price
+                  assign pdp_price = pdp_target.price | default: 0
+                  assign pdp_available = pdp_target.available | default: false
+                  assign pdp_sale_visible = false
+                  if pdp_available and pdp_compare_at_price > pdp_price
+                    assign pdp_sale_visible = true
+                  endif
+
+                  assign pdp_product_type_downcase = product.type | downcase
+                  assign pdp_has_bundles_tag = false
+                  assign pdp_bundle_discount_percent = ''
+                  for product_tag in product.tags
+                    assign pdp_normalized_tag = product_tag | downcase | strip
+                    if pdp_normalized_tag == 'bundles'
+                      assign pdp_has_bundles_tag = true
+                    elsif pdp_normalized_tag contains '%'
+                      assign pdp_bundle_discount_percent = product_tag | strip
+                    endif
+                  endfor
+                -%}
                 <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }} class="product__price-row{% if template.suffix == 'chains' %} product__price--with-suffix{% endif %}">
                   {%- render 'price',
                     product: product,
                     use_variant: true,
-                    show_badges: true,
+                    show_badges: false,
                     price_class: 'price--large'
                   -%}
                   {%- if template.suffix == 'chains' -%}
                     <span class="product__price-suffix">*Priced per foot*</span>
+                  {%- endif -%}
+                  {%- if pdp_sale_visible -%}
+                    <span class="badge product__sale-badge color-{{ settings.sale_badge_color_scheme }}">
+                      {%- if pdp_has_bundles_tag and pdp_bundle_discount_percent != '' -%}
+                        Save {{ pdp_bundle_discount_percent }}
+                      {%- elsif pdp_product_type_downcase == 'pack' -%}
+                        Save 10%
+                      {%- else -%}
+                        {{ 'products.product.on_sale' | t }}
+                      {%- endif -%}
+                    </span>
+                  {%- elsif pdp_available == false -%}
+                    <span class="badge product__sale-badge product__sale-badge--soldout color-{{ settings.sold_out_badge_color_scheme }}">
+                      {{ 'products.product.sold_out' | t }}
+                    </span>
                   {%- endif -%}
                   {% render 'customer-status-badge', class: 'status-badge--pdp' %}
                 </div>
@@ -136,6 +173,26 @@
                   #price-{{ section.id }}.product__price-row .price--on-sale .price__sale { display: inline-flex !important; align-items: baseline; gap: 0; }
                   #price-{{ section.id }}.product__price-row .price--on-sale .price__sale .visually-hidden { display: none !important; }
                   #price-{{ section.id }}.product__price-row .price--on-sale .price__sale .price-item--sale { margin-left: 0.4rem !important; }
+                  #price-{{ section.id }}.product__price-row .product__sale-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    align-self: center;
+                    white-space: nowrap;
+                    padding: 0.5rem 0.8rem;
+                    border-radius: 0.8rem;
+                    border: 1.5px solid transparent;
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    line-height: 1;
+                    letter-spacing: 0;
+                    margin: 0;
+                  }
+                  @media (max-width: 480px) {
+                    #price-{{ section.id }}.product__price-row .product__sale-badge {
+                      font-size: 0.68rem;
+                      padding: 0.25rem 0.5rem;
+                    }
+                  }
                 {%- endstyle -%}
                 {%- if template.suffix == 'chains' -%}
                   <style>
