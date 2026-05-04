@@ -288,13 +288,34 @@ a.product__text {
 }
 
 /* Self-contained sale badge visibility: independent of ancestor .price--on-sale,
-   which can be stripped by BSS B2B price re-rendering. */
-.product .price .price__badge-sale.price__badge-sale--visible {
-  display: inline-block;
+   which can be stripped by BSS B2B price re-rendering when a wholesale customer
+   is signed in. !important is required to defeat BSS-injected overrides. */
+.product .price .price__badge-sale.price__badge-sale--visible,
+.product__price-row .price__badge-sale.price__badge-sale--visible {
+  display: inline-flex !important;
+  align-items: center;
+  align-self: center;
+  white-space: nowrap;
+  padding: 0.5rem 0.6rem;
   margin-left: 0.8rem;
+  border-radius: 0.8rem;
+  border: 1.5px solid transparent;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: 0;
 }
-.product .price--sold-out .price__badge-sale.price__badge-sale--visible {
-  display: none;
+.product .price--sold-out .price__badge-sale.price__badge-sale--visible,
+.product__price-row .price--sold-out .price__badge-sale.price__badge-sale--visible {
+  display: none !important;
+}
+
+@media (max-width: 480px) {
+  .product .price .price__badge-sale.price__badge-sale--visible,
+  .product__price-row .price__badge-sale.price__badge-sale--visible {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.5rem;
+  }
 }
 
 @media screen and (min-width: 750px) {
