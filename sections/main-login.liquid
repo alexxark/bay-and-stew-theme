@@ -152,7 +152,7 @@
         {{ 'customer.login_page.sign_in' | t }}
       </button>
 
-      <a href="{{ routes.account_register_url }}">
+      <a href="{{ routes.account_register_url }}{% if request.query.checkout_url %}?checkout_url={{ request.query.checkout_url | url_encode }}{% endif %}">
         {{ 'customer.login_page.create_account' | t }}
       </a>
     {%- endform -%}

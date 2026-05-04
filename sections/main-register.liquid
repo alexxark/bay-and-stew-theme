@@ -19,6 +19,9 @@
     {{ 'customer.register.title' | t }}
   </h1>
   {%- form 'create_customer', novalidate: 'novalidate' -%}
+    {%- if request.query.checkout_url -%}
+      <input type="hidden" name="checkout_url" value="{{ request.query.checkout_url }}">
+    {%- endif -%}
     {%- if form.errors -%}
       <h2 class="form__message" tabindex="-1" autofocus>
         <span class="svg-wrapper">

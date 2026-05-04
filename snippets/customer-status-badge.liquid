@@ -25,8 +25,12 @@
 {%- if customer -%}
   <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
 {%- else -%}
+  {%- assign login_return_url = request.path -%}
+  {%- if request.query_string != blank -%}
+    {%- assign login_return_url = login_return_url | append: '?' | append: request.query_string -%}
+  {%- endif -%}
   <span class="status-badge-wrapper {{ class }}">
-    <a href="{{ routes.account_login_url }}" class="status-badge {{ status_class }}">{{ status_text }}</a>
+    <a href="{{ routes.account_login_url }}?checkout_url={{ login_return_url | url_encode }}" class="status-badge {{ status_class }}">{{ status_text }}</a>
     <span class="status-badge-info" tabindex="0" aria-label="Wholesale information">
       *
       <span class="status-badge-info__tooltip" role="tooltip">

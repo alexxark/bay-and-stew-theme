@@ -99,7 +99,7 @@
   .status-badge-wrapper {
     display: inline-flex;
     align-items: center;
-    gap: 0.4rem;
+    gap: 0.1rem;
     position: relative;
   }
 
@@ -125,7 +125,7 @@
     opacity: 0;
     pointer-events: none;
     position: absolute;
-    bottom: calc(100% + 0.6rem);
+    bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
     z-index: 20;
@@ -144,6 +144,17 @@
     transition: opacity 0.15s ease-in-out;
   }
 
+  /* Invisible bridge so the cursor can travel from the * into the tooltip
+     without crossing a gap that would close it. */
+  .status-badge-info__tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 0.8rem;
+  }
+
   .status-badge-info__tooltip a {
     color: #9cc8ff;
     text-decoration: underline;
@@ -151,7 +162,8 @@
 
   .status-badge-info:hover .status-badge-info__tooltip,
   .status-badge-info:focus .status-badge-info__tooltip,
-  .status-badge-info:focus-within .status-badge-info__tooltip {
+  .status-badge-info:focus-within .status-badge-info__tooltip,
+  .status-badge-info__tooltip:hover {
     visibility: visible;
     opacity: 1;
     pointer-events: auto;
