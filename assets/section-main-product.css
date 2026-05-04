@@ -288,7 +288,8 @@ a.product__text {
 }
 
 /* Loox star rating widget: shrink the clickable area so only the stars
-   themselves are interactive, not the entire row width. */
+   themselves are interactive, not the entire row width. Also tighten the
+   default vertical spacing the app injects. */
 .product .loox-rating,
 .product .loox-rating-wrapper,
 .product .loox-rating a {
@@ -296,6 +297,10 @@ a.product__text {
   width: auto !important;
   max-width: max-content;
   align-items: center;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }
 
 @media screen and (min-width: 750px) {
