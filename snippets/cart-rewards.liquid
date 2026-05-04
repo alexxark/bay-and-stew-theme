@@ -77,6 +77,33 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
       assign max_threshold = r4_threshold
     endif
   endif
+
+  capture rewards_signature
+    echo r1_type
+    echo '|'
+    echo r1_threshold
+    echo '|'
+    echo r1_product.id
+    echo '||'
+    echo r2_type
+    echo '|'
+    echo r2_threshold
+    echo '|'
+    echo r2_product.id
+    echo '||'
+    echo r3_type
+    echo '|'
+    echo r3_threshold
+    echo '|'
+    echo r3_product.id
+    echo '||'
+    echo r4_type
+    echo '|'
+    echo r4_threshold
+    echo '|'
+    echo r4_product.id
+  endcapture
+  assign rewards_version = rewards_signature | md5
 -%}
 
 {%- if milestones_count > 0 -%}
@@ -85,6 +112,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
     data-total-price="{{ calculated_total_price }}"
     data-max-threshold="{{ max_threshold }}"
     data-all-unlocked-subtitle="{{ rewards_all_unlocked | escape }}"
+    data-rewards-version="{{ rewards_version }}"
   >
     <p class="cart-rewards__message" data-rewards-message></p>
 
@@ -631,6 +659,23 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
               }
             }
 
+            /* Sweep orphan gifts: any cart item flagged as a reward gift whose
+               variant is no longer present in the current milestone config
+               (because the merchant removed/changed that milestone). These would
+               otherwise persist in the customer's server-side cart for ~14 days. */
+            const knownGiftVariants = new Set(
+              milestones.map((m) => String(m.dataset.variantId))
+            );
+            for (const item of cartItems) {
+              const props = item.properties || {};
+              const giftVid = props.__reward_gift_variant
+                ? String(props.__reward_gift_variant)
+                : (props.__reward_gift ? String(item.variant_id) : null);
+              if (giftVid && !knownGiftVariants.has(giftVid)) {
+                updates[item.key] = 0;
+              }
+            }
+
             for (const [variantId, desiredQty] of desiredQuantities.entries()) {
               const giftItems = cartItems.filter((item) => {
                 if (!item.properties) return false;
@@ -706,6 +751,23 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             const drawerHtml = sections['cart-drawer'];
             const bubbleHtml = sections['cart-icon-bubble'];
             const cartPageHtml = sections['main-cart-items'];
+
+            /* Stale-tab guard: if the freshly rendered <cart-rewards> reports a
+               different rewards-version than this element, the merchant has
+               changed the rewards settings since this tab loaded. Replace this
+               element with the fresh one so old thresholds/variants stop firing. */
+            const sourceForVersion = drawerHtml || cartPageHtml;
+            if (sourceForVersion) {
+              const versionDoc = new DOMParser().parseFromString(sourceForVersion, 'text/html');
+              const freshEl = versionDoc.querySelector('cart-rewards');
+              const freshVersion = freshEl?.dataset.rewardsVersion;
+              const ownVersion = this.dataset.rewardsVersion;
+              if (freshVersion && ownVersion && freshVersion !== ownVersion) {
+                window.__cartRewardsLastCart = null;
+                this.replaceWith(freshEl);
+                return;
+              }
+            }
 
             /* Update cart drawer items + footer */
             if (drawerHtml) {
