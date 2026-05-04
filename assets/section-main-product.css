@@ -297,8 +297,8 @@ a.product__text {
   width: auto !important;
   max-width: max-content;
   align-items: center;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  margin-top: -10 !important;
+  margin-bottom: -10 !important;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
 }
