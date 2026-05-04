@@ -150,7 +150,7 @@
                     <span class="product__price-suffix">*Priced per foot*</span>
                   {%- endif -%}
                   {%- if pdp_sale_visible -%}
-                    <span class="badge product__sale-badge color-{{ settings.sale_badge_color_scheme }}">
+                    <span class="badge product__sale-badge">
                       {%- if pdp_has_bundles_tag and pdp_bundle_discount_percent != '' -%}
                         Save {{ pdp_bundle_discount_percent }}
                       {%- elsif pdp_product_type_downcase == 'pack' -%}
@@ -160,7 +160,7 @@
                       {%- endif -%}
                     </span>
                   {%- elsif pdp_available == false -%}
-                    <span class="badge product__sale-badge product__sale-badge--soldout color-{{ settings.sold_out_badge_color_scheme }}">
+                    <span class="badge product__sale-badge product__sale-badge--soldout">
                       {{ 'products.product.sold_out' | t }}
                     </span>
                   {%- endif -%}
@@ -180,7 +180,9 @@
                     white-space: nowrap;
                     padding: 0.5rem 0.8rem;
                     border-radius: 0.8rem;
-                    border: 1.5px solid rgba(var(--color-badge-foreground), 0.35);
+                    background: #e0efff;
+                    color: #0a4d8a;
+                    border: 1.5px solid #b3d4f0;
                     font-family: var(--font-body-family);
                     font-style: var(--font-body-style);
                     font-size: 0.95rem;
@@ -188,6 +190,11 @@
                     line-height: 1;
                     letter-spacing: normal;
                     margin: 0;
+                  }
+                  #price-{{ section.id }}.product__price-row .product__sale-badge--soldout {
+                    background: #ffe5e5;
+                    color: #8a0010;
+                    border-color: #ffb3b3;
                   }
                   @media (max-width: 480px) {
                     #price-{{ section.id }}.product__price-row .product__sale-badge {
