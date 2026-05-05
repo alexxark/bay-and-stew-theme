@@ -32,6 +32,7 @@
         },
         "announcement-bar-0": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "RECEIVE AN EXTRA 25% OFF ON SALE ITEMS",
             "link": "shopify://collections/sale-1"
