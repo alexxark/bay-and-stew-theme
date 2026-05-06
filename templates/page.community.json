@@ -59,6 +59,79 @@
         "padding_bottom": 0
       }
     },
+    "rich_text_QUKJQ8": {
+      "type": "rich-text",
+      "blocks": {
+        "text_Crmewi": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nothing active right now, but take a look below for what’s coming next.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_Crmewi"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 12,
+        "padding_bottom": 52
+      }
+    },
+    "image_with_text_yziiii": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_WJpjHE": {
+          "type": "heading",
+          "settings": {
+            "heading": "EXTRA 25% OFF SALE",
+            "heading_size": "h1"
+          }
+        },
+        "text_66mTxa": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Take an additional 25% off on all sale items</a><br/></h3><p>For a limited time, enjoy an <strong>extra 25% off </strong>all sale styles at Bay & Stew. It’s the perfect moment to restock your go-to tools, supplies, and studio essentials at even better value. <br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>TERMS: Valid 05/01/2026 through 05/05/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_Xx8WkJ": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Sale",
+            "button_link": "shopify://collections/sale-1",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_WJpjHE",
+        "text_66mTxa",
+        "button_Xx8WkJ"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "EXTRA 25 SALE",
+      "settings": {
+        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
+      }
+    },
     "image_with_text_aiRX6U": {
       "type": "image-with-text",
       "blocks": {
@@ -149,55 +222,6 @@
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
-      }
-    },
-    "image_with_text_yziiii": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_WJpjHE": {
-          "type": "heading",
-          "settings": {
-            "heading": "EXTRA 25% OFF SALE",
-            "heading_size": "h1"
-          }
-        },
-        "text_66mTxa": {
-          "type": "text",
-          "settings": {
-            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Take an additional 25% off on all sale items</a><br/></h3><p>For a limited time, enjoy an <strong>extra 25% off </strong>all sale styles at Bay & Stew. It’s the perfect moment to restock your go-to tools, supplies, and studio essentials at even better value. <br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>TERMS: Valid 05/01/2026 through 05/05/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
-            "text_style": "body"
-          }
-        },
-        "button_Xx8WkJ": {
-          "type": "button",
-          "settings": {
-            "button_label": "Shop Sale",
-            "button_link": "shopify://collections/sale-1",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_WJpjHE",
-        "text_66mTxa",
-        "button_Xx8WkJ"
-      ],
-      "custom_css": [],
-      "name": "EXTRA 25 SALE",
-      "settings": {
-        "image": "shopify://shop_images/sale-offers-page.jpg",
-        "height": "small",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-1",
-        "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 60
       }
     },
     "image_with_text_btPUQR": {
@@ -433,6 +457,7 @@
   "order": [
     "image_banner_tayJNr",
     "main",
+    "rich_text_QUKJQ8",
     "image_with_text_yziiii",
     "image_with_text_aiRX6U",
     "rich_text_dXNmG6",
