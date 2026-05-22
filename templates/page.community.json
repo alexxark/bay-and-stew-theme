@@ -72,7 +72,6 @@
       "block_order": [
         "text_Crmewi"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
