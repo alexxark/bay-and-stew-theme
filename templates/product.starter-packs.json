@@ -142,7 +142,7 @@
             "link_hover_color": "#23a3c1",
             "link_style": "underline",
             "link_hover_style": "underline",
-            "feature_1_enabled": true,
+            "feature_1_enabled": false,
             "feature_1_icon": "shopify://shop_images/Card-Icon.svg",
             "feature_1_title": "Free Limited Edition Card Deck",
             "feature_1_subtext": "<p>With qualifying $100+ purchase, <a href=\"https://bayandstew.com/pages/offers\" title=\"https://bayandstew.com/pages/offers\">while supplies last.</a></p>",
