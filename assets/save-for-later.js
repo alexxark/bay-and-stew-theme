@@ -152,11 +152,26 @@
   // Cart helpers
   // -----------------------------------------------------------------------
 
+  // Sections we need re-rendered after any cart mutation. Keep in sync with
+  // CartDrawer.getSectionsToRender() and CartItems.getSectionsToRender().
+  const CART_SECTIONS_TO_RENDER = [
+    { id: 'cart-drawer',       targetId: 'CartDrawer',           selector: '.drawer__inner' },
+    { id: 'cart-icon-bubble',  targetId: 'cart-icon-bubble',     selector: '.shopify-section' },
+    { id: 'main-cart-items',   targetId: 'main-cart-items',      selector: '.js-contents'   },
+    { id: 'main-cart-footer',  targetId: 'main-cart-footer',     selector: '.js-contents'   },
+  ];
+
+  const CART_SECTIONS_PARAM = CART_SECTIONS_TO_RENDER.map((s) => s.id).join(',');
+
   function addItemsToCart(items) {
     return fetch('/cart/add.js', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body:    JSON.stringify({ items: items }),
+      body: JSON.stringify({
+        items:        items,
+        sections:     CART_SECTIONS_PARAM,
+        sections_url: window.location.pathname,
+      }),
     }).then((r) => {
       if (!r.ok) return r.json().then((err) => Promise.reject(err));
       return r.json();
@@ -168,7 +183,12 @@
     return fetch('/cart/change.js', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body:    JSON.stringify({ id: itemKey, quantity: 0 }),
+      body: JSON.stringify({
+        id:           itemKey,
+        quantity:     0,
+        sections:     CART_SECTIONS_PARAM,
+        sections_url: window.location.pathname,
+      }),
     }).then((r) => {
       if (!r.ok) return r.json().then((err) => Promise.reject(err));
       return r.json();
@@ -179,6 +199,84 @@
     return fetch('/?sections=' + sectionIds.join(','), {
       headers: { Accept: 'application/json' },
     }).then((r) => r.json());
+  }
+
+  /**
+   * Extract the inner HTML of a Liquid-rendered section. Mirrors what
+   * Dawn's own cart-drawer.js does so the swap is byte-for-byte equivalent.
+   */
+  function getSectionInnerHTML(html, selector) {
+    if (!html) return '';
+    const dom = new DOMParser().parseFromString(html, 'text/html');
+    const el  = dom.querySelector(selector || '.shopify-section');
+    return el ? el.innerHTML : '';
+  }
+
+  /**
+   * Apply a parsedState returned from /cart/change.js or /cart/add.js
+   * (with sections requested) to the current page atomically.
+   *
+   * Handles:
+   *   - Re-rendering each section's target innerHTML.
+   *   - Toggling the `is-empty` class on cart-drawer / cart-items / footer.
+   *   - Publishing PUB_SUB_EVENTS.cartUpdate with cartData so the rewards
+   *     bar and other listeners refresh from a consistent snapshot.
+   *   - Dispatching `cart:refresh` as a fallback for any older listeners.
+   */
+  function applyCartUpdate(parsedState) {
+    if (!parsedState) return;
+
+    // 1. Replace section HTML.
+    if (parsedState.sections) {
+      CART_SECTIONS_TO_RENDER.forEach(function (section) {
+        const html = parsedState.sections[section.id];
+        if (!html) return;
+        const target = document.getElementById(section.targetId);
+        if (!target) return;
+        const inner  = target.querySelector(section.selector) || target;
+        inner.innerHTML = getSectionInnerHTML(html, section.selector);
+      });
+    }
+
+    // 2. Toggle is-empty when we know the count (change.js returns it; add.js
+    //    doesn't, but added items can never produce item_count=0).
+    if (typeof parsedState.item_count === 'number') {
+      const isEmpty    = parsedState.item_count === 0;
+      const cartDrawer = document.querySelector('cart-drawer');
+      const cartItems  = document.querySelector('cart-items');
+      const cartFooter = document.getElementById('main-cart-footer');
+
+      if (cartDrawer) cartDrawer.classList.toggle('is-empty', isEmpty);
+      if (cartItems)  cartItems.classList.toggle('is-empty', isEmpty);
+      if (cartFooter) cartFooter.classList.toggle('is-empty', isEmpty);
+
+      // The new inner HTML from the server already reflects the empty/non-empty
+      // state, but make sure the inner wrapper class is in sync as well.
+      const inner = cartDrawer && cartDrawer.querySelector('.drawer__inner');
+      if (inner) inner.classList.toggle('is-empty', isEmpty);
+    } else {
+      // add.js — we know cart is non-empty after the add, so drop is-empty.
+      const cartDrawer = document.querySelector('cart-drawer');
+      if (cartDrawer) {
+        cartDrawer.classList.remove('is-empty');
+        const inner = cartDrawer.querySelector('.drawer__inner');
+        if (inner) inner.classList.remove('is-empty');
+      }
+    }
+
+    // 3. Notify the rest of the page.
+    if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
+      publish(PUB_SUB_EVENTS.cartUpdate, {
+        source:   'save-for-later',
+        cartData: parsedState,
+      });
+    }
+    document.dispatchEvent(new CustomEvent('cart:refresh'));
+
+    // 4. Re-run the rewards burst (BLOY hook) if present.
+    if (typeof window.__runRewardsLast === 'function') {
+      try { window.__runRewardsLast(); } catch (e) { /* ignore */ }
+    }
   }
 
   /**
@@ -395,7 +493,7 @@
    * Finalise a successful (full or partial) move to cart:
    * remove from SFL, refresh cart UI, open drawer, toast.
    */
-  function finishMove(variantId, itemEl, container, addedQty, requestedQty) {
+  function finishMove(variantId, itemEl, container, addedQty, requestedQty, addResponse) {
     remove(variantId);
     if (itemEl && itemEl.parentNode) itemEl.remove();
 
@@ -406,8 +504,14 @@
       showToast('Item moved to cart.');
     }
 
-    // Re-render cart UI then open the drawer so the customer sees the change.
-    Promise.resolve(refreshCartUI()).then(openCartDrawer);
+    // Prefer the sections from the add.js response (atomic, no race). Fall
+    // back to the full re-fetch path if the response didn't include them.
+    if (addResponse && addResponse.sections) {
+      applyCartUpdate(addResponse);
+      openCartDrawer();
+    } else {
+      Promise.resolve(refreshCartUI()).then(openCartDrawer);
+    }
 
     if (readAll().length === 0 && container) renderSavedForLaterTab(container);
   }
@@ -429,8 +533,8 @@
 
         return addItemsToCart([{ id: variantId, quantity: saved.quantity }])
           .then(
-            function () { return { ok: true,  err: null }; },
-            function (err) { return { ok: false, err: err  }; }
+            function (resp) { return { ok: true,  err: null, resp: resp }; },
+            function (err)  { return { ok: false, err: err,  resp: null }; }
           )
           .then(function (addResult) {
             // If the first attempt failed, parse the allowed qty from the
@@ -440,8 +544,8 @@
               if (maxAddable && maxAddable > 0) {
                 return addItemsToCart([{ id: variantId, quantity: maxAddable }])
                   .then(
-                    function () { return { ok: true,  err: null }; },
-                    function (err) { return { ok: false, err: err  }; }
+                    function (resp) { return { ok: true,  err: null, resp: resp }; },
+                    function (err)  { return { ok: false, err: err,  resp: null }; }
                   );
               }
             }
@@ -457,13 +561,15 @@
           });
       })
       .then(function (result) {
-        const added = result.added;
-        const err   = result.finalResult && result.finalResult.err;
+        const added   = result.added;
+        const final   = result.finalResult || {};
+        const err     = final.err;
+        const addResp = final.resp;
 
         if (added > 0) {
           // Something was added — success path (full or partial).
           setStatus(itemEl, '', null);
-          finishMove(variantId, itemEl, container, added, saved.quantity);
+          finishMove(variantId, itemEl, container, added, saved.quantity, addResp);
           return;
         }
 
@@ -681,7 +787,7 @@
     btn.disabled = true;
 
     removeFromCart(itemKey)
-      .then(function () {
+      .then(function (parsedState) {
         save({
           variantId,
           productHandle: handle,
@@ -694,23 +800,19 @@
           compareAt: compareAt && compareAt > price ? compareAt : null,
         });
         showToast('Item saved for later.');
+
+        // Atomically re-render cart UI from the change.js response. This
+        // includes the proper empty-state markup when the saved item was
+        // the last thing in the cart.
+        try { applyCartUpdate(parsedState); } catch (e) { /* swallow */ }
       })
       .catch(function (err) {
         // Cart removal itself failed — re-enable so the customer can retry.
         btn.disabled = false;
         showToast((err && err.description) || 'Could not save item.');
-        // Re-throw to skip the refresh step below.
-        throw err;
-      })
-      .then(function () {
-        // Always refresh the cart UI after a successful save, but never let
-        // a refresh failure surface as a "Could not save item." toast — the
-        // item IS saved at this point.
-        return refreshCartUI();
-      })
-      .catch(function () { /* refresh failures are swallowed */ });
+      });
     // btn.disabled intentionally stays true on success: the entire row is
-    // removed from the cart when refreshCartUI() re-renders the section.
+    // removed from the cart when applyCartUpdate() re-renders the section.
   }
 
   document.addEventListener('click', handleSaveForLaterClick);
