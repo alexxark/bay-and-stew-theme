@@ -116,9 +116,25 @@
         credentials: 'same-origin',
         headers:     { 'Content-Type': 'application/json', Accept: 'application/json' },
         body:        payload,
+        keepalive:   true,
       }).catch(() => { /* offline / endpoint down — ignore */ });
     });
   }
+
+  function flushPush() {
+    if (pushTimer) {
+      clearTimeout(pushTimer);
+      pushTimer = null;
+      doPush();
+    }
+  }
+
+  // If the page is being hidden / unloaded, push immediately so we don't lose
+  // the snapshot. fetch with keepalive: true survives navigation.
+  document.addEventListener('visibilitychange', function () {
+    if (document.visibilityState === 'hidden') flushPush();
+  });
+  window.addEventListener('pagehide', flushPush);
 
   // ---------------------------------------------------------------------------
   // Restore (server snapshot → current empty cart)
