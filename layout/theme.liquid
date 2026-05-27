@@ -59,7 +59,8 @@
 
     <meta name="bs-customer-id" content="{% if customer %}{{ customer.id }}{% endif %}">
     <meta name="bs-login-url" content="{{ routes.account_login_url }}">
-    <meta name="bs-favorites-endpoint" content="/apps/favorites">
+    <meta name="bs-favorites-endpoint" content="/apps/growth/favorites">
+    <meta name="bs-saveforlater-endpoint" content="/apps/growth/saved-for-later">
     {%- if customer -%}
       {%- assign bs_fav_value = customer.metafields.favorites.handles.value -%}
       <script id="bs-favorites-bootstrap" type="application/json">
@@ -67,6 +68,14 @@
           []
         {%- else -%}
           {{ bs_fav_value | json }}
+        {%- endif -%}
+      </script>
+      {%- assign bs_sfl_value = customer.metafields.saveforlater.handles.value -%}
+      <script id="bs-saveforlater-bootstrap" type="application/json">
+        {%- if bs_sfl_value == blank -%}
+          []
+        {%- else -%}
+          {{ bs_sfl_value | json }}
         {%- endif -%}
       </script>
     {%- endif -%}

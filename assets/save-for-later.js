@@ -1,32 +1,41 @@
 /**
  * Bay & Stew — Save for Later
  *
- * Allows customers to save cart items for later without requiring a server
- * sync. Storage is localStorage only (per device / browser).
+ * Cross-device save-for-later, modelled on favorites.js:
+ *   - localStorage acts as a fast local cache.
+ *   - On load, a server-rendered bootstrap (<script id="bs-saveforlater-bootstrap">)
+ *     provides the authoritative list from customer.metafields.saveforlater.handles.
+ *   - Writes are debounced and PUT through to the App Proxy endpoint defined by
+ *     <meta name="bs-saveforlater-endpoint"> (default: /apps/growth/saved-for-later).
+ *   - A background GET runs shortly after boot to catch updates made on other devices.
  *
- * Saved items are separate from Favorites (different key, different namespace).
+ * Wire-format on the metafield (list.single_line_text_field):
+ *   each entry is "<variantId>|<quantity>|<productHandle>".
+ * The richer object shape (title/image/price/...) lives only in the local cache and
+ * is rehydrated lazily from /products/<handle>.js on a fresh device.
  *
- * Storage format: array of objects:
+ * Saved items are separate from Favorites (different key, different metafield).
+ *
+ * Storage format (localStorage): array of objects:
  *   {
  *     variantId:     number,
  *     productHandle: string,
- *     title:         string,   // product title
- *     variantTitle:  string,   // variant name (e.g. "Blue / M")
+ *     title:         string,
+ *     variantTitle:  string,
  *     image:         string|null,
  *     url:           string,
  *     quantity:      number,
- *     price:         number,   // in cents
+ *     price:         number,    // in cents
  *     compareAt:     number|null,
  *   }
- *
- * The Save button in the cart uses data attributes written by the Liquid
- * template so no additional fetch is needed at save time.
  */
 (function () {
   'use strict';
 
-  const STORAGE_PREFIX = 'bs:saved-later:';
-  const GUEST_KEY      = 'bs:saved-later:guest';
+  const STORAGE_PREFIX   = 'bs:saved-later:';
+  const GUEST_KEY        = 'bs:saved-later:guest';
+  const EVENT_CHANGED    = 'bs:sfl:changed';
+  const SYNC_DEBOUNCE_MS = 600;
 
   // -----------------------------------------------------------------------
   // Storage helpers
@@ -36,6 +45,12 @@
     const meta = document.querySelector('meta[name="bs-customer-id"]');
     const id   = meta && meta.getAttribute('content');
     return id && id.trim() !== '' ? id.trim() : null;
+  }
+
+  function getSyncEndpoint() {
+    const meta = document.querySelector('meta[name="bs-saveforlater-endpoint"]');
+    const url  = meta && meta.getAttribute('content');
+    return url && url.trim() !== '' ? url.trim() : null;
   }
 
   function getStorageKey() {
@@ -53,11 +68,267 @@
     }
   }
 
-  function writeAll(list) {
+  function writeLocal(list) {
     try {
       localStorage.setItem(getStorageKey(), JSON.stringify(list));
     } catch (e) {
       /* storage full / disabled — ignore */
+    }
+  }
+
+  /**
+   * Persist the list locally, fire a change event so any open UI re-renders,
+   * and (unless opted out) schedule a debounced push to the server.
+   */
+  function writeAll(list, options) {
+    options = options || {};
+    writeLocal(list);
+    document.dispatchEvent(new CustomEvent(EVENT_CHANGED, { detail: { items: list } }));
+    if (!options.skipSync) scheduleSync(list);
+  }
+
+  // -----------------------------------------------------------------------
+  // Wire-format encode / decode for the metafield
+  // -----------------------------------------------------------------------
+
+  /**
+   * Encode a single local item to the metafield string format:
+   * "<variantId>|<quantity>|<productHandle>"
+   */
+  function encodeEntry(item) {
+    if (!item || !item.variantId || !item.productHandle) return null;
+    const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
+    // The worker validates handles as [a-z0-9-]+ — strip anything else.
+    const handle = String(item.productHandle).toLowerCase().replace(/[^a-z0-9-]/g, '');
+    if (!handle) return null;
+    return String(item.variantId) + '|' + qty + '|' + handle;
+  }
+
+  function decodeEntry(str) {
+    if (typeof str !== 'string') return null;
+    const m = str.match(/^(\d+)\|(\d+)\|([a-z0-9-]+)$/);
+    if (!m) return null;
+    return {
+      variantId:     parseInt(m[1], 10),
+      quantity:      parseInt(m[2], 10),
+      productHandle: m[3],
+    };
+  }
+
+  function encodeList(list) {
+    const out = [];
+    (list || []).forEach((item) => {
+      const enc = encodeEntry(item);
+      if (enc) out.push(enc);
+    });
+    return out;
+  }
+
+  function readBootstrap() {
+    const node = document.getElementById('bs-saveforlater-bootstrap');
+    if (!node) return null;
+    const text = (node.textContent || '').trim();
+    if (!text) return null;
+    try {
+      let parsed = JSON.parse(text);
+      // Shopify list metafields may come back as a JSON-encoded string.
+      if (typeof parsed === 'string') {
+        try { parsed = JSON.parse(parsed); } catch (e) { /* leave as-is */ }
+      }
+      return Array.isArray(parsed) ? parsed.filter((s) => typeof s === 'string') : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Server sync (write-through)
+  // -----------------------------------------------------------------------
+
+  let syncTimer      = null;
+  let lastSyncedJson = null;
+
+  function scheduleSync(list) {
+    if (!getCustomerId() || !getSyncEndpoint()) return;
+    clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => pushToServer(list), SYNC_DEBOUNCE_MS);
+  }
+
+  function pushToServer(list) {
+    const endpoint = getSyncEndpoint();
+    if (!endpoint || !getCustomerId()) return Promise.resolve();
+    const handles = encodeList(list);
+    const payload = JSON.stringify({ handles: handles });
+    if (payload === lastSyncedJson) return Promise.resolve();
+    return fetch(endpoint, {
+      method:      'PUT',
+      credentials: 'same-origin',
+      headers:     { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body:        payload,
+    })
+      .then((r) => {
+        if (r.ok) lastSyncedJson = payload;
+      })
+      .catch(() => {
+        /* offline / endpoint down — local cache still holds the change */
+      });
+  }
+
+  function pullFromServer() {
+    const endpoint = getSyncEndpoint();
+    if (!endpoint || !getCustomerId()) return Promise.resolve(null);
+    return fetch(endpoint, {
+      method:      'GET',
+      credentials: 'same-origin',
+      headers:     { Accept: 'application/json' },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((body) => {
+        if (!body) return null;
+        const list = Array.isArray(body) ? body : body.handles;
+        return Array.isArray(list) ? list.filter((s) => typeof s === 'string') : null;
+      })
+      .catch(() => null);
+  }
+
+  // -----------------------------------------------------------------------
+  // Rehydration: convert decoded "variantId|qty|handle" entries into the
+  // full local-cache object shape. Uses the existing cache when possible,
+  // otherwise lazily fetches /products/<handle>.js to fill in details.
+  // -----------------------------------------------------------------------
+
+  function rehydrateFromEncoded(encodedList) {
+    const decoded = encodedList.map(decodeEntry).filter(Boolean);
+    if (!decoded.length) return Promise.resolve([]);
+
+    // Existing cache → lookup by variantId so we don't re-fetch known items.
+    const cache = readAll();
+    const byVariant = Object.create(null);
+    cache.forEach((it) => { if (it && it.variantId) byVariant[it.variantId] = it; });
+
+    // Group decoded entries by handle so we hit each product endpoint once.
+    const byHandle = Object.create(null);
+    decoded.forEach((d) => {
+      if (!byHandle[d.productHandle]) byHandle[d.productHandle] = [];
+      byHandle[d.productHandle].push(d);
+    });
+
+    const handles = Object.keys(byHandle);
+
+    return Promise.all(handles.map((handle) => {
+      // Skip the network call when every decoded entry for this handle is
+      // already in the local cache.
+      const allCached = byHandle[handle].every((d) => byVariant[d.variantId]);
+      if (allCached) return Promise.resolve({ handle: handle, product: null });
+
+      return fetch('/products/' + encodeURIComponent(handle) + '.js', {
+        headers: { Accept: 'application/json' },
+      })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((product) => ({ handle: handle, product: product }))
+        .catch(() => ({ handle: handle, product: null }));
+    })).then((results) => {
+      const productByHandle = Object.create(null);
+      results.forEach((res) => { productByHandle[res.handle] = res.product; });
+
+      // Preserve the order returned by the server.
+      const out = [];
+      decoded.forEach((d) => {
+        const cached  = byVariant[d.variantId];
+        const product = productByHandle[d.productHandle];
+
+        if (cached) {
+          // Keep cached metadata; update quantity to what the server says.
+          out.push(Object.assign({}, cached, { quantity: d.quantity }));
+          return;
+        }
+
+        if (product) {
+          const variant = (product.variants || []).find((v) => v.id === d.variantId)
+                       || (product.variants || [])[0]
+                       || null;
+          out.push({
+            variantId:     d.variantId,
+            productHandle: d.productHandle,
+            title:         product.title || '',
+            variantTitle:  variant ? variant.title : '',
+            image:         (variant && variant.featured_image && variant.featured_image.src)
+                            || product.featured_image
+                            || (product.images && product.images[0])
+                            || null,
+            url:           '/products/' + d.productHandle
+                            + (variant ? '?variant=' + variant.id : ''),
+            quantity:      d.quantity,
+            price:         variant ? variant.price : (product.price || 0),
+            compareAt:     variant && variant.compare_at_price && variant.compare_at_price > variant.price
+                            ? variant.compare_at_price : null,
+          });
+          return;
+        }
+
+        // Product fetch failed (e.g. variant deleted) — keep a minimal stub so
+        // the entry isn't silently dropped from the server next sync.
+        out.push({
+          variantId:     d.variantId,
+          productHandle: d.productHandle,
+          title:         '',
+          variantTitle:  '',
+          image:         null,
+          url:           '/products/' + d.productHandle,
+          quantity:      d.quantity,
+          price:         0,
+          compareAt:     null,
+        });
+      });
+
+      return out;
+    });
+  }
+
+  /**
+   * Hydrate localStorage from the server (bootstrap + background pull).
+   *
+   * Server is authoritative for logged-in customers. Algorithm mirrors
+   * favorites.js so the two behave identically:
+   *   1. If bootstrap has items → replace local cache (no sync).
+   *   2. If bootstrap is empty but local has items (guest-import case)
+   *      → seed the server one-time.
+   *   3. Always re-pull shortly after to catch other-device updates.
+   */
+  function hydrate() {
+    if (!getCustomerId()) return;
+
+    const local     = readAll();
+    const bootstrap = readBootstrap();
+
+    if (bootstrap && bootstrap.length) {
+      rehydrateFromEncoded(bootstrap).then((freshList) => {
+        if (JSON.stringify(freshList) !== JSON.stringify(local)) {
+          writeAll(freshList, { skipSync: true });
+        }
+        lastSyncedJson = JSON.stringify({ handles: encodeList(freshList) });
+      });
+    } else if (bootstrap && bootstrap.length === 0 && local.length === 0) {
+      lastSyncedJson = JSON.stringify({ handles: [] });
+    } else if (local.length && getSyncEndpoint()) {
+      // Server is empty but local has items — seed it.
+      scheduleSync(local);
+    }
+
+    // Background pull a moment later to catch other-device updates.
+    if (getSyncEndpoint()) {
+      setTimeout(() => {
+        pullFromServer().then((serverHandles) => {
+          if (!serverHandles) return;
+          rehydrateFromEncoded(serverHandles).then((freshList) => {
+            const current = readAll();
+            if (JSON.stringify(freshList) !== JSON.stringify(current)) {
+              writeAll(freshList, { skipSync: true });
+            }
+            lastSyncedJson = JSON.stringify({ handles: encodeList(freshList) });
+          });
+        });
+      }, 1200);
     }
   }
 
@@ -954,6 +1225,7 @@
   // -----------------------------------------------------------------------
 
   function init() {
+    hydrate();
     initTabs();
     // Run cart validation after a short idle so it doesn't compete with
     // above-the-fold rendering.
