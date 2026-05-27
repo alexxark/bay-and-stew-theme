@@ -220,26 +220,56 @@
     return CART_MUTATION_PATHS.some((p) => s.indexOf(p) !== -1);
   }
 
-  function installFetchHook() {
-    const origFetch = window.fetch;
-    if (!origFetch || origFetch.__bsPersistentCartHooked) return;
-
+  function wrapFetch(target) {
+    if (!target || target.__bsPersistentCartHooked) return target;
     const wrapped = function (input, init) {
       const url    = typeof input === 'string' ? input : (input && input.url) || '';
       const method = (init && init.method) || (input && input.method) || 'GET';
       const isMutation = isCartMutationUrl(url) && /POST/i.test(method);
 
-      const promise = origFetch.apply(this, arguments);
+      const promise = target.apply(this, arguments);
       if (!isMutation) return promise;
 
       return promise.then((res) => {
-        // Only push on a successful response; failed mutations don't change state.
         if (res && res.ok) schedulePush();
         return res;
       });
     };
-    wrapped.__bsPersistentCartHooked = true;
-    window.fetch = wrapped;
+    wrapped.__bsPersistentCartHooked    = true;
+    wrapped.__bsPersistentCartUnderlying = target;
+    return wrapped;
+  }
+
+  function installFetchHook() {
+    if (window.__bsFetchAccessorInstalled) {
+      // Defensive: ensure current value is wrapped.
+      const current = window.fetch;
+      if (current && !current.__bsPersistentCartHooked) {
+        window.fetch = current; // triggers our setter, which wraps it
+      }
+      return;
+    }
+
+    let stored = wrapFetch(window.fetch);
+
+    try {
+      Object.defineProperty(window, 'fetch', {
+        configurable: true,
+        get: function () { return stored; },
+        set: function (next) {
+          // Any later assignment (third-party polyfill, etc.) is auto-wrapped.
+          // Unwrap one layer first if it's already our wrapper, to avoid stacking.
+          const base = next && next.__bsPersistentCartUnderlying
+            ? next.__bsPersistentCartUnderlying
+            : next;
+          stored = wrapFetch(base);
+        },
+      });
+      window.__bsFetchAccessorInstalled = true;
+    } catch (e) {
+      // Fallback: plain assignment.
+      window.fetch = stored;
+    }
   }
 
   function installXhrHook() {
