@@ -1,5 +1,7 @@
 {{ 'favorites.css' | asset_url | stylesheet_tag }}
+{{ 'save-for-later.css' | asset_url | stylesheet_tag }}
 <script src="{{ 'favorites.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'save-for-later.js' | asset_url }}" defer="defer"></script>
 
 <div
   class="bs-favorites"
@@ -16,72 +18,94 @@
       </a>
     </div>
   {%- else -%}
-    <div data-bs-favorites-root>
-      <p class="bs-favorites__loading">Loading your favorites…</p>
-    </div>
 
-    {%- comment -%}
-      Server-rendered inventory + price map for the customer's favorited
-      products. Storefront product JSON (/products/handle.js) does NOT expose
-      inventory_quantity AND returns the public price, ignoring B2B /
-      wholesale rules. Liquid sees the signed-in customer, so we emit both
-      from Liquid here for the JS to use.
-    {%- endcomment -%}
-    {%- assign fav_handles = customer.metafields.favorites.handles.value -%}
-    {%- if fav_handles -%}
-      {%- capture fav_inventory_json -%}
-        {
-        {%- for handle in fav_handles -%}
-          {%- assign p = all_products[handle] -%}
-          {%- if p and p.id -%}
-            "{{ handle }}":{
-            {%- for v in p.variants -%}
-              "{{ v.id }}":{
-                "tracked":{% if v.inventory_management == 'shopify' and v.inventory_policy != 'continue' %}true{% else %}false{% endif %},
-                "qty":{{ v.inventory_quantity | default: 0 }}
-              }{% unless forloop.last %},{% endunless %}
-            {%- endfor -%}
-            }{% unless forloop.last %},{% endunless %}
-          {%- endif -%}
-        {%- endfor -%}
-        }
-      {%- endcapture -%}
-      <script type="application/json" data-bs-favorites-inventory>{{ fav_inventory_json }}</script>
+    {%- comment -%} Tab navigation {%- endcomment -%}
+    <nav class="bs-page-tabs" data-bs-page-tabs aria-label="Favorites navigation">
+      <button type="button" class="bs-page-tabs__btn" data-bs-tab="favorites" aria-selected="true">
+        Favorites
+      </button>
+      <button type="button" class="bs-page-tabs__btn" data-bs-tab="saved" aria-selected="false">
+        Saved for Later
+      </button>
+    </nav>
+
+    {%- comment -%} Favorites tab panel {%- endcomment -%}
+    <div data-bs-tab-panel="favorites">
+      <div data-bs-favorites-root>
+        <p class="bs-favorites__loading">Loading your favorites…</p>
+      </div>
 
       {%- comment -%}
-        Hidden price bootstrap: render the standard BSS-aware price markup
-        for every favorited variant. The BSS B2B app naturally observes
-        these elements at page load and rewrites them with the customer's
-        wholesale price. The favorites JS then clones the already-correct
-        HTML into each visible variant row, so wholesale pricing "just
-        works" without us having to hand off to BSS at runtime.
+        Server-rendered inventory + price map for the customer's favorited
+        products. Storefront product JSON (/products/handle.js) does NOT expose
+        inventory_quantity AND returns the public price, ignoring B2B /
+        wholesale rules. Liquid sees the signed-in customer, so we emit both
+        from Liquid here for the JS to use.
       {%- endcomment -%}
-      <div data-bs-favorites-prices hidden aria-hidden="true" style="display:none">
-        {%- for handle in fav_handles -%}
-          {%- assign p = all_products[handle] -%}
-          {%- if p and p.id -%}
-            {%- for v in p.variants -%}
-              <span
-                data-bs-fav-price
-                data-bs-handle="{{ handle }}"
-                data-bs-variant="{{ v.id }}"
-                bss-b2b-product-id="{{ p.id }}"
-                bss-b2b-product-price
-                bss-b2b-variant-price
-                bss-b2b-variant-id="{{ v.id }}"
-              >
-                {%- if v.compare_at_price and v.compare_at_price > v.price -%}
-                  <s class="bs-fav-variant__compare">{{ v.compare_at_price | money }}</s>
-                  <span class="bs-fav-variant__sale">{{ v.price | money }}</span>
-                {%- else -%}
-                  {{ v.price | money }}
-                {%- endif -%}
-              </span>
-            {%- endfor -%}
-          {%- endif -%}
-        {%- endfor -%}
+      {%- assign fav_handles = customer.metafields.favorites.handles.value -%}
+      {%- if fav_handles -%}
+        {%- capture fav_inventory_json -%}
+          {
+          {%- for handle in fav_handles -%}
+            {%- assign p = all_products[handle] -%}
+            {%- if p and p.id -%}
+              "{{ handle }}":{
+              {%- for v in p.variants -%}
+                "{{ v.id }}":{
+                  "tracked":{% if v.inventory_management == 'shopify' and v.inventory_policy != 'continue' %}true{% else %}false{% endif %},
+                  "qty":{{ v.inventory_quantity | default: 0 }}
+                }{% unless forloop.last %},{% endunless %}
+              {%- endfor -%}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endif -%}
+          {%- endfor -%}
+          }
+        {%- endcapture -%}
+        <script type="application/json" data-bs-favorites-inventory>{{ fav_inventory_json }}</script>
+
+        {%- comment -%}
+          Hidden price bootstrap: render the standard BSS-aware price markup
+          for every favorited variant. The BSS B2B app naturally observes
+          these elements at page load and rewrites them with the customer's
+          wholesale price. The favorites JS then clones the already-correct
+          HTML into each visible variant row, so wholesale pricing "just
+          works" without us having to hand off to BSS at runtime.
+        {%- endcomment -%}
+        <div data-bs-favorites-prices hidden aria-hidden="true" style="display:none">
+          {%- for handle in fav_handles -%}
+            {%- assign p = all_products[handle] -%}
+            {%- if p and p.id -%}
+              {%- for v in p.variants -%}
+                <span
+                  data-bs-fav-price
+                  data-bs-handle="{{ handle }}"
+                  data-bs-variant="{{ v.id }}"
+                  bss-b2b-product-id="{{ p.id }}"
+                  bss-b2b-product-price
+                  bss-b2b-variant-price
+                  bss-b2b-variant-id="{{ v.id }}"
+                >
+                  {%- if v.compare_at_price and v.compare_at_price > v.price -%}
+                    <s class="bs-fav-variant__compare">{{ v.compare_at_price | money }}</s>
+                    <span class="bs-fav-variant__sale">{{ v.price | money }}</span>
+                  {%- else -%}
+                    {{ v.price | money }}
+                  {%- endif -%}
+                </span>
+              {%- endfor -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} Saved for Later tab panel {%- endcomment -%}
+    <div data-bs-tab-panel="saved" hidden>
+      <div data-bs-sfl-root>
+        <p class="bs-favorites__loading">Loading saved items…</p>
       </div>
-    {%- endif -%}
+    </div>
+
   {%- endunless -%}
 </div>
 

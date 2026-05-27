@@ -72,6 +72,8 @@
     {%- endif -%}
     {{ 'favorites.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'favorites.js' | asset_url }}" defer="defer"></script>
+    {{ 'save-for-later.css' | asset_url | stylesheet_tag }}
+    <script src="{{ 'save-for-later.js' | asset_url }}" defer="defer"></script>
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'

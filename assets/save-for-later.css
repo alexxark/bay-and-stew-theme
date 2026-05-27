@@ -1,0 +1,231 @@
+/* ---------- Save for Later — Toast ---------- */
+.bs-sfl-toast {
+  position: fixed;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%) translateY(1rem);
+  background: rgb(var(--color-foreground, 0 0 0));
+  color: rgb(var(--color-background, 255 255 255));
+  padding: 0.65rem 1.25rem;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  z-index: 10000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 220ms ease, transform 220ms ease;
+}
+
+.bs-sfl-toast.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ---------- Save for Later — Page tabs ---------- */
+.bs-page-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid rgba(var(--color-foreground), 0.12);
+  margin-bottom: 2rem;
+}
+
+.bs-page-tabs__btn {
+  background: transparent;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  padding: 0.65rem 1.25rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: rgba(var(--color-foreground), 0.55);
+  letter-spacing: 0.01em;
+  transition: color 150ms ease, border-color 150ms ease;
+}
+
+.bs-page-tabs__btn:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.bs-page-tabs__btn.is-active {
+  color: rgb(var(--color-foreground));
+  border-bottom-color: rgb(var(--color-foreground));
+}
+
+/* ---------- Save for Later — Item list ---------- */
+.bs-sfl-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.bs-sfl-item {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 2rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(var(--color-foreground), 0.12);
+  border-radius: 8px;
+  background: rgb(var(--color-background, 255 255 255));
+}
+
+@media (max-width: 600px) {
+  .bs-sfl-item {
+    grid-template-columns: 110px 1fr;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
+.bs-sfl-item__media img,
+.bs-sfl-item__no-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 4px;
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+}
+
+.bs-sfl-item__no-image {
+  background: rgba(var(--color-foreground), 0.06);
+}
+
+.bs-sfl-item__body {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.bs-sfl-item__remove {
+  align-self: flex-start;
+  background: transparent;
+  border: 0;
+  color: rgba(var(--color-foreground), 0.6);
+  cursor: pointer;
+  padding: 0;
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  text-decoration: underline;
+}
+
+.bs-sfl-item__remove:hover {
+  color: rgb(var(--color-foreground));
+}
+
+.bs-sfl-item__title {
+  margin: 0 0 0.4rem;
+  font-size: 1.6rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+@media (max-width: 600px) {
+  .bs-sfl-item__title {
+    font-size: 1.25rem;
+  }
+}
+
+.bs-sfl-item__title a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.bs-sfl-item__title a:hover {
+  text-decoration: underline;
+}
+
+.bs-sfl-item__variant {
+  margin: 0 0 0.3rem;
+  font-size: 0.9rem;
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.bs-sfl-item__price {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.bs-sfl-item__compare {
+  color: rgba(var(--color-foreground), 0.5);
+  margin-right: 0.35rem;
+}
+
+.bs-sfl-item__sale {
+  color: rgb(var(--color-sale-price, var(--color-foreground)));
+  font-weight: 600;
+}
+
+.bs-sfl-item__qty {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: rgba(var(--color-foreground), 0.65);
+}
+
+.bs-sfl-item__actions {
+  margin-top: auto;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.bs-sfl-item__move {
+  min-width: 180px;
+}
+
+.bs-sfl-item__status {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  text-align: right;
+}
+
+.bs-sfl-item__status.is-error {
+  color: #c0392b;
+}
+
+.bs-sfl-item__status.is-success {
+  color: #1e8449;
+}
+
+/* ---------- Save for Later — Cart save button ---------- */
+.bs-cart-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: transparent;
+  border: 0;
+  padding: 0.4rem 0.5rem;
+  cursor: pointer;
+  color: rgba(var(--color-foreground), 0.65);
+  font-size: 0.8rem;
+  line-height: 1;
+  border-radius: var(--buttons-radius, 0);
+  transition: color 150ms ease;
+  white-space: nowrap;
+}
+
+.bs-cart-save-btn:hover:not(:disabled) {
+  color: rgb(var(--color-foreground));
+}
+
+.bs-cart-save-btn:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.bs-cart-save-btn .svg-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.bs-cart-save-btn svg {
+  width: 16px;
+  height: 16px;
+}
