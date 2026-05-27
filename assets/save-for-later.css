@@ -176,6 +176,12 @@
   min-width: 180px;
 }
 
+.bs-sfl-item__move.is-out-of-stock {
+  opacity: 0.45;
+  cursor: default;
+  pointer-events: none;
+}
+
 .bs-sfl-item__status {
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
