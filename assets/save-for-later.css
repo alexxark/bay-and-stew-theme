@@ -270,12 +270,25 @@
 /* Cart drawer: there's even less room here, so collapse the save button
    to an icon-only control on narrow widths to prevent line-wrapping. */
 @media (max-width: 480px) {
-  .cart-drawer .bs-cart-save-btn {
-    font-size: 0;
-    gap: 0;
-    padding: 0.35rem;
+  /* Keep the "Save for later" label visible on mobile too — just shrink
+     padding/gap so the row stays tidy. */
+  .bs-cart-save-btn {
+    font-size: 0.7rem;
+    gap: 0.25rem;
+    padding: 0.3rem 0.25rem;
   }
-  .cart-drawer .bs-cart-save-btn .svg-wrapper {
-    margin: 0;
+
+  /* Mobile cart page: narrow the quantity input so the action buttons
+     fit alongside without wrapping. */
+  .cart-item .quantity {
+    width: calc(9.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+  }
+
+  .cart-item .quantity__button {
+    width: 2.6rem;
+  }
+
+  .cart-items .cart-item__quantity {
+    padding-left: 0;
   }
 }

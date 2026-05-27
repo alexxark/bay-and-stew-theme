@@ -408,43 +408,69 @@
     moveBtn.disabled = true;
     setStatus(itemEl, 'Moving to cart…', null);
 
-    // Use the server as the source of truth for inventory: try to add the
-    // full saved quantity first. If Shopify rejects it (422) we parse the
-    // allowed amount from the error message and retry with that. This avoids
-    // relying on the heavily CDN-cached /products/handle.js inventory data.
-    addItemsToCart([{ id: variantId, quantity: saved.quantity }])
-      .then(function () {
-        setStatus(itemEl, '', null);
-        finishMove(variantId, itemEl, container, saved.quantity, saved.quantity);
-      })
-      .catch(function (err) {
-        const maxAddable = parseQtyFromError(err);
+    // Strategy: capture cart qty for this variant BEFORE the add, attempt
+    // the add (Shopify is the source of truth for inventory), then re-fetch
+    // the cart and diff to find out how many units were actually added.
+    // This works whether Shopify returns 200 (full add) or 422 (rejected).
+    fetchCurrentCart()
+      .then(function (preCart) {
+        const preQty = getCartQtyForVariant(preCart, variantId);
 
-        // No numeric hint in the error → give up and surface the message.
-        if (!maxAddable || maxAddable <= 0) {
-          // If Shopify says zero are available, flag the row as out of stock.
-          if (maxAddable === 0 || /sold\s*out|out of stock|unavailable/i.test(
-                (err && (err.description || err.message)) || '')) {
-            markOutOfStock(itemEl);
-            setStatus(itemEl, '', null);
-          } else {
-            setStatus(itemEl, (err && err.description) || 'Could not move to cart.', 'error');
-            moveBtn.disabled = false;
-          }
+        return addItemsToCart([{ id: variantId, quantity: saved.quantity }])
+          .then(
+            function () { return { ok: true,  err: null }; },
+            function (err) { return { ok: false, err: err  }; }
+          )
+          .then(function (addResult) {
+            // If the first attempt failed, parse the allowed qty from the
+            // error message and retry once with the clamped amount.
+            if (!addResult.ok) {
+              const maxAddable = parseQtyFromError(addResult.err);
+              if (maxAddable && maxAddable > 0) {
+                return addItemsToCart([{ id: variantId, quantity: maxAddable }])
+                  .then(
+                    function () { return { ok: true,  err: null }; },
+                    function (err) { return { ok: false, err: err  }; }
+                  );
+              }
+            }
+            return addResult;
+          })
+          .then(function (finalResult) {
+            // Verify what actually landed in the cart by re-fetching it.
+            return fetchCurrentCart().then(function (postCart) {
+              const postQty = getCartQtyForVariant(postCart, variantId);
+              const added   = Math.max(0, postQty - preQty);
+              return { added: added, finalResult: finalResult };
+            });
+          });
+      })
+      .then(function (result) {
+        const added = result.added;
+        const err   = result.finalResult && result.finalResult.err;
+
+        if (added > 0) {
+          // Something was added — success path (full or partial).
+          setStatus(itemEl, '', null);
+          finishMove(variantId, itemEl, container, added, saved.quantity);
           return;
         }
 
-        // Retry with the maximum quantity Shopify will accept.
-        addItemsToCart([{ id: variantId, quantity: maxAddable }])
-          .then(function () {
-            setStatus(itemEl, '', null);
-            finishMove(variantId, itemEl, container, maxAddable, saved.quantity);
-          })
-          .catch(function (err2) {
-            // Even the clamped retry failed → leave item in SFL.
-            setStatus(itemEl, (err2 && err2.description) || 'Could not move to cart.', 'error');
-            moveBtn.disabled = false;
-          });
+        // Nothing was added. Either out of stock or another error.
+        const text = ((err && (err.description || err.message)) || '').toString();
+        if (/sold\s*out|out of stock|unavailable|cannot find/i.test(text) ||
+            parseQtyFromError(err) === 0) {
+          markOutOfStock(itemEl);
+          setStatus(itemEl, '', null);
+        } else {
+          setStatus(itemEl, text || 'Could not move to cart.', 'error');
+          moveBtn.disabled = false;
+        }
+      })
+      .catch(function (err) {
+        // Network failure during pre-fetch.
+        setStatus(itemEl, (err && err.description) || 'Could not move to cart.', 'error');
+        moveBtn.disabled = false;
       });
   }
 
