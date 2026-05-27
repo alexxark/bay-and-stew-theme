@@ -200,14 +200,16 @@
 .bs-cart-save-btn {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   background: transparent;
   border: 0;
-  padding: 0.4rem 0.5rem;
+  padding: 0.35rem 0.4rem;
   cursor: pointer;
   color: rgba(var(--color-foreground), 0.65);
-  font-size: 0.8rem;
-  line-height: 1;
+  /* Slightly smaller than the remove button so "Save for later" stays
+     compact enough to sit alongside the trash icon without overflowing. */
+  font-size: 0.75rem;
+  line-height: 1.2;
   border-radius: var(--buttons-radius, 0);
   transition: color 150ms ease;
   white-space: nowrap;

@@ -547,6 +547,58 @@
   }
 
   // -----------------------------------------------------------------------
+  // Sign-in modal (shown when a guest tries to save an item)
+  //
+  // Reuses the same .bs-favorite-modal CSS classes so no extra styles are
+  // needed. Only the heading/body text and data attributes differ.
+  // -----------------------------------------------------------------------
+
+  let sflModalEl = null;
+
+  function openSflSignInModal() {
+    if (!sflModalEl) {
+      sflModalEl = document.createElement('div');
+      sflModalEl.className = 'bs-favorite-modal';
+      sflModalEl.setAttribute('role', 'dialog');
+      sflModalEl.setAttribute('aria-modal', 'true');
+      sflModalEl.setAttribute('aria-hidden', 'true');
+      sflModalEl.innerHTML =
+        '<div class="bs-favorite-modal__overlay" data-bs-sfl-close></div>' +
+        '<div class="bs-favorite-modal__panel">' +
+          '<button type="button" class="bs-favorite-modal__close" aria-label="Close" data-bs-sfl-close>&times;</button>' +
+          '<h2 class="bs-favorite-modal__title">Sign in to save for later</h2>' +
+          '<p class="bs-favorite-modal__text">Please sign in to your account to save items for later.</p>' +
+          '<div class="bs-favorite-modal__actions">' +
+            '<a class="button button--primary" data-bs-sfl-login>Sign in</a>' +
+            '<button type="button" class="button button--secondary" data-bs-sfl-close>Cancel</button>' +
+          '</div>' +
+        '</div>';
+      document.body.appendChild(sflModalEl);
+
+      sflModalEl.addEventListener('click', function (e) {
+        if (e.target.closest('[data-bs-sfl-close]')) closeSflSignInModal();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeSflSignInModal();
+      });
+    }
+
+    const loginUrl = (document.querySelector('meta[name="bs-login-url"]') || {}).content || '/account/login';
+    const returnTo = encodeURIComponent(window.location.pathname + window.location.search);
+    const link     = sflModalEl.querySelector('[data-bs-sfl-login]');
+    link.href      = loginUrl + (loginUrl.indexOf('?') === -1 ? '?' : '&') + 'checkout_url=' + returnTo;
+
+    sflModalEl.classList.add('is-open');
+    sflModalEl.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeSflSignInModal() {
+    if (!sflModalEl) return;
+    sflModalEl.classList.remove('is-open');
+    sflModalEl.setAttribute('aria-hidden', 'true');
+  }
+
+  // -----------------------------------------------------------------------
   // Save button handler (wired to cart drawer + main cart page)
   //
   // The Liquid template stamps all needed item data as data-* attributes on
@@ -558,6 +610,12 @@
     if (!btn || btn.disabled) return;
     e.preventDefault();
     e.stopPropagation();
+
+    // Guests cannot use Save for Later — prompt them to sign in.
+    if (!getCustomerId()) {
+      openSflSignInModal();
+      return;
+    }
 
     const itemKey      = btn.getAttribute('data-item-key');
     const variantId    = parseInt(btn.getAttribute('data-variant-id'), 10);
