@@ -271,10 +271,15 @@
   // Boot
   // ---------------------------------------------------------------------------
 
-  function init() {
-    if (!getCustomerId()) return;          // guests: no-op
+  function alwaysInstallHooks() {
+    // Always (re-)install hooks after DOMContentLoaded, in case fetch was polyfilled late.
     installFetchHook();
     installXhrHook();
+  }
+
+  function init() {
+    if (!getCustomerId()) return; // guests: no-op
+    alwaysInstallHooks();
 
     const snapshot = readBootstrap();
     if (!snapshot) return;
@@ -282,22 +287,26 @@
     // Seed dedupe baseline with the snapshot we just read; this prevents
     // an immediate redundant push if no mutations occur this session.
     lastPushedJson = JSON.stringify({
-      items:      (snapshot.items || []).map((it) => ({
-        id:           it.id,
-        quantity:     it.quantity,
-        properties:   it.properties || {},
+      items: (snapshot.items || []).map((it) => ({
+        id: it.id,
+        quantity: it.quantity,
+        properties: it.properties || {},
         selling_plan: it.selling_plan || null,
       })),
-      note:       snapshot.note || '',
+      note: snapshot.note || '',
       attributes: snapshot.attributes || {},
     });
 
     fetchCart().then((cart) => restoreSnapshot(snapshot, cart));
   }
 
+  // Install hooks as soon as possible, and again after DOMContentLoaded.
+  alwaysInstallHooks();
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('DOMContentLoaded', alwaysInstallHooks);
   } else {
     init();
+    alwaysInstallHooks();
   }
 })();
