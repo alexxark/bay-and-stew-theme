@@ -355,84 +355,94 @@
    *   7. Remove from Saved for Later regardless (even partial move).
    *   8. Refresh cart UI.
    */
+  /**
+   * Open the cart drawer if one exists on the page. Safe to call from any
+   * context — does nothing if the drawer element isn't present.
+   */
+  function openCartDrawer() {
+    const drawer = document.querySelector('cart-drawer');
+    if (drawer && typeof drawer.open === 'function') {
+      try { drawer.open(); } catch (e) { /* ignore */ }
+    }
+  }
+
+  /**
+   * Pull the first integer out of a Shopify cart error description.
+   * Examples handled:
+   *   "You can only add 20 of this item to your cart."  → 20
+   *   "All 20 are in your cart."                        → 20
+   *   "There are only 20 left of Foo."                  → 20
+   */
+  function parseQtyFromError(err) {
+    if (!err) return null;
+    const text = (err.description || err.message || '').toString();
+    const m    = text.match(/(\d+)/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  /**
+   * Finalise a successful (full or partial) move to cart:
+   * remove from SFL, refresh cart UI, open drawer, toast.
+   */
+  function finishMove(variantId, itemEl, container, addedQty, requestedQty) {
+    remove(variantId);
+    if (itemEl && itemEl.parentNode) itemEl.remove();
+
+    if (addedQty < requestedQty) {
+      showToast('Only ' + addedQty + ' ' + (addedQty === 1 ? 'was' : 'were') +
+        ' moved to cart due to availability.');
+    } else {
+      showToast('Item moved to cart.');
+    }
+
+    // Re-render cart UI then open the drawer so the customer sees the change.
+    Promise.resolve(refreshCartUI()).then(openCartDrawer);
+
+    if (readAll().length === 0 && container) renderSavedForLaterTab(container);
+  }
+
   function executeMoveToCart(variantId, itemEl, moveBtn, container) {
     const saved = readAll().find((s) => s.variantId === variantId);
     if (!saved) return;
 
     moveBtn.disabled = true;
-    setStatus(itemEl, 'Checking availability…', null);
+    setStatus(itemEl, 'Moving to cart…', null);
 
-    // Fetch inventory data and current cart state in parallel.
-    Promise.all([
-      fetchProductInventory(saved.productHandle),
-      fetchCurrentCart(),
-    ])
-      .then(function (results) {
-        const invMap  = results[0];
-        const cart    = results[1];
-        const inv     = invMap[variantId];
-        const cartQty = getCartQtyForVariant(cart, variantId);
+    // Use the server as the source of truth for inventory: try to add the
+    // full saved quantity first. If Shopify rejects it (422) we parse the
+    // allowed amount from the error message and retry with that. This avoids
+    // relying on the heavily CDN-cached /products/handle.js inventory data.
+    addItemsToCart([{ id: variantId, quantity: saved.quantity }])
+      .then(function () {
+        setStatus(itemEl, '', null);
+        finishMove(variantId, itemEl, container, saved.quantity, saved.quantity);
+      })
+      .catch(function (err) {
+        const maxAddable = parseQtyFromError(err);
 
-        // --- Determine how many can actually be added ---
-        const available = computeAvailable(inv, cartQty);
-
-        // Out of stock: mark the row and abort.
-        if (available === 0) {
-          markOutOfStock(itemEl);
-          setStatus(itemEl, '', null);
-          // Do NOT remove from SFL — customer keeps it until they choose to.
+        // No numeric hint in the error → give up and surface the message.
+        if (!maxAddable || maxAddable <= 0) {
+          // If Shopify says zero are available, flag the row as out of stock.
+          if (maxAddable === 0 || /sold\s*out|out of stock|unavailable/i.test(
+                (err && (err.description || err.message)) || '')) {
+            markOutOfStock(itemEl);
+            setStatus(itemEl, '', null);
+          } else {
+            setStatus(itemEl, (err && err.description) || 'Could not move to cart.', 'error');
+            moveBtn.disabled = false;
+          }
           return;
         }
 
-        // Clamp to available qty if the saved qty exceeds it.
-        const addQty    = available !== null ? Math.min(saved.quantity, available) : saved.quantity;
-        const wasPartial = available !== null && addQty < saved.quantity;
-
-        setStatus(itemEl, 'Moving to cart…', null);
-
-        // --- Add to cart ---
-        addItemsToCart([{ id: variantId, quantity: addQty }])
+        // Retry with the maximum quantity Shopify will accept.
+        addItemsToCart([{ id: variantId, quantity: maxAddable }])
           .then(function () {
-            // Always remove from Saved for Later after a successful add,
-            // even if only a partial quantity was moved.
-            remove(variantId);
-            itemEl.remove();
             setStatus(itemEl, '', null);
-
-            if (wasPartial) {
-              showToast('Only ' + addQty + ' ' + (addQty === 1 ? 'was' : 'were') +
-                ' moved to cart due to availability.');
-            } else {
-              showToast('Item moved to cart.');
-            }
-
-            // Refresh cart UI (drawer + icon + cart page).
-            refreshCartUI();
-
-            // If SFL list is now empty, render the empty-state placeholder.
-            if (readAll().length === 0) renderSavedForLaterTab(container);
+            finishMove(variantId, itemEl, container, maxAddable, saved.quantity);
           })
-          .catch(function (err) {
-            // /cart/add.js returned an error (e.g. inventory edge-case on
-            // the server after our check). Surface it without removing.
-            setStatus(itemEl, (err && err.description) || 'Could not move to cart.', 'error');
-            moveBtn.disabled = false;
-          });
-      })
-      .catch(function () {
-        // Network failure during inventory check — fall back to a direct add
-        // attempt so the feature still works offline-ish.
-        setStatus(itemEl, 'Moving to cart…', null);
-        addItemsToCart([{ id: variantId, quantity: saved.quantity }])
-          .then(function () {
-            remove(variantId);
-            itemEl.remove();
-            showToast('Item moved to cart.');
-            refreshCartUI();
-            if (readAll().length === 0) renderSavedForLaterTab(container);
-          })
-          .catch(function (err) {
-            setStatus(itemEl, (err && err.description) || 'Could not move to cart.', 'error');
+          .catch(function (err2) {
+            // Even the clamped retry failed → leave item in SFL.
+            setStatus(itemEl, (err2 && err2.description) || 'Could not move to cart.', 'error');
             moveBtn.disabled = false;
           });
       });

@@ -237,3 +237,45 @@
   width: 16px;
   height: 16px;
 }
+
+/* ----------------------------------------------------------------------
+   Cart page layout tweaks to fit the longer "Save for later" label
+   without horizontal scroll. The default quantity column reserves a lot
+   of left-padding which crowds the right-hand action buttons.
+   ---------------------------------------------------------------------- */
+@media screen and (min-width: 750px) {
+  /* Tighten the quantity column padding and shrink the quantity input
+     so the Remove + Save for later buttons sit comfortably next to it. */
+  .cart-items .cart-item__quantity,
+  .cart-items .cart-items__heading--quantity,
+  .cart-item__quantity--info quantity-popover > * {
+    padding-left: 1.5rem;
+  }
+
+  .cart-item .quantity {
+    width: calc(10.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+  }
+
+  .cart-item .quantity__button {
+    width: 3rem;
+  }
+}
+
+@media screen and (min-width: 990px) {
+  .cart-item .cart-item__quantity {
+    padding-left: 2rem;
+  }
+}
+
+/* Cart drawer: there's even less room here, so collapse the save button
+   to an icon-only control on narrow widths to prevent line-wrapping. */
+@media (max-width: 480px) {
+  .cart-drawer .bs-cart-save-btn {
+    font-size: 0;
+    gap: 0;
+    padding: 0.35rem;
+  }
+  .cart-drawer .bs-cart-save-btn .svg-wrapper {
+    margin: 0;
+  }
+}
