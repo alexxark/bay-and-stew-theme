@@ -167,6 +167,7 @@
         },
         "feature_item_3Ayn8B": {
           "type": "feature_item",
+          "disabled": true,
           "settings": {
             "enabled": true,
             "icon": "shopify://shop_images/Card-Icon.svg",

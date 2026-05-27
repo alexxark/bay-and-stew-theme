@@ -18,20 +18,20 @@
           "type": "announcement",
           "disabled": true,
           "settings": {
-            "text": "DOUBLE LOYALTY POINTS ON ANY PURCHASE – MAKERS CIRCLE EXCLUSIVE",
+            "text": "TRIPLE LOYALTY POINTS ON ANY PURCHASE – MAKERS CIRCLE EXCLUSIVE",
             "link": "https://bayandstew.com/pages/about?view=bloy-loyalty"
           }
         },
         "announcement_yxMhRg": {
           "type": "announcement",
-          "disabled": true,
           "settings": {
-            "text": "WE WILL BE CLOSED ON PRESIDENTS DAY 2/16, ORDERS PLACED AFTER NOON 2/13 WILL BE SHIPPED ON 2/17",
+            "text": "WE WILL BE CLOSED ON MEMORIAL DAY 5/25, ORDERS PLACED AFTER 12p.m. PDT FRIDAY 5/22 WILL BE SHIPPED ON TUESDAY 5/26",
             "link": ""
           }
         },
         "announcement-bar-0": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "RECEIVE AN EXTRA 25% OFF ON SALE ITEMS",
             "link": "shopify://collections/sale-1"
@@ -52,6 +52,7 @@
         "announcement-bar-0",
         "announcement_FnhcDx"
       ],
+      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],

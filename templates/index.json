@@ -58,6 +58,7 @@
         },
         "slide_8LMkQB": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
             "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
@@ -426,12 +427,12 @@
       ],
       "name": "Featured collection",
       "settings": {
-        "title": "Mother's Day",
+        "title": "Starter Packs",
         "heading_size": "h2",
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "mothers-day",
+        "collection": "bundles",
         "products_to_show": 5,
         "columns_desktop": 5,
         "full_width": false,
