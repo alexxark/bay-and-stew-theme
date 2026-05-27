@@ -36,6 +36,24 @@
 
   const DEBOUNCE_MS = 700;
   const CART_MUTATION_PATHS = ['/cart/add', '/cart/change', '/cart/update', '/cart/clear'];
+  const LAST_APPLIED_KEY = 'bs:cart-snapshot:last-applied';
+
+  function getLastApplied() {
+    try {
+      const id = getCustomerId();
+      if (!id) return 0;
+      const v = localStorage.getItem(LAST_APPLIED_KEY + ':' + id);
+      return v ? Number(v) || 0 : 0;
+    } catch (e) { return 0; }
+  }
+
+  function setLastApplied(ts) {
+    try {
+      const id = getCustomerId();
+      if (!id) return;
+      localStorage.setItem(LAST_APPLIED_KEY + ':' + id, String(ts || Date.now()));
+    } catch (e) { /* private mode etc. */ }
+  }
 
   function getCustomerId() {
     const meta = document.querySelector('meta[name="bs-customer-id"]');
@@ -117,6 +135,9 @@
         headers:     { 'Content-Type': 'application/json', Accept: 'application/json' },
         body:        payload,
         keepalive:   true,
+      }).then(() => {
+        // Our own push is now the latest applied state for this browser.
+        setLastApplied(snapshot.updated_at);
       }).catch(() => { /* offline / endpoint down — ignore */ });
     });
   }
@@ -151,79 +172,90 @@
   }
 
   function restoreSnapshot(snapshot, currentCart) {
-    if (!snapshot || !Array.isArray(snapshot.items) || !snapshot.items.length) return;
+    if (!snapshot || !Array.isArray(snapshot.items)) return;
 
-    // Don't overwrite an in-progress cart.
-    if (currentCart && currentCart.item_count > 0) return;
+    const snapshotTs   = Number(snapshot.updated_at) || 0;
+    const lastApplied  = getLastApplied();
+    const sourceToken  = snapshot.source_token || '';
+    const currentToken = (currentCart && currentCart.token) || '';
 
-    // If the snapshot was written by this same browser's cart token, the items
-    // are already accounted for — skip to avoid a redundant /cart/update call.
-    if (currentCart && snapshot.source_token && snapshot.source_token === currentCart.token) return;
+    // If the snapshot was written by this browser's current cart, nothing to do.
+    if (sourceToken && sourceToken === currentToken) {
+      if (snapshotTs > lastApplied) setLastApplied(snapshotTs);
+      return;
+    }
+
+    // Newer-wins: only restore if the server snapshot is newer than what this
+    // browser has already applied (or has never applied anything).
+    if (snapshotTs && snapshotTs <= lastApplied) return;
+
+    // If the snapshot is empty AND the current cart has items added in this
+    // browser since lastApplied, don't wipe them. Otherwise, clear the cart.
+    const snapshotEmpty = !snapshot.items.length;
 
     // Build the line-item array Shopify's /cart/add.js expects.
     const items = snapshot.items
       .filter((it) => it && it.id && it.quantity > 0)
       .map((it) => ({
-        id:         it.id,
-        quantity:   it.quantity,
-        properties: it.properties || {},
-        // /cart/add.js accepts selling_plan at the top level.
+        id:           it.id,
+        quantity:     it.quantity,
+        properties:   it.properties || {},
         selling_plan: it.selling_plan || undefined,
       }));
 
-    if (!items.length) return;
+    const applyAndFinish = function () {
+      // Round-trip note + attributes if present.
+      if (snapshot.note || (snapshot.attributes && Object.keys(snapshot.attributes).length)) {
+        fetch('/cart/update.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body:    JSON.stringify({
+            note:       snapshot.note || '',
+            attributes: snapshot.attributes || {},
+          }),
+        }).catch(() => {});
+      }
 
-    // Use /cart/add.js so each line preserves its properties + selling plan
-    // (those can't be set via /cart/update.js).
-    fetch('/cart/add.js', {
+      // Suppress the next push (it would just mirror what we just restored).
+      lastPushedJson = JSON.stringify({
+        items: items.map((it) => ({
+          id:           it.id,
+          quantity:     it.quantity,
+          properties:   it.properties,
+          selling_plan: it.selling_plan || null,
+        })),
+        note:       snapshot.note || '',
+        attributes: snapshot.attributes || {},
+      });
+      setLastApplied(snapshotTs || Date.now());
+
+      document.dispatchEvent(new CustomEvent('cart:refresh'));
+
+      // Force a reload so any visible cart UI (drawer, /cart page, header
+      // bubble) reflects the new state. Without this, the user sees stale
+      // counts until they interact with the cart.
+      location.reload();
+    };
+
+    // Step 1: clear current cart (so we replace rather than merge / duplicate).
+    fetch('/cart/clear.js', {
       method:  'POST',
       headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body:    JSON.stringify({ items: items }),
     })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((res) => {
-        if (!res) return;
-
-        // Round-trip note + attributes if present.
-        if (snapshot.note || (snapshot.attributes && Object.keys(snapshot.attributes).length)) {
-          fetch('/cart/update.js', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body:    JSON.stringify({
-              note:       snapshot.note || '',
-              attributes: snapshot.attributes || {},
-            }),
-          }).catch(() => {});
+      .then(() => {
+        if (snapshotEmpty || !items.length) {
+          // Snapshot is empty — cart is already cleared, just finish.
+          applyAndFinish();
+          return;
         }
-
-        // Suppress the next push (it would just mirror what we just restored).
-        lastPushedJson = JSON.stringify({
-          items:      items.map((it) => ({
-            id:           it.id,
-            quantity:     it.quantity,
-            properties:   it.properties,
-            selling_plan: it.selling_plan || null,
-          })),
-          note:       snapshot.note || '',
-          attributes: snapshot.attributes || {},
-        });
-
-        // Re-render any visible cart UI. cart.js publishes its own update
-        // event when CartItems.updateQuantity runs; here we go via the cart
-        // icon bubble and dispatch a refresh event for cart-rewards etc.
-        document.dispatchEvent(new CustomEvent('cart:refresh'));
-
-        // For visible cart pages / drawers, the simplest reliable refresh is
-        // a soft reload of just the relevant sections via a GET to the page.
-        // Most pages get away with a single reload; only do it if the user
-        // is currently looking at the cart page or has the drawer open.
-        const onCartPage = location.pathname.indexOf('/cart') === 0;
-        const drawerOpen = !!document.querySelector('cart-drawer.active');
-        if (onCartPage || drawerOpen) {
-          location.reload();
-        }
+        // Step 2: add snapshot items.
+        return fetch('/cart/add.js', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body:    JSON.stringify({ items: items }),
+        }).then(() => applyAndFinish());
       })
-      .catch(() => { /* ignore */ });
+      .catch(() => { /* ignore — next page load will retry */ });
   }
 
   // ---------------------------------------------------------------------------
