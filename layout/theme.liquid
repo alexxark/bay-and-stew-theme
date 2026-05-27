@@ -60,6 +60,7 @@
     <meta name="bs-login-url" content="{{ routes.account_login_url }}">
     <meta name="bs-favorites-endpoint" content="/apps/growth/favorites">
     <meta name="bs-saveforlater-endpoint" content="/apps/growth/saved-for-later">
+    <meta name="bs-cart-endpoint" content="/apps/growth/cart">
     {%- if customer -%}
       {%- assign bs_fav_value = customer.metafields.favorites.handles.value -%}
       <script id="bs-favorites-bootstrap" type="application/json">
@@ -77,11 +78,20 @@
           {{ bs_sfl_value | json }}
         {%- endif -%}
       </script>
+      {%- assign bs_cart_value = customer.metafields.cart.snapshot.value -%}
+      <script id="bs-cart-bootstrap" type="application/json">
+        {%- if bs_cart_value == blank -%}
+          null
+        {%- else -%}
+          {{ bs_cart_value | json }}
+        {%- endif -%}
+      </script>
     {%- endif -%}
     {{ 'favorites.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'favorites.js' | asset_url }}" defer="defer"></script>
     {{ 'save-for-later.css' | asset_url | stylesheet_tag }}
     <script src="{{ 'save-for-later.js' | asset_url }}" defer="defer"></script>
+    <script src="{{ 'persistent-cart.js' | asset_url }}" defer="defer"></script>
 
     {%- liquid
       assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
