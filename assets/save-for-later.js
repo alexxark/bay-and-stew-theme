@@ -199,20 +199,31 @@
     const cartDrawer = document.querySelector('cart-drawer');
     if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
       const sections = cartDrawer.getSectionsToRender().map((s) => s.id);
-      return fetchCartSections(sections).then((sectionMap) => {
-        cartDrawer.renderContents({ sections: sectionMap });
-        if (cartDrawer.classList.contains('is-empty')) cartDrawer.classList.remove('is-empty');
-        const inner = cartDrawer.querySelector('.drawer__inner');
-        if (inner && inner.classList.contains('is-empty')) inner.classList.remove('is-empty');
-      });
+      return Promise.all([fetchCartSections(sections), fetchCurrentCart()])
+        .then(function (results) {
+          const sectionMap = results[0];
+          const cart       = results[1];
+          const isEmpty    = !cart || cart.item_count === 0;
+
+          cartDrawer.renderContents({ sections: sectionMap });
+
+          // The server-rendered section HTML reflects the new cart state,
+          // but the outer <cart-drawer> element's `is-empty` class is not
+          // re-evaluated by renderContents(). Toggle it ourselves so the
+          // empty-cart layout shows when the last item is removed.
+          cartDrawer.classList.toggle('is-empty', isEmpty);
+          const inner = cartDrawer.querySelector('.drawer__inner');
+          if (inner) inner.classList.toggle('is-empty', isEmpty);
+        })
+        .catch(() => { /* swallow — caller's success path should not flip */ });
     }
 
     const cartNotification = document.querySelector('cart-notification');
     if (cartNotification && typeof cartNotification.renderContents === 'function') {
       const sections = cartNotification.getSectionsToRender().map((s) => s.id);
-      return fetchCartSections(sections).then((sectionMap) => {
-        cartNotification.renderContents({ sections: sectionMap });
-      });
+      return fetchCartSections(sections)
+        .then((sectionMap) => { cartNotification.renderContents({ sections: sectionMap }); })
+        .catch(() => {});
     }
 
     // Fallback: at minimum update the cart icon count bubble.
@@ -683,14 +694,21 @@
           compareAt: compareAt && compareAt > price ? compareAt : null,
         });
         showToast('Item saved for later.');
-        // Re-render the cart so the removed row disappears.
-        return refreshCartUI();
       })
       .catch(function (err) {
-        // Cart removal failed — re-enable so the customer can retry.
+        // Cart removal itself failed — re-enable so the customer can retry.
         btn.disabled = false;
         showToast((err && err.description) || 'Could not save item.');
-      });
+        // Re-throw to skip the refresh step below.
+        throw err;
+      })
+      .then(function () {
+        // Always refresh the cart UI after a successful save, but never let
+        // a refresh failure surface as a "Could not save item." toast — the
+        // item IS saved at this point.
+        return refreshCartUI();
+      })
+      .catch(function () { /* refresh failures are swallowed */ });
     // btn.disabled intentionally stays true on success: the entire row is
     // removed from the cart when refreshCartUI() re-renders the section.
   }
