@@ -171,6 +171,63 @@
     return JSON.stringify(a.properties || {}) === JSON.stringify(b.properties || {});
   }
 
+  /**
+   * Refresh visible cart UI (header bubble, drawer, /cart page) by fetching
+   * the rendered sections from Shopify and patching matching DOM nodes.
+   * Mirrors Dawn's CartItems.getSectionsToRender() approach.
+   */
+  function refreshCartSections() {
+    const targets = [
+      { id: 'cart-icon-bubble',     selector: '#cart-icon-bubble',  inner: '.shopify-section' },
+      { id: 'cart-drawer',          selector: '#CartDrawer',        inner: false },
+      { id: 'cart-live-region-text', selector: '#cart-live-region-text', inner: '.shopify-section' },
+      // Only present on /cart page; harmless if missing.
+      { id: 'main-cart-items',      selector: '#main-cart-items',   inner: '.js-contents' },
+      { id: 'main-cart-footer',     selector: '#main-cart-footer',  inner: '.js-contents' },
+    ];
+
+    const present = targets.filter((t) => document.querySelector(t.selector));
+    if (!present.length) return;
+
+    const sectionsParam = present.map((t) => t.id).join(',');
+
+    fetch('/?sections=' + encodeURIComponent(sectionsParam), {
+      credentials: 'same-origin',
+      headers:     { Accept: 'application/json' },
+    })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((sections) => {
+        if (!sections) return;
+
+        present.forEach((t) => {
+          const html = sections[t.id];
+          if (!html) return;
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+
+          if (t.inner) {
+            const src  = doc.querySelector(t.inner);
+            const dest = document.querySelector(t.selector + ' ' + t.inner)
+                      || document.querySelector(t.selector);
+            if (src && dest) dest.innerHTML = src.innerHTML;
+          } else {
+            // Replace the whole node.
+            const src  = doc.querySelector(t.selector);
+            const dest = document.querySelector(t.selector);
+            if (src && dest) dest.innerHTML = src.innerHTML;
+          }
+        });
+
+        // Let BLOY / rewards bar / anything else listening know.
+        document.dispatchEvent(new CustomEvent('cart:refresh'));
+        if (window.PUB_SUB_EVENTS && window.publish) {
+          fetch('/cart.js').then((r) => r.json()).then((cart) => {
+            try { window.publish(window.PUB_SUB_EVENTS.cartUpdate, { source: 'persistent-cart', cartData: cart }); } catch (e) {}
+          });
+        }
+      })
+      .catch(() => { /* ignore — user can refresh manually if needed */ });
+  }
+
   function restoreSnapshot(snapshot, currentCart) {
     if (!snapshot || !Array.isArray(snapshot.items)) return;
 
@@ -231,10 +288,9 @@
 
       document.dispatchEvent(new CustomEvent('cart:refresh'));
 
-      // Force a reload so any visible cart UI (drawer, /cart page, header
-      // bubble) reflects the new state. Without this, the user sees stale
-      // counts until they interact with the cart.
-      location.reload();
+      // Soft-refresh the cart UI (header bubble, drawer, /cart page) without
+      // a full page reload.
+      refreshCartSections();
     };
 
     // Step 1: clear current cart (so we replace rather than merge / duplicate).
