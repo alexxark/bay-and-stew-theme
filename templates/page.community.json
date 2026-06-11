@@ -72,7 +72,7 @@
         "text_AfDa6P": {
           "type": "text",
           "settings": {
-            "text": "<h3>Free with qualifying $350+ purchase<br/></h3><p>Receive a complimentary <strong>Bay & Stew tote bag</strong> with $350+ qualifying purchases throughout June. Featuring a convenient pocket and spacious inside space, perfect for carrying jewelry supplies in. Available while supplies last and automatically added to eligible carts.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/>TERMS: Valid through 06/30/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
+            "text": "<h3>SOLD OUT - PROMOTION NOW ENDED<br/></h3><p>Receive a complimentary <strong>Bay & Stew tote bag</strong> with $350+ qualifying purchases throughout June. Featuring a convenient pocket and spacious inside space, perfect for carrying jewelry supplies in. Available while supplies last and automatically added to eligible carts.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/>TERMS: Valid through 06/30/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
             "text_style": "body"
           }
         },
@@ -91,7 +91,9 @@
         "text_AfDa6P",
         "button_8cbpjb"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "h3 {color: red}"
+      ],
       "settings": {
         "image": "shopify://shop_images/card-size_V3-tote-sold-out.jpg",
         "height": "small",
