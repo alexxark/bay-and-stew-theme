@@ -626,7 +626,6 @@
         "text_HewVVU",
         "button_WJWTcb"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "PJ Supplies",
       "settings": {
@@ -735,6 +734,7 @@
         "text_ndHcJE",
         "button_FmxNiW"
       ],
+      "disabled": true,
       "name": "PJ Supplies V2",
       "settings": {
         "image": "shopify://shop_images/Rectangle_2.jpg",
