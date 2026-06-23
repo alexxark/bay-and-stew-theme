@@ -627,7 +627,7 @@
         "button_WJWTcb"
       ],
       "custom_css": [],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "PJ Supplies",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -699,6 +699,55 @@
         "quick_add": "none",
         "columns_mobile": "2",
         "swipe_on_mobile": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_bFQqqt": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_gr4TbG": {
+          "type": "heading",
+          "settings": {
+            "heading": "Permanent Jewelry Supplies for Professional Makers",
+            "heading_size": "h2"
+          }
+        },
+        "text_ndHcJE": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Shop high-quality permanent jewelry chains, connectors, charms, and findings designed for jewelry artists, studios, and event-based permanent jewelry businesses.</p><p><strong>Our gold-filled and sterling silver materials are trusted by makers</strong> who need reliable supplies for permanent jewelry bracelets, anklets, and custom pieces.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_FmxNiW": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Here",
+            "button_link": "shopify://collections/all",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_gr4TbG",
+        "text_ndHcJE",
+        "button_FmxNiW"
+      ],
+      "disabled": true,
+      "name": "PJ Supplies V2",
+      "settings": {
+        "image": "shopify://shop_images/Rectangle_2.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-2",
+        "color_scheme": "scheme-2",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -1058,6 +1107,7 @@
     "rich_text_cjJbya",
     "featured_collection_YRmdhq",
     "featured_collection_iQH7YA",
+    "image_with_text_bFQqqt",
     "rich_text_LDLKra",
     "featured_collection_BBDHfE",
     "rich_text_Ugb7AD",
