@@ -626,6 +626,7 @@
         "text_HewVVU",
         "button_WJWTcb"
       ],
+      "disabled": true,
       "custom_css": [],
       "name": "PJ Supplies",
       "settings": {
@@ -724,7 +725,7 @@
           "type": "button",
           "settings": {
             "button_label": "Shop Here",
-            "button_link": "shopify://collections/all",
+            "button_link": "shopify://pages/permanent-jewelry",
             "button_style_secondary": false
           }
         }
@@ -734,7 +735,6 @@
         "text_ndHcJE",
         "button_FmxNiW"
       ],
-      "disabled": true,
       "name": "PJ Supplies V2",
       "settings": {
         "image": "shopify://shop_images/Rectangle_2.jpg",
@@ -783,7 +783,6 @@
         "text_GUh77y",
         "button_xLVgN9"
       ],
-      "disabled": true,
       "name": "Wholesale V2",
       "settings": {
         "image": "shopify://shop_images/Rectangle_2-2.jpg",
@@ -834,6 +833,7 @@
         "text_7yKLcq",
         "button_C3EKXm"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
