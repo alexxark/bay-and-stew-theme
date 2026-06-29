@@ -11,6 +11,7 @@
   "sections": {
     "main": {
       "type": "main-page",
+      "disabled": true,
       "custom_css": [
         ".main-page-title {font-size: 48px; font-weight: bold; text-align: center; color: #806f65;}"
       ],
@@ -18,9 +19,59 @@
         "padding_top": 28,
         "padding_bottom": 48
       }
+    },
+    "image_banner_U7UGL6": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_RRkLmA": {
+          "type": "heading",
+          "settings": {
+            "heading": "Jump Ring Chart",
+            "heading_size": "h1"
+          }
+        },
+        "text_B9Dt4h": {
+          "type": "text",
+          "settings": {
+            "text": "Find jump ring styles compatible with our large quantity of permanent jewelry chains.",
+            "text_style": "body"
+          }
+        },
+        "buttons_AN4GC6": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "View Chart",
+            "button_link_1": "https://cdn.shopify.com/s/files/1/0730/7824/3649/files/Jump-Ring-Chart-V1.pdf?v=1782773218",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_RRkLmA",
+        "text_B9Dt4h",
+        "buttons_AN4GC6"
+      ],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Banner-02.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "small",
+        "desktop_content_position": "top-center",
+        "show_text_box": false,
+        "desktop_content_alignment": "center",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
     }
   },
   "order": [
-    "main"
+    "main",
+    "image_banner_U7UGL6"
   ]
 }
