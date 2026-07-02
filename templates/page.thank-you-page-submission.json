@@ -1,0 +1,76 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "custom_css": [
+        ".main-page-title {font-size: 48px; font-weight: bold; text-align: center; color: #806f65;}"
+      ],
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 48
+      }
+    },
+    "image_with_text_eJUEqD": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_8LikNT": {
+          "type": "heading",
+          "settings": {
+            "heading": "Thanks for Applying!",
+            "heading_size": "h1"
+          }
+        },
+        "text_h8hn8N": {
+          "type": "text",
+          "settings": {
+            "text": "<h3>What Happens Next?</h3><ul><li>Our team will review your application and submitted documents.</li><li>Most applications are reviewed within <strong>1 business day</strong>.</li><li>You'll receive an email once your account has been approved.</li></ul><h3>Important</h3><p>If additional documentation is needed, we'll contact you by email.</p><p><strong>Questions?</strong> Contact us at hello@bayandstew.com.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_43pymn": {
+          "type": "button",
+          "settings": {
+            "button_label": "Explore Jewelry Supplies",
+            "button_link": "shopify://pages/permanent-jewelry",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_8LikNT",
+        "text_h8hn8N",
+        "button_43pymn"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/permanent-jewelry-19.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_with_text_eJUEqD"
+  ]
+}

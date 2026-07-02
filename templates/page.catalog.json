@@ -45,7 +45,7 @@
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
-        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "color_scheme": "scheme-1",
         "full_width": true,
         "padding_top": 40,
         "padding_bottom": 52
@@ -59,6 +59,54 @@
         "color_scheme": "",
         "padding_top": 0,
         "padding_bottom": 52
+      }
+    },
+    "image_with_text_cGHjxU": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_npLHXe": {
+          "type": "heading",
+          "settings": {
+            "heading": "Get a Physical Copy",
+            "heading_size": "h2"
+          }
+        },
+        "text_JMe6im": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Add a physical catalog to your cart to ship in your next order, limit to one per person.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_qN3iBb": {
+          "type": "button",
+          "settings": {
+            "button_label": "View Physical Catalog",
+            "button_link": "https://bayandstew.com/products/bay-stew-product-catalog-connectors?_pos=1&_sid=72244b20f&_ss=r",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_npLHXe",
+        "text_JMe6im",
+        "button_qN3iBb"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Catalog-Mockup-3.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "image_with_text_NH3jQH": {
@@ -88,12 +136,12 @@
         "image": "shopify://shop_images/image_73e1e6b3-9357-4850-94d8-c25699c3dd60.jpg",
         "height": "adapt",
         "desktop_image_width": "medium",
-        "layout": "image_first",
+        "layout": "text_first",
         "desktop_content_position": "top",
         "desktop_content_alignment": "left",
         "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
-        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
+        "section_color_scheme": "scheme-2",
+        "color_scheme": "scheme-2",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 36,
@@ -105,6 +153,7 @@
     "main",
     "rich_text_DyCnBA",
     "custom_liquid_aT7XDJ",
+    "image_with_text_cGHjxU",
     "image_with_text_NH3jQH"
   ]
 }
