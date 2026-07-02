@@ -344,8 +344,12 @@
                   Collection Showcases: render image/gif tiles after a configured
                   product position. Tiles take the same grid slot/aspect ratio as
                   product cards so the grid layout stays intact.
+
+                  Use the absolute position across all paginated pages
+                  (`paginate.current_offset + forloop.index`) so each showcase
+                  only appears once as pages are appended via Load More.
                 {%- endcomment -%}
-                {%- assign current_position = forloop.index -%}
+                {%- assign current_position = paginate.current_offset | plus: forloop.index -%}
                 {%- for showcase_i in (1..5) -%}
                   {%- assign showcase_pos_key = 'showcase_' | append: showcase_i | append: '_position' -%}
                   {%- assign showcase_img_key = 'showcase_' | append: showcase_i | append: '_image' -%}
