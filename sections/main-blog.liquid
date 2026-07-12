@@ -29,7 +29,9 @@
     {%- if section.settings.show_search -%}
       <blog-search
         class="blog-search"
-        data-search-scope="{{ section.settings.search_scope | default: 'page' }}"
+        data-blog-handle="{{ blog.handle }}"
+        data-search-url="{{ routes.predictive_search_url }}"
+        data-search-page-url="{{ routes.search_url }}"
       >
         <form
           class="blog-search__form"
@@ -39,32 +41,41 @@
         >
           <input type="hidden" name="type" value="article">
           <input type="hidden" name="options[prefix]" value="last">
-          <label for="BlogSearch-{{ section.id }}" class="visually-hidden">
-            {{ 'general.search.search' | t }}
-          </label>
-          <div class="blog-search__field">
-            <span class="blog-search__icon" aria-hidden="true">
-              {{- 'icon-search.svg' | inline_asset_content -}}
-            </span>
+          <div class="field">
             <input
               id="BlogSearch-{{ section.id }}"
-              class="blog-search__input"
+              class="search__input field__input"
               type="search"
               name="q"
               value=""
               placeholder="{{ section.settings.search_placeholder | default: 'Search articles...' | escape }}"
               autocomplete="off"
+              autocorrect="off"
+              autocapitalize="off"
               spellcheck="false"
               data-blog-search-input
             >
+            <label class="field__label" for="BlogSearch-{{ section.id }}">
+              {{ section.settings.search_placeholder | default: 'Search articles...' | escape }}
+            </label>
             <button
-              type="button"
-              class="blog-search__clear"
+              type="reset"
+              class="reset__button field__button hidden"
               data-blog-search-clear
-              aria-label="{{ 'general.search.reset' | t | default: 'Clear search' }}"
-              hidden
+              aria-label="{{ 'general.search.reset' | t }}"
             >
-              &times;
+              <span class="svg-wrapper">
+                {{- 'icon-reset.svg' | inline_asset_content -}}
+              </span>
+            </button>
+            <button
+              type="submit"
+              class="search__button field__button"
+              aria-label="{{ 'general.search.search' | t }}"
+            >
+              <span class="svg-wrapper">
+                {{- 'icon-search.svg' | inline_asset_content -}}
+              </span>
             </button>
           </div>
         </form>
@@ -75,6 +86,12 @@
           aria-live="polite"
           hidden
         ></p>
+
+        <div
+          class="blog-search__results"
+          data-blog-search-results
+          hidden
+        ></div>
       </blog-search>
     {%- endif -%}
 
@@ -83,16 +100,8 @@
       data-blog-articles
     >
       {%- for article in blog.articles -%}
-        {%- capture article_tags -%}
-          {%- for tag in article.tags -%}{{ tag }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
-        {%- endcapture -%}
         <div
           class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
-          data-blog-article
-          data-article-title="{{ article.title | escape }}"
-          data-article-tags="{{ article_tags | strip | escape }}"
-          data-article-excerpt="{{ article.excerpt_or_content | strip_html | truncatewords: 60 | escape }}"
-          data-article-author="{{ article.author | escape }}"
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
             style="--animation-order: {{ forloop.index }};"
