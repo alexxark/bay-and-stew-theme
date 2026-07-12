@@ -1,13 +1,3 @@
-{%- comment -%}
-  ================================================================
-  Wholesale gating for non-B2B customers is now handled inline by
-  the `price` snippet (price replaced with an "Apply for wholesale"
-  CTA). The full product page is shown to everyone, but the buy
-  buttons are hidden for non-B2B customers on wholesale-only
-  products (see the `buy_buttons` block below).
-  ================================================================
-{%- endcomment -%}
-{%- capture wholesale_lock -%}{%- render 'wholesale-lock-status', product: product -%}{%- endcapture -%}
 {%- comment %}BSS Login{% endcomment -%}{%- assign bss_product__has_only_default_variant = false %} {% assign _variants_count = 0 %} {% assign bss_product__first_available_variant = nil %} {% assign bss_product__selected_variant = nil %} {% assign bss_product__selected_or_first_available_variant = nil %} {% assign use_variant = true %} {% for variant in product.variants %} {% capture var %} {% render 'bss-lock-condition', scope: 'subject', subject: variant, subject_parent: product, bss_lock_action: 'handle-variant-default' %} {% endcapture %} {% if var contains "true" %} {% continue %} {% endif %} {% assign _variants_count = _variants_count | plus: 1 %} {% if bss_product__first_available_variant == nil and variant.available %} {% assign bss_product__first_available_variant = variant %} {% endif %} {% if bss_product__selected_variant == nil and variant.selected %} {% assign bss_product__selected_variant = variant %} {% endif %} {% if variant == product.selected_or_first_available_variant %} {% assign bss_product__selected_or_first_available_variant = product.selected_or_first_available_variant %} {% endif %} {% endfor %} {% if _variants_count == 1 %} {% assign bss_product__has_only_default_variant = true %} {% endif %} {% if bss_product__selected_or_first_available_variant == nil %} {% assign bss_product__selected_or_first_available_variant = bss_product__first_available_variant %} {% endif -%}{%- comment %}BSS-Login{% endcomment -%}
 <product-info
   id="MainProduct-{{ section.id }}"
@@ -611,13 +601,7 @@
                 {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
               {%- when 'bulk_order_form' -%}
   <div {{ block.shopify_attributes }}>
-    {%- if wholesale_lock contains 'product-locked' -%}
-      {%- comment -%}
-        Non-B2B customer on a wholesale-only product:
-        hide the bulk/quick order form. The price snippet
-        already shows an "Apply for wholesale" CTA.
-      {%- endcomment -%}
-    {%- elsif product.tags contains '0ALPHABET' or product.tags contains '0BIRTHSTHONES' or product.tags contains 'SAMPLES' or product.tags contains '0ZODIAC' or product.tags contains '0BIRTHFLOWERS' or product.type == 'Rings' -%}
+    {%- if product.tags contains '0ALPHABET' or product.tags contains '0BIRTHSTHONES' or product.tags contains 'SAMPLES' or product.tags contains '0ZODIAC' or product.tags contains '0BIRTHFLOWERS' or product.type == 'Rings' -%}
 
       <div class="bulk-order-form" id="BulkOrderForm-{{ section.id }}">
         <div class="bulk-order-form__header">
@@ -867,21 +851,13 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     {%- endif -%}
   </div>
               {%- when 'buy_buttons' -%}
-                {%- if wholesale_lock contains 'product-locked' -%}
-                  {%- comment -%}
-                    Non-B2B customer on a wholesale-only product:
-                    hide the add-to-cart / buy buttons. The price
-                    snippet already shows an "Apply for wholesale" CTA.
-                  {%- endcomment -%}
-                {%- else -%}
-                  {%- render 'buy-buttons',
-                    block: block,
-                    product: product,
-                    product_form_id: product_form_id,
-                    section_id: section.id,
-                    show_pickup_availability: true
-                  -%}
-                {%- endif -%}
+                {%- render 'buy-buttons',
+                  block: block,
+                  product: product,
+                  product_form_id: product_form_id,
+                  section_id: section.id,
+                  show_pickup_availability: true
+                -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
@@ -1143,31 +1119,7 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     margin-bottom: 10px !important;
   }
 </style>
-{%- if wholesale_lock contains 'product-locked' -%}
-  {%- comment -%}
-    Non-B2B customer on a wholesale-only product: hide the BSS B2B
-    quantity-discount table (rendered client-side by the BSS app)
-    along with any volume-pricing / bulk-order UI. The price snippet
-    already shows an "Apply for wholesale" CTA in their place.
-  {%- endcomment -%}
-  <style>
-    .bss-b2b-qty-table-wrapper,
-    .bss-b2b-cart-item-qty-table,
-    .quantity_break_table,
-    [bss-b2b-qty-table],
-    .volume-pricing,
-    .bulk-order-form,
-    #shopify-installments,
-    .shopify-payment-terms,
-    shopify-payment-terms,
-    .product-form__quantity,
-    .product-form__input--quantity {
-      display: none !important;
-      margin: 0 !important;
-      padding: 0 !important;
-    }
-  </style>
-{%- endif -%}
+
 <style>
   .product-form__input--personalization {
     margin-bottom: 1.5rem;
