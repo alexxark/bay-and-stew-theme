@@ -2,6 +2,10 @@
 {{ 'component-card.css' | asset_url | stylesheet_tag }}
 {{ 'section-main-blog.css' | asset_url | stylesheet_tag }}
 
+{%- if section.settings.show_search -%}
+  <script src="{{ 'main-blog-search.js' | asset_url }}" defer="defer"></script>
+{%- endif -%}
+
 {%- style -%}
   .section-{{ section.id }}-padding {
     padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
@@ -22,10 +26,73 @@
       {{ blog.title | escape }}
     </h1>
 
-    <div class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}">
+    {%- if section.settings.show_search -%}
+      <blog-search
+        class="blog-search"
+        data-search-scope="{{ section.settings.search_scope | default: 'page' }}"
+      >
+        <form
+          class="blog-search__form"
+          role="search"
+          action="{{ routes.search_url }}"
+          method="get"
+        >
+          <input type="hidden" name="type" value="article">
+          <input type="hidden" name="options[prefix]" value="last">
+          <label for="BlogSearch-{{ section.id }}" class="visually-hidden">
+            {{ 'general.search.search' | t }}
+          </label>
+          <div class="blog-search__field">
+            <span class="blog-search__icon" aria-hidden="true">
+              {{- 'icon-search.svg' | inline_asset_content -}}
+            </span>
+            <input
+              id="BlogSearch-{{ section.id }}"
+              class="blog-search__input"
+              type="search"
+              name="q"
+              value=""
+              placeholder="{{ section.settings.search_placeholder | default: 'Search articles...' | escape }}"
+              autocomplete="off"
+              spellcheck="false"
+              data-blog-search-input
+            >
+            <button
+              type="button"
+              class="blog-search__clear"
+              data-blog-search-clear
+              aria-label="{{ 'general.search.reset' | t | default: 'Clear search' }}"
+              hidden
+            >
+              &times;
+            </button>
+          </div>
+        </form>
+
+        <p
+          class="blog-search__status"
+          data-blog-search-status
+          aria-live="polite"
+          hidden
+        ></p>
+      </blog-search>
+    {%- endif -%}
+
+    <div
+      class="blog-articles {% if section.settings.layout == 'collage' %}blog-articles--collage{% endif %}"
+      data-blog-articles
+    >
       {%- for article in blog.articles -%}
+        {%- capture article_tags -%}
+          {%- for tag in article.tags -%}{{ tag }}{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}
+        {%- endcapture -%}
         <div
           class="blog-articles__article article{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}"
+          data-blog-article
+          data-article-title="{{ article.title | escape }}"
+          data-article-tags="{{ article_tags | strip | escape }}"
+          data-article-excerpt="{{ article.excerpt_or_content | strip_html | truncatewords: 60 | escape }}"
+          data-article-author="{{ article.author | escape }}"
           {% if settings.animations_reveal_on_scroll %}
             data-cascade
             style="--animation-order: {{ forloop.index }};"
@@ -45,7 +112,9 @@
     </div>
 
     {%- if paginate.pages > 1 -%}
-      {%- render 'pagination', paginate: paginate -%}
+      <div data-blog-pagination>
+        {%- render 'pagination', paginate: paginate -%}
+      </div>
     {%- endif -%}
   </div>
 {%- endpaginate -%}
@@ -59,6 +128,23 @@
     {
       "type": "header",
       "content": "t:sections.main-blog.settings.header.content"
+    },
+    {
+      "type": "header",
+      "content": "Search bar"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_search",
+      "default": true,
+      "label": "Show search bar",
+      "info": "Adds a live-filter search bar at the top of the blog. Filters the currently displayed articles by title, tags, excerpt, and author."
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "default": "Search articles...",
+      "label": "Search placeholder"
     },
     {
       "type": "select",

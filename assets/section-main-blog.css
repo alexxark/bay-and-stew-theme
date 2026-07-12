@@ -59,3 +59,110 @@
     padding-bottom: 82.5rem;
   }
 }
+
+/* ---- Blog search bar ---- */
+.blog-search {
+  display: block;
+  margin: 0 auto 3rem;
+  max-width: 60rem;
+}
+
+.blog-search__form {
+  margin: 0;
+}
+
+.blog-search__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.2);
+  border-radius: var(--inputs-radius, 0);
+  background-color: rgb(var(--color-background));
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.blog-search__field:focus-within {
+  border-color: rgba(var(--color-foreground), 0.7);
+  box-shadow: 0 0 0 0.1rem rgba(var(--color-foreground), 0.4);
+}
+
+.blog-search__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-left: 1.4rem;
+  color: rgba(var(--color-foreground), 0.6);
+  pointer-events: none;
+}
+
+.blog-search__icon .icon {
+  width: 1.8rem;
+  height: 1.8rem;
+}
+
+.blog-search__input {
+  flex: 1 1 auto;
+  width: 100%;
+  padding: 1.2rem 1.4rem;
+  border: 0;
+  background: transparent;
+  color: rgb(var(--color-foreground));
+  font-size: 1.5rem;
+  font-family: inherit;
+  outline: none;
+  appearance: none;
+}
+
+.blog-search__input::placeholder {
+  color: rgba(var(--color-foreground), 0.55);
+}
+
+/* Hide native clear buttons so we can render our own consistent one. */
+.blog-search__input::-webkit-search-cancel-button,
+.blog-search__input::-webkit-search-decoration {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.blog-search__clear {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.2rem;
+  height: 3.2rem;
+  margin-right: 0.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: rgba(var(--color-foreground), 0.7);
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.blog-search__clear:hover,
+.blog-search__clear:focus-visible {
+  background-color: rgba(var(--color-foreground), 0.08);
+  color: rgb(var(--color-foreground));
+  outline: none;
+}
+
+.blog-search__status {
+  margin: 1.2rem 0 0;
+  color: rgba(var(--color-foreground), 0.75);
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.blog-search__status a {
+  color: inherit;
+  text-decoration: underline;
+}
+
+/* Ensure hidden article cards do not leave empty grid tracks behind. */
+.blog-articles__article[hidden] {
+  display: none !important;
+}
+
