@@ -1,0 +1,216 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "custom_css": [
+        ".main-page-title {font-size: 48px; font-weight: bold; text-align: center; color: #806f65;}"
+      ],
+      "settings": {
+        "padding_top": 36,
+        "padding_bottom": 48
+      }
+    },
+    "image_banner_EP4pQG": {
+      "type": "image-banner",
+      "blocks": {
+        "heading_QGXCTi": {
+          "type": "heading",
+          "settings": {
+            "heading": "Gold Filled Connector Requests",
+            "heading_size": "h2"
+          }
+        },
+        "text_MnP4qc": {
+          "type": "text",
+          "settings": {
+            "text": "Looking for something unique? We love hearing customer ideas. If your gold filled connector request is a good fit, we'll work through the design and development process to make it a reality.",
+            "text_style": "body"
+          }
+        },
+        "buttons_x9WahF": {
+          "type": "buttons",
+          "settings": {
+            "button_label_1": "Make a request",
+            "button_link_1": "",
+            "button_style_secondary_1": false,
+            "button_label_2": "",
+            "button_link_2": "",
+            "button_style_secondary_2": true
+          }
+        }
+      },
+      "block_order": [
+        "heading_QGXCTi",
+        "text_MnP4qc",
+        "buttons_x9WahF"
+      ],
+      "custom_css": [],
+      "name": "t:sections.image-banner.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Banner-3.jpg",
+        "image_overlay_opacity": 0,
+        "image_height": "adapt",
+        "desktop_content_position": "middle-center",
+        "show_text_box": true,
+        "desktop_content_alignment": "center",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "center",
+        "stack_images_on_mobile": true,
+        "show_text_below": true
+      }
+    },
+    "image_with_text_H4XcYQ": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_eQMKzU": {
+          "type": "heading",
+          "settings": {
+            "heading": "How It Works",
+            "heading_size": "h2"
+          }
+        },
+        "text_aMf3LQ": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Submit a Request: </strong>Share the connector you'd like us to create.</p><p><strong>We'll Review It: </strong>If it's a good fit for our catalog, we'll move it into development.</p><p><strong>Development Begins: </strong>We'll refine the design with your feedback before adding it to our collection.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_eQMKzU",
+        "text_aMf3LQ"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Image-GF-Connector.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_YfggL9": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_tHQAGU": {
+          "type": "heading",
+          "settings": {
+            "heading": "Flat GF Connectors",
+            "heading_size": "h2"
+          }
+        },
+        "text_gPwdw6": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Our flat connector program allows you to bring new designs to life with a minimum order of &lcub;X&rcub; connectors. Once developed, the design becomes part of our catalog, and you'll have first access before it's released to other customers.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_KnJL97": {
+          "type": "button",
+          "settings": {
+            "button_label": "Request a Flat Connector",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_tHQAGU",
+        "text_gPwdw6",
+        "button_KnJL97"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Image-Flat.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "image_with_text_6mJH9Q": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_JdfiLr": {
+          "type": "heading",
+          "settings": {
+            "heading": "Stamped GF Connectors",
+            "heading_size": "h2"
+          }
+        },
+        "text_JrNXhE": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Looking for a specific stamped connector? Custom stamped designs require a one-time development fee starting at &lcub;X&rcub; and a minimum order of &lcub;X&rcub; pieces. We'll work with you to create a stamp that's ready for production and future reorders.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_WmRDbi": {
+          "type": "button",
+          "settings": {
+            "button_label": "Request a Stamped Connector",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_JdfiLr",
+        "text_JrNXhE",
+        "button_WmRDbi"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Image-Stamped.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "image_banner_EP4pQG",
+    "image_with_text_H4XcYQ",
+    "image_with_text_YfggL9",
+    "image_with_text_6mJH9Q"
+  ]
+}
