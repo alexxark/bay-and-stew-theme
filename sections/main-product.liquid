@@ -335,6 +335,7 @@
     {%- endif -%}
   </div>
               {%- when 'quantity_selector' -%}
+                {%- if template.suffix == 'bulk-order' -%}{%- continue -%}{%- endif -%}
                 <div
                   id="Quantity-Form-{{ section.id }}"
                   class="product-form__input product-form__quantity{% if settings.inputs_shadow_vertical_offset != 0 and settings.inputs_shadow_vertical_offset < 0 %} product-form__quantity-top{% endif %}"
@@ -598,10 +599,12 @@
                 %}
 
               {%- when 'variant_picker' -%}
-                {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                {%- unless template.suffix == 'bulk-order' -%}
+                  {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+                {%- endunless -%}
               {%- when 'bulk_order_form' -%}
   <div {{ block.shopify_attributes }}>
-    {%- if product.tags contains '0ALPHABET' or product.tags contains '0BIRTHSTHONES' or product.tags contains 'SAMPLES' or product.tags contains '0ZODIAC' or product.tags contains '0BIRTHFLOWERS' or product.type == 'Rings' -%}
+    {%- if template.suffix == 'bulk-order' -%}
 
       <div class="bulk-order-form" id="BulkOrderForm-{{ section.id }}">
         <div class="bulk-order-form__header">
@@ -851,13 +854,15 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
     {%- endif -%}
   </div>
               {%- when 'buy_buttons' -%}
-                {%- render 'buy-buttons',
-                  block: block,
-                  product: product,
-                  product_form_id: product_form_id,
-                  section_id: section.id,
-                  show_pickup_availability: true
-                -%}
+                {%- unless template.suffix == 'bulk-order' -%}
+                  {%- render 'buy-buttons',
+                    block: block,
+                    product: product,
+                    product_form_id: product_form_id,
+                    section_id: section.id,
+                    show_pickup_availability: true
+                  -%}
+                {%- endunless -%}
               {%- when 'rating' -%}
                 {%- if product.metafields.reviews.rating.value != blank -%}
                   <div class="rating-wrapper">
