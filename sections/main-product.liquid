@@ -767,90 +767,145 @@
           .bulk-order-form__cell-variant::before { display: none; }
         }
       </style>
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    const bulkForm = document.querySelector('#BulkOrderForm-{{ section.id }}');
-    if (!bulkForm) return;
 
-    // --- START: YOUR SETTINGS ---
-    // Change this value to your desired initial B2B discount. E.g., 0.15 = 15%
-    const isB2BCustomer = {% if customer and customer.tags contains 'B2B' %}true{% else %}false{% endif %};
-const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for others
-    
-    // Quantity discounts from your image
-    const quantityDiscounts = [
-      { from: 1, to: 2, percent: 0 },
-      { from: 3, to: 4, percent: 2.28 },
-      { from: 5, to: 14, percent: 4.61 },
-      { from: 15, to: 24, percent: 6.9 },
-      { from: 25, to: 49, percent: 9.2 },
-      { from: 50, to: Infinity, percent: 11.49 }
-    ];
-    // --- END: YOUR SETTINGS ---
+      {%- liquid
+        assign _b2b_tag = block.settings.b2b_customer_tag | default: 'B2B'
+        assign _disc_tag = block.settings.discount_eligible_tag | default: 'discount eligible'
+        assign _rtw_handle = block.settings.ready_to_wear_collection | default: 'ready-to-wear'
+        assign _disc_pct = block.settings.discount_eligible_percent | default: 0
+        assign _rtw_pct = block.settings.ready_to_wear_percent | default: 0
 
-    const quantityInputs = bulkForm.querySelectorAll('.quantity__input');
-    const priceElements = bulkForm.querySelectorAll('.price[data-original-price]');
-    const moneyFormat = {{ shop.money_format | json }};
+        assign _is_b2b = false
+        if customer and customer.tags contains _b2b_tag
+          assign _is_b2b = true
+        endif
 
-    const formatMoney = (cents, format) => {
-      if (typeof cents !== 'number') {
-        cents = parseInt(cents, 10);
-      }
-      let value = '';
-      const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
-      const formatString = (format || moneyFormat);
+        assign _has_disc_tag = false
+        if product.tags contains _disc_tag
+          assign _has_disc_tag = true
+        endif
 
-      function formatWithDelimiters(number, precision = 2, thousands = ',', decimal = '.') {
-        if (isNaN(number) || number == null) { return 0; }
-        const fixedNumber = (number / 100.0).toFixed(precision);
-        let parts = fixedNumber.split('.');
-        parts[0] = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
-        return parts.join(decimal);
-      }
+        assign _is_rtw = false
+        for _c in product.collections
+          if _c.handle == _rtw_handle
+            assign _is_rtw = true
+            break
+          endif
+        endfor
 
-      switch (formatString.match(placeholderRegex)[1]) {
-        case 'amount': value = formatWithDelimiters(cents, 2); break;
-        case 'amount_no_decimals': value = formatWithDelimiters(cents, 0); break;
-        case 'amount_with_comma_separator': value = formatWithDelimiters(cents, 2, '.', ','); break;
-        case 'amount_no_decimals_with_comma_separator': value = formatWithDelimiters(cents, 0, '.', ','); break;
-        default: value = formatWithDelimiters(cents, 2); break;
-      }
-      return formatString.replace(placeholderRegex, value);
-    };
-    
-    const updateAllPrices = () => {
-      let totalQuantity = 0;
-      quantityInputs.forEach(input => {
-        totalQuantity += parseInt(input.value, 10) || 0;
-      });
+        assign _base_pct = 0
+        if _is_b2b
+          if _is_rtw
+            assign _base_pct = _rtw_pct
+          elsif _has_disc_tag
+            assign _base_pct = _disc_pct
+          endif
+        endif
 
-      const tier = quantityDiscounts.find(d => totalQuantity >= d.from && totalQuantity <= d.to);
-      const quantityDiscountPercent = tier ? tier.percent / 100 : 0;
+        assign _volume_rules_raw = block.settings.volume_rules_json | default: '[]'
+        assign _volume_rules_safe = _volume_rules_raw | replace: '</', '<\/'
+      -%}
 
-      priceElements.forEach(priceEl => {
-        const originalPriceCents = parseInt(priceEl.dataset.originalPrice, 10);
-        const b2bPrice = originalPriceCents * (1 - initialB2BDiscount);
-        const finalPrice = b2bPrice * (1 - quantityDiscountPercent);
-        priceEl.innerHTML = formatMoney(finalPrice);
-      });
-    };
+      <script type="application/json" id="BulkOrderForm-Config-{{ section.id }}">
+        {
+          "basePercent": {{ _base_pct | json }},
+          "productTags": {{ product.tags | json }},
+          "volumeRules": {{ _volume_rules_safe }},
+          "moneyFormat": {{ shop.money_format | json }}
+        }
+      </script>
 
-    bulkForm.addEventListener('change', event => {
-      if (event.target.classList.contains('quantity__input')) {
-        updateAllPrices();
-      }
-    });
+      <script>
+        (function () {
+          const bulkForm = document.querySelector('#BulkOrderForm-{{ section.id }}');
+          if (!bulkForm) return;
 
-    bulkForm.addEventListener('click', event => {
-      if (event.target.closest('.quantity__button')) {
-        setTimeout(updateAllPrices, 50); // Delay to ensure input value is updated first
-      }
-    });
+          const configEl = document.getElementById('BulkOrderForm-Config-{{ section.id }}');
+          let config;
+          try {
+            config = JSON.parse(configEl.textContent);
+          } catch (e) {
+            console.warn('[bulk-order] Invalid volume_rules_json — falling back to no discounts', e);
+            config = { basePercent: 0, productTags: [], volumeRules: [], moneyFormat: '${{amount}}' };
+          }
 
-    // Initial run to set the starting B2B prices
-    updateAllPrices();
-  });
-</script>
+          // Pick the first product tag that matches a volume rule (case-insensitive).
+          const productTagSet = new Set((config.productTags || []).map(t => String(t).toLowerCase()));
+          const activeRule = (config.volumeRules || []).find(rule => {
+            const ruleTag = String(rule && rule.tag || '').toLowerCase();
+            return ruleTag && productTagSet.has(ruleTag);
+          });
+          const tiers = (activeRule && Array.isArray(activeRule.tiers)) ? activeRule.tiers : [];
+          const basePercent = Number(config.basePercent) || 0;
+
+          const quantityInputs = bulkForm.querySelectorAll('.quantity__input');
+          const priceElements = bulkForm.querySelectorAll('.price[data-original-price]');
+
+          const formatMoney = (cents) => {
+            const format = config.moneyFormat || '${{amount}}';
+            const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+            const number = typeof cents === 'number' ? cents : parseInt(cents, 10);
+
+            const withDelimiters = (n, precision = 2, thousands = ',', decimal = '.') => {
+              if (isNaN(n) || n == null) return '0';
+              const parts = (n / 100.0).toFixed(precision).split('.');
+              parts[0] = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+              return parts.join(decimal);
+            };
+
+            const match = format.match(placeholderRegex);
+            const placeholder = match ? match[1] : 'amount';
+            let value;
+            switch (placeholder) {
+              case 'amount_no_decimals': value = withDelimiters(number, 0); break;
+              case 'amount_with_comma_separator': value = withDelimiters(number, 2, '.', ','); break;
+              case 'amount_no_decimals_with_comma_separator': value = withDelimiters(number, 0, '.', ','); break;
+              default: value = withDelimiters(number, 2); break;
+            }
+            return format.replace(placeholderRegex, value);
+          };
+
+          const findVolumePercent = (totalQty) => {
+            if (!totalQty || !tiers.length) return 0;
+            const tier = tiers.find(t => {
+              const from = Number(t.from) || 0;
+              const to = (t.to == null || t.to === '') ? Infinity : Number(t.to);
+              return totalQty >= from && totalQty <= to;
+            });
+            return tier ? (Number(tier.percent) || 0) : 0;
+          };
+
+          const updateAllPrices = () => {
+            let totalQuantity = 0;
+            quantityInputs.forEach(input => {
+              totalQuantity += parseInt(input.value, 10) || 0;
+            });
+            const volumePercent = findVolumePercent(totalQuantity);
+            const baseMult = 1 - (basePercent / 100);
+            const volMult = 1 - (volumePercent / 100);
+
+            priceElements.forEach(priceEl => {
+              const original = parseInt(priceEl.dataset.originalPrice, 10);
+              if (isNaN(original)) return;
+              priceEl.innerHTML = formatMoney(original * baseMult * volMult);
+            });
+          };
+
+          bulkForm.addEventListener('change', (event) => {
+            if (event.target.classList.contains('quantity__input')) {
+              updateAllPrices();
+            }
+          });
+          bulkForm.addEventListener('click', (event) => {
+            if (event.target.closest('.quantity__button')) {
+              // Delay so the +/- handler in the sibling script updates the input first.
+              setTimeout(updateAllPrices, 50);
+            }
+          });
+
+          updateAllPrices();
+        })();
+      </script>
     {%- endif -%}
   </div>
               {%- when 'buy_buttons' -%}
@@ -1321,6 +1376,58 @@ const initialB2BDiscount = isB2BCustomer ? 0.03 : 0; // 3% for B2B, 0% for other
       "id": "heading",
       "label": "Heading",
       "default": "Quick Order"
+    },
+    {
+      "type": "header",
+      "content": "Base wholesale discount"
+    },
+    {
+      "type": "text",
+      "id": "b2b_customer_tag",
+      "label": "B2B customer tag",
+      "info": "Customer tag that identifies a wholesale (B2B) buyer.",
+      "default": "B2B"
+    },
+    {
+      "type": "text",
+      "id": "discount_eligible_tag",
+      "label": "\"Discount eligible\" product tag",
+      "info": "If a B2B customer views a product with this tag, apply the percent below.",
+      "default": "discount eligible"
+    },
+    {
+      "type": "number",
+      "id": "discount_eligible_percent",
+      "label": "B2B + discount-eligible % off",
+      "default": 2
+    },
+    {
+      "type": "text",
+      "id": "ready_to_wear_collection",
+      "label": "\"Ready to wear\" collection handle",
+      "info": "If a B2B customer views a product in this collection, apply the percent below instead (overrides discount-eligible).",
+      "default": "ready-to-wear"
+    },
+    {
+      "type": "number",
+      "id": "ready_to_wear_percent",
+      "label": "B2B + ready-to-wear % off",
+      "default": 77
+    },
+    {
+      "type": "header",
+      "content": "Volume pricing rules"
+    },
+    {
+      "type": "paragraph",
+      "content": "Paste a JSON array. Each entry is one rule keyed to a product tag. Applies to all customers (B2B + retail) and stacks on top of the wholesale discount above. First matching tag wins."
+    },
+    {
+      "type": "textarea",
+      "id": "volume_rules_json",
+      "label": "Volume rules (JSON)",
+      "info": "Example: [{\"tag\":\"CHARMS\",\"tiers\":[{\"from\":1,\"to\":2,\"percent\":0},{\"from\":3,\"to\":4,\"percent\":2.28},{\"from\":5,\"to\":14,\"percent\":4.61},{\"from\":15,\"to\":24,\"percent\":6.9},{\"from\":25,\"to\":49,\"percent\":9.2},{\"from\":50,\"to\":null,\"percent\":11.49}]}]",
+      "default": "[]"
     }
   ]
 },
