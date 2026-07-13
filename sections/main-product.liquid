@@ -801,10 +801,10 @@
             assign _base_pct = _disc_pct
           endif
         endif
-
-        assign _volume_rules_raw = block.settings.volume_rules_json | default: '[]'
-        assign _volume_rules_safe = _volume_rules_raw | replace: '</', '<\/'
       -%}
+
+      {%- capture _volume_rules_raw -%}{%- render 'bulk-order-volume-rules' -%}{%- endcapture -%}
+      {%- assign _volume_rules_safe = _volume_rules_raw | strip | default: '[]' | replace: '</', '<\/' -%}
 
       <script type="application/json" id="BulkOrderForm-Config-{{ section.id }}">
         {
@@ -1420,14 +1420,7 @@
     },
     {
       "type": "paragraph",
-      "content": "Paste a JSON array. Each entry is one rule keyed to a product tag. Applies to all customers (B2B + retail) and stacks on top of the wholesale discount above. First matching tag wins."
-    },
-    {
-      "type": "textarea",
-      "id": "volume_rules_json",
-      "label": "Volume rules (JSON)",
-      "info": "Example: [{\"tag\":\"CHARMS\",\"tiers\":[{\"from\":1,\"to\":2,\"percent\":0},{\"from\":3,\"to\":4,\"percent\":2.28},{\"from\":5,\"to\":14,\"percent\":4.61},{\"from\":15,\"to\":24,\"percent\":6.9},{\"from\":25,\"to\":49,\"percent\":9.2},{\"from\":50,\"to\":null,\"percent\":11.49}]}]",
-      "default": "[]"
+      "content": "Volume tier rules live in the snippet file snippets/bulk-order-volume-rules.liquid \u2014 edit them there (not in the theme editor). They apply to B2B and retail customers and stack on top of the wholesale discount above."
     }
   ]
 },

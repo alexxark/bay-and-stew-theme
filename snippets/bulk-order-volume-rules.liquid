@@ -1,0 +1,39 @@
+{%- comment -%}
+  ------------------------------------------------------------
+  Bulk Order Form — Volume Pricing Rules
+  ------------------------------------------------------------
+  This snippet is the single source of truth for the quantity/volume
+  discount tiers used by the bulk order form on the product template
+  with suffix "bulk-order".
+
+  Rendered by: sections/main-product.liquid  (bulk_order_form block)
+
+  Rules:
+    • One entry per product tag. The bulk form matches product.tags
+      against the "tag" field (case-insensitive).
+    • First matching rule in this array wins — order matters. Put
+      more-specific tags before more-general ones.
+    • Each rule has up to 6 tiers. Use "to": null (or omit "to") on
+      the top tier to mean "and above".
+    • Percents are % off. They stack multiplicatively on top of the
+      base wholesale discount configured in the block settings
+      (theme editor → Bulk Order Form block).
+    • Tiers apply to B2B and retail customers alike.
+    • Invalid JSON here = form falls back to no volume discounts
+      (with a console warning). Validate before committing.
+
+  Example rule:
+    {
+      "tag": "CHARMS",
+      "tiers": [
+        { "from": 1,  "to": 2,    "percent": 0 },
+        { "from": 3,  "to": 4,    "percent": 2.28 },
+        { "from": 5,  "to": 14,   "percent": 4.61 },
+        { "from": 15, "to": 24,   "percent": 6.9 },
+        { "from": 25, "to": 49,   "percent": 9.2 },
+        { "from": 50, "to": null, "percent": 11.49 }
+      ]
+    }
+  ------------------------------------------------------------
+{%- endcomment -%}
+[]
