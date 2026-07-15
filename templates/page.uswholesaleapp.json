@@ -12,7 +12,7 @@
     "main": {
       "type": "main-page",
       "custom_css": [
-        ".main-page-title {font-size: 48px; font-weight: bold; text-align: center; color: #806f65;}"
+        ".main-page-title {font-size: 0px; font-weight: bold; text-align: center; color: #806f65;}"
       ],
       "settings": {
         "padding_top": 28,
