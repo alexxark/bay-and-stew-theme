@@ -36,23 +36,11 @@
             "text": "Have an idea for a connector you'd love to see? We'd love to hear it! Submit your suggestion below, and if it's a good fit for our catalog, we'll explore bringing it to life.",
             "text_style": "body"
           }
-        },
-        "buttons_x9WahF": {
-          "type": "buttons",
-          "settings": {
-            "button_label_1": "Make a request",
-            "button_link_1": "",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": true
-          }
         }
       },
       "block_order": [
         "heading_QGXCTi",
-        "text_MnP4qc",
-        "buttons_x9WahF"
+        "text_MnP4qc"
       ],
       "custom_css": [],
       "name": "t:sections.image-banner.presets.name",
@@ -119,7 +107,7 @@
             "title": "Cut Out Connectors",
             "text": "<p>Have an idea for a cut out connector you'd like to see us carry? Submit your suggestion below for consideration in our general catalog.</p>",
             "link_label": "Suggest a Cut Out Connector",
-            "link": ""
+            "link": "https://docs.google.com/forms/d/e/1FAIpQLSeBu_lRGVZTGxQBAcrP_bvMfVUDT1wfqAiKi5J031zn03ucEg/viewform?usp=dialog"
           }
         },
         "column_NFFjmd": {
@@ -129,7 +117,7 @@
             "title": "Stamped Connectors",
             "text": "<p>Have an idea for a stamped connector you'd like to see us carry? Submit your suggestion below for consideration in our general catalog.</p>",
             "link_label": "Suggest a Stamped Connector",
-            "link": ""
+            "link": "https://docs.google.com/forms/d/e/1FAIpQLSdW6dwlvOdI-wfD0bEBql2vihcBCgRiv8SQiifeZ8vyQ_Yw-A/viewform?usp=sharing&ouid=115223190349288081527"
           }
         }
       },
