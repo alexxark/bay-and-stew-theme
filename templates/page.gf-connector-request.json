@@ -26,14 +26,14 @@
         "heading_QGXCTi": {
           "type": "heading",
           "settings": {
-            "heading": "Gold Filled Connector Requests",
+            "heading": "Gold Filled Connector Suggestions",
             "heading_size": "h2"
           }
         },
         "text_MnP4qc": {
           "type": "text",
           "settings": {
-            "text": "Looking for something unique? We love hearing customer ideas. If your gold filled connector request is a good fit, we'll work through the design and development process to make it a reality.",
+            "text": "Have an idea for a connector you'd love to see? We'd love to hear it! Submit your suggestion below, and if it's a good fit for our catalog, we'll explore bringing it to life.",
             "text_style": "body"
           }
         },
@@ -83,7 +83,7 @@
         "text_aMf3LQ": {
           "type": "text",
           "settings": {
-            "text": "<p><strong>Submit a Request: </strong>Share the connector you'd like us to create.</p><p><strong>We'll Review It: </strong>If it's a good fit for our catalog, we'll move it into development.</p><p><strong>Development Begins: </strong>We'll refine the design with your feedback before adding it to our collection.</p>",
+            "text": "<ol><li><strong>Submit a Request: </strong>Tell us about the connector you'd love to see in our catalog.</li><li><strong>We'll Review It: </strong>Our team will evaluate your suggestion based on demand, manufacturability, and how well it fits our product line.</li><li><strong>If Selected, We'll Develop It: </strong>If we decide to move forward, we'll work through the design and development process before adding it to our general catalog.</li></ol>",
             "text_style": "body"
           }
         }
@@ -117,8 +117,8 @@
           "settings": {
             "image": "shopify://shop_images/Image-Flat_c043aebb-9fca-4c79-b6ba-b6e8fc1a84c1.jpg",
             "title": "Cut Out Connectors",
-            "text": "<p>Have an idea for a cut out connector you'd like to see us carry? Request a cut out connector to be added to our catalog!</p>",
-            "link_label": "Request Cut Out Connector",
+            "text": "<p>Have an idea for a cut out connector you'd like to see us carry? Submit your suggestion below for consideration in our general catalog.</p>",
+            "link_label": "Suggest a Cut Out Connector",
             "link": ""
           }
         },
@@ -127,8 +127,8 @@
           "settings": {
             "image": "shopify://shop_images/Image-Stamped_b56585c5-8f47-4472-a1ae-f4dcd0b6d35b.jpg",
             "title": "Stamped Connectors",
-            "text": "<p>Have an idea for a stamped connector you'd like to see us carry? Request a stamped connector to be added to our catalog!</p>",
-            "link_label": "Request Stamped Connector",
+            "text": "<p>Have an idea for a stamped connector you'd like to see us carry? Submit your suggestion below for consideration in our general catalog.</p>",
+            "link_label": "Suggest a Stamped Connector",
             "link": ""
           }
         }
