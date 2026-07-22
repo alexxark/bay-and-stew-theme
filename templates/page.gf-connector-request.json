@@ -109,98 +109,49 @@
         "padding_bottom": 36
       }
     },
-    "image_with_text_YfggL9": {
-      "type": "image-with-text",
+    "multicolumn_8xNW8p": {
+      "type": "multicolumn",
       "blocks": {
-        "heading_tHQAGU": {
-          "type": "heading",
+        "column_abBQwi": {
+          "type": "column",
           "settings": {
-            "heading": "Flat GF Connectors",
-            "heading_size": "h2"
+            "image": "shopify://shop_images/Image-Flat_c043aebb-9fca-4c79-b6ba-b6e8fc1a84c1.jpg",
+            "title": "Cut Out Connectors",
+            "text": "<p>Have an idea for a cut out connector you'd like to see us carry? Request a cut out connector to be added to our catalog!</p>",
+            "link_label": "Request Cut Out Connector",
+            "link": ""
           }
         },
-        "text_gPwdw6": {
-          "type": "text",
+        "column_NFFjmd": {
+          "type": "column",
           "settings": {
-            "text": "<p>Our flat connector program allows you to bring new designs to life with a minimum order of &lcub;X&rcub; connectors. Once developed, the design becomes part of our catalog, and you'll have first access before it's released to other customers.</p>",
-            "text_style": "body"
-          }
-        },
-        "button_KnJL97": {
-          "type": "button",
-          "settings": {
-            "button_label": "Request a Flat Connector",
-            "button_link": "",
-            "button_style_secondary": false
+            "image": "shopify://shop_images/Image-Stamped_b56585c5-8f47-4472-a1ae-f4dcd0b6d35b.jpg",
+            "title": "Stamped Connectors",
+            "text": "<p>Have an idea for a stamped connector you'd like to see us carry? Request a stamped connector to be added to our catalog!</p>",
+            "link_label": "Request Stamped Connector",
+            "link": ""
           }
         }
       },
       "block_order": [
-        "heading_tHQAGU",
-        "text_gPwdw6",
-        "button_KnJL97"
+        "column_abBQwi",
+        "column_NFFjmd"
       ],
-      "name": "t:sections.image-with-text.presets.name",
+      "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Image-Flat.jpg",
-        "height": "adapt",
-        "desktop_image_width": "medium",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "",
-        "color_scheme": "",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "image_with_text_6mJH9Q": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_JdfiLr": {
-          "type": "heading",
-          "settings": {
-            "heading": "Stamped GF Connectors",
-            "heading_size": "h2"
-          }
-        },
-        "text_JrNXhE": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Looking for a specific stamped connector? Custom stamped designs require a one-time development fee starting at &lcub;X&rcub; and a minimum order of &lcub;X&rcub; pieces. We'll work with you to create a stamp that's ready for production and future reorders.</p>",
-            "text_style": "body"
-          }
-        },
-        "button_WmRDbi": {
-          "type": "button",
-          "settings": {
-            "button_label": "Request a Stamped Connector",
-            "button_link": "",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_JdfiLr",
-        "text_JrNXhE",
-        "button_WmRDbi"
-      ],
-      "name": "t:sections.image-with-text.presets.name",
-      "settings": {
-        "image": "shopify://shop_images/Image-Stamped.jpg",
-        "height": "adapt",
-        "desktop_image_width": "medium",
-        "layout": "image_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "",
-        "color_scheme": "",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 2,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -210,7 +161,6 @@
     "main",
     "image_banner_EP4pQG",
     "image_with_text_H4XcYQ",
-    "image_with_text_YfggL9",
-    "image_with_text_6mJH9Q"
+    "multicolumn_8xNW8p"
   ]
 }
