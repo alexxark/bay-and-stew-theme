@@ -38,7 +38,7 @@
         "heading_size": "h2",
         "subtitle": "Durable, tarnish-resistant, and made to last with a thick layer of real gold",
         "alignment": "left",
-        "collection": "gold-filled-1",
+        "collection": "gold-filled-permanent-jewelry",
         "image": "shopify://shop_images/photos-01.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -218,7 +218,7 @@
         "featured_collection_AXfWUX": {
           "type": "featured_collection",
           "settings": {
-            "collection": "gold-filled-1",
+            "collection": "gold-filled-permanent-jewelry",
             "label": "Gold Filled",
             "products_to_show": 6,
             "show_view_all": true
