@@ -142,7 +142,7 @@
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "charms-pj",
+        "collection": "charms-permanent-jewelry",
         "image": "shopify://shop_images/photos-05.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -254,7 +254,7 @@
         "featured_collection_HBc8ky": {
           "type": "featured_collection",
           "settings": {
-            "collection": "charms-pj",
+            "collection": "charms-permanent-jewelry",
             "label": "Charms",
             "products_to_show": 6,
             "show_view_all": true
