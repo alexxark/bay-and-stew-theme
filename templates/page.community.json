@@ -155,7 +155,7 @@
           "type": "button",
           "settings": {
             "button_label": "Shop Sale",
-            "button_link": "shopify://collections/sale-1",
+            "button_link": "shopify://collections/sale",
             "button_style_secondary": false
           }
         }
@@ -299,7 +299,7 @@
           "type": "button",
           "settings": {
             "button_label": "Shop Sale",
-            "button_link": "shopify://collections/sale-1",
+            "button_link": "shopify://collections/sale",
             "button_style_secondary": false
           }
         }
