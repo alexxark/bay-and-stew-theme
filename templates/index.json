@@ -432,7 +432,7 @@
         "description": "",
         "show_description": false,
         "description_style": "body",
-        "collection": "bundles",
+        "collection": "starter-packs-bundles",
         "products_to_show": 5,
         "columns_desktop": 5,
         "full_width": false,
