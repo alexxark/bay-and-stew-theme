@@ -116,7 +116,7 @@
         "heading_size": "h2",
         "subtitle": "Find new staples and exclusive styles here",
         "alignment": "right",
-        "collection": "connectors-pj",
+        "collection": "connectors-permanent-jewelry",
         "image": "shopify://shop_images/photos-04.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -245,7 +245,7 @@
         "featured_collection_kfNLik": {
           "type": "featured_collection",
           "settings": {
-            "collection": "connectors-pj",
+            "collection": "connectors-permanent-jewelry",
             "label": "Connectors",
             "products_to_show": 6,
             "show_view_all": true
