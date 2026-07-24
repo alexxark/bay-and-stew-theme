@@ -64,7 +64,7 @@
         "heading_size": "h2",
         "subtitle": "Hypoallergenic, durable, and made with 92.5% pure silver for everyday wear",
         "alignment": "right",
-        "collection": "sterling-silver-1",
+        "collection": "sterling-silver-permanent-jewelry",
         "image": "shopify://shop_images/photos-02.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -227,7 +227,7 @@
         "featured_collection_trBeF7": {
           "type": "featured_collection",
           "settings": {
-            "collection": "sterling-silver-1",
+            "collection": "sterling-silver-permanent-jewelry",
             "label": "Sterling Silver",
             "products_to_show": 6,
             "show_view_all": true
