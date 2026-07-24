@@ -168,7 +168,7 @@
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "findings-pj",
+        "collection": "findings-permanent-jewelry",
         "image": "shopify://shop_images/photos-07.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -263,7 +263,7 @@
         "featured_collection_8hLWVW": {
           "type": "featured_collection",
           "settings": {
-            "collection": "findings-pj",
+            "collection": "findings-permanent-jewelry",
             "label": "Findings",
             "products_to_show": 6,
             "show_view_all": true
