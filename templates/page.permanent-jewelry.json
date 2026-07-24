@@ -194,7 +194,7 @@
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "jump-rings-pj",
+        "collection": "jump-rings-permanent-jewelry",
         "image": "shopify://shop_images/photos-06.jpg",
         "image_link": "",
         "columns_desktop": 6,
@@ -272,7 +272,7 @@
         "featured_collection_9a4rzP": {
           "type": "featured_collection",
           "settings": {
-            "collection": "jump-rings-pj",
+            "collection": "jump-rings-permanent-jewelry",
             "label": "Jump Rings",
             "products_to_show": 6,
             "show_view_all": true
