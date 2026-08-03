@@ -1,0 +1,47 @@
+/* ============================================
+   CART ACCOUNT STATUS – native retail/wholesale
+   status + sign-in prompt shown in the cart
+   summary area (drawer + full cart page),
+   above the estimated total. Replaces the
+   disabled BLOY rewards sign-in panel; has no
+   dependency on BLOY markup or scripts.
+   ============================================ */
+
+.cart-account-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem 1.2rem;
+  padding: 1.2rem 1.6rem;
+  margin: 0 0 1.2rem;
+  border-radius: var(--inputs-radius);
+  background: rgba(var(--color-foreground), 0.04);
+  border: 0.1rem solid rgba(var(--color-foreground), 0.1);
+}
+
+.cart-account-status__info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.4rem;
+  flex: 1 1 auto;
+  min-width: 18rem;
+}
+
+.cart-account-status__note {
+  margin: 0;
+  font-size: 1.25rem;
+  line-height: 1.35;
+  color: rgba(var(--color-foreground), 0.75);
+}
+
+.cart-account-status__login {
+  flex-shrink: 0;
+}
+
+@media screen and (max-width: 479px) {
+  .cart-account-status__info {
+    min-width: 100%;
+  }
+}

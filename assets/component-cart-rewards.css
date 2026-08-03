@@ -8,33 +8,6 @@
   margin-bottom: 0.8rem;
 }
 
-/* ============================================
-   PRICING STATUS – small retail/wholesale line
-   appended (via JS) into the BLOY loyalty widget,
-   directly under its existing message text.
-   Scoped narrowly so it cannot affect any other
-   cart element.
-   ============================================ */
-
-.bs-pricing-status {
-  display: block;
-  font-size: 1.25rem;
-  line-height: 1.35;
-  margin-top: 0.2rem;
-  font-style: normal;
-  font-weight: normal;
-  opacity: 0.75;
-  white-space: normal;
-  overflow-wrap: break-word;
-}
-
-/* Keep the widget's own "Log in" / "Rewards" button vertically centered
-   against the now taller (two-line) text column, without altering its
-   layout when our line isn't present. */
-.BLOY-cart__points_container:has(.bs-pricing-status) {
-  align-items: center;
-}
-
 /* ---------- message ---------- */
 
 .cart-rewards__message {

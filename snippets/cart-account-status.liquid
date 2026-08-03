@@ -1,0 +1,44 @@
+{%- comment -%}
+  Cart Account Status
+  --------------------------------------------------------------------------
+  Native Liquid replacement for the disabled BLOY rewards sign-in panel.
+  Shown in the cart summary area, above the estimated total.
+
+  Reuses the theme's existing product-price status bubble
+  (snippets/customer-status-badge.liquid) and its wholesale condition
+  unchanged: a signed-in customer is wholesale only if their tags contain
+  "b2b" (case-insensitive); signed in without that tag is retail; no
+  customer is signed out.
+
+  Usage:
+    {% render 'cart-account-status' %}
+{%- endcomment -%}
+{%- liquid
+  assign tag_str = customer.tags | join: ',' | downcase
+  assign is_wholesale = false
+  if customer and tag_str contains 'b2b'
+    assign is_wholesale = true
+  endif
+
+  if customer == null
+    assign status_note = "You’re currently shopping at retail prices. Sign in with an approved wholesale account to access wholesale pricing."
+  elsif is_wholesale
+    assign status_note = "You’re signed in, and wholesale pricing is active for this account."
+  else
+    assign status_note = "You’re signed in, and retail pricing is active for this account."
+  endif
+-%}
+<div class="cart-account-status">
+  <div class="cart-account-status__info">
+    {%- render 'customer-status-badge', class: 'cart-account-status__badge' -%}
+    <p class="cart-account-status__note">{{ status_note }}</p>
+  </div>
+  {%- if customer == null -%}
+    <a
+      href="/customer_authentication/login?return_to={{ routes.cart_url | url_encode }}"
+      class="button button--secondary button--small cart-account-status__login"
+    >
+      Sign in
+    </a>
+  {%- endif -%}
+</div>
