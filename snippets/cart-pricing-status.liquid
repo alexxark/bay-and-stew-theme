@@ -1,0 +1,27 @@
+{%- comment -%}
+  Cart Pricing Status
+  --------------------------------------------------------------------------
+  Echoes (no markup) the pricing-status sentence for the cart's small
+  "retail vs. wholesale" indicator line. Reuses the exact wholesale
+  condition already used site-wide (see snippets/customer-status-badge.liquid
+  and the _is_b2b check in sections/main-product.liquid): a signed-in
+  customer is wholesale only if their tags contain "b2b".
+
+  Usage:
+    {% render 'cart-pricing-status' %}
+{%- endcomment -%}
+{%- liquid
+  assign tag_str = customer.tags | join: ',' | downcase
+  assign is_wholesale = false
+  if customer and tag_str contains 'b2b'
+    assign is_wholesale = true
+  endif
+
+  if customer == null
+    echo 'Retail pricing is active. Approved wholesale accounts unlock wholesale pricing.'
+  elsif is_wholesale
+    echo 'Wholesale pricing is active for your account.'
+  else
+    echo 'Retail pricing is active for this account.'
+  endif
+-%}

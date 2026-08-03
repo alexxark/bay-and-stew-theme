@@ -11,6 +11,7 @@
 
 <script src="{{ 'cart.js' | asset_url }}" defer="defer"></script>
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'cart-pricing-status.js' | asset_url }}" defer="defer"></script>
 
 <style>
   .drawer {
@@ -18,7 +19,8 @@
   }
 </style>
 
-<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}">
+{%- capture bs_pricing_status_text -%}{% render 'cart-pricing-status' %}{%- endcapture -%}
+<cart-drawer class="drawer{% if cart == empty %} is-empty{% endif %}" data-bs-pricing-status="{{ bs_pricing_status_text | strip | escape }}">
   <div id="CartDrawer" class="cart-drawer">
     <div id="CartDrawer-Overlay" class="cart-drawer__overlay"></div>
     <div
