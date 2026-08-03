@@ -33,3 +33,19 @@
   line-height: 1.35;
   color: rgba(var(--color-foreground), 0.75);
 }
+
+/* Desktop cart bubble */
+.cart-account-status__badge {
+  font-size: 1.2rem;
+  line-height: 1.2;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+}
+
+/* Mobile cart bubble */
+@media screen and (max-width: 749px) {
+  .cart-account-status__badge {
+    font-size: 1rem;
+    padding: 0.4rem 0.8rem;
+  }
+}
