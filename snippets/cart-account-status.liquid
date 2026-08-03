@@ -43,12 +43,4 @@ endif
     {%- render 'customer-status-badge', class: 'cart-account-status__badge', show_tooltip: false -%}
     <p class="cart-account-status__note">{{ status_note }}</p>
   </div>
-  {%- if customer == null -%}
-    <a
-      href="/customer_authentication/login?return_to={{ routes.cart_url | url_encode }}"
-      class="button button--secondary button--small cart-account-status__login"
-    >
-      Sign in
-    </a>
-  {%- endif -%}
 </div>
