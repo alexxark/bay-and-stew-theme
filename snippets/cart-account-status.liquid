@@ -27,18 +27,18 @@
   endif
 
   if customer == null
-    assign status_note = "Retail pricing is active. Wholesale accounts can sign in for wholesale pricing."
+    assign status_note = "Retail pricing is active. Approved wholesale accounts can sign in for wholesale pricing."
   elsif is_wholesale
-    assign status_note = "You’re signed in, and wholesale pricing is active for this account."
+    assign status_note = "You’re signed in, wholesale status is active for this account."
   else
-    assign status_note = 'You’re signed in, retail status is active for this account. Apply <a href="/pages/apply-for-wholesale">here</a> for wholesale access.'
+    assign status_note = "You’re signed in, retail status is active for this account. Apply here for wholesale access."
   endif
 -%}
 <div class="cart-account-status cart-account-status--{{ context }}">
-  <div class="cart-account-status__badge">
-    {%- render 'customer-status-badge', show_tooltip: false -%}
+  <div class="cart-account-status__info">
+    {%- render 'customer-status-badge', class: 'cart-account-status__badge', show_tooltip: false -%}
+    <p class="cart-account-status__note">{{ status_note }}</p>
   </div>
-  <p class="cart-account-status__message">{{ status_note }}</p>
   {%- if customer == null -%}
     <a
       href="/customer_authentication/login?return_to={{ routes.cart_url | url_encode }}"
