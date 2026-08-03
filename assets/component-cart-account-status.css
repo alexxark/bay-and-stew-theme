@@ -44,8 +44,8 @@
 
 /* Mobile cart bubble */
 @media screen and (max-width: 749px) {
-  .cart-account-status__badge {
-    font-size: 1.1rem;
+  .cart-account-status .status-badge.cart-account-status__badge {
+    font-size: 1.2rem;
     padding: 0.5rem 0.9rem;
   }
 }
