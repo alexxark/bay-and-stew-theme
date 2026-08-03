@@ -10,10 +10,16 @@
   "b2b" (case-insensitive); signed in without that tag is retail; no
   customer is signed out.
 
+  Accepts:
+    - context: {String} optional, 'drawer' (default) or 'page'. Adds a
+      modifier class as a hook for context-specific styling.
+
   Usage:
     {% render 'cart-account-status' %}
+    {% render 'cart-account-status', context: 'page' %}
 {%- endcomment -%}
 {%- liquid
+  assign context = context | default: 'drawer'
   assign tag_str = customer.tags | join: ',' | downcase
   assign is_wholesale = false
   if customer and tag_str contains 'b2b'
@@ -21,16 +27,16 @@
   endif
 
   if customer == null
-    assign status_note = "You’re currently shopping at retail prices. Sign in with an approved wholesale account to access wholesale pricing."
+    assign status_note = "Retail pricing is active. Approved wholesale accounts can sign in for wholesale pricing."
   elsif is_wholesale
     assign status_note = "You’re signed in, and wholesale pricing is active for this account."
   else
     assign status_note = "You’re signed in, and retail pricing is active for this account."
   endif
 -%}
-<div class="cart-account-status">
+<div class="cart-account-status cart-account-status--{{ context }}">
   <div class="cart-account-status__info">
-    {%- render 'customer-status-badge', class: 'cart-account-status__badge' -%}
+    {%- render 'customer-status-badge', class: 'cart-account-status__badge', show_tooltip: false -%}
     <p class="cart-account-status__note">{{ status_note }}</p>
   </div>
   {%- if customer == null -%}

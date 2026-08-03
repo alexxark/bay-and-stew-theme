@@ -37,11 +37,10 @@
         </cart-note>
       {%- endif -%}
 
-      {%- if cart.item_count > 0 -%}
-        {%- render 'cart-account-status' -%}
-      {%- endif -%}
-
       <div class="cart__blocks">
+        {%- if cart.item_count > 0 -%}
+          {%- render 'cart-account-status', context: 'page' -%}
+        {%- endif -%}
         {% for block in section.blocks %}
           {%- case block.type -%}
             {%- when '@app' -%}

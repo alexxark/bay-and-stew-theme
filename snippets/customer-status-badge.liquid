@@ -3,6 +3,9 @@
 
   Accepts:
     - class: {String} optional extra class name(s) to apply to the badge
+    - show_tooltip: {Boolean} optional, defaults to true. Pass false to render
+      the signed-out state as a plain badge with no asterisk, no tooltip, and
+      no hover/focus behavior (used in the cart). Has no effect when signed in.
 {%- endcomment -%}
 {%- liquid
   assign status_class = 'status-badge--out'
@@ -23,6 +26,8 @@
   endif
 -%}
 {%- if customer -%}
+  <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
+{%- elsif show_tooltip == false -%}
   <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
 {%- else -%}
   {%- assign login_return_url = request.path -%}
