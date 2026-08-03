@@ -27,12 +27,16 @@
   endif
 
   if customer == null
-    assign status_note = "Retail pricing is active. Approved wholesale accounts can <a href="/customer_authentication/redirect">sign in</a> for wholesale pricing."
-  elsif is_wholesale
-    assign status_note = "You’re signed in, wholesale status is active for this account."
-  else
-    assign status_note = "You’re signed in, retail status is active for this account. Apply <a href="/pages/apply-for-wholesale">here</a> for wholesale access."
-  endif
+  capture status_note
+    echo 'Retail pricing is active. Approved wholesale accounts can <a href="'
+    echo routes.storefront_login_url
+    echo '">sign in</a> for wholesale pricing.'
+  endcapture
+elsif is_wholesale
+  assign status_note = 'You’re signed in, and wholesale pricing is active for this account.'
+else
+  assign status_note = 'You’re signed in, retail status is active for this account. Apply <a href="/pages/apply-for-wholesale">here</a> for wholesale access.'
+endif
 -%}
 <div class="cart-account-status cart-account-status--{{ context }}">
   <div class="cart-account-status__info">
