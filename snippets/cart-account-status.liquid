@@ -33,9 +33,9 @@
     echo '">sign in</a> for wholesale pricing.'
   endcapture
 elsif is_wholesale
-  assign status_note = 'You’re signed in, and wholesale pricing is active for this account.'
+  assign status_note = 'You’re signed in, wholesale status is active for your account.'
 else
-  assign status_note = 'You’re signed in, retail status is active for this account. Apply <a href="/pages/apply-for-wholesale">here</a> for wholesale access.'
+  assign status_note = 'You’re signed in, retail status is active for your account. Apply <a href="/pages/apply-for-wholesale">here</a> for wholesale access.'
 endif
 -%}
 <div class="cart-account-status cart-account-status--{{ context }}">
