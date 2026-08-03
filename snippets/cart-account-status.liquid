@@ -29,9 +29,9 @@
   if customer == null
     assign status_note = "Retail pricing is active. Approved wholesale accounts can sign in for wholesale pricing."
   elsif is_wholesale
-    assign status_note = "You’re signed in, and wholesale pricing is active for this account."
+    assign status_note = "You’re signed in, wholesale status is active for this account."
   else
-    assign status_note = "You’re signed in, and retail pricing is active for this account."
+    assign status_note = "You’re signed in, retail status is active for this account. Apply here for wholesale access."
   endif
 -%}
 <div class="cart-account-status cart-account-status--{{ context }}">
