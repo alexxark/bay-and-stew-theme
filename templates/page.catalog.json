@@ -74,7 +74,7 @@
         "text_JMe6im": {
           "type": "text",
           "settings": {
-            "text": "<p>Add a physical catalog to your cart to ship in your next order, limit to one per person.</p>",
+            "text": "<p>Add a physical catalog to your cart to ship in your next order, limit to one per person.</p><p>Note: Printed catalog comes in version 2.0</p>",
             "text_style": "body"
           }
         },
