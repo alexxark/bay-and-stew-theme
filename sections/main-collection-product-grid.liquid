@@ -291,10 +291,15 @@
           <div
             class="collection{% if section.settings.filter_type != 'vertical' %} page-width{% endif %}"
           >
+            {%- capture collection_context_url -%}
+              {{ request.path }}{%- if request.query_string != blank -%}?{{ request.query_string }}{%- endif -%}
+            {%- endcapture -%}
             <div class="loading-overlay gradient"></div>
             <ul
               id="product-grid"
               data-id="{{ section.id }}"
+              data-collection-url="{{ collection_context_url | strip }}"
+              data-collection-title="{{ collection.title | escape }}"
               class="
                 grid product-grid grid--{{ section.settings.columns_mobile }}-col-tablet-down
                 grid--{{ section.settings.columns_desktop }}-col-desktop
@@ -421,73 +426,387 @@
 {%- endcomment -%}
 <script>
   (function() {
+    var COLLECTION_STATE_DEBUG = window.COLLECTION_STATE_DEBUG === true;
+    var STORAGE_PREFIX = 'bs:collection-state:v1:';
+    var PRODUCT_CONTEXT_KEY = 'bs:product-collection-context:v1';
+    var ACTIVE_PRODUCT_CONTEXT_KEY = 'bs:active-product-context:v1';
+    var RETURN_INTENT_KEY = 'bs:collection-return-intent:v1';
+    var STATE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
+    var PRODUCT_CONTEXT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
+    var ACTIVE_PRODUCT_CONTEXT_MAX_AGE_MS = 60 * 60 * 1000;
+    var RETURN_INTENT_MAX_AGE_MS = 45 * 60 * 1000;
+
+    function debugLog(message, payload) {
+      if (!COLLECTION_STATE_DEBUG) return;
+      if (typeof payload === 'undefined') {
+        console.info('[Collection State] ' + message);
+      } else {
+        console.info('[Collection State] ' + message, payload);
+      }
+    }
+
+    if (window.__bsCollectionStateInit) {
+      debugLog('Already initialized - skipping duplicate script execution');
+      return;
+    }
+    window.__bsCollectionStateInit = true;
+    debugLog('Initializing');
+
     var loadMoreListenerAttached = false;
-    
+    var loadMoreInProgress = false;
+    var restoreInProgress = false;
+    var restoreAttemptedForKey = null;
+    var restoredFromBFCache = false;
+    var runtimeLoadedPages = 0;
+    var loadedBatchUrls = [];
+    var scrollThrottleTimer = null;
+    var lastSavedScrollY = 0;
+
     // Prefetch cache - stores pre-loaded and pre-processed items
     var prefetchCache = {
       url: null,
-      items: null,        // Array of DOM elements ready to insert
-      nextUrl: null,      // URL for the page after that
+      items: null,
+      nextUrl: null,
       isLoading: false,
       isReady: false
     };
-    
+
     // Hidden container for prefetched items (allows BSS to process them)
     var prefetchContainer = null;
-    
+
+    function safeParseJSON(raw, fallback) {
+      if (!raw) return fallback;
+      try {
+        return JSON.parse(raw);
+      } catch (error) {
+        return fallback;
+      }
+    }
+
+    function readSessionItem(key) {
+      try {
+        return window.sessionStorage.getItem(key);
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function writeSessionItem(key, value) {
+      try {
+        window.sessionStorage.setItem(key, value);
+      } catch (error) {
+        // Ignore storage failures and continue normal browsing.
+      }
+    }
+
+    function removeSessionItem(key) {
+      try {
+        window.sessionStorage.removeItem(key);
+      } catch (error) {
+        // Ignore storage failures and continue normal browsing.
+      }
+    }
+
+    function getNavigationType() {
+      try {
+        var navEntries = performance.getEntriesByType('navigation');
+        if (navEntries && navEntries.length > 0 && navEntries[0].type) {
+          return navEntries[0].type;
+        }
+      } catch (error) {
+        // No-op.
+      }
+      return '';
+    }
+
+    function normalizeProductPath(urlString) {
+      if (!urlString) return '';
+      try {
+        var parsed = new URL(urlString, window.location.origin);
+        return parsed.pathname.replace(/\/+$/, '') || parsed.pathname;
+      } catch (error) {
+        return '';
+      }
+    }
+
+    function normalizeCollectionUrl(urlString) {
+      try {
+        var parsed = new URL(urlString, window.location.origin);
+        var params = new URLSearchParams(parsed.search);
+        params.sort();
+        var sortedSearch = params.toString();
+        return parsed.pathname + (sortedSearch ? '?' + sortedSearch : '');
+      } catch (error) {
+        return window.location.pathname + window.location.search;
+      }
+    }
+
+    function getCollectionStateKey() {
+      if (!/^\/collections\//.test(window.location.pathname)) return null;
+      return STORAGE_PREFIX + normalizeCollectionUrl(window.location.pathname + window.location.search);
+    }
+
+    function getCollectionMeta() {
+      var grid = document.getElementById('product-grid');
+      var currentCollectionUrl = normalizeCollectionUrl(window.location.pathname + window.location.search);
+      if (!grid) {
+        return {
+          collectionUrl: currentCollectionUrl,
+          collectionTitle: document.title || ''
+        };
+      }
+
+      return {
+        collectionUrl: currentCollectionUrl,
+        collectionTitle: grid.dataset.collectionTitle || document.title || ''
+      };
+    }
+
+    function sanitizeCollectionState(state) {
+      if (!state || typeof state !== 'object') return null;
+      var timestamp = Number(state.timestamp || 0);
+      if (!timestamp || Date.now() - timestamp > STATE_MAX_AGE_MS) return null;
+
+      return {
+        version: Number(state.version || 1),
+        collectionUrl: typeof state.collectionUrl === 'string' ? state.collectionUrl : '',
+        loadedPages: Math.max(parseInt(state.loadedPages, 10) || 0, 0),
+        loadedBatchUrls: Array.isArray(state.loadedBatchUrls) ? state.loadedBatchUrls.slice(0, 100) : [],
+        nextPageUrl: typeof state.nextPageUrl === 'string' ? state.nextPageUrl : null,
+        scrollY: Math.max(Number(state.scrollY || 0), 0),
+        timestamp: timestamp,
+        clickedProductUrl: typeof state.clickedProductUrl === 'string' ? state.clickedProductUrl : '',
+        clickedProductPath: typeof state.clickedProductPath === 'string' ? state.clickedProductPath : '',
+        clickedProductHandle: typeof state.clickedProductHandle === 'string' ? state.clickedProductHandle : ''
+      };
+    }
+
+    function readCollectionStateRaw() {
+      var key = getCollectionStateKey();
+      if (!key) return null;
+      var parsed = safeParseJSON(readSessionItem(key), null);
+      return sanitizeCollectionState(parsed);
+    }
+
+    function getCollectionState() {
+      var key = getCollectionStateKey();
+      if (!key) return null;
+      var state = readCollectionStateRaw();
+      if (!state) {
+        debugLog('No saved state for this URL');
+      }
+      return state;
+    }
+
+    function writeCollectionState(state) {
+      var key = getCollectionStateKey();
+      if (!key) return;
+      writeSessionItem(key, JSON.stringify(state));
+    }
+
+    function pruneCollectionStateStorage() {
+      try {
+        for (var i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
+          var key = window.sessionStorage.key(i);
+          if (!key || key.indexOf(STORAGE_PREFIX) !== 0) continue;
+          var parsed = safeParseJSON(readSessionItem(key), null);
+          var sanitized = sanitizeCollectionState(parsed);
+          if (!sanitized) {
+            removeSessionItem(key);
+          }
+        }
+      } catch (error) {
+        // Ignore cleanup failures.
+      }
+    }
+
+    function getLoadMoreButton() {
+      return document.getElementById('load-more-btn');
+    }
+
+    function persistCollectionState(extra, reason) {
+      var key = getCollectionStateKey();
+      if (!key) return;
+
+      var existing = readCollectionStateRaw() || {};
+      var btn = getLoadMoreButton();
+      var meta = getCollectionMeta();
+
+      var state = {
+        version: 1,
+        collectionUrl: meta.collectionUrl,
+        loadedPages: runtimeLoadedPages,
+        loadedBatchUrls: loadedBatchUrls.slice(),
+        nextPageUrl: btn && btn.dataset.nextUrl ? btn.dataset.nextUrl : null,
+        scrollY: Math.max(window.scrollY || 0, 0),
+        timestamp: Date.now(),
+        clickedProductUrl: existing.clickedProductUrl || '',
+        clickedProductPath: existing.clickedProductPath || '',
+        clickedProductHandle: existing.clickedProductHandle || ''
+      };
+
+      if (extra && typeof extra === 'object') {
+        Object.assign(state, extra);
+      }
+
+      writeCollectionState(state);
+
+      if (reason && reason !== 'scroll') {
+        debugLog('Saved state:', {
+          reason: reason,
+          key: key,
+          loadedPages: state.loadedPages,
+          nextPageUrl: state.nextPageUrl,
+          clickedProductPath: state.clickedProductPath,
+          scrollY: state.scrollY
+        });
+      }
+    }
+
+    function markBatchLoaded(sourceUrl, nextUrl, addedCount) {
+      if (!addedCount || addedCount < 1) return;
+
+      runtimeLoadedPages += 1;
+      if (sourceUrl) {
+        var normalizedUrl = normalizeCollectionUrl(sourceUrl);
+        if (loadedBatchUrls.indexOf(normalizedUrl) === -1) {
+          loadedBatchUrls.push(normalizedUrl);
+        }
+      }
+
+      debugLog('Loaded pages: ' + runtimeLoadedPages);
+      persistCollectionState(
+        {
+          nextPageUrl: nextUrl || null
+        },
+        'load-more'
+      );
+    }
+
+    function getReturnIntent() {
+      var parsed = safeParseJSON(readSessionItem(RETURN_INTENT_KEY), null);
+      if (!parsed || typeof parsed !== 'object') return null;
+
+      var timestamp = Number(parsed.timestamp || 0);
+      if (!timestamp || Date.now() - timestamp > RETURN_INTENT_MAX_AGE_MS) {
+        removeSessionItem(RETURN_INTENT_KEY);
+        return null;
+      }
+
+      if (!parsed.collectionKey || typeof parsed.collectionKey !== 'string') return null;
+      return parsed;
+    }
+
+    function setReturnIntent(intent) {
+      if (!intent || !intent.collectionKey) return;
+      writeSessionItem(RETURN_INTENT_KEY, JSON.stringify(intent));
+    }
+
+    function consumeReturnIntent() {
+      removeSessionItem(RETURN_INTENT_KEY);
+    }
+
+    function shouldRestoreForVisit(collectionStateKey) {
+      var intent = getReturnIntent();
+      var navType = getNavigationType();
+
+      if (!intent) {
+        return {
+          shouldRestore: false,
+          consumeIntent: false,
+          reason: 'no-return-intent'
+        };
+      }
+
+      if (intent.collectionKey !== collectionStateKey) {
+        return {
+          shouldRestore: false,
+          consumeIntent: false,
+          reason: 'intent-for-different-collection'
+        };
+      }
+
+      if (intent.mode === 'breadcrumb') {
+        return {
+          shouldRestore: true,
+          consumeIntent: true,
+          reason: 'breadcrumb-return'
+        };
+      }
+
+      if (intent.mode === 'product-click' && navType === 'back_forward') {
+        return {
+          shouldRestore: true,
+          consumeIntent: true,
+          reason: 'browser-back-return'
+        };
+      }
+
+      return {
+        shouldRestore: false,
+        consumeIntent: true,
+        reason: 'intent-present-but-not-return-navigation'
+      };
+    }
+
     function createPrefetchContainer() {
       if (prefetchContainer) return prefetchContainer;
       prefetchContainer = document.createElement('div');
       prefetchContainer.id = 'load-more-prefetch';
       prefetchContainer.setAttribute('aria-hidden', 'true');
-      prefetchContainer.style.cssText = 'position:absolute;left:-9999px;top:-9999px;visibility:hidden;pointer-events:none;';
+      prefetchContainer.style.cssText =
+        'position:absolute;left:-9999px;top:-9999px;visibility:hidden;pointer-events:none;';
       document.body.appendChild(prefetchContainer);
       return prefetchContainer;
     }
-    
+
+    function resetPrefetchCache() {
+      prefetchCache.url = null;
+      prefetchCache.items = null;
+      prefetchCache.nextUrl = null;
+      prefetchCache.isLoading = false;
+      prefetchCache.isReady = false;
+    }
+
     // Prefetch the next page in the background
     function prefetchNextPage(url) {
       if (!url || prefetchCache.isLoading || prefetchCache.url === url) return;
-      
+
       prefetchCache.isLoading = true;
       prefetchCache.url = url;
       prefetchCache.isReady = false;
-      
+
       fetch(url)
-        .then(function(response) { return response.text(); })
+        .then(function(response) {
+          return response.text();
+        })
         .then(function(html) {
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var newItems = doc.querySelectorAll('#product-grid > li');
           var nextBtn = doc.querySelector('#load-more-btn');
-          
-          // Store the next page's URL
+
           prefetchCache.nextUrl = nextBtn ? nextBtn.dataset.nextUrl : null;
-          
-          // Create hidden container and add items for BSS to process
+
           var container = createPrefetchContainer();
           container.innerHTML = '';
-          
-          // Create a hidden product grid structure so BSS recognizes it
+
           var hiddenGrid = document.createElement('ul');
           hiddenGrid.id = 'prefetch-product-grid';
           hiddenGrid.className = 'product-grid';
-          
+
           Array.from(newItems).forEach(function(item) {
             hiddenGrid.appendChild(item);
           });
-          
+
           container.appendChild(hiddenGrid);
-          
-          // Trigger BSS to process the prefetched items
           triggerBSSPriceRefresh(container);
-          
-          // Mark as ready after giving BSS time to process
+
           setTimeout(function() {
             prefetchCache.items = Array.from(hiddenGrid.querySelectorAll('li'));
             prefetchCache.isReady = true;
             prefetchCache.isLoading = false;
-          }, 800); // Give BSS time to fetch and populate prices
+          }, 800);
         })
         .catch(function(error) {
           console.error('Prefetch error:', error);
@@ -496,149 +815,197 @@
         });
     }
 
-    function handleLoadMoreClick(e) {
-      var btn = e.target.closest('#load-more-btn');
+    function displayPrefetchedItems(productGrid, items, done) {
+      if (!items || items.length === 0) {
+        if (typeof done === 'function') done(0);
+        return;
+      }
+
+      var fragment = document.createDocumentFragment();
+
+      items.forEach(function(item, index) {
+        item.classList.add('load-more-fade-in');
+        item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + index * 0.02 + 's';
+        item.classList.remove('scroll-trigger');
+        fragment.appendChild(item);
+      });
+
+      requestAnimationFrame(function() {
+        productGrid.appendChild(fragment);
+        announceLoadMoreToScreenReader(items.length + ' new products loaded');
+        if (typeof done === 'function') done(items.length);
+      });
+    }
+
+    function dispatchLoadMoreComplete(detail) {
+      document.dispatchEvent(
+        new CustomEvent('baystew:load-more-complete', {
+          bubbles: true,
+          detail: detail || {}
+        })
+      );
+    }
+
+    function handleLoadMoreClick(event) {
+      var btn = event.target.closest('#load-more-btn');
       if (!btn) return;
 
-      e.preventDefault();
+      event.preventDefault();
+      if (loadMoreInProgress) return;
 
       var loadingSpinner = document.getElementById('loading-spinner');
       var loadMoreWrapper = document.getElementById('load-more-wrapper');
       var productGrid = document.getElementById('product-grid');
 
-      if (!productGrid) return;
+      if (!productGrid) {
+        dispatchLoadMoreComplete({ success: false, reason: 'missing-grid' });
+        return;
+      }
 
       var nextUrl = btn.dataset.nextUrl;
       if (!nextUrl) {
-        console.error('Load more: No next URL found');
-        return;
-      }
-      
-      // Check if we have prefetched data ready
-      if (prefetchCache.isReady && prefetchCache.url === nextUrl && prefetchCache.items) {
-        // Use cached items - instant display!
-        displayPrefetchedItems(productGrid, prefetchCache.items, btn, loadingSpinner, loadMoreWrapper);
-        
-        // Start prefetching the next page
-        if (prefetchCache.nextUrl) {
-          btn.dataset.nextUrl = prefetchCache.nextUrl;
-          prefetchCache.url = null; // Reset for next prefetch
-          prefetchCache.items = null;
-          prefetchCache.isReady = false;
-          prefetchNextPage(prefetchCache.nextUrl);
-        } else {
-          // No more pages
-          if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
-        }
+        dispatchLoadMoreComplete({ success: false, reason: 'missing-next-url' });
         return;
       }
 
-      // Fallback: fetch normally if prefetch isn't ready
+      loadMoreInProgress = true;
+
+      function finalize(detail) {
+        loadMoreInProgress = false;
+        dispatchLoadMoreComplete(detail);
+      }
+
+      if (prefetchCache.isReady && prefetchCache.url === nextUrl && prefetchCache.items) {
+        displayPrefetchedItems(productGrid, prefetchCache.items, function(addedCount) {
+          var updatedNextUrl = prefetchCache.nextUrl || null;
+
+          if (updatedNextUrl) {
+            btn.dataset.nextUrl = updatedNextUrl;
+            prefetchCache.url = null;
+            prefetchCache.items = null;
+            prefetchCache.isReady = false;
+            prefetchNextPage(updatedNextUrl);
+          } else if (loadMoreWrapper) {
+            loadMoreWrapper.style.display = 'none';
+          }
+
+          btn.disabled = false;
+          btn.setAttribute('aria-busy', 'false');
+          if (loadingSpinner) loadingSpinner.style.display = 'none';
+
+          markBatchLoaded(nextUrl, updatedNextUrl, addedCount);
+
+          finalize({
+            success: addedCount > 0,
+            addedCount: addedCount,
+            sourceUrl: nextUrl,
+            nextUrl: updatedNextUrl,
+            restored: restoreInProgress
+          });
+        });
+        return;
+      }
+
       btn.disabled = true;
       btn.setAttribute('aria-busy', 'true');
       if (loadingSpinner) loadingSpinner.style.display = 'inline-block';
 
       fetch(nextUrl)
-        .then(function(response) { return response.text(); })
+        .then(function(response) {
+          return response.text();
+        })
         .then(function(html) {
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
-          var newItems = doc.querySelectorAll('#product-grid > li');
+          var newItems = Array.from(doc.querySelectorAll('#product-grid > li'));
+          var fragment = document.createDocumentFragment();
 
-          if (newItems.length > 0) {
-            var fragment = document.createDocumentFragment();
-            var itemsArray = Array.from(newItems);
-            
-            itemsArray.forEach(function(item, index) {
-              item.classList.add('load-more-fade-in');
-              item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + (index * 0.03) + 's';
-              item.classList.remove('scroll-trigger');
-              fragment.appendChild(item);
-            });
+          newItems.forEach(function(item, index) {
+            item.classList.add('load-more-fade-in');
+            item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + index * 0.03 + 's';
+            item.classList.remove('scroll-trigger');
+            fragment.appendChild(item);
+          });
 
-            requestAnimationFrame(function() {
+          var newLoadMoreBtn = doc.querySelector('#load-more-btn');
+          var updatedNextUrl = newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl ? newLoadMoreBtn.dataset.nextUrl : null;
+
+          requestAnimationFrame(function() {
+            if (newItems.length > 0) {
               productGrid.appendChild(fragment);
               triggerBSSPriceRefresh(productGrid);
-              announceLoadMoreToScreenReader(itemsArray.length + ' new products loaded');
-            });
-          }
+              announceLoadMoreToScreenReader(newItems.length + ' new products loaded');
+            }
 
-          // Update button state
-          var newLoadMoreBtn = doc.querySelector('#load-more-btn');
-          if (newLoadMoreBtn && newLoadMoreBtn.dataset.nextUrl) {
-            btn.dataset.nextUrl = newLoadMoreBtn.dataset.nextUrl;
-            btn.disabled = false;
-            btn.setAttribute('aria-busy', 'false');
-            if (loadingSpinner) loadingSpinner.style.display = 'none';
-            
-            // Start prefetching the next page
-            prefetchNextPage(newLoadMoreBtn.dataset.nextUrl);
-          } else {
-            if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
-            if (loadingSpinner) loadingSpinner.style.display = 'none';
-          }
+            if (updatedNextUrl) {
+              btn.dataset.nextUrl = updatedNextUrl;
+              btn.disabled = false;
+              btn.setAttribute('aria-busy', 'false');
+              if (loadingSpinner) loadingSpinner.style.display = 'none';
+              prefetchNextPage(updatedNextUrl);
+            } else {
+              if (loadMoreWrapper) loadMoreWrapper.style.display = 'none';
+              if (loadingSpinner) loadingSpinner.style.display = 'none';
+            }
+
+            markBatchLoaded(nextUrl, updatedNextUrl, newItems.length);
+
+            finalize({
+              success: newItems.length > 0,
+              addedCount: newItems.length,
+              sourceUrl: nextUrl,
+              nextUrl: updatedNextUrl,
+              restored: restoreInProgress
+            });
+          });
         })
         .catch(function(error) {
           console.error('Load more error:', error);
           btn.disabled = false;
           btn.setAttribute('aria-busy', 'false');
           if (loadingSpinner) loadingSpinner.style.display = 'none';
+          finalize({
+            success: false,
+            addedCount: 0,
+            sourceUrl: nextUrl,
+            nextUrl: btn.dataset.nextUrl || null,
+            restored: restoreInProgress,
+            error: true
+          });
         });
-    }
-    
-    // Display prefetched items instantly
-    function displayPrefetchedItems(productGrid, items, btn, spinner, wrapper) {
-      if (!items || items.length === 0) return;
-      
-      var fragment = document.createDocumentFragment();
-      
-      items.forEach(function(item, index) {
-        item.classList.add('load-more-fade-in');
-        item.style.cssText = 'opacity:1;transform:translateY(0);animation-delay:' + (index * 0.02) + 's';
-        item.classList.remove('scroll-trigger');
-        fragment.appendChild(item);
-      });
-      
-      requestAnimationFrame(function() {
-        productGrid.appendChild(fragment);
-        announceLoadMoreToScreenReader(items.length + ' new products loaded');
-      });
-      
-      // Button stays enabled, no spinner needed
-      btn.disabled = false;
-      btn.setAttribute('aria-busy', 'false');
-      if (spinner) spinner.style.display = 'none';
     }
 
     // Trigger BSS B2B and other third-party apps to process new price elements
     function triggerBSSPriceRefresh(container) {
-      // Dispatch Shopify section events that apps listen to
-      document.dispatchEvent(new CustomEvent('shopify:section:load', {
-        bubbles: true,
-        detail: { sectionId: container.closest('[data-section-id]')?.dataset.sectionId }
-      }));
-      
-      // Dispatch content updated event
+      var sectionId = null;
+      if (container && typeof container.closest === 'function') {
+        var parentWithSection = container.closest('[data-section-id]');
+        sectionId = parentWithSection ? parentWithSection.dataset.sectionId : null;
+      }
+
+      document.dispatchEvent(
+        new CustomEvent('shopify:section:load', {
+          bubbles: true,
+          detail: { sectionId: sectionId }
+        })
+      );
+
       container.dispatchEvent(new CustomEvent('bss:content:updated', { bubbles: true }));
-      
-      // Call BSS global refresh functions if they exist
+
       if (typeof window.BSSB2B !== 'undefined' && typeof window.BSSB2B.refresh === 'function') {
         window.BSSB2B.refresh();
       }
       if (typeof window.BSSCommerce !== 'undefined' && typeof window.BSSCommerce.initPrices === 'function') {
         window.BSSCommerce.initPrices(container);
       }
-      
-      // Poke MutationObserver
+
       var priceElements = container.querySelectorAll('[bss-b2b-product-price]');
-      priceElements.forEach(function(el) {
-        el.setAttribute('data-bss-refresh', Date.now());
+      priceElements.forEach(function(element) {
+        element.setAttribute('data-bss-refresh', Date.now());
       });
-      
-      // Dispatch price refresh event
+
       document.dispatchEvent(new CustomEvent('price:refresh', { detail: { container: container } }));
-      
-      // Tax display
+
       if (typeof window.BssB2BTax !== 'undefined' && typeof window.BssB2BTax.calculate === 'function') {
         window.BssB2BTax.calculate();
       }
@@ -655,39 +1022,388 @@
         document.body.appendChild(announcer);
       }
       announcer.textContent = '';
-      setTimeout(function() { announcer.textContent = message; }, 100);
+      setTimeout(function() {
+        announcer.textContent = message;
+      }, 100);
     }
 
-    // Attach delegated listener
+    function readProductContextMap() {
+      return safeParseJSON(readSessionItem(PRODUCT_CONTEXT_KEY), {});
+    }
+
+    function writeProductContextMap(map) {
+      writeSessionItem(PRODUCT_CONTEXT_KEY, JSON.stringify(map));
+    }
+
+    function saveProductCollectionContext(productPath) {
+      if (!productPath) return;
+
+      var contextMap = readProductContextMap();
+      var now = Date.now();
+      var contextMeta = getCollectionMeta();
+
+      contextMap[productPath] = {
+        collectionUrl: contextMeta.collectionUrl,
+        collectionTitle: contextMeta.collectionTitle,
+        timestamp: now
+      };
+
+      Object.keys(contextMap).forEach(function(key) {
+        var item = contextMap[key];
+        if (!item || !item.timestamp || now - item.timestamp > PRODUCT_CONTEXT_MAX_AGE_MS) {
+          delete contextMap[key];
+        }
+      });
+
+      var contextKeys = Object.keys(contextMap);
+      if (contextKeys.length > 200) {
+        contextKeys
+          .sort(function(a, b) {
+            var aTs = contextMap[a] && contextMap[a].timestamp ? contextMap[a].timestamp : 0;
+            var bTs = contextMap[b] && contextMap[b].timestamp ? contextMap[b].timestamp : 0;
+            return bTs - aTs;
+          })
+          .slice(200)
+          .forEach(function(staleKey) {
+            delete contextMap[staleKey];
+          });
+      }
+
+      writeProductContextMap(contextMap);
+    }
+
+    function saveActiveProductContext(productPath) {
+      var key = getCollectionStateKey();
+      if (!key || !productPath) return;
+      var contextMeta = getCollectionMeta();
+      writeSessionItem(
+        ACTIVE_PRODUCT_CONTEXT_KEY,
+        JSON.stringify({
+          productPath: productPath,
+          collectionUrl: contextMeta.collectionUrl,
+          collectionTitle: contextMeta.collectionTitle,
+          timestamp: Date.now()
+        })
+      );
+
+      setReturnIntent({
+        collectionKey: key,
+        collectionUrl: contextMeta.collectionUrl,
+        collectionTitle: contextMeta.collectionTitle,
+        productPath: productPath,
+        mode: 'product-click',
+        timestamp: Date.now()
+      });
+    }
+
+    function extractProductHandle(productPath) {
+      var parts = productPath.split('/').filter(Boolean);
+      return parts.length ? parts[parts.length - 1] : '';
+    }
+
+    function handleProductLinkClick(event) {
+      var productLink = event.target.closest('#product-grid a[href*="/products/"]');
+      if (!productLink) return;
+      if (productLink.closest('.quick-add, quick-add-bulk, quick-add-modal, product-form')) return;
+
+      var productPath = normalizeProductPath(productLink.getAttribute('href'));
+      if (!productPath) return;
+
+      saveProductCollectionContext(productPath);
+      saveActiveProductContext(productPath);
+
+      persistCollectionState(
+        {
+          scrollY: Math.max(window.scrollY || 0, 0),
+          clickedProductUrl: productPath,
+          clickedProductPath: productPath,
+          clickedProductHandle: extractProductHandle(productPath)
+        },
+        'product-click'
+      );
+
+      debugLog('Product clicked: ' + productPath);
+    }
+
+    function saveScrollStateIfNeeded(force) {
+      var currentScrollY = Math.max(window.scrollY || 0, 0);
+      if (!force && Math.abs(currentScrollY - lastSavedScrollY) < 120) return;
+      lastSavedScrollY = currentScrollY;
+      persistCollectionState({ scrollY: currentScrollY }, force ? 'pagehide' : 'scroll');
+    }
+
+    function handleScrollPersist() {
+      if (scrollThrottleTimer) return;
+      scrollThrottleTimer = setTimeout(function() {
+        scrollThrottleTimer = null;
+        saveScrollStateIfNeeded(false);
+      }, 250);
+    }
+
+    function getHeaderOffset() {
+      var header =
+        document.querySelector('#shopify-section-header-group .section-header') ||
+        document.querySelector('.section-header') ||
+        document.querySelector('header');
+      if (!header) return 80;
+      return Math.round(header.getBoundingClientRect().height + 24);
+    }
+
+    function findProductElementInGrid(productPath) {
+      if (!productPath) return null;
+      var links = document.querySelectorAll('#product-grid a[href*="/products/"]');
+      for (var i = 0; i < links.length; i += 1) {
+        var candidatePath = normalizeProductPath(links[i].getAttribute('href'));
+        if (candidatePath === productPath) {
+          return links[i].closest('li') || links[i].closest('.grid__item') || links[i];
+        }
+      }
+      return null;
+    }
+
+    function waitForNextFrame() {
+      return new Promise(function(resolve) {
+        requestAnimationFrame(function() {
+          requestAnimationFrame(resolve);
+        });
+      });
+    }
+
+    function waitForGridImages(container, timeoutMs) {
+      if (!container) return Promise.resolve();
+      var images = Array.from(container.querySelectorAll('img')).filter(function(image) {
+        return !image.complete;
+      });
+      if (!images.length) return Promise.resolve();
+
+      var settledPromise = Promise.all(
+        images.map(function(image) {
+          return new Promise(function(resolve) {
+            image.addEventListener('load', resolve, { once: true });
+            image.addEventListener('error', resolve, { once: true });
+          });
+        })
+      );
+
+      return Promise.race([
+        settledPromise,
+        new Promise(function(resolve) {
+          setTimeout(resolve, timeoutMs || 1200);
+        })
+      ]);
+    }
+
+    function restoreScrollPosition(savedState) {
+      if (!savedState) return;
+      if (restoredFromBFCache) return;
+      if ((window.scrollY || 0) > 100) return;
+
+      var productPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
+      var productElement = findProductElementInGrid(productPath);
+      if (productElement) {
+        debugLog('Scrolling to clicked product');
+        var offset = getHeaderOffset();
+        var targetTop = productElement.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo(0, Math.max(targetTop, 0));
+
+        setTimeout(function() {
+          var adjustedTop = productElement.getBoundingClientRect().top + window.pageYOffset - offset;
+          var difference = Math.abs((window.scrollY || 0) - Math.max(adjustedTop, 0));
+          if (difference > 40) {
+            window.scrollTo(0, Math.max(adjustedTop, 0));
+          }
+        }, 220);
+        return;
+      }
+
+      if (typeof savedState.scrollY === 'number' && savedState.scrollY > 0) {
+        debugLog('Falling back to scrollY');
+        window.scrollTo(0, savedState.scrollY);
+      }
+    }
+
+    function triggerLoadMoreAndWait() {
+      return new Promise(function(resolve) {
+        var btn = getLoadMoreButton();
+        if (!btn || !btn.dataset.nextUrl || btn.disabled) {
+          resolve({ success: false, reason: 'no-next-page' });
+          return;
+        }
+
+        var completed = false;
+        var timeoutId = null;
+
+        function cleanup() {
+          if (timeoutId) clearTimeout(timeoutId);
+          document.removeEventListener('baystew:load-more-complete', onLoadMoreComplete);
+        }
+
+        function onLoadMoreComplete(completeEvent) {
+          if (completed) return;
+          completed = true;
+          cleanup();
+          resolve(completeEvent.detail || { success: false, reason: 'unknown' });
+        }
+
+        document.addEventListener('baystew:load-more-complete', onLoadMoreComplete);
+        timeoutId = setTimeout(function() {
+          if (completed) return;
+          completed = true;
+          cleanup();
+          resolve({ success: false, reason: 'timeout' });
+        }, 10000);
+
+        btn.click();
+      });
+    }
+
+    function hasDomAlreadyRestored(savedState) {
+      if (!savedState || savedState.loadedPages < 1) return false;
+      var btn = getLoadMoreButton();
+      var currentNextUrl = btn && btn.dataset.nextUrl ? normalizeCollectionUrl(btn.dataset.nextUrl) : null;
+      var savedNextUrl = savedState.nextPageUrl ? normalizeCollectionUrl(savedState.nextPageUrl) : null;
+
+      if (currentNextUrl === savedNextUrl) {
+        return true;
+      }
+
+      if (!btn && !savedNextUrl) {
+        return true;
+      }
+
+      return false;
+    }
+
+    async function restoreCollectionStateIfNeeded() {
+      var key = getCollectionStateKey();
+      if (!key) return;
+      if (restoreInProgress || restoredFromBFCache) return;
+      if (restoreAttemptedForKey === key) return;
+
+      restoreAttemptedForKey = key;
+      debugLog('State key: ' + key);
+
+      var restoreDecision = shouldRestoreForVisit(key);
+      if (!restoreDecision.shouldRestore) {
+        if (restoreDecision.reason === 'intent-present-but-not-return-navigation') {
+          debugLog('Skipping restore for normal fresh visit');
+        }
+        if (restoreDecision.consumeIntent) {
+          consumeReturnIntent();
+        }
+        return;
+      }
+
+      var savedState = getCollectionState();
+      if (!savedState) {
+        if (restoreDecision.consumeIntent) {
+          consumeReturnIntent();
+        }
+        return;
+      }
+
+      debugLog('Restoring state:', savedState);
+
+      if (hasDomAlreadyRestored(savedState)) {
+        debugLog('bfcache restored page - skipping AJAX restore');
+        restoreScrollPosition(savedState);
+        if (restoreDecision.consumeIntent) {
+          consumeReturnIntent();
+        }
+        return;
+      }
+
+      var targetLoads = Math.max(parseInt(savedState.loadedPages, 10) || 0, 0);
+
+      restoreInProgress = true;
+      try {
+        for (var i = 0; i < targetLoads; i += 1) {
+          debugLog('Restoring page ' + (i + 2));
+          var result = await triggerLoadMoreAndWait();
+          if (!result || !result.success) {
+            debugLog('Restore failed gracefully: ' + ((result && result.reason) || 'unknown'));
+            break;
+          }
+        }
+
+        var productGrid = document.getElementById('product-grid');
+        await waitForNextFrame();
+        await waitForGridImages(productGrid, 1600);
+        await waitForNextFrame();
+
+        restoreScrollPosition(savedState);
+        debugLog('Restore complete');
+      } finally {
+        restoreInProgress = false;
+      }
+
+      if (restoreDecision.consumeIntent) {
+        consumeReturnIntent();
+      }
+      persistCollectionState({}, 'restore');
+    }
+
+    function schedulePrefetch(delayMs) {
+      setTimeout(function() {
+        var btn = getLoadMoreButton();
+        if (btn && btn.dataset.nextUrl) {
+          prefetchNextPage(btn.dataset.nextUrl);
+        }
+      }, delayMs);
+    }
+
+    function resetRuntimeStateForCurrentGrid() {
+      runtimeLoadedPages = 0;
+      loadedBatchUrls = [];
+      lastSavedScrollY = Math.max(window.scrollY || 0, 0);
+    }
+
     if (!loadMoreListenerAttached) {
       document.addEventListener('click', handleLoadMoreClick);
       loadMoreListenerAttached = true;
     }
-    
-    // Start prefetching after page loads
-    document.addEventListener('DOMContentLoaded', function() {
-      var btn = document.getElementById('load-more-btn');
-      if (btn && btn.dataset.nextUrl) {
-        // Delay prefetch to not compete with initial page resources
-        setTimeout(function() {
-          prefetchNextPage(btn.dataset.nextUrl);
-        }, 1500);
-      }
+
+    document.addEventListener('click', handleProductLinkClick, true);
+    window.addEventListener('scroll', handleScrollPersist, { passive: true });
+    window.addEventListener('pagehide', function() {
+      saveScrollStateIfNeeded(true);
     });
-    
-    // Also prefetch when filters change (facets update the grid)
-    document.addEventListener('facets:updated', function() {
-      // Reset cache since filters changed
-      prefetchCache.url = null;
-      prefetchCache.items = null;
-      prefetchCache.isReady = false;
-      
-      setTimeout(function() {
-        var btn = document.getElementById('load-more-btn');
-        if (btn && btn.dataset.nextUrl) {
-          prefetchNextPage(btn.dataset.nextUrl);
+
+    window.addEventListener('pageshow', function(pageShowEvent) {
+      if (pageShowEvent.persisted) {
+        restoredFromBFCache = true;
+        debugLog('bfcache restored page - skipping AJAX restore');
+        var key = getCollectionStateKey();
+        var intent = getReturnIntent();
+        if (intent && key && intent.collectionKey === key) {
+          consumeReturnIntent();
         }
-      }, 1000);
+        return;
+      }
+      restoreCollectionStateIfNeeded();
+    });
+
+    function onCollectionPageReady() {
+      pruneCollectionStateStorage();
+      resetRuntimeStateForCurrentGrid();
+      restoreCollectionStateIfNeeded();
+      schedulePrefetch(1500);
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', onCollectionPageReady);
+    } else {
+      onCollectionPageReady();
+    }
+
+    // Reset state cache and prefetch after AJAX filter/sort replacements.
+    document.addEventListener('facets:updated', function() {
+      debugLog('Facet/sort URL changed');
+      resetPrefetchCache();
+      resetRuntimeStateForCurrentGrid();
+      restoreAttemptedForKey = null;
+      restoreCollectionStateIfNeeded();
+      schedulePrefetch(1000);
     });
   })();
 </script>

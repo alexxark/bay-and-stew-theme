@@ -1,0 +1,50 @@
+{{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
+<script>
+  window.COLLECTION_STATE_DEBUG = true;
+</script>
+<script src="{{ 'breadcrumbs.js' | asset_url }}" defer="defer"></script>
+
+{%- assign breadcrumb_kind = breadcrumb_type | default: '' -%}
+
+{%- if breadcrumb_kind == 'collection' and collection != blank -%}
+  <nav class="breadcrumbs page-width" aria-label="Breadcrumb" data-breadcrumb-type="collection">
+    <ol class="breadcrumbs__list" role="list">
+      <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
+      </li>
+      <li class="breadcrumbs__item" aria-current="page">{{ collection.title | escape }}</li>
+    </ol>
+  </nav>
+{%- elsif breadcrumb_kind == 'product' and product != blank -%}
+  {%- assign fallback_collection = collection -%}
+  {%- if fallback_collection == blank and product.collections.size > 0 -%}
+    {%- assign fallback_collection = product.collections.first -%}
+  {%- endif -%}
+
+  <nav
+    class="breadcrumbs page-width"
+    aria-label="Breadcrumb"
+    data-breadcrumb-type="product"
+    data-product-path="{{ product.url | split: '?' | first }}"
+  >
+    <ol class="breadcrumbs__list" role="list">
+      <li class="breadcrumbs__item">
+        <a class="breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
+      </li>
+
+      <li class="breadcrumbs__item" data-breadcrumb-collection-item {% if fallback_collection == blank %}hidden{% endif %}>
+        <a
+          class="breadcrumbs__link"
+          data-breadcrumb-collection-link
+          href="{% if fallback_collection %}{{ fallback_collection.url }}{% else %}{{ routes.root_url }}{% endif %}"
+        >
+          {% if fallback_collection %}
+            {{ fallback_collection.title | escape }}
+          {% endif %}
+        </a>
+      </li>
+
+      <li class="breadcrumbs__item" aria-current="page">{{ product.title | escape }}</li>
+    </ol>
+  </nav>
+{%- endif -%}
