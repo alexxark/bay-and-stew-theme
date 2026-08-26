@@ -1,7 +1,4 @@
 {{ 'component-breadcrumb.css' | asset_url | stylesheet_tag }}
-<script>
-  window.COLLECTION_STATE_DEBUG = true;
-</script>
 <script src="{{ 'breadcrumbs.js' | asset_url }}" defer="defer"></script>
 
 {%- assign breadcrumb_kind = breadcrumb_type | default: '' -%}

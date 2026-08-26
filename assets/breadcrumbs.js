@@ -1,5 +1,4 @@
 (function() {
-  var COLLECTION_STATE_DEBUG = window.COLLECTION_STATE_DEBUG === true;
   var STORAGE_PREFIX = 'bs:collection-state:v1:';
   var PRODUCT_CONTEXT_KEY = 'bs:product-collection-context:v1';
   var ACTIVE_PRODUCT_CONTEXT_KEY = 'bs:active-product-context:v1';
@@ -7,24 +6,6 @@
   var PRODUCT_CONTEXT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
   var ACTIVE_PRODUCT_CONTEXT_MAX_AGE_MS = 60 * 60 * 1000;
   var RETURN_INTENT_MAX_AGE_MS = 45 * 60 * 1000;
-
-  function debugLog(message, payload) {
-    if (!COLLECTION_STATE_DEBUG) return;
-    if (typeof payload === 'undefined') {
-      console.info('[Collection State] ' + message);
-    } else {
-      console.info('[Collection State] ' + message, payload);
-    }
-  }
-
-  function breadcrumbLog(message, payload) {
-    if (!COLLECTION_STATE_DEBUG) return;
-    if (typeof payload === 'undefined') {
-      console.info('[Breadcrumbs] ' + message);
-    } else {
-      console.info('[Breadcrumbs] ' + message, payload);
-    }
-  }
 
   function safeParseJSON(raw, fallback) {
     if (!raw) return fallback;
@@ -249,14 +230,10 @@
       setBreadcrumbReturnIntent(targetCollectionUrl, collectionLink.textContent, productPath);
 
       if (canUseHistoryBackForCollectionReturn(targetCollectionUrl, productPath)) {
-        breadcrumbLog('Attempting history back for collection return');
         event.preventDefault();
         window.history.back();
         return;
       }
-
-      breadcrumbLog('History back not safe, using href');
-      breadcrumbLog('Breadcrumb return using fresh collection restore');
     });
   }
 

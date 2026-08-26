@@ -432,7 +432,6 @@
 
 <script>
   (function() {
-    var COLLECTION_STATE_DEBUG = window.COLLECTION_STATE_DEBUG === true;
     var STORAGE_PREFIX = 'bs:collection-state:v1:';
     var PRODUCT_CONTEXT_KEY = 'bs:product-collection-context:v1';
     var ACTIVE_PRODUCT_CONTEXT_KEY = 'bs:active-product-context:v1';
@@ -447,55 +446,21 @@
     var RESTORE_PAINT_GUARD_CLASS = 'collection-return-restoring';
     var RESTORE_PAINT_GUARD_TIMEOUT_MS = 650;
 
-    function debugLog(message, payload) {
-      if (!COLLECTION_STATE_DEBUG) return;
-      if (typeof payload === 'undefined') {
-        console.info('[Collection State] ' + message);
-      } else {
-        console.info('[Collection State] ' + message, payload);
-      }
-    }
-
-    function perfLog(message, valueMs) {
-      if (!COLLECTION_STATE_DEBUG) return;
-      console.info('[Collection State Perf] ' + message + ': ' + Math.round(valueMs) + ' ms');
-    }
-
-    function perfEventLog(message, payload) {
-      if (!COLLECTION_STATE_DEBUG) return;
-      if (typeof payload === 'undefined') {
-        console.info('[Collection State Perf] ' + message);
-      } else {
-        console.info('[Collection State Perf] ' + message, payload);
-      }
-    }
-
     if (window.__bsCollectionStateInit) {
-      debugLog('Already initialized - skipping duplicate script execution');
       return;
     }
     window.__bsCollectionStateInit = true;
-    debugLog('Initializing');
 
     var loadMoreListenerAttached = false;
     var loadMoreInProgress = false;
     var restoreInProgress = false;
     var restoreOperationInProgress = false;
-    var activeRestoreOperationId = null;
     var restoreAttemptedForKey = null;
-    var restoredFromBFCache = false;
     var runtimeLoadedPages = 0;
     var loadedBatchUrls = [];
     var scrollThrottleTimer = null;
     var lastSavedScrollY = 0;
-    var browserBackDetected = false;
-    var scriptInitPerfAt = performance.now();
-    var domReadyPerfAt = null;
-    var lastPageShowPerfAt = null;
-    var restoreIdCounter = 1;
-    var paintGuardEnabledAt = null;
     var paintGuardTimeoutId = null;
-    var paintGuardRestoreId = '';
     var collectionPageReadyHandled = false;
 
     // Prefetch cache - stores pre-loaded and pre-processed items
@@ -510,61 +475,6 @@
 
     // Hidden container for prefetched items (allows BSS to process them)
     var prefetchContainer = null;
-
-    function createRestoreOperation(triggerSource) {
-      var now = performance.now();
-      var navType = getNavigationType();
-      var usePageShowBaseline = navType === 'back_forward' && typeof lastPageShowPerfAt === 'number';
-      var restoreOperation = {
-        id: String(Date.now()) + '-' + String(restoreIdCounter),
-        trigger: triggerSource || 'unknown',
-        startedAt: now,
-        baselineAt: usePageShowBaseline ? lastPageShowPerfAt : scriptInitPerfAt,
-        baselineType: usePageShowBaseline ? 'pageshow' : 'init',
-        totalLogged: false
-      };
-
-      restoreIdCounter += 1;
-      return restoreOperation;
-    }
-
-    function logRestoreStage(restoreOperation, stageName, payload) {
-      if (!COLLECTION_STATE_DEBUG || !restoreOperation) return;
-      var now = performance.now();
-      var stagePayload = Object.assign(
-        {
-          restoreId: restoreOperation.id,
-          trigger: restoreOperation.trigger,
-          baseline: restoreOperation.baselineType,
-          sinceBaselineMs: Math.round(now - restoreOperation.baselineAt),
-          sinceRestoreStartMs: Math.round(now - restoreOperation.startedAt)
-        },
-        payload || {}
-      );
-
-      console.info(
-        '[Collection State Perf] ' + stageName + ': ' + stagePayload.sinceBaselineMs + ' ms',
-        stagePayload
-      );
-    }
-
-    function logTotalReturnToProduct(restoreOperation, payload) {
-      if (!COLLECTION_STATE_DEBUG || !restoreOperation || restoreOperation.totalLogged) return;
-      restoreOperation.totalLogged = true;
-
-      var totalMs = Math.round(performance.now() - restoreOperation.baselineAt);
-      var totalPayload = Object.assign(
-        {
-          restoreId: restoreOperation.id,
-          trigger: restoreOperation.trigger,
-          baseline: restoreOperation.baselineType,
-          totalMs: totalMs
-        },
-        payload || {}
-      );
-
-      console.info('[Collection State Perf] TOTAL return-to-product: ' + totalMs + ' ms', totalPayload);
-    }
 
     function isPaintGuardActive() {
       return document.documentElement.classList.contains(RESTORE_PAINT_GUARD_CLASS);
@@ -585,36 +495,12 @@
 
       document.documentElement.classList.remove(RESTORE_PAINT_GUARD_CLASS);
       clearPaintGuardFailsafeTimer();
-
-      if (paintGuardEnabledAt !== null) {
-        var hiddenMs = performance.now() - paintGuardEnabledAt;
-        perfLog('restore paint guard removed', hiddenMs);
-        debugLog('Restore paint guard removed', {
-          reason: reason || 'unknown',
-          hiddenMs: Math.round(hiddenMs),
-          restoreId:
-            (restoreOperation && restoreOperation.id) ||
-            paintGuardRestoreId ||
-            activeRestoreOperationId ||
-            ''
-        });
-      }
-
-      paintGuardEnabledAt = null;
-      paintGuardRestoreId = '';
     }
 
     function enableRestorePaintGuard(reason, restoreOperation) {
       if (isPaintGuardActive()) return;
 
       document.documentElement.classList.add(RESTORE_PAINT_GUARD_CLASS);
-      paintGuardEnabledAt = performance.now();
-      paintGuardRestoreId = (restoreOperation && restoreOperation.id) || activeRestoreOperationId || '';
-      perfLog('restore paint guard enabled', paintGuardEnabledAt - scriptInitPerfAt);
-      debugLog('Restore paint guard enabled', {
-        reason: reason || 'unknown',
-        restoreId: paintGuardRestoreId || ''
-      });
 
       clearPaintGuardFailsafeTimer();
       paintGuardTimeoutId = setTimeout(function() {
@@ -680,24 +566,9 @@
       return entries;
     }
 
-    function logEvictedInactiveCollectionCache(entry, reason) {
-      debugLog('Evicted inactive collection cache: ' + entry.key, {
-        reason: reason,
-        cachedBatches: entry.cachedBatches || 0,
-        cachedChars: entry.cachedChars || 0,
-        timestamp: entry.timestamp || 0
-      });
-    }
+    function logEvictedInactiveCollectionCache(entry, reason) {}
 
-    function logActiveCacheStats(activeStateKey) {
-      if (!activeStateKey) return;
-
-      var activeState = sanitizeCollectionState(safeParseJSON(readSessionItem(activeStateKey), null));
-      var activeBatchCache = activeState && Array.isArray(activeState.batchCache) ? activeState.batchCache : [];
-
-      debugLog('Active cache chars: ' + getBatchCacheSizeChars(activeBatchCache));
-      debugLog('Active cached batches: ' + activeBatchCache.length);
-    }
+    function logActiveCacheStats(activeStateKey) {}
 
     function cleanupCollectionStateStorageForQuota(activeStateKey) {
       var changed = false;
@@ -760,8 +631,6 @@
         window.sessionStorage.setItem(key, value);
       } catch (error) {
         if (isQuotaExceededError(error)) {
-          debugLog('Storage quota pressure');
-
           var activeStateKey = key && key.indexOf(STORAGE_PREFIX) === 0 ? key : getCollectionStateKey();
           cleanupCollectionStateStorageForQuota(activeStateKey);
 
@@ -769,18 +638,9 @@
             window.sessionStorage.setItem(key, value);
             return;
           } catch (retryError) {
-            debugLog('sessionStorage write failed', {
-              key: key,
-              error: retryError && retryError.message ? retryError.message : retryError
-            });
             return;
           }
         }
-
-        debugLog('sessionStorage write failed', {
-          key: key,
-          error: error && error.message ? error.message : error
-        });
       }
     }
 
@@ -802,108 +662,6 @@
         // No-op.
       }
       return '';
-    }
-
-    function getNavigationEntry() {
-      try {
-        var entries = performance.getEntriesByType('navigation');
-        return entries && entries.length ? entries[0] : null;
-      } catch (error) {
-        return null;
-      }
-    }
-
-    function getNotRestoredReasons() {
-      var entry = getNavigationEntry();
-      if (!entry || typeof entry.notRestoredReasons === 'undefined') return null;
-      return entry.notRestoredReasons;
-    }
-
-    function formatBFCacheReason(reasonEntry) {
-      if (!reasonEntry) return 'unknown';
-      if (typeof reasonEntry === 'string') return reasonEntry;
-      if (typeof reasonEntry.reason === 'string' && reasonEntry.reason) return reasonEntry.reason;
-      if (typeof reasonEntry.type === 'string' && reasonEntry.type) return reasonEntry.type;
-      if (typeof reasonEntry.name === 'string' && reasonEntry.name) return reasonEntry.name;
-      return 'unknown';
-    }
-
-    function collectBFCacheBlockers(node, inheritedContext, output) {
-      if (!node) return;
-
-      if (Array.isArray(node)) {
-        node.forEach(function(item) {
-          collectBFCacheBlockers(item, inheritedContext, output);
-        });
-        return;
-      }
-
-      if (typeof node !== 'object') return;
-
-      var context = Object.assign({}, inheritedContext || {});
-      if (typeof node.url === 'string' && node.url) context.url = node.url;
-      if (typeof node.src === 'string' && node.src) context.source = node.src;
-      if (typeof node.id === 'string' && node.id) context.frame = node.id;
-      if (typeof node.name === 'string' && node.name) context.frame = node.name;
-
-      if (Array.isArray(node.reasons) && node.reasons.length) {
-        node.reasons.forEach(function(reasonEntry) {
-          var blockerContext = Object.assign({}, context);
-          if (reasonEntry && typeof reasonEntry === 'object') {
-            if (typeof reasonEntry.context === 'string' && reasonEntry.context) {
-              blockerContext.context = reasonEntry.context;
-            } else if (typeof reasonEntry.details === 'string' && reasonEntry.details) {
-              blockerContext.context = reasonEntry.details;
-            }
-            if (typeof reasonEntry.url === 'string' && reasonEntry.url) blockerContext.url = reasonEntry.url;
-            if (typeof reasonEntry.src === 'string' && reasonEntry.src) blockerContext.source = reasonEntry.src;
-          }
-
-          output.push({
-            reason: formatBFCacheReason(reasonEntry),
-            context: blockerContext.context || '',
-            source: blockerContext.source || '',
-            url: blockerContext.url || '',
-            frame: blockerContext.frame || ''
-          });
-        });
-      }
-
-      if (Array.isArray(node.children) && node.children.length) {
-        node.children.forEach(function(child) {
-          collectBFCacheBlockers(child, context, output);
-        });
-      }
-    }
-
-    function extractBFCacheBlockers(reasons) {
-      if (!reasons) return [];
-      var blockers = [];
-      collectBFCacheBlockers(reasons, {}, blockers);
-      return blockers;
-    }
-
-    function logBackForwardDiagnostics(pageShowEvent) {
-      debugLog('pageshow persisted: ' + Boolean(pageShowEvent && pageShowEvent.persisted));
-      debugLog('navigation type: ' + (getNavigationType() || 'unknown'));
-      var reasons = getNotRestoredReasons();
-      debugLog('bfcache not restored reasons:', reasons === null ? 'not supported or none' : reasons);
-      var blockers = extractBFCacheBlockers(reasons);
-      blockers.forEach(function(blocker, index) {
-        debugLog('bfcache blocker ' + (index + 1) + ': ' + blocker.reason, {
-          context: blocker.context || '',
-          source: blocker.source || '',
-          url: blocker.url || '',
-          frame: blocker.frame || ''
-        });
-      });
-      try {
-        if (window.history && typeof window.history.scrollRestoration !== 'undefined') {
-          debugLog('history.scrollRestoration: ' + window.history.scrollRestoration);
-        }
-      } catch (error) {
-        // No-op.
-      }
     }
 
     function normalizeProductPath(urlString) {
@@ -994,9 +752,6 @@
       var key = getCollectionStateKey();
       if (!key) return null;
       var state = readCollectionStateRaw();
-      if (!state) {
-        debugLog('No saved state for this URL');
-      }
       return state;
     }
 
@@ -1093,17 +848,6 @@
       if (reason && reason !== 'scroll') {
         updateCollectionHistoryState(state, key);
       }
-
-      if (reason && reason !== 'scroll') {
-        debugLog('Saved state:', {
-          reason: reason,
-          key: key,
-          loadedPages: state.loadedPages,
-          nextPageUrl: state.nextPageUrl,
-          clickedProductPath: state.clickedProductPath,
-          scrollY: state.scrollY
-        });
-      }
     }
 
     function getBatchCacheSizeChars(batchCache) {
@@ -1143,41 +887,17 @@
         timestamp: Date.now()
       });
 
-      var removedForCountLimit = 0;
       while (updatedBatches.length > MAX_BATCHES_PER_STATE) {
         updatedBatches.shift();
-        removedForCountLimit += 1;
       }
 
-      var removedForSizeLimit = 0;
       while (getBatchCacheSizeChars(updatedBatches) > MAX_STATE_BATCH_HTML_CHARS && updatedBatches.length > 1) {
         updatedBatches.shift();
-        removedForSizeLimit += 1;
       }
 
       state.batchCache = updatedBatches;
       state.timestamp = Date.now();
       writeCollectionState(state);
-
-      if (removedForCountLimit || removedForSizeLimit) {
-        debugLog('Batch cache trimmed', {
-          pageUrl: normalizedPageUrl,
-          loadedPages: state.loadedPages,
-          removedForCountLimit: removedForCountLimit,
-          removedForSizeLimit: removedForSizeLimit,
-          cachedBatches: updatedBatches.length,
-          cachedChars: getBatchCacheSizeChars(updatedBatches),
-          maxBatches: MAX_BATCHES_PER_STATE,
-          maxChars: MAX_STATE_BATCH_HTML_CHARS
-        });
-      }
-
-      debugLog('Saved state:', {
-        reason: 'batch-cache',
-        pageUrl: normalizedPageUrl,
-        cachedBatches: updatedBatches.length,
-        cachedChars: getBatchCacheSizeChars(updatedBatches)
-      });
     }
 
     function markBatchLoaded(sourceUrl, nextUrl, addedCount, itemsHtml) {
@@ -1195,7 +915,6 @@
         cacheBatchForCurrentState(sourceUrl, itemsHtml, nextUrl || null);
       }
 
-      debugLog('Loaded pages: ' + runtimeLoadedPages);
       persistCollectionState(
         {
           nextPageUrl: nextUrl || null
@@ -1351,13 +1070,6 @@
         decision.reason + ':' + (triggerSource || 'unknown'),
         restoreOperation || null
       );
-
-      debugLog('Restore paint guard candidate', {
-        trigger: triggerSource || 'unknown',
-        reason: decision.reason,
-        key: decision.key || '',
-        coverage: decision.coverage || null
-      });
     }
 
     function createPrefetchContainer() {
@@ -1747,8 +1459,6 @@
         },
         'product-click'
       );
-
-      debugLog('Product clicked: ' + productPath);
     }
 
     function saveScrollStateIfNeeded(force) {
@@ -1801,7 +1511,6 @@
 
     function restoreScrollPosition(savedState) {
       if (!savedState) {
-        debugLog('Scroll already correct, no action');
         return { applied: false, reason: 'missing-state' };
       }
 
@@ -1812,11 +1521,8 @@
         var targetTop = productElement.getBoundingClientRect().top + window.pageYOffset - offset;
 
         if (isScrollClose(targetTop, 90)) {
-          debugLog('Scroll already correct, no action');
           return { applied: false, reason: 'already-correct-product' };
         }
-
-        debugLog('Scrolling to clicked product');
         window.scrollTo(0, Math.max(targetTop, 0));
 
         setTimeout(function() {
@@ -1831,11 +1537,8 @@
 
       if (typeof savedState.scrollY === 'number' && savedState.scrollY > 0) {
         if (isScrollClose(savedState.scrollY, 90)) {
-          debugLog('Scroll already correct, no action');
           return { applied: false, reason: 'already-correct-scrollY' };
         }
-
-        debugLog('Falling back to scrollY');
         window.scrollTo(0, savedState.scrollY);
 
         setTimeout(function() {
@@ -1846,29 +1549,13 @@
 
         return { applied: true, reason: 'scrollY' };
       }
-
-      debugLog('Scroll already correct, no action');
       return { applied: false, reason: 'no-scroll-target' };
     }
 
     async function applyScrollRestorationOnly(savedState, restoreOperation) {
-      debugLog('Applying scroll restoration only');
-      logRestoreStage(restoreOperation, 'first scroll pending', {
-        mode: 'scroll-only'
-      });
       await waitForNextFrame();
-      var scrollResult = restoreScrollPosition(savedState);
+      restoreScrollPosition(savedState);
       removeRestorePaintGuard('first-scroll-applied', restoreOperation);
-      logRestoreStage(restoreOperation, 'first scroll applied', {
-        mode: 'scroll-only',
-        applied: Boolean(scrollResult && scrollResult.applied),
-        scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
-      });
-      logTotalReturnToProduct(restoreOperation, {
-        mode: 'scroll-only',
-        applied: Boolean(scrollResult && scrollResult.applied),
-        scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
-      });
     }
 
     function setGridRestoringState(isRestoring) {
@@ -1971,14 +1658,6 @@
     async function fetchKnownBatchUrls(urls, restoreOperation, reason) {
       if (!urls.length) return [];
 
-      var fetchStart = performance.now();
-      perfEventLog('network fallback START', {
-        restoreId: restoreOperation && restoreOperation.id ? restoreOperation.id : 'unknown',
-        reason: reason || 'missing-cached-batches',
-        requestCount: urls.length,
-        missingPageUrls: urls.slice()
-      });
-
       var results = await Promise.all(
         urls.map(function(url) {
           return fetch(url)
@@ -1995,18 +1674,7 @@
         })
       );
 
-      var fetchedBatches = results.filter(Boolean);
-      perfEventLog('network fallback END', {
-        restoreId: restoreOperation && restoreOperation.id ? restoreOperation.id : 'unknown',
-        reason: reason || 'missing-cached-batches',
-        elapsedMs: Math.round(performance.now() - fetchStart),
-        requestCount: urls.length,
-        fetchedUrls: fetchedBatches.map(function(batch) {
-          return normalizeCollectionUrl(batch.pageUrl);
-        })
-      });
-
-      return fetchedBatches;
+      return results.filter(Boolean);
     }
 
     async function restoreUsingCachedOrKnownNetworkBatches(savedState, restoreOperation) {
@@ -2023,30 +1691,12 @@
         return !cacheMap[url];
       });
 
-      logRestoreStage(restoreOperation, 'cache availability determined', {
-        expectedBatchUrls: expectedUrls.length,
-        cachedBatchUrls: expectedUrls.length - missingUrls.length,
-        missingBatchUrls: missingUrls.length
-      });
-
       if (missingUrls.length) {
-        logRestoreStage(restoreOperation, 'missing network requests started', {
-          missingPageUrls: missingUrls.slice(),
-          requestCount: missingUrls.length
-        });
-
         var networkBatches = await fetchKnownBatchUrls(
           missingUrls,
           restoreOperation,
           'missing-cached-batches'
         );
-
-        logRestoreStage(restoreOperation, 'missing network responses completed', {
-          fetchedBatchCount: networkBatches.length,
-          fetchedUrls: networkBatches.map(function(batch) {
-            return normalizeCollectionUrl(batch.pageUrl);
-          })
-        });
 
         networkBatches.forEach(function(batch) {
           cacheMap[normalizeCollectionUrl(batch.pageUrl)] = batch;
@@ -2068,14 +1718,7 @@
       }
 
       setGridRestoringState(true);
-      var insertStart = performance.now();
       var inserted = appendBatchHtmlToGrid(orderedBatches);
-      perfLog('cards inserted', performance.now() - insertStart);
-      logRestoreStage(restoreOperation, 'cached/network cards inserted', {
-        insertedPages: inserted.pages,
-        insertedItems: inserted.items,
-        mode: missingUrls.length > 0 ? 'network-fallback' : 'cached-dom'
-      });
       setGridRestoringState(false);
 
       runtimeLoadedPages = inserted.pages;
@@ -2155,16 +1798,7 @@
     }
 
     async function restoreCollectionStateIfNeeded(triggerSource) {
-      var restoreOperation = createRestoreOperation(triggerSource);
-      logRestoreStage(restoreOperation, 'restore attempt start', {
-        navigationType: getNavigationType() || 'unknown'
-      });
-      if (typeof domReadyPerfAt === 'number') {
-        logRestoreStage(restoreOperation, 'collection DOM ready', {
-          domReadySinceInitMs: Math.round(domReadyPerfAt - scriptInitPerfAt),
-          domReadySinceBaselineMs: Math.round(domReadyPerfAt - restoreOperation.baselineAt)
-        });
-      }
+      var restoreOperation = null;
 
       var key = getCollectionStateKey();
       if (!key) {
@@ -2173,47 +1807,23 @@
       }
       maybeEnableRestorePaintGuard(triggerSource, restoreOperation);
       if (restoreOperationInProgress) {
-        logRestoreStage(restoreOperation, 'restore skipped duplicate', {
-          key: key,
-          activeRestoreId: activeRestoreOperationId || ''
-        });
         return;
       }
       if (restoreInProgress) {
-        logRestoreStage(restoreOperation, 'restore skipped in-progress', {
-          key: key,
-          activeRestoreId: activeRestoreOperationId || ''
-        });
         return;
       }
       if (restoreAttemptedForKey === key) {
-        logRestoreStage(restoreOperation, 'restore skipped already-attempted-key', {
-          key: key
-        });
         return;
       }
 
       restoreOperationInProgress = true;
-      activeRestoreOperationId = restoreOperation.id;
 
       restoreAttemptedForKey = key;
-      debugLog('State key: ' + key);
-      logRestoreStage(restoreOperation, 'state read start', {
-        key: key
-      });
 
       try {
         var restoreDecision = shouldRestoreForVisit(key);
-        logRestoreStage(restoreOperation, 'return intent resolved', {
-          shouldRestore: Boolean(restoreDecision.shouldRestore),
-          reason: restoreDecision.reason || 'unknown',
-          consumeIntent: Boolean(restoreDecision.consumeIntent)
-        });
 
         if (!restoreDecision.shouldRestore) {
-          if (restoreDecision.reason === 'intent-present-but-not-return-navigation') {
-            debugLog('Skipping restore for normal fresh visit');
-          }
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
           }
@@ -2222,11 +1832,6 @@
         }
 
         var savedState = getCollectionState();
-        logRestoreStage(restoreOperation, 'state read complete', {
-          hasState: Boolean(savedState),
-          savedLoadedPages: savedState ? savedState.loadedPages : 0,
-          savedBatchCacheCount: savedState && Array.isArray(savedState.batchCache) ? savedState.batchCache.length : 0
-        });
         if (!savedState) {
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
@@ -2235,16 +1840,8 @@
           return;
         }
 
-        debugLog('Restoring state:', savedState);
-
         if (hasDomAlreadyRestored(savedState)) {
-          debugLog('DOM already restored, checking position');
-          logRestoreStage(restoreOperation, 'cache availability determined', {
-            mode: 'dom-already-restored',
-            missingBatchUrls: 0
-          });
           await applyScrollRestorationOnly(savedState, restoreOperation);
-          perfLog('cached DOM restore', performance.now() - restoreOperation.startedAt);
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
           }
@@ -2253,36 +1850,9 @@
 
         var cachedRestoreResult = await restoreUsingCachedOrKnownNetworkBatches(savedState, restoreOperation);
         if (cachedRestoreResult.restored) {
-          var scrollStart = performance.now();
-          var clickedPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
-          var anchorElement = findProductElementInGrid(clickedPath);
-          logRestoreStage(restoreOperation, 'clicked-product anchor found', {
-            found: Boolean(anchorElement),
-            clickedProductPath: clickedPath || ''
-          });
-          logRestoreStage(restoreOperation, 'first scroll pending', {
-            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom'
-          });
           await waitForNextFrame();
-          var scrollResult = restoreScrollPosition(savedState);
+          restoreScrollPosition(savedState);
           removeRestorePaintGuard('first-scroll-applied', restoreOperation);
-          logRestoreStage(restoreOperation, 'first scroll applied', {
-            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom',
-            applied: Boolean(scrollResult && scrollResult.applied),
-            scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
-          });
-          perfLog('scroll restored', performance.now() - scrollStart);
-          if (cachedRestoreResult.usedNetwork) {
-            perfLog('network fallback', performance.now() - restoreOperation.startedAt);
-          } else {
-            perfLog('cached DOM restore', performance.now() - restoreOperation.startedAt);
-          }
-          logTotalReturnToProduct(restoreOperation, {
-            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom',
-            usedNetwork: Boolean(cachedRestoreResult.usedNetwork),
-            applied: Boolean(scrollResult && scrollResult.applied),
-            scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
-          });
 
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
@@ -2298,52 +1868,24 @@
         }
 
         var targetLoads = Math.max(parseInt(savedState.loadedPages, 10) || 0, 0);
-        var replayStart = performance.now();
 
         restoreInProgress = true;
         setGridRestoringState(true);
         try {
           for (var i = 0; i < targetLoads; i += 1) {
-            debugLog('Restoring page ' + (i + 2));
             var result = await triggerLoadMoreAndWait();
             if (!result || !result.success) {
-              debugLog('Restore failed gracefully: ' + ((result && result.reason) || 'unknown'));
               break;
             }
           }
 
-          var replayScrollStart = performance.now();
-          var replayClickedPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
-          var replayAnchorElement = findProductElementInGrid(replayClickedPath);
-          logRestoreStage(restoreOperation, 'clicked-product anchor found', {
-            found: Boolean(replayAnchorElement),
-            clickedProductPath: replayClickedPath || ''
-          });
-          logRestoreStage(restoreOperation, 'first scroll pending', {
-            mode: 'load-more-replay'
-          });
           await waitForNextFrame();
-          var replayScrollResult = restoreScrollPosition(savedState);
+          restoreScrollPosition(savedState);
           removeRestorePaintGuard('first-scroll-applied', restoreOperation);
-          logRestoreStage(restoreOperation, 'first scroll applied', {
-            mode: 'load-more-replay',
-            applied: Boolean(replayScrollResult && replayScrollResult.applied),
-            scrollReason: replayScrollResult && replayScrollResult.reason ? replayScrollResult.reason : 'unknown'
-          });
-          perfLog('scroll restored', performance.now() - replayScrollStart);
-          debugLog('Restore complete');
-          logTotalReturnToProduct(restoreOperation, {
-            mode: 'load-more-replay',
-            applied: Boolean(replayScrollResult && replayScrollResult.applied),
-            scrollReason: replayScrollResult && replayScrollResult.reason ? replayScrollResult.reason : 'unknown'
-          });
         } finally {
           setGridRestoringState(false);
           restoreInProgress = false;
         }
-
-        perfLog('load-more replay', performance.now() - replayStart);
-        perfLog('network fallback', performance.now() - restoreOperation.startedAt);
 
         if (restoreDecision.consumeIntent) {
           consumeReturnIntent();
@@ -2352,7 +1894,6 @@
       } finally {
         removeRestorePaintGuard('restore-operation-finished', restoreOperation);
         restoreOperationInProgress = false;
-        activeRestoreOperationId = null;
       }
     }
 
@@ -2383,29 +1924,13 @@
     });
 
     window.addEventListener('pageshow', function(pageShowEvent) {
-      var bfcachePerfStart = performance.now();
-      lastPageShowPerfAt = performance.now();
-      logBackForwardDiagnostics(pageShowEvent);
-
       if (pageShowEvent.persisted) {
-        debugLog('Browser back detected');
-        restoredFromBFCache = true;
-        debugLog('bfcache restored page - skipping AJAX restore');
-
         var persistedSavedState = getCollectionState();
         if (persistedSavedState && shouldInterveneAfterBFCache(persistedSavedState)) {
-          debugLog('DOM already restored, checking position');
-          var bfcacheRestoreOperation = createRestoreOperation('pageshow-bfcache');
-          logRestoreStage(bfcacheRestoreOperation, 'collection DOM ready', {
-            readyState: document.readyState || 'unknown'
-          });
-          applyScrollRestorationOnly(persistedSavedState, bfcacheRestoreOperation);
+          applyScrollRestorationOnly(persistedSavedState, null);
         } else {
-          debugLog('Scroll already correct, no action');
           removeRestorePaintGuard('bfcache-no-intervention', null);
         }
-
-        perfLog('bfcache restore', performance.now() - bfcachePerfStart);
 
         var key = getCollectionStateKey();
         var intent = getReturnIntent();
@@ -2421,13 +1946,8 @@
     function onCollectionPageReady(triggerSource) {
       if (collectionPageReadyHandled) return;
       collectionPageReadyHandled = true;
-      domReadyPerfAt = performance.now();
       pruneCollectionStateStorage();
       resetRuntimeStateForCurrentGrid();
-      browserBackDetected = getNavigationType() === 'back_forward';
-      if (browserBackDetected) {
-        debugLog('Browser back detected');
-      }
       maybeEnableRestorePaintGuard(triggerSource || 'ready', null);
       restoreCollectionStateIfNeeded(triggerSource || 'ready');
       schedulePrefetch(1500);
@@ -2449,7 +1969,6 @@
 
     // Reset state cache and prefetch after AJAX filter/sort replacements.
     document.addEventListener('facets:updated', function() {
-      debugLog('Facet/sort URL changed');
       resetPrefetchCache();
       resetRuntimeStateForCurrentGrid();
       restoreAttemptedForKey = null;
