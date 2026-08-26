@@ -424,6 +424,12 @@
   Uses event delegation so it works after filter changes.
   ================================================================
 {%- endcomment -%}
+<style>
+  html.collection-return-restoring #product-grid {
+    visibility: hidden;
+  }
+</style>
+
 <script>
   (function() {
     var COLLECTION_STATE_DEBUG = window.COLLECTION_STATE_DEBUG === true;
@@ -438,6 +444,8 @@
     var MAX_BATCHES_PER_STATE = 12;
     var MAX_STATE_BATCH_HTML_CHARS = 1000000;
     var MAX_STORED_COLLECTION_STATES = 6;
+    var RESTORE_PAINT_GUARD_CLASS = 'collection-return-restoring';
+    var RESTORE_PAINT_GUARD_TIMEOUT_MS = 650;
 
     function debugLog(message, payload) {
       if (!COLLECTION_STATE_DEBUG) return;
@@ -485,6 +493,10 @@
     var domReadyPerfAt = null;
     var lastPageShowPerfAt = null;
     var restoreIdCounter = 1;
+    var paintGuardEnabledAt = null;
+    var paintGuardTimeoutId = null;
+    var paintGuardRestoreId = '';
+    var collectionPageReadyHandled = false;
 
     // Prefetch cache - stores pre-loaded and pre-processed items
     var prefetchCache = {
@@ -552,6 +564,62 @@
       );
 
       console.info('[Collection State Perf] TOTAL return-to-product: ' + totalMs + ' ms', totalPayload);
+    }
+
+    function isPaintGuardActive() {
+      return document.documentElement.classList.contains(RESTORE_PAINT_GUARD_CLASS);
+    }
+
+    function clearPaintGuardFailsafeTimer() {
+      if (paintGuardTimeoutId) {
+        clearTimeout(paintGuardTimeoutId);
+        paintGuardTimeoutId = null;
+      }
+    }
+
+    function removeRestorePaintGuard(reason, restoreOperation) {
+      if (!isPaintGuardActive()) {
+        clearPaintGuardFailsafeTimer();
+        return;
+      }
+
+      document.documentElement.classList.remove(RESTORE_PAINT_GUARD_CLASS);
+      clearPaintGuardFailsafeTimer();
+
+      if (paintGuardEnabledAt !== null) {
+        var hiddenMs = performance.now() - paintGuardEnabledAt;
+        perfLog('restore paint guard removed', hiddenMs);
+        debugLog('Restore paint guard removed', {
+          reason: reason || 'unknown',
+          hiddenMs: Math.round(hiddenMs),
+          restoreId:
+            (restoreOperation && restoreOperation.id) ||
+            paintGuardRestoreId ||
+            activeRestoreOperationId ||
+            ''
+        });
+      }
+
+      paintGuardEnabledAt = null;
+      paintGuardRestoreId = '';
+    }
+
+    function enableRestorePaintGuard(reason, restoreOperation) {
+      if (isPaintGuardActive()) return;
+
+      document.documentElement.classList.add(RESTORE_PAINT_GUARD_CLASS);
+      paintGuardEnabledAt = performance.now();
+      paintGuardRestoreId = (restoreOperation && restoreOperation.id) || activeRestoreOperationId || '';
+      perfLog('restore paint guard enabled', paintGuardEnabledAt - scriptInitPerfAt);
+      debugLog('Restore paint guard enabled', {
+        reason: reason || 'unknown',
+        restoreId: paintGuardRestoreId || ''
+      });
+
+      clearPaintGuardFailsafeTimer();
+      paintGuardTimeoutId = setTimeout(function() {
+        removeRestorePaintGuard('failsafe-timeout', restoreOperation || null);
+      }, RESTORE_PAINT_GUARD_TIMEOUT_MS);
     }
 
     function safeParseJSON(raw, fallback) {
@@ -1202,6 +1270,96 @@
       };
     }
 
+    function getCachedCoverageInfo(savedState) {
+      var expectedUrls = getExpectedLoadedBatchUrls(savedState);
+      if (!expectedUrls.length) {
+        return {
+          expectedCount: 0,
+          cachedCount: 0,
+          missingCount: 0
+        };
+      }
+
+      var cacheMap = buildBatchCacheMap(savedState);
+      var cachedCount = expectedUrls.reduce(function(total, url) {
+        return total + (cacheMap[url] ? 1 : 0);
+      }, 0);
+
+      return {
+        expectedCount: expectedUrls.length,
+        cachedCount: cachedCount,
+        missingCount: Math.max(expectedUrls.length - cachedCount, 0)
+      };
+    }
+
+    function shouldEnablePaintGuardForRestore() {
+      var key = getCollectionStateKey();
+      if (!key) {
+        return {
+          shouldEnable: false,
+          reason: 'no-collection-key'
+        };
+      }
+
+      if (getNavigationType() !== 'back_forward') {
+        return {
+          shouldEnable: false,
+          reason: 'not-back-forward'
+        };
+      }
+
+      var restoreDecision = shouldRestoreForVisit(key);
+      if (!restoreDecision.shouldRestore) {
+        return {
+          shouldEnable: false,
+          reason: restoreDecision.reason || 'no-restore'
+        };
+      }
+
+      var savedState = getCollectionState();
+      if (!savedState || savedState.loadedPages < 1) {
+        return {
+          shouldEnable: false,
+          reason: 'missing-or-empty-state'
+        };
+      }
+
+      var coverage = getCachedCoverageInfo(savedState);
+      if (!coverage.cachedCount) {
+        return {
+          shouldEnable: false,
+          reason: 'no-cached-batches',
+          coverage: coverage
+        };
+      }
+
+      return {
+        shouldEnable: true,
+        reason: 'back-forward-cached-return',
+        key: key,
+        coverage: coverage
+      };
+    }
+
+    function maybeEnableRestorePaintGuard(triggerSource, restoreOperation) {
+      if (isPaintGuardActive()) return;
+
+      var decision = shouldEnablePaintGuardForRestore();
+      if (!decision.shouldEnable) return;
+
+      enableRestorePaintGuard(
+        decision.reason + ':' + (triggerSource || 'unknown'),
+        restoreOperation || null
+      );
+
+      debugLog('Restore paint guard candidate', {
+        trigger: triggerSource || 'unknown',
+        reason: decision.reason,
+        key: decision.key || '',
+        coverage: decision.coverage || null
+      });
+    }
+
     function createPrefetchContainer() {
       if (prefetchContainer) return prefetchContainer;
       prefetchContainer = document.createElement('div');
@@ -1700,6 +1858,7 @@
       });
       await waitForNextFrame();
       var scrollResult = restoreScrollPosition(savedState);
+      removeRestorePaintGuard('first-scroll-applied', restoreOperation);
       logRestoreStage(restoreOperation, 'first scroll applied', {
         mode: 'scroll-only',
         applied: Boolean(scrollResult && scrollResult.applied),
@@ -2008,7 +2167,11 @@
       }
 
       var key = getCollectionStateKey();
-      if (!key) return;
+      if (!key) {
+        removeRestorePaintGuard('no-collection-key', restoreOperation);
+        return;
+      }
+      maybeEnableRestorePaintGuard(triggerSource, restoreOperation);
       if (restoreOperationInProgress) {
         logRestoreStage(restoreOperation, 'restore skipped duplicate', {
           key: key,
@@ -2054,6 +2217,7 @@
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
           }
+          removeRestorePaintGuard('restore-not-needed', restoreOperation);
           return;
         }
 
@@ -2067,6 +2231,7 @@
           if (restoreDecision.consumeIntent) {
             consumeReturnIntent();
           }
+          removeRestorePaintGuard('missing-saved-state', restoreOperation);
           return;
         }
 
@@ -2100,6 +2265,7 @@
           });
           await waitForNextFrame();
           var scrollResult = restoreScrollPosition(savedState);
+          removeRestorePaintGuard('first-scroll-applied', restoreOperation);
           logRestoreStage(restoreOperation, 'first scroll applied', {
             mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom',
             applied: Boolean(scrollResult && scrollResult.applied),
@@ -2158,6 +2324,7 @@
           });
           await waitForNextFrame();
           var replayScrollResult = restoreScrollPosition(savedState);
+          removeRestorePaintGuard('first-scroll-applied', restoreOperation);
           logRestoreStage(restoreOperation, 'first scroll applied', {
             mode: 'load-more-replay',
             applied: Boolean(replayScrollResult && replayScrollResult.applied),
@@ -2183,6 +2350,7 @@
         }
         persistCollectionState({}, 'restore');
       } finally {
+        removeRestorePaintGuard('restore-operation-finished', restoreOperation);
         restoreOperationInProgress = false;
         activeRestoreOperationId = null;
       }
@@ -2234,6 +2402,7 @@
           applyScrollRestorationOnly(persistedSavedState, bfcacheRestoreOperation);
         } else {
           debugLog('Scroll already correct, no action');
+          removeRestorePaintGuard('bfcache-no-intervention', null);
         }
 
         perfLog('bfcache restore', performance.now() - bfcachePerfStart);
@@ -2245,10 +2414,13 @@
         }
         return;
       }
+      maybeEnableRestorePaintGuard('pageshow', null);
       restoreCollectionStateIfNeeded('pageshow');
     });
 
-    function onCollectionPageReady() {
+    function onCollectionPageReady(triggerSource) {
+      if (collectionPageReadyHandled) return;
+      collectionPageReadyHandled = true;
       domReadyPerfAt = performance.now();
       pruneCollectionStateStorage();
       resetRuntimeStateForCurrentGrid();
@@ -2256,14 +2428,23 @@
       if (browserBackDetected) {
         debugLog('Browser back detected');
       }
-      restoreCollectionStateIfNeeded('ready');
+      maybeEnableRestorePaintGuard(triggerSource || 'ready', null);
+      restoreCollectionStateIfNeeded(triggerSource || 'ready');
       schedulePrefetch(1500);
     }
 
+    maybeEnableRestorePaintGuard('init-check', null);
+
     if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', onCollectionPageReady);
+      if (document.getElementById('product-grid')) {
+        onCollectionPageReady('grid-ready-immediate');
+      } else {
+        document.addEventListener('DOMContentLoaded', function() {
+          onCollectionPageReady('domcontentloaded');
+        });
+      }
     } else {
-      onCollectionPageReady();
+      onCollectionPageReady('ready-state-immediate');
     }
 
     // Reset state cache and prefetch after AJAX filter/sort replacements.
