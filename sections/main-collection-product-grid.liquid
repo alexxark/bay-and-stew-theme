@@ -435,6 +435,9 @@
     var PRODUCT_CONTEXT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
     var ACTIVE_PRODUCT_CONTEXT_MAX_AGE_MS = 60 * 60 * 1000;
     var RETURN_INTENT_MAX_AGE_MS = 45 * 60 * 1000;
+    var MAX_BATCHES_PER_STATE = 8;
+    var MAX_STATE_BATCH_HTML_CHARS = 450000;
+    var MAX_STORED_COLLECTION_STATES = 6;
 
     function debugLog(message, payload) {
       if (!COLLECTION_STATE_DEBUG) return;
@@ -443,6 +446,11 @@
       } else {
         console.info('[Collection State] ' + message, payload);
       }
+    }
+
+    function perfLog(message, valueMs) {
+      if (!COLLECTION_STATE_DEBUG) return;
+      console.info('[Collection State Perf] ' + message + ': ' + Math.round(valueMs) + ' ms');
     }
 
     if (window.__bsCollectionStateInit) {
@@ -467,6 +475,7 @@
     var prefetchCache = {
       url: null,
       items: null,
+      itemsHtml: '',
       nextUrl: null,
       isLoading: false,
       isReady: false
@@ -496,7 +505,10 @@
       try {
         window.sessionStorage.setItem(key, value);
       } catch (error) {
-        // Ignore storage failures and continue normal browsing.
+        debugLog('sessionStorage write failed', {
+          key: key,
+          error: error && error.message ? error.message : error
+        });
       }
     }
 
@@ -518,6 +530,35 @@
         // No-op.
       }
       return '';
+    }
+
+    function getNavigationEntry() {
+      try {
+        var entries = performance.getEntriesByType('navigation');
+        return entries && entries.length ? entries[0] : null;
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function getNotRestoredReasons() {
+      var entry = getNavigationEntry();
+      if (!entry || typeof entry.notRestoredReasons === 'undefined') return null;
+      return entry.notRestoredReasons;
+    }
+
+    function logBackForwardDiagnostics(pageShowEvent) {
+      debugLog('pageshow persisted: ' + Boolean(pageShowEvent && pageShowEvent.persisted));
+      debugLog('navigation type: ' + (getNavigationType() || 'unknown'));
+      var reasons = getNotRestoredReasons();
+      debugLog('bfcache not restored reasons:', reasons === null ? 'not supported or none' : reasons);
+      try {
+        if (window.history && typeof window.history.scrollRestoration !== 'undefined') {
+          debugLog('history.scrollRestoration: ' + window.history.scrollRestoration);
+        }
+      } catch (error) {
+        // No-op.
+      }
     }
 
     function normalizeProductPath(urlString) {
@@ -573,6 +614,21 @@
         collectionUrl: typeof state.collectionUrl === 'string' ? state.collectionUrl : '',
         loadedPages: Math.max(parseInt(state.loadedPages, 10) || 0, 0),
         loadedBatchUrls: Array.isArray(state.loadedBatchUrls) ? state.loadedBatchUrls.slice(0, 100) : [],
+        batchCache: Array.isArray(state.batchCache)
+          ? state.batchCache
+              .map(function(batch) {
+                if (!batch || typeof batch !== 'object') return null;
+                if (typeof batch.pageUrl !== 'string' || typeof batch.itemsHtml !== 'string') return null;
+                return {
+                  pageUrl: batch.pageUrl,
+                  itemsHtml: batch.itemsHtml,
+                  nextPageUrl: typeof batch.nextPageUrl === 'string' ? batch.nextPageUrl : null,
+                  timestamp: Number(batch.timestamp || timestamp)
+                };
+              })
+              .filter(Boolean)
+              .slice(0, MAX_BATCHES_PER_STATE)
+          : [],
         nextPageUrl: typeof state.nextPageUrl === 'string' ? state.nextPageUrl : null,
         scrollY: Math.max(Number(state.scrollY || 0), 0),
         timestamp: timestamp,
@@ -607,6 +663,7 @@
 
     function pruneCollectionStateStorage() {
       try {
+        var stateEntries = [];
         for (var i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
           var key = window.sessionStorage.key(i);
           if (!key || key.indexOf(STORAGE_PREFIX) !== 0) continue;
@@ -614,8 +671,19 @@
           var sanitized = sanitizeCollectionState(parsed);
           if (!sanitized) {
             removeSessionItem(key);
+            continue;
           }
+          stateEntries.push({ key: key, timestamp: sanitized.timestamp || 0 });
         }
+
+        stateEntries
+          .sort(function(a, b) {
+            return b.timestamp - a.timestamp;
+          })
+          .slice(MAX_STORED_COLLECTION_STATES)
+          .forEach(function(entry) {
+            removeSessionItem(entry.key);
+          });
       } catch (error) {
         // Ignore cleanup failures.
       }
@@ -623,6 +691,26 @@
 
     function getLoadMoreButton() {
       return document.getElementById('load-more-btn');
+    }
+
+    function updateCollectionHistoryState(state, key) {
+      if (!state || !key || typeof history.replaceState !== 'function') return;
+      var existingState = history.state && typeof history.state === 'object' ? history.state : {};
+      var nextState = Object.assign({}, existingState, {
+        collectionStateMeta: {
+          collectionStateKey: key,
+          clickedProduct: state.clickedProductPath || state.clickedProductUrl || '',
+          loadedPages: state.loadedPages || 0,
+          scrollY: Math.round(state.scrollY || 0),
+          timestamp: Date.now()
+        }
+      });
+
+      try {
+        history.replaceState(nextState, '', window.location.href);
+      } catch (error) {
+        // Ignore history state failures.
+      }
     }
 
     function persistCollectionState(extra, reason) {
@@ -638,6 +726,7 @@
         collectionUrl: meta.collectionUrl,
         loadedPages: runtimeLoadedPages,
         loadedBatchUrls: loadedBatchUrls.slice(),
+        batchCache: Array.isArray(existing.batchCache) ? existing.batchCache : [],
         nextPageUrl: btn && btn.dataset.nextUrl ? btn.dataset.nextUrl : null,
         scrollY: Math.max(window.scrollY || 0, 0),
         timestamp: Date.now(),
@@ -653,6 +742,10 @@
       writeCollectionState(state);
 
       if (reason && reason !== 'scroll') {
+        updateCollectionHistoryState(state, key);
+      }
+
+      if (reason && reason !== 'scroll') {
         debugLog('Saved state:', {
           reason: reason,
           key: key,
@@ -664,7 +757,64 @@
       }
     }
 
-    function markBatchLoaded(sourceUrl, nextUrl, addedCount) {
+    function getBatchCacheSizeChars(batchCache) {
+      if (!Array.isArray(batchCache)) return 0;
+      return batchCache.reduce(function(total, batch) {
+        if (!batch || typeof batch.itemsHtml !== 'string') return total;
+        return total + batch.itemsHtml.length;
+      }, 0);
+    }
+
+    function cacheBatchForCurrentState(pageUrl, itemsHtml, nextPageUrl) {
+      if (!pageUrl || !itemsHtml) return;
+
+      var state = readCollectionStateRaw() || {
+        version: 1,
+        collectionUrl: getCollectionMeta().collectionUrl,
+        loadedPages: runtimeLoadedPages,
+        loadedBatchUrls: loadedBatchUrls.slice(),
+        batchCache: [],
+        nextPageUrl: nextPageUrl || null,
+        scrollY: Math.max(window.scrollY || 0, 0),
+        timestamp: Date.now(),
+        clickedProductUrl: '',
+        clickedProductPath: '',
+        clickedProductHandle: ''
+      };
+
+      var normalizedPageUrl = normalizeCollectionUrl(pageUrl);
+      var updatedBatches = (state.batchCache || []).filter(function(batch) {
+        return batch.pageUrl !== normalizedPageUrl;
+      });
+
+      updatedBatches.push({
+        pageUrl: normalizedPageUrl,
+        itemsHtml: itemsHtml,
+        nextPageUrl: nextPageUrl || null,
+        timestamp: Date.now()
+      });
+
+      while (updatedBatches.length > MAX_BATCHES_PER_STATE) {
+        updatedBatches.shift();
+      }
+
+      while (getBatchCacheSizeChars(updatedBatches) > MAX_STATE_BATCH_HTML_CHARS && updatedBatches.length > 1) {
+        updatedBatches.shift();
+      }
+
+      state.batchCache = updatedBatches;
+      state.timestamp = Date.now();
+      writeCollectionState(state);
+
+      debugLog('Saved state:', {
+        reason: 'batch-cache',
+        pageUrl: normalizedPageUrl,
+        cachedBatches: updatedBatches.length,
+        cachedChars: getBatchCacheSizeChars(updatedBatches)
+      });
+    }
+
+    function markBatchLoaded(sourceUrl, nextUrl, addedCount, itemsHtml) {
       if (!addedCount || addedCount < 1) return;
 
       runtimeLoadedPages += 1;
@@ -673,6 +823,10 @@
         if (loadedBatchUrls.indexOf(normalizedUrl) === -1) {
           loadedBatchUrls.push(normalizedUrl);
         }
+      }
+
+      if (sourceUrl && itemsHtml) {
+        cacheBatchForCurrentState(sourceUrl, itemsHtml, nextUrl || null);
       }
 
       debugLog('Loaded pages: ' + runtimeLoadedPages);
@@ -764,6 +918,7 @@
     function resetPrefetchCache() {
       prefetchCache.url = null;
       prefetchCache.items = null;
+      prefetchCache.itemsHtml = '';
       prefetchCache.nextUrl = null;
       prefetchCache.isLoading = false;
       prefetchCache.isReady = false;
@@ -785,9 +940,16 @@
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var newItems = doc.querySelectorAll('#product-grid > li');
+          var newItemsArray = Array.from(newItems);
+          var batchItemsHtml = newItemsArray
+            .map(function(item) {
+              return item.outerHTML;
+            })
+            .join('');
           var nextBtn = doc.querySelector('#load-more-btn');
 
           prefetchCache.nextUrl = nextBtn ? nextBtn.dataset.nextUrl : null;
+          prefetchCache.itemsHtml = batchItemsHtml;
 
           var container = createPrefetchContainer();
           container.innerHTML = '';
@@ -796,7 +958,7 @@
           hiddenGrid.id = 'prefetch-product-grid';
           hiddenGrid.className = 'product-grid';
 
-          Array.from(newItems).forEach(function(item) {
+          newItemsArray.forEach(function(item) {
             hiddenGrid.appendChild(item);
           });
 
@@ -877,6 +1039,7 @@
       }
 
       if (prefetchCache.isReady && prefetchCache.url === nextUrl && prefetchCache.items) {
+        var prefetchedBatchHtml = prefetchCache.itemsHtml || '';
         displayPrefetchedItems(productGrid, prefetchCache.items, function(addedCount) {
           var updatedNextUrl = prefetchCache.nextUrl || null;
 
@@ -884,6 +1047,7 @@
             btn.dataset.nextUrl = updatedNextUrl;
             prefetchCache.url = null;
             prefetchCache.items = null;
+            prefetchCache.itemsHtml = '';
             prefetchCache.isReady = false;
             prefetchNextPage(updatedNextUrl);
           } else if (loadMoreWrapper) {
@@ -894,7 +1058,7 @@
           btn.setAttribute('aria-busy', 'false');
           if (loadingSpinner) loadingSpinner.style.display = 'none';
 
-          markBatchLoaded(nextUrl, updatedNextUrl, addedCount);
+          markBatchLoaded(nextUrl, updatedNextUrl, addedCount, prefetchedBatchHtml);
 
           finalize({
             success: addedCount > 0,
@@ -919,6 +1083,11 @@
           var parser = new DOMParser();
           var doc = parser.parseFromString(html, 'text/html');
           var newItems = Array.from(doc.querySelectorAll('#product-grid > li'));
+          var batchItemsHtml = newItems
+            .map(function(item) {
+              return item.outerHTML;
+            })
+            .join('');
           var fragment = document.createDocumentFragment();
 
           newItems.forEach(function(item, index) {
@@ -949,7 +1118,7 @@
               if (loadingSpinner) loadingSpinner.style.display = 'none';
             }
 
-            markBatchLoaded(nextUrl, updatedNextUrl, newItems.length);
+            markBatchLoaded(nextUrl, updatedNextUrl, newItems.length, batchItemsHtml);
 
             finalize({
               success: newItems.length > 0,
@@ -1170,30 +1339,6 @@
       });
     }
 
-    function waitForGridImages(container, timeoutMs) {
-      if (!container) return Promise.resolve();
-      var images = Array.from(container.querySelectorAll('img')).filter(function(image) {
-        return !image.complete;
-      });
-      if (!images.length) return Promise.resolve();
-
-      var settledPromise = Promise.all(
-        images.map(function(image) {
-          return new Promise(function(resolve) {
-            image.addEventListener('load', resolve, { once: true });
-            image.addEventListener('error', resolve, { once: true });
-          });
-        })
-      );
-
-      return Promise.race([
-        settledPromise,
-        new Promise(function(resolve) {
-          setTimeout(resolve, timeoutMs || 1200);
-        })
-      ]);
-    }
-
     function isScrollClose(targetY, tolerance) {
       return Math.abs((window.scrollY || 0) - Math.max(targetY, 0)) <= (tolerance || 80);
     }
@@ -1252,11 +1397,194 @@
 
     async function applyScrollRestorationOnly(savedState) {
       debugLog('Applying scroll restoration only');
-      var productGrid = document.getElementById('product-grid');
-      await waitForNextFrame();
-      await waitForGridImages(productGrid, 1200);
       await waitForNextFrame();
       restoreScrollPosition(savedState);
+    }
+
+    function setGridRestoringState(isRestoring) {
+      var grid = document.getElementById('product-grid');
+      if (!grid) return;
+      if (isRestoring) {
+        grid.setAttribute('data-collection-restoring', 'true');
+      } else {
+        grid.removeAttribute('data-collection-restoring');
+      }
+    }
+
+    function applyLoadMoreControlState(nextPageUrl) {
+      var btn = getLoadMoreButton();
+      var wrapper = document.getElementById('load-more-wrapper');
+
+      if (nextPageUrl) {
+        if (btn) {
+          btn.dataset.nextUrl = nextPageUrl;
+          btn.disabled = false;
+          btn.setAttribute('aria-busy', 'false');
+        }
+        if (wrapper) {
+          wrapper.style.display = '';
+        }
+      } else {
+        if (wrapper) {
+          wrapper.style.display = 'none';
+        }
+      }
+    }
+
+    function extractBatchFromHtml(pageUrl, html) {
+      if (!html) return null;
+      var parser = new DOMParser();
+      var doc = parser.parseFromString(html, 'text/html');
+      var items = Array.from(doc.querySelectorAll('#product-grid > li'));
+      if (!items.length) return null;
+
+      var nextBtn = doc.querySelector('#load-more-btn');
+      return {
+        pageUrl: normalizeCollectionUrl(pageUrl),
+        itemsHtml: items
+          .map(function(item) {
+            return item.outerHTML;
+          })
+          .join(''),
+        nextPageUrl: nextBtn && nextBtn.dataset.nextUrl ? nextBtn.dataset.nextUrl : null,
+        timestamp: Date.now()
+      };
+    }
+
+    function getExpectedLoadedBatchUrls(savedState) {
+      if (!savedState || !Array.isArray(savedState.loadedBatchUrls)) return [];
+      return savedState.loadedBatchUrls
+        .map(function(url) {
+          return normalizeCollectionUrl(url);
+        })
+        .filter(Boolean);
+    }
+
+    function buildBatchCacheMap(savedState) {
+      var map = {};
+      if (!savedState || !Array.isArray(savedState.batchCache)) return map;
+      savedState.batchCache.forEach(function(batch) {
+        if (!batch || !batch.pageUrl || !batch.itemsHtml) return;
+        map[normalizeCollectionUrl(batch.pageUrl)] = batch;
+      });
+      return map;
+    }
+
+    function appendBatchHtmlToGrid(orderedBatches) {
+      var productGrid = document.getElementById('product-grid');
+      if (!productGrid) return { pages: 0, items: 0 };
+
+      var fragment = document.createDocumentFragment();
+      var insertedItems = 0;
+
+      orderedBatches.forEach(function(batch) {
+        if (!batch || !batch.itemsHtml) return;
+        var wrapper = document.createElement('div');
+        wrapper.innerHTML = '<ul>' + batch.itemsHtml + '</ul>';
+        var items = wrapper.querySelectorAll('li');
+        insertedItems += items.length;
+        items.forEach(function(item) {
+          item.classList.remove('scroll-trigger');
+          fragment.appendChild(item);
+        });
+      });
+
+      productGrid.appendChild(fragment);
+      triggerBSSPriceRefresh(productGrid);
+
+      return {
+        pages: orderedBatches.length,
+        items: insertedItems
+      };
+    }
+
+    async function fetchKnownBatchUrls(urls) {
+      if (!urls.length) return [];
+
+      var fetchStart = performance.now();
+      var results = await Promise.all(
+        urls.map(function(url) {
+          return fetch(url)
+            .then(function(response) {
+              if (!response.ok) return null;
+              return response.text();
+            })
+            .then(function(html) {
+              return html ? extractBatchFromHtml(url, html) : null;
+            })
+            .catch(function() {
+              return null;
+            });
+        })
+      );
+
+      perfLog('network fallback', performance.now() - fetchStart);
+      return results.filter(Boolean);
+    }
+
+    async function restoreUsingCachedOrKnownNetworkBatches(savedState) {
+      var expectedUrls = getExpectedLoadedBatchUrls(savedState);
+      if (!expectedUrls.length) {
+        return {
+          restored: false,
+          reason: 'no-known-batch-urls'
+        };
+      }
+
+      var cacheMap = buildBatchCacheMap(savedState);
+      var missingUrls = expectedUrls.filter(function(url) {
+        return !cacheMap[url];
+      });
+
+      if (missingUrls.length) {
+        var networkBatches = await fetchKnownBatchUrls(missingUrls);
+        networkBatches.forEach(function(batch) {
+          cacheMap[normalizeCollectionUrl(batch.pageUrl)] = batch;
+          cacheBatchForCurrentState(batch.pageUrl, batch.itemsHtml, batch.nextPageUrl || null);
+        });
+      }
+
+      var orderedBatches = expectedUrls
+        .map(function(url) {
+          return cacheMap[url] || null;
+        })
+        .filter(Boolean);
+
+      if (!orderedBatches.length) {
+        return {
+          restored: false,
+          reason: 'no-restorable-batches'
+        };
+      }
+
+      setGridRestoringState(true);
+      var insertStart = performance.now();
+      var inserted = appendBatchHtmlToGrid(orderedBatches);
+      perfLog('cards inserted', performance.now() - insertStart);
+      setGridRestoringState(false);
+
+      runtimeLoadedPages = inserted.pages;
+      loadedBatchUrls = orderedBatches.map(function(batch) {
+        return normalizeCollectionUrl(batch.pageUrl);
+      });
+
+      var finalNextUrl = orderedBatches[orderedBatches.length - 1].nextPageUrl || savedState.nextPageUrl || null;
+      applyLoadMoreControlState(finalNextUrl);
+
+      return {
+        restored: true,
+        usedNetwork: missingUrls.length > 0,
+        nextPageUrl: finalNextUrl
+      };
+    }
+
+    function shouldInterveneAfterBFCache(savedState) {
+      if (!savedState) return false;
+      var currentY = Math.max(window.scrollY || 0, 0);
+      if (currentY > 60) return false;
+      if (typeof savedState.scrollY === 'number' && savedState.scrollY > 240) return true;
+      if (savedState.clickedProductPath || savedState.clickedProductUrl) return true;
+      return false;
     }
 
     function triggerLoadMoreAndWait() {
@@ -1312,6 +1640,7 @@
     }
 
     async function restoreCollectionStateIfNeeded() {
+      var restoreStartedAt = performance.now();
       var key = getCollectionStateKey();
       if (!key) return;
       if (restoreInProgress) return;
@@ -1344,15 +1673,43 @@
       if (hasDomAlreadyRestored(savedState)) {
         debugLog('DOM already restored, checking position');
         await applyScrollRestorationOnly(savedState);
+        perfLog('cached DOM restore', performance.now() - restoreStartedAt);
         if (restoreDecision.consumeIntent) {
           consumeReturnIntent();
         }
         return;
       }
 
+      var cachedRestoreResult = await restoreUsingCachedOrKnownNetworkBatches(savedState);
+      if (cachedRestoreResult.restored) {
+        var scrollStart = performance.now();
+        await waitForNextFrame();
+        restoreScrollPosition(savedState);
+        perfLog('scroll restored', performance.now() - scrollStart);
+        if (cachedRestoreResult.usedNetwork) {
+          perfLog('network fallback', performance.now() - restoreStartedAt);
+        } else {
+          perfLog('cached DOM restore', performance.now() - restoreStartedAt);
+        }
+
+        if (restoreDecision.consumeIntent) {
+          consumeReturnIntent();
+        }
+
+        persistCollectionState(
+          {
+            nextPageUrl: cachedRestoreResult.nextPageUrl
+          },
+          cachedRestoreResult.usedNetwork ? 'restore-network' : 'restore-cached'
+        );
+        return;
+      }
+
       var targetLoads = Math.max(parseInt(savedState.loadedPages, 10) || 0, 0);
+      var replayStart = performance.now();
 
       restoreInProgress = true;
+      setGridRestoringState(true);
       try {
         for (var i = 0; i < targetLoads; i += 1) {
           debugLog('Restoring page ' + (i + 2));
@@ -1363,16 +1720,18 @@
           }
         }
 
-        var productGrid = document.getElementById('product-grid');
+        var scrollStart = performance.now();
         await waitForNextFrame();
-        await waitForGridImages(productGrid, 1600);
-        await waitForNextFrame();
-
         restoreScrollPosition(savedState);
+        perfLog('scroll restored', performance.now() - scrollStart);
         debugLog('Restore complete');
       } finally {
+        setGridRestoringState(false);
         restoreInProgress = false;
       }
+
+      perfLog('load-more replay', performance.now() - replayStart);
+      perfLog('network fallback', performance.now() - restoreStartedAt);
 
       if (restoreDecision.consumeIntent) {
         consumeReturnIntent();
@@ -1407,15 +1766,24 @@
     });
 
     window.addEventListener('pageshow', function(pageShowEvent) {
+      var bfcachePerfStart = performance.now();
+      logBackForwardDiagnostics(pageShowEvent);
+
       if (pageShowEvent.persisted) {
         debugLog('Browser back detected');
         restoredFromBFCache = true;
         debugLog('bfcache restored page - skipping AJAX restore');
-        debugLog('DOM already restored, checking position');
+
         var persistedSavedState = getCollectionState();
-        if (persistedSavedState) {
+        if (persistedSavedState && shouldInterveneAfterBFCache(persistedSavedState)) {
+          debugLog('DOM already restored, checking position');
           applyScrollRestorationOnly(persistedSavedState);
+        } else {
+          debugLog('Scroll already correct, no action');
         }
+
+        perfLog('bfcache restore', performance.now() - bfcachePerfStart);
+
         var key = getCollectionStateKey();
         var intent = getReturnIntent();
         if (intent && key && intent.collectionKey === key) {
