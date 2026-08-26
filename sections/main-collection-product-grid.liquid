@@ -435,8 +435,8 @@
     var PRODUCT_CONTEXT_MAX_AGE_MS = 24 * 60 * 60 * 1000;
     var ACTIVE_PRODUCT_CONTEXT_MAX_AGE_MS = 60 * 60 * 1000;
     var RETURN_INTENT_MAX_AGE_MS = 45 * 60 * 1000;
-    var MAX_BATCHES_PER_STATE = 8;
-    var MAX_STATE_BATCH_HTML_CHARS = 450000;
+    var MAX_BATCHES_PER_STATE = 12;
+    var MAX_STATE_BATCH_HTML_CHARS = 1000000;
     var MAX_STORED_COLLECTION_STATES = 6;
 
     function debugLog(message, payload) {
@@ -453,6 +453,15 @@
       console.info('[Collection State Perf] ' + message + ': ' + Math.round(valueMs) + ' ms');
     }
 
+    function perfEventLog(message, payload) {
+      if (!COLLECTION_STATE_DEBUG) return;
+      if (typeof payload === 'undefined') {
+        console.info('[Collection State Perf] ' + message);
+      } else {
+        console.info('[Collection State Perf] ' + message, payload);
+      }
+    }
+
     if (window.__bsCollectionStateInit) {
       debugLog('Already initialized - skipping duplicate script execution');
       return;
@@ -463,6 +472,8 @@
     var loadMoreListenerAttached = false;
     var loadMoreInProgress = false;
     var restoreInProgress = false;
+    var restoreOperationInProgress = false;
+    var activeRestoreOperationId = null;
     var restoreAttemptedForKey = null;
     var restoredFromBFCache = false;
     var runtimeLoadedPages = 0;
@@ -470,6 +481,10 @@
     var scrollThrottleTimer = null;
     var lastSavedScrollY = 0;
     var browserBackDetected = false;
+    var scriptInitPerfAt = performance.now();
+    var domReadyPerfAt = null;
+    var lastPageShowPerfAt = null;
+    var restoreIdCounter = 1;
 
     // Prefetch cache - stores pre-loaded and pre-processed items
     var prefetchCache = {
@@ -483,6 +498,61 @@
 
     // Hidden container for prefetched items (allows BSS to process them)
     var prefetchContainer = null;
+
+    function createRestoreOperation(triggerSource) {
+      var now = performance.now();
+      var navType = getNavigationType();
+      var usePageShowBaseline = navType === 'back_forward' && typeof lastPageShowPerfAt === 'number';
+      var restoreOperation = {
+        id: String(Date.now()) + '-' + String(restoreIdCounter),
+        trigger: triggerSource || 'unknown',
+        startedAt: now,
+        baselineAt: usePageShowBaseline ? lastPageShowPerfAt : scriptInitPerfAt,
+        baselineType: usePageShowBaseline ? 'pageshow' : 'init',
+        totalLogged: false
+      };
+
+      restoreIdCounter += 1;
+      return restoreOperation;
+    }
+
+    function logRestoreStage(restoreOperation, stageName, payload) {
+      if (!COLLECTION_STATE_DEBUG || !restoreOperation) return;
+      var now = performance.now();
+      var stagePayload = Object.assign(
+        {
+          restoreId: restoreOperation.id,
+          trigger: restoreOperation.trigger,
+          baseline: restoreOperation.baselineType,
+          sinceBaselineMs: Math.round(now - restoreOperation.baselineAt),
+          sinceRestoreStartMs: Math.round(now - restoreOperation.startedAt)
+        },
+        payload || {}
+      );
+
+      console.info(
+        '[Collection State Perf] ' + stageName + ': ' + stagePayload.sinceBaselineMs + ' ms',
+        stagePayload
+      );
+    }
+
+    function logTotalReturnToProduct(restoreOperation, payload) {
+      if (!COLLECTION_STATE_DEBUG || !restoreOperation || restoreOperation.totalLogged) return;
+      restoreOperation.totalLogged = true;
+
+      var totalMs = Math.round(performance.now() - restoreOperation.baselineAt);
+      var totalPayload = Object.assign(
+        {
+          restoreId: restoreOperation.id,
+          trigger: restoreOperation.trigger,
+          baseline: restoreOperation.baselineType,
+          totalMs: totalMs
+        },
+        payload || {}
+      );
+
+      console.info('[Collection State Perf] TOTAL return-to-product: ' + totalMs + ' ms', totalPayload);
+    }
 
     function safeParseJSON(raw, fallback) {
       if (!raw) return fallback;
@@ -501,10 +571,144 @@
       }
     }
 
+    function isQuotaExceededError(error) {
+      if (!error) return false;
+      return (
+        error.name === 'QuotaExceededError' ||
+        error.name === 'NS_ERROR_DOM_QUOTA_REACHED' ||
+        error.code === 22 ||
+        error.code === 1014
+      );
+    }
+
+    function collectCollectionStateEntriesForCleanup(activeStateKey) {
+      var entries = [];
+      var now = Date.now();
+
+      for (var i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
+        var stateKey = window.sessionStorage.key(i);
+        if (!stateKey || stateKey.indexOf(STORAGE_PREFIX) !== 0) continue;
+
+        var parsed = safeParseJSON(readSessionItem(stateKey), null);
+        if (!parsed || typeof parsed !== 'object') {
+          removeSessionItem(stateKey);
+          continue;
+        }
+
+        var timestamp = Number(parsed.timestamp || 0);
+        var batchCache = Array.isArray(parsed.batchCache) ? parsed.batchCache : [];
+
+        entries.push({
+          key: stateKey,
+          state: parsed,
+          timestamp: timestamp || 0,
+          expired: !timestamp || now - timestamp > STATE_MAX_AGE_MS,
+          isActive: stateKey === activeStateKey,
+          cachedBatches: batchCache.length,
+          cachedChars: getBatchCacheSizeChars(batchCache)
+        });
+      }
+
+      return entries;
+    }
+
+    function logEvictedInactiveCollectionCache(entry, reason) {
+      debugLog('Evicted inactive collection cache: ' + entry.key, {
+        reason: reason,
+        cachedBatches: entry.cachedBatches || 0,
+        cachedChars: entry.cachedChars || 0,
+        timestamp: entry.timestamp || 0
+      });
+    }
+
+    function logActiveCacheStats(activeStateKey) {
+      if (!activeStateKey) return;
+
+      var activeState = sanitizeCollectionState(safeParseJSON(readSessionItem(activeStateKey), null));
+      var activeBatchCache = activeState && Array.isArray(activeState.batchCache) ? activeState.batchCache : [];
+
+      debugLog('Active cache chars: ' + getBatchCacheSizeChars(activeBatchCache));
+      debugLog('Active cached batches: ' + activeBatchCache.length);
+    }
+
+    function cleanupCollectionStateStorageForQuota(activeStateKey) {
+      var changed = false;
+      var entries = collectCollectionStateEntriesForCleanup(activeStateKey);
+
+      entries
+        .filter(function(entry) {
+          return entry.expired;
+        })
+        .forEach(function(entry) {
+          removeSessionItem(entry.key);
+          changed = true;
+        });
+
+      var freshEntries = entries.filter(function(entry) {
+        return !entry.expired;
+      });
+
+      var inactiveEntries = freshEntries
+        .filter(function(entry) {
+          return !entry.isActive;
+        })
+        .sort(function(a, b) {
+          return a.timestamp - b.timestamp;
+        });
+
+      var maxInactiveStates = Math.max(MAX_STORED_COLLECTION_STATES - (activeStateKey ? 1 : 0), 0);
+      var statesToEvict = Math.max(inactiveEntries.length - maxInactiveStates, 0);
+
+      inactiveEntries.slice(0, statesToEvict).forEach(function(entry) {
+        removeSessionItem(entry.key);
+        logEvictedInactiveCollectionCache(entry, 'oldest-inactive-state');
+        changed = true;
+      });
+
+      inactiveEntries.slice(statesToEvict).forEach(function(entry) {
+        var batchCache = Array.isArray(entry.state.batchCache) ? entry.state.batchCache : [];
+        if (!batchCache.length) return;
+
+        entry.state.batchCache = [];
+        var updatedSerialized = JSON.stringify(entry.state);
+
+        try {
+          window.sessionStorage.setItem(entry.key, updatedSerialized);
+          logEvictedInactiveCollectionCache(entry, 'inactive-batch-cache');
+          changed = true;
+        } catch (error) {
+          removeSessionItem(entry.key);
+          logEvictedInactiveCollectionCache(entry, 'inactive-state-after-trim-failed');
+          changed = true;
+        }
+      });
+
+      logActiveCacheStats(activeStateKey);
+      return changed;
+    }
+
     function writeSessionItem(key, value) {
       try {
         window.sessionStorage.setItem(key, value);
       } catch (error) {
+        if (isQuotaExceededError(error)) {
+          debugLog('Storage quota pressure');
+
+          var activeStateKey = key && key.indexOf(STORAGE_PREFIX) === 0 ? key : getCollectionStateKey();
+          cleanupCollectionStateStorageForQuota(activeStateKey);
+
+          try {
+            window.sessionStorage.setItem(key, value);
+            return;
+          } catch (retryError) {
+            debugLog('sessionStorage write failed', {
+              key: key,
+              error: retryError && retryError.message ? retryError.message : retryError
+            });
+            return;
+          }
+        }
+
         debugLog('sessionStorage write failed', {
           key: key,
           error: error && error.message ? error.message : error
@@ -547,11 +751,84 @@
       return entry.notRestoredReasons;
     }
 
+    function formatBFCacheReason(reasonEntry) {
+      if (!reasonEntry) return 'unknown';
+      if (typeof reasonEntry === 'string') return reasonEntry;
+      if (typeof reasonEntry.reason === 'string' && reasonEntry.reason) return reasonEntry.reason;
+      if (typeof reasonEntry.type === 'string' && reasonEntry.type) return reasonEntry.type;
+      if (typeof reasonEntry.name === 'string' && reasonEntry.name) return reasonEntry.name;
+      return 'unknown';
+    }
+
+    function collectBFCacheBlockers(node, inheritedContext, output) {
+      if (!node) return;
+
+      if (Array.isArray(node)) {
+        node.forEach(function(item) {
+          collectBFCacheBlockers(item, inheritedContext, output);
+        });
+        return;
+      }
+
+      if (typeof node !== 'object') return;
+
+      var context = Object.assign({}, inheritedContext || {});
+      if (typeof node.url === 'string' && node.url) context.url = node.url;
+      if (typeof node.src === 'string' && node.src) context.source = node.src;
+      if (typeof node.id === 'string' && node.id) context.frame = node.id;
+      if (typeof node.name === 'string' && node.name) context.frame = node.name;
+
+      if (Array.isArray(node.reasons) && node.reasons.length) {
+        node.reasons.forEach(function(reasonEntry) {
+          var blockerContext = Object.assign({}, context);
+          if (reasonEntry && typeof reasonEntry === 'object') {
+            if (typeof reasonEntry.context === 'string' && reasonEntry.context) {
+              blockerContext.context = reasonEntry.context;
+            } else if (typeof reasonEntry.details === 'string' && reasonEntry.details) {
+              blockerContext.context = reasonEntry.details;
+            }
+            if (typeof reasonEntry.url === 'string' && reasonEntry.url) blockerContext.url = reasonEntry.url;
+            if (typeof reasonEntry.src === 'string' && reasonEntry.src) blockerContext.source = reasonEntry.src;
+          }
+
+          output.push({
+            reason: formatBFCacheReason(reasonEntry),
+            context: blockerContext.context || '',
+            source: blockerContext.source || '',
+            url: blockerContext.url || '',
+            frame: blockerContext.frame || ''
+          });
+        });
+      }
+
+      if (Array.isArray(node.children) && node.children.length) {
+        node.children.forEach(function(child) {
+          collectBFCacheBlockers(child, context, output);
+        });
+      }
+    }
+
+    function extractBFCacheBlockers(reasons) {
+      if (!reasons) return [];
+      var blockers = [];
+      collectBFCacheBlockers(reasons, {}, blockers);
+      return blockers;
+    }
+
     function logBackForwardDiagnostics(pageShowEvent) {
       debugLog('pageshow persisted: ' + Boolean(pageShowEvent && pageShowEvent.persisted));
       debugLog('navigation type: ' + (getNavigationType() || 'unknown'));
       var reasons = getNotRestoredReasons();
       debugLog('bfcache not restored reasons:', reasons === null ? 'not supported or none' : reasons);
+      var blockers = extractBFCacheBlockers(reasons);
+      blockers.forEach(function(blocker, index) {
+        debugLog('bfcache blocker ' + (index + 1) + ': ' + blocker.reason, {
+          context: blocker.context || '',
+          source: blocker.source || '',
+          url: blocker.url || '',
+          frame: blocker.frame || ''
+        });
+      });
       try {
         if (window.history && typeof window.history.scrollRestoration !== 'undefined') {
           debugLog('history.scrollRestoration: ' + window.history.scrollRestoration);
@@ -663,27 +940,31 @@
 
     function pruneCollectionStateStorage() {
       try {
-        var stateEntries = [];
-        for (var i = window.sessionStorage.length - 1; i >= 0; i -= 1) {
-          var key = window.sessionStorage.key(i);
-          if (!key || key.indexOf(STORAGE_PREFIX) !== 0) continue;
-          var parsed = safeParseJSON(readSessionItem(key), null);
-          var sanitized = sanitizeCollectionState(parsed);
-          if (!sanitized) {
-            removeSessionItem(key);
-            continue;
-          }
-          stateEntries.push({ key: key, timestamp: sanitized.timestamp || 0 });
-        }
+        var activeStateKey = getCollectionStateKey();
+        var entries = collectCollectionStateEntriesForCleanup(activeStateKey);
 
-        stateEntries
-          .sort(function(a, b) {
-            return b.timestamp - a.timestamp;
+        entries
+          .filter(function(entry) {
+            return entry.expired;
           })
-          .slice(MAX_STORED_COLLECTION_STATES)
           .forEach(function(entry) {
             removeSessionItem(entry.key);
           });
+
+        var freshInactiveEntries = entries
+          .filter(function(entry) {
+            return !entry.expired && !entry.isActive;
+          })
+          .sort(function(a, b) {
+            return a.timestamp - b.timestamp;
+          });
+
+        var maxInactiveStates = Math.max(MAX_STORED_COLLECTION_STATES - (activeStateKey ? 1 : 0), 0);
+        var inactiveStatesToRemove = Math.max(freshInactiveEntries.length - maxInactiveStates, 0);
+
+        freshInactiveEntries.slice(0, inactiveStatesToRemove).forEach(function(entry) {
+          removeSessionItem(entry.key);
+        });
       } catch (error) {
         // Ignore cleanup failures.
       }
@@ -794,17 +1075,34 @@
         timestamp: Date.now()
       });
 
+      var removedForCountLimit = 0;
       while (updatedBatches.length > MAX_BATCHES_PER_STATE) {
         updatedBatches.shift();
+        removedForCountLimit += 1;
       }
 
+      var removedForSizeLimit = 0;
       while (getBatchCacheSizeChars(updatedBatches) > MAX_STATE_BATCH_HTML_CHARS && updatedBatches.length > 1) {
         updatedBatches.shift();
+        removedForSizeLimit += 1;
       }
 
       state.batchCache = updatedBatches;
       state.timestamp = Date.now();
       writeCollectionState(state);
+
+      if (removedForCountLimit || removedForSizeLimit) {
+        debugLog('Batch cache trimmed', {
+          pageUrl: normalizedPageUrl,
+          loadedPages: state.loadedPages,
+          removedForCountLimit: removedForCountLimit,
+          removedForSizeLimit: removedForSizeLimit,
+          cachedBatches: updatedBatches.length,
+          cachedChars: getBatchCacheSizeChars(updatedBatches),
+          maxBatches: MAX_BATCHES_PER_STATE,
+          maxChars: MAX_STATE_BATCH_HTML_CHARS
+        });
+      }
 
       debugLog('Saved state:', {
         reason: 'batch-cache',
@@ -1395,10 +1693,23 @@
       return { applied: false, reason: 'no-scroll-target' };
     }
 
-    async function applyScrollRestorationOnly(savedState) {
+    async function applyScrollRestorationOnly(savedState, restoreOperation) {
       debugLog('Applying scroll restoration only');
+      logRestoreStage(restoreOperation, 'first scroll pending', {
+        mode: 'scroll-only'
+      });
       await waitForNextFrame();
-      restoreScrollPosition(savedState);
+      var scrollResult = restoreScrollPosition(savedState);
+      logRestoreStage(restoreOperation, 'first scroll applied', {
+        mode: 'scroll-only',
+        applied: Boolean(scrollResult && scrollResult.applied),
+        scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
+      });
+      logTotalReturnToProduct(restoreOperation, {
+        mode: 'scroll-only',
+        applied: Boolean(scrollResult && scrollResult.applied),
+        scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
+      });
     }
 
     function setGridRestoringState(isRestoring) {
@@ -1498,10 +1809,17 @@
       };
     }
 
-    async function fetchKnownBatchUrls(urls) {
+    async function fetchKnownBatchUrls(urls, restoreOperation, reason) {
       if (!urls.length) return [];
 
       var fetchStart = performance.now();
+      perfEventLog('network fallback START', {
+        restoreId: restoreOperation && restoreOperation.id ? restoreOperation.id : 'unknown',
+        reason: reason || 'missing-cached-batches',
+        requestCount: urls.length,
+        missingPageUrls: urls.slice()
+      });
+
       var results = await Promise.all(
         urls.map(function(url) {
           return fetch(url)
@@ -1518,11 +1836,21 @@
         })
       );
 
-      perfLog('network fallback', performance.now() - fetchStart);
-      return results.filter(Boolean);
+      var fetchedBatches = results.filter(Boolean);
+      perfEventLog('network fallback END', {
+        restoreId: restoreOperation && restoreOperation.id ? restoreOperation.id : 'unknown',
+        reason: reason || 'missing-cached-batches',
+        elapsedMs: Math.round(performance.now() - fetchStart),
+        requestCount: urls.length,
+        fetchedUrls: fetchedBatches.map(function(batch) {
+          return normalizeCollectionUrl(batch.pageUrl);
+        })
+      });
+
+      return fetchedBatches;
     }
 
-    async function restoreUsingCachedOrKnownNetworkBatches(savedState) {
+    async function restoreUsingCachedOrKnownNetworkBatches(savedState, restoreOperation) {
       var expectedUrls = getExpectedLoadedBatchUrls(savedState);
       if (!expectedUrls.length) {
         return {
@@ -1536,8 +1864,31 @@
         return !cacheMap[url];
       });
 
+      logRestoreStage(restoreOperation, 'cache availability determined', {
+        expectedBatchUrls: expectedUrls.length,
+        cachedBatchUrls: expectedUrls.length - missingUrls.length,
+        missingBatchUrls: missingUrls.length
+      });
+
       if (missingUrls.length) {
-        var networkBatches = await fetchKnownBatchUrls(missingUrls);
+        logRestoreStage(restoreOperation, 'missing network requests started', {
+          missingPageUrls: missingUrls.slice(),
+          requestCount: missingUrls.length
+        });
+
+        var networkBatches = await fetchKnownBatchUrls(
+          missingUrls,
+          restoreOperation,
+          'missing-cached-batches'
+        );
+
+        logRestoreStage(restoreOperation, 'missing network responses completed', {
+          fetchedBatchCount: networkBatches.length,
+          fetchedUrls: networkBatches.map(function(batch) {
+            return normalizeCollectionUrl(batch.pageUrl);
+          })
+        });
+
         networkBatches.forEach(function(batch) {
           cacheMap[normalizeCollectionUrl(batch.pageUrl)] = batch;
           cacheBatchForCurrentState(batch.pageUrl, batch.itemsHtml, batch.nextPageUrl || null);
@@ -1561,6 +1912,11 @@
       var insertStart = performance.now();
       var inserted = appendBatchHtmlToGrid(orderedBatches);
       perfLog('cards inserted', performance.now() - insertStart);
+      logRestoreStage(restoreOperation, 'cached/network cards inserted', {
+        insertedPages: inserted.pages,
+        insertedItems: inserted.items,
+        mode: missingUrls.length > 0 ? 'network-fallback' : 'cached-dom'
+      });
       setGridRestoringState(false);
 
       runtimeLoadedPages = inserted.pages;
@@ -1639,104 +1995,197 @@
       return false;
     }
 
-    async function restoreCollectionStateIfNeeded() {
-      var restoreStartedAt = performance.now();
+    async function restoreCollectionStateIfNeeded(triggerSource) {
+      var restoreOperation = createRestoreOperation(triggerSource);
+      logRestoreStage(restoreOperation, 'restore attempt start', {
+        navigationType: getNavigationType() || 'unknown'
+      });
+      if (typeof domReadyPerfAt === 'number') {
+        logRestoreStage(restoreOperation, 'collection DOM ready', {
+          domReadySinceInitMs: Math.round(domReadyPerfAt - scriptInitPerfAt),
+          domReadySinceBaselineMs: Math.round(domReadyPerfAt - restoreOperation.baselineAt)
+        });
+      }
+
       var key = getCollectionStateKey();
       if (!key) return;
-      if (restoreInProgress) return;
-      if (restoreAttemptedForKey === key) return;
+      if (restoreOperationInProgress) {
+        logRestoreStage(restoreOperation, 'restore skipped duplicate', {
+          key: key,
+          activeRestoreId: activeRestoreOperationId || ''
+        });
+        return;
+      }
+      if (restoreInProgress) {
+        logRestoreStage(restoreOperation, 'restore skipped in-progress', {
+          key: key,
+          activeRestoreId: activeRestoreOperationId || ''
+        });
+        return;
+      }
+      if (restoreAttemptedForKey === key) {
+        logRestoreStage(restoreOperation, 'restore skipped already-attempted-key', {
+          key: key
+        });
+        return;
+      }
+
+      restoreOperationInProgress = true;
+      activeRestoreOperationId = restoreOperation.id;
 
       restoreAttemptedForKey = key;
       debugLog('State key: ' + key);
+      logRestoreStage(restoreOperation, 'state read start', {
+        key: key
+      });
 
-      var restoreDecision = shouldRestoreForVisit(key);
-      if (!restoreDecision.shouldRestore) {
-        if (restoreDecision.reason === 'intent-present-but-not-return-navigation') {
-          debugLog('Skipping restore for normal fresh visit');
-        }
-        if (restoreDecision.consumeIntent) {
-          consumeReturnIntent();
-        }
-        return;
-      }
-
-      var savedState = getCollectionState();
-      if (!savedState) {
-        if (restoreDecision.consumeIntent) {
-          consumeReturnIntent();
-        }
-        return;
-      }
-
-      debugLog('Restoring state:', savedState);
-
-      if (hasDomAlreadyRestored(savedState)) {
-        debugLog('DOM already restored, checking position');
-        await applyScrollRestorationOnly(savedState);
-        perfLog('cached DOM restore', performance.now() - restoreStartedAt);
-        if (restoreDecision.consumeIntent) {
-          consumeReturnIntent();
-        }
-        return;
-      }
-
-      var cachedRestoreResult = await restoreUsingCachedOrKnownNetworkBatches(savedState);
-      if (cachedRestoreResult.restored) {
-        var scrollStart = performance.now();
-        await waitForNextFrame();
-        restoreScrollPosition(savedState);
-        perfLog('scroll restored', performance.now() - scrollStart);
-        if (cachedRestoreResult.usedNetwork) {
-          perfLog('network fallback', performance.now() - restoreStartedAt);
-        } else {
-          perfLog('cached DOM restore', performance.now() - restoreStartedAt);
-        }
-
-        if (restoreDecision.consumeIntent) {
-          consumeReturnIntent();
-        }
-
-        persistCollectionState(
-          {
-            nextPageUrl: cachedRestoreResult.nextPageUrl
-          },
-          cachedRestoreResult.usedNetwork ? 'restore-network' : 'restore-cached'
-        );
-        return;
-      }
-
-      var targetLoads = Math.max(parseInt(savedState.loadedPages, 10) || 0, 0);
-      var replayStart = performance.now();
-
-      restoreInProgress = true;
-      setGridRestoringState(true);
       try {
-        for (var i = 0; i < targetLoads; i += 1) {
-          debugLog('Restoring page ' + (i + 2));
-          var result = await triggerLoadMoreAndWait();
-          if (!result || !result.success) {
-            debugLog('Restore failed gracefully: ' + ((result && result.reason) || 'unknown'));
-            break;
+        var restoreDecision = shouldRestoreForVisit(key);
+        logRestoreStage(restoreOperation, 'return intent resolved', {
+          shouldRestore: Boolean(restoreDecision.shouldRestore),
+          reason: restoreDecision.reason || 'unknown',
+          consumeIntent: Boolean(restoreDecision.consumeIntent)
+        });
+
+        if (!restoreDecision.shouldRestore) {
+          if (restoreDecision.reason === 'intent-present-but-not-return-navigation') {
+            debugLog('Skipping restore for normal fresh visit');
           }
+          if (restoreDecision.consumeIntent) {
+            consumeReturnIntent();
+          }
+          return;
         }
 
-        var scrollStart = performance.now();
-        await waitForNextFrame();
-        restoreScrollPosition(savedState);
-        perfLog('scroll restored', performance.now() - scrollStart);
-        debugLog('Restore complete');
+        var savedState = getCollectionState();
+        logRestoreStage(restoreOperation, 'state read complete', {
+          hasState: Boolean(savedState),
+          savedLoadedPages: savedState ? savedState.loadedPages : 0,
+          savedBatchCacheCount: savedState && Array.isArray(savedState.batchCache) ? savedState.batchCache.length : 0
+        });
+        if (!savedState) {
+          if (restoreDecision.consumeIntent) {
+            consumeReturnIntent();
+          }
+          return;
+        }
+
+        debugLog('Restoring state:', savedState);
+
+        if (hasDomAlreadyRestored(savedState)) {
+          debugLog('DOM already restored, checking position');
+          logRestoreStage(restoreOperation, 'cache availability determined', {
+            mode: 'dom-already-restored',
+            missingBatchUrls: 0
+          });
+          await applyScrollRestorationOnly(savedState, restoreOperation);
+          perfLog('cached DOM restore', performance.now() - restoreOperation.startedAt);
+          if (restoreDecision.consumeIntent) {
+            consumeReturnIntent();
+          }
+          return;
+        }
+
+        var cachedRestoreResult = await restoreUsingCachedOrKnownNetworkBatches(savedState, restoreOperation);
+        if (cachedRestoreResult.restored) {
+          var scrollStart = performance.now();
+          var clickedPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
+          var anchorElement = findProductElementInGrid(clickedPath);
+          logRestoreStage(restoreOperation, 'clicked-product anchor found', {
+            found: Boolean(anchorElement),
+            clickedProductPath: clickedPath || ''
+          });
+          logRestoreStage(restoreOperation, 'first scroll pending', {
+            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom'
+          });
+          await waitForNextFrame();
+          var scrollResult = restoreScrollPosition(savedState);
+          logRestoreStage(restoreOperation, 'first scroll applied', {
+            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom',
+            applied: Boolean(scrollResult && scrollResult.applied),
+            scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
+          });
+          perfLog('scroll restored', performance.now() - scrollStart);
+          if (cachedRestoreResult.usedNetwork) {
+            perfLog('network fallback', performance.now() - restoreOperation.startedAt);
+          } else {
+            perfLog('cached DOM restore', performance.now() - restoreOperation.startedAt);
+          }
+          logTotalReturnToProduct(restoreOperation, {
+            mode: cachedRestoreResult.usedNetwork ? 'network-fallback' : 'cached-dom',
+            usedNetwork: Boolean(cachedRestoreResult.usedNetwork),
+            applied: Boolean(scrollResult && scrollResult.applied),
+            scrollReason: scrollResult && scrollResult.reason ? scrollResult.reason : 'unknown'
+          });
+
+          if (restoreDecision.consumeIntent) {
+            consumeReturnIntent();
+          }
+
+          persistCollectionState(
+            {
+              nextPageUrl: cachedRestoreResult.nextPageUrl
+            },
+            cachedRestoreResult.usedNetwork ? 'restore-network' : 'restore-cached'
+          );
+          return;
+        }
+
+        var targetLoads = Math.max(parseInt(savedState.loadedPages, 10) || 0, 0);
+        var replayStart = performance.now();
+
+        restoreInProgress = true;
+        setGridRestoringState(true);
+        try {
+          for (var i = 0; i < targetLoads; i += 1) {
+            debugLog('Restoring page ' + (i + 2));
+            var result = await triggerLoadMoreAndWait();
+            if (!result || !result.success) {
+              debugLog('Restore failed gracefully: ' + ((result && result.reason) || 'unknown'));
+              break;
+            }
+          }
+
+          var replayScrollStart = performance.now();
+          var replayClickedPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
+          var replayAnchorElement = findProductElementInGrid(replayClickedPath);
+          logRestoreStage(restoreOperation, 'clicked-product anchor found', {
+            found: Boolean(replayAnchorElement),
+            clickedProductPath: replayClickedPath || ''
+          });
+          logRestoreStage(restoreOperation, 'first scroll pending', {
+            mode: 'load-more-replay'
+          });
+          await waitForNextFrame();
+          var replayScrollResult = restoreScrollPosition(savedState);
+          logRestoreStage(restoreOperation, 'first scroll applied', {
+            mode: 'load-more-replay',
+            applied: Boolean(replayScrollResult && replayScrollResult.applied),
+            scrollReason: replayScrollResult && replayScrollResult.reason ? replayScrollResult.reason : 'unknown'
+          });
+          perfLog('scroll restored', performance.now() - replayScrollStart);
+          debugLog('Restore complete');
+          logTotalReturnToProduct(restoreOperation, {
+            mode: 'load-more-replay',
+            applied: Boolean(replayScrollResult && replayScrollResult.applied),
+            scrollReason: replayScrollResult && replayScrollResult.reason ? replayScrollResult.reason : 'unknown'
+          });
+        } finally {
+          setGridRestoringState(false);
+          restoreInProgress = false;
+        }
+
+        perfLog('load-more replay', performance.now() - replayStart);
+        perfLog('network fallback', performance.now() - restoreOperation.startedAt);
+
+        if (restoreDecision.consumeIntent) {
+          consumeReturnIntent();
+        }
+        persistCollectionState({}, 'restore');
       } finally {
-        setGridRestoringState(false);
-        restoreInProgress = false;
+        restoreOperationInProgress = false;
+        activeRestoreOperationId = null;
       }
-
-      perfLog('load-more replay', performance.now() - replayStart);
-      perfLog('network fallback', performance.now() - restoreStartedAt);
-
-      if (restoreDecision.consumeIntent) {
-        consumeReturnIntent();
-      }
-      persistCollectionState({}, 'restore');
     }
 
     function schedulePrefetch(delayMs) {
@@ -1767,6 +2216,7 @@
 
     window.addEventListener('pageshow', function(pageShowEvent) {
       var bfcachePerfStart = performance.now();
+      lastPageShowPerfAt = performance.now();
       logBackForwardDiagnostics(pageShowEvent);
 
       if (pageShowEvent.persisted) {
@@ -1777,7 +2227,11 @@
         var persistedSavedState = getCollectionState();
         if (persistedSavedState && shouldInterveneAfterBFCache(persistedSavedState)) {
           debugLog('DOM already restored, checking position');
-          applyScrollRestorationOnly(persistedSavedState);
+          var bfcacheRestoreOperation = createRestoreOperation('pageshow-bfcache');
+          logRestoreStage(bfcacheRestoreOperation, 'collection DOM ready', {
+            readyState: document.readyState || 'unknown'
+          });
+          applyScrollRestorationOnly(persistedSavedState, bfcacheRestoreOperation);
         } else {
           debugLog('Scroll already correct, no action');
         }
@@ -1791,17 +2245,18 @@
         }
         return;
       }
-      restoreCollectionStateIfNeeded();
+      restoreCollectionStateIfNeeded('pageshow');
     });
 
     function onCollectionPageReady() {
+      domReadyPerfAt = performance.now();
       pruneCollectionStateStorage();
       resetRuntimeStateForCurrentGrid();
       browserBackDetected = getNavigationType() === 'back_forward';
       if (browserBackDetected) {
         debugLog('Browser back detected');
       }
-      restoreCollectionStateIfNeeded();
+      restoreCollectionStateIfNeeded('ready');
       schedulePrefetch(1500);
     }
 
@@ -1817,7 +2272,7 @@
       resetPrefetchCache();
       resetRuntimeStateForCurrentGrid();
       restoreAttemptedForKey = null;
-      restoreCollectionStateIfNeeded();
+      restoreCollectionStateIfNeeded('facets-updated');
       schedulePrefetch(1000);
     });
   })();
