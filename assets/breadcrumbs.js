@@ -17,6 +17,15 @@
     }
   }
 
+  function breadcrumbLog(message, payload) {
+    if (!COLLECTION_STATE_DEBUG) return;
+    if (typeof payload === 'undefined') {
+      console.info('[Breadcrumbs] ' + message);
+    } else {
+      console.info('[Breadcrumbs] ' + message, payload);
+    }
+  }
+
   function safeParseJSON(raw, fallback) {
     if (!raw) return fallback;
     try {
@@ -186,6 +195,28 @@
     );
   }
 
+  function canUseHistoryBackForCollectionReturn(collectionUrl, productPath) {
+    if (!collectionUrl || window.history.length < 2) return false;
+
+    var normalizedTargetUrl = normalizeCollectionUrl(collectionUrl);
+    if (!normalizedTargetUrl) return false;
+
+    var referrerCollectionUrl = getCollectionReferrerUrl();
+    if (!referrerCollectionUrl || referrerCollectionUrl !== normalizedTargetUrl) {
+      return false;
+    }
+
+    var activeContext = readActiveProductContext();
+    if (activeContext) {
+      var activeProductPath = normalizeProductPath(activeContext.productPath || '');
+      var activeCollectionUrl = normalizeCollectionUrl(activeContext.collectionUrl || '');
+      if (activeProductPath && activeProductPath !== productPath) return false;
+      if (activeCollectionUrl && activeCollectionUrl !== normalizedTargetUrl) return false;
+    }
+
+    return true;
+  }
+
   function pruneReturnIntent() {
     var intent = safeParseJSON(readSessionItem(RETURN_INTENT_KEY), null);
     if (!intent || typeof intent !== 'object') return;
@@ -213,13 +244,19 @@
     }
     collectionItem.hidden = false;
 
-    if (context.source === 'active') {
-      removeSessionItem(ACTIVE_PRODUCT_CONTEXT_KEY);
-    }
+    collectionLink.addEventListener('click', function(event) {
+      var targetCollectionUrl = collectionLink.getAttribute('href');
+      setBreadcrumbReturnIntent(targetCollectionUrl, collectionLink.textContent, productPath);
 
-    collectionLink.addEventListener('click', function() {
-      setBreadcrumbReturnIntent(collectionLink.getAttribute('href'), collectionLink.textContent, productPath);
-      debugLog('Marked breadcrumb return intent');
+      if (canUseHistoryBackForCollectionReturn(targetCollectionUrl, productPath)) {
+        breadcrumbLog('Attempting history back for collection return');
+        event.preventDefault();
+        window.history.back();
+        return;
+      }
+
+      breadcrumbLog('History back not safe, using href');
+      breadcrumbLog('Breadcrumb return using fresh collection restore');
     });
   }
 

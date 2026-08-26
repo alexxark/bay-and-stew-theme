@@ -461,6 +461,7 @@
     var loadedBatchUrls = [];
     var scrollThrottleTimer = null;
     var lastSavedScrollY = 0;
+    var browserBackDetected = false;
 
     // Prefetch cache - stores pre-loaded and pre-processed items
     var prefetchCache = {
@@ -1193,33 +1194,69 @@
       ]);
     }
 
+    function isScrollClose(targetY, tolerance) {
+      return Math.abs((window.scrollY || 0) - Math.max(targetY, 0)) <= (tolerance || 80);
+    }
+
     function restoreScrollPosition(savedState) {
-      if (!savedState) return;
-      if (restoredFromBFCache) return;
-      if ((window.scrollY || 0) > 100) return;
+      if (!savedState) {
+        debugLog('Scroll already correct, no action');
+        return { applied: false, reason: 'missing-state' };
+      }
 
       var productPath = savedState.clickedProductPath || savedState.clickedProductUrl || '';
       var productElement = findProductElementInGrid(productPath);
       if (productElement) {
-        debugLog('Scrolling to clicked product');
         var offset = getHeaderOffset();
         var targetTop = productElement.getBoundingClientRect().top + window.pageYOffset - offset;
+
+        if (isScrollClose(targetTop, 90)) {
+          debugLog('Scroll already correct, no action');
+          return { applied: false, reason: 'already-correct-product' };
+        }
+
+        debugLog('Scrolling to clicked product');
         window.scrollTo(0, Math.max(targetTop, 0));
 
         setTimeout(function() {
           var adjustedTop = productElement.getBoundingClientRect().top + window.pageYOffset - offset;
-          var difference = Math.abs((window.scrollY || 0) - Math.max(adjustedTop, 0));
-          if (difference > 40) {
+          if (!isScrollClose(adjustedTop, 55)) {
             window.scrollTo(0, Math.max(adjustedTop, 0));
           }
         }, 220);
-        return;
+
+        return { applied: true, reason: 'product' };
       }
 
       if (typeof savedState.scrollY === 'number' && savedState.scrollY > 0) {
+        if (isScrollClose(savedState.scrollY, 90)) {
+          debugLog('Scroll already correct, no action');
+          return { applied: false, reason: 'already-correct-scrollY' };
+        }
+
         debugLog('Falling back to scrollY');
         window.scrollTo(0, savedState.scrollY);
+
+        setTimeout(function() {
+          if (!isScrollClose(savedState.scrollY, 55)) {
+            window.scrollTo(0, savedState.scrollY);
+          }
+        }, 220);
+
+        return { applied: true, reason: 'scrollY' };
       }
+
+      debugLog('Scroll already correct, no action');
+      return { applied: false, reason: 'no-scroll-target' };
+    }
+
+    async function applyScrollRestorationOnly(savedState) {
+      debugLog('Applying scroll restoration only');
+      var productGrid = document.getElementById('product-grid');
+      await waitForNextFrame();
+      await waitForGridImages(productGrid, 1200);
+      await waitForNextFrame();
+      restoreScrollPosition(savedState);
     }
 
     function triggerLoadMoreAndWait() {
@@ -1277,7 +1314,7 @@
     async function restoreCollectionStateIfNeeded() {
       var key = getCollectionStateKey();
       if (!key) return;
-      if (restoreInProgress || restoredFromBFCache) return;
+      if (restoreInProgress) return;
       if (restoreAttemptedForKey === key) return;
 
       restoreAttemptedForKey = key;
@@ -1305,8 +1342,8 @@
       debugLog('Restoring state:', savedState);
 
       if (hasDomAlreadyRestored(savedState)) {
-        debugLog('bfcache restored page - skipping AJAX restore');
-        restoreScrollPosition(savedState);
+        debugLog('DOM already restored, checking position');
+        await applyScrollRestorationOnly(savedState);
         if (restoreDecision.consumeIntent) {
           consumeReturnIntent();
         }
@@ -1371,8 +1408,14 @@
 
     window.addEventListener('pageshow', function(pageShowEvent) {
       if (pageShowEvent.persisted) {
+        debugLog('Browser back detected');
         restoredFromBFCache = true;
         debugLog('bfcache restored page - skipping AJAX restore');
+        debugLog('DOM already restored, checking position');
+        var persistedSavedState = getCollectionState();
+        if (persistedSavedState) {
+          applyScrollRestorationOnly(persistedSavedState);
+        }
         var key = getCollectionStateKey();
         var intent = getReturnIntent();
         if (intent && key && intent.collectionKey === key) {
@@ -1386,6 +1429,10 @@
     function onCollectionPageReady() {
       pruneCollectionStateStorage();
       resetRuntimeStateForCurrentGrid();
+      browserBackDetected = getNavigationType() === 'back_forward';
+      if (browserBackDetected) {
+        debugLog('Browser back detected');
+      }
       restoreCollectionStateIfNeeded();
       schedulePrefetch(1500);
     }

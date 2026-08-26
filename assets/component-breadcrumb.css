@@ -45,6 +45,17 @@
   color: rgba(var(--color-foreground), 0.6);
 }
 
+.breadcrumbs--product-info {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.product__info-container .breadcrumbs--product-info {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 @media screen and (max-width: 749px) {
   .breadcrumbs {
     margin-top: 0.9rem;
@@ -54,5 +65,10 @@
   .breadcrumbs__item {
     font-size: 1.1rem;
     line-height: 1.35;
+  }
+
+  .breadcrumbs--product-info {
+    margin-top: 0;
+    margin-bottom: 0.8rem;
   }
 }

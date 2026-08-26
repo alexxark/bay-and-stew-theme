@@ -5,9 +5,16 @@
 <script src="{{ 'breadcrumbs.js' | asset_url }}" defer="defer"></script>
 
 {%- assign breadcrumb_kind = breadcrumb_type | default: '' -%}
+{%- assign breadcrumb_classes = 'breadcrumbs' -%}
+{%- if breadcrumb_full_width != false -%}
+  {%- assign breadcrumb_classes = breadcrumb_classes | append: ' page-width' -%}
+{%- endif -%}
+{%- if breadcrumb_modifier != blank -%}
+  {%- assign breadcrumb_classes = breadcrumb_classes | append: ' ' | append: breadcrumb_modifier -%}
+{%- endif -%}
 
 {%- if breadcrumb_kind == 'collection' and collection != blank -%}
-  <nav class="breadcrumbs page-width" aria-label="Breadcrumb" data-breadcrumb-type="collection">
+  <nav class="{{ breadcrumb_classes }}" aria-label="Breadcrumb" data-breadcrumb-type="collection">
     <ol class="breadcrumbs__list" role="list">
       <li class="breadcrumbs__item">
         <a class="breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
@@ -22,7 +29,7 @@
   {%- endif -%}
 
   <nav
-    class="breadcrumbs page-width"
+    class="{{ breadcrumb_classes }}"
     aria-label="Breadcrumb"
     data-breadcrumb-type="product"
     data-product-path="{{ product.url | split: '?' | first }}"
