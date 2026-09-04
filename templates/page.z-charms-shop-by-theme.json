@@ -135,14 +135,14 @@
     },
     "pj_collection_highlight_GdFPYJ": {
       "type": "pj-collection-highlight",
-      "name": "Gold Vermeil Charms",
+      "name": "Profession Charms",
       "settings": {
-        "title": "Gold Vermeil Charms",
+        "title": "Profession Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "gold-vermeil-charms",
-        "image": "shopify://shop_images/IMG_8280.jpg",
+        "collection": "profession-charms",
+        "image": "shopify://shop_images/MG_1049.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
