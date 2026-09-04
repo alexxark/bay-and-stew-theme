@@ -57,14 +57,14 @@
     },
     "pj_collection_highlight_aWibKH": {
       "type": "pj-collection-highlight",
-      "name": "Sterling Silver Charms",
+      "name": "Animal Charms",
       "settings": {
-        "title": "Sterling Silver Charms",
+        "title": "Animal Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "sterling-silver-charms",
-        "image": "shopify://shop_images/silverch4.webp",
+        "collection": "animal-charms",
+        "image": "shopify://shop_images/2023-12-2115.17.49.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
