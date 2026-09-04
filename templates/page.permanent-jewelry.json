@@ -30,7 +30,7 @@
         "color_scheme": ""
       }
     },
-    "pj_collection_highlight_WVhzdn": {
+    "collection_showcase_with_highlight_WVhzdn": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Gold Filled",
       "settings": {
@@ -56,7 +56,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_wGH9Cc": {
+    "collection_showcase_with_highlight_wGH9Cc": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Sterling Silver",
       "settings": {
@@ -82,7 +82,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_aWibKH": {
+    "collection_showcase_with_highlight_aWibKH": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Footage Chains",
       "settings": {
@@ -108,7 +108,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_4P4mxa": {
+    "collection_showcase_with_highlight_4P4mxa": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Connectors",
       "settings": {
@@ -134,7 +134,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_GdFPYJ": {
+    "collection_showcase_with_highlight_GdFPYJ": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Charms",
       "settings": {
@@ -160,7 +160,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_ge7fTB": {
+    "collection_showcase_with_highlight_ge7fTB": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Findings",
       "settings": {
@@ -186,7 +186,7 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_NMwNTG": {
+    "collection_showcase_with_highlight_NMwNTG": {
       "type": "collection-showcase-with-highlight",
       "name": "PJ Collection Jump Rings",
       "settings": {
@@ -308,13 +308,13 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "pj_collection_highlight_WVhzdn",
-    "pj_collection_highlight_wGH9Cc",
-    "pj_collection_highlight_aWibKH",
-    "pj_collection_highlight_4P4mxa",
-    "pj_collection_highlight_GdFPYJ",
-    "pj_collection_highlight_ge7fTB",
-    "pj_collection_highlight_NMwNTG",
+    "collection_showcase_with_highlight_WVhzdn",
+    "collection_showcase_with_highlight_wGH9Cc",
+    "collection_showcase_with_highlight_aWibKH",
+    "collection_showcase_with_highlight_4P4mxa",
+    "collection_showcase_with_highlight_GdFPYJ",
+    "collection_showcase_with_highlight_ge7fTB",
+    "collection_showcase_with_highlight_NMwNTG",
     "mega_collection_display_4mCxM7"
   ]
 }
