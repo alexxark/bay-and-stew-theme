@@ -109,14 +109,14 @@
     },
     "pj_collection_highlight_4P4mxa": {
       "type": "pj-collection-highlight",
-      "name": "Stainless Steel Charms",
+      "name": "Nature Charms",
       "settings": {
-        "title": "Stainless Steel Charms",
+        "title": "Nature Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "stainless-steel-charms",
-        "image": "shopify://shop_images/IMG_8366.jpg",
+        "collection": "nature-charms",
+        "image": "shopify://shop_images/IMG_8282.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
