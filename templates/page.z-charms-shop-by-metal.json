@@ -187,14 +187,14 @@
     },
     "pj_collection_highlight_NMwNTG": {
       "type": "pj-collection-highlight",
-      "name": "Silver Plated Chains",
+      "name": "Rose Gold Filled Charms",
       "settings": {
-        "title": "Silver Plated Chains",
+        "title": "Rose Gold Filled Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "silver-plated-chains",
-        "image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+        "collection": "rose-gold-filled-charms",
+        "image": "shopify://shop_images/CH106RG.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
