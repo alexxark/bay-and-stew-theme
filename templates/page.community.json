@@ -91,8 +91,9 @@
         "text_AfDa6P",
         "button_8cbpjb"
       ],
+      "disabled": true,
       "custom_css": [
-        "h3 {color: red}"
+        "h3 {color: red;}"
       ],
       "settings": {
         "image": "shopify://shop_images/card-size_V3-tote-sold-out.jpg",
@@ -123,7 +124,6 @@
       "block_order": [
         "text_Crmewi"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -140,14 +140,14 @@
         "heading_WJpjHE": {
           "type": "heading",
           "settings": {
-            "heading": "EXTRA 25% OFF SALE",
+            "heading": "5 FOR $15",
             "heading_size": "h1"
           }
         },
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3><a href=\"https://bayandstew.com/collections/sale-1\" title=\"https://bayandstew.com/collections/sale-1\">Take an additional 25% off on all sale items</a><br/></h3><p>For a limited time, enjoy an <strong>extra 25% off </strong>all sale styles at Bay & Stew. It’s the perfect moment to restock your go-to tools, supplies, and studio essentials at even better value. <br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>TERMS: Valid 05/01/2026 through 05/05/2026 at 11:59pm PST. Discount applies to eligible merchandise marked ‘Sale’ only and is automatically applied at checkout. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text": "<h3>Mix & match sale connectors & charms<br/></h3><p>Must purchase 5 eligible items to receive the $15 offer. Regular pricing applies to quantities under 5.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid  through 10/09/2026 from 12:00am to 11:59pm PDT. Discount applies to eligible merchandise and is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
             "text_style": "body"
           }
         },
@@ -169,7 +169,7 @@
       "custom_css": [],
       "name": "EXTRA 25 SALE",
       "settings": {
-        "image": "shopify://shop_images/sale-offers-page.jpg",
+        "image": "shopify://shop_images/5for15_084589c6-a9be-4bda-be3d-3d816d49061a.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
