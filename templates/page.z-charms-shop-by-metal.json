@@ -83,14 +83,14 @@
     },
     "pj_collection_highlight_wGH9Cc": {
       "type": "pj-collection-highlight",
-      "name": "Sterling Silver Chains",
+      "name": "Gold PVD Charms",
       "settings": {
-        "title": "Sterling Silver Chains",
+        "title": "Gold PVD Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "sterling-silver-chains",
-        "image": "shopify://shop_images/photos-02.jpg",
+        "collection": "gold-pvd-charms",
+        "image": "shopify://shop_images/MG_6917.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
