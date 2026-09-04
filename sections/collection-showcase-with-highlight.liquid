@@ -1,6 +1,6 @@
 {%- comment -%}
   ================================================================
-  PJ Collection Highlight
+  Collection Showcase With Highlight
   ----------------------------------------------------------------
   Renders a heading row (large title + smaller side text) followed
   by a single row of product cards from a chosen collection. The
@@ -71,6 +71,16 @@
   .pj-highlight-{{ section.id }} .pj-highlight__grid > li > .product-card-wrapper {
     width: 100%;
   }
+  .pj-highlight-{{ section.id }} .pj-highlight__spacer {
+    display: none;
+  }
+  @media screen and (min-width: 750px) {
+    .pj-highlight-{{ section.id }} .pj-highlight__spacer {
+      display: block;
+      visibility: hidden;
+      pointer-events: none;
+    }
+  }
   .pj-highlight-{{ section.id }} .pj-highlight__image-cell {
     grid-column: span 2;
     grid-row: span 1;
@@ -118,6 +128,21 @@
   assign columns_desktop = section.settings.columns_desktop
   assign image_slots = 2
   assign product_slots = columns_desktop | minus: image_slots
+  assign product_limit = product_slots
+  if products_to_show < product_slots
+    assign product_limit = products_to_show
+  endif
+  assign rendered_product_count = product_limit
+  if collection != blank
+    assign rendered_product_count = collection.products.size
+    if rendered_product_count > product_limit
+      assign rendered_product_count = product_limit
+    endif
+  endif
+  assign desktop_spacer_count = 0
+  if section.settings.alignment == 'right'
+    assign desktop_spacer_count = product_slots | minus: rendered_product_count
+  endif
   assign skip_card_product_styles = false
 -%}
 
@@ -189,7 +214,7 @@
 
       {%- capture product_cells -%}
         {%- if collection != blank and collection.products.size > 0 -%}
-          {%- for product in collection.products limit: product_slots -%}
+          {%- for product in collection.products limit: product_limit -%}
             <li class="grid__item">
               {% render 'card-product',
                 card_product: product,
@@ -207,7 +232,7 @@
             {%- assign skip_card_product_styles = true -%}
           {%- endfor -%}
         {%- else -%}
-          {%- for i in (1..product_slots) -%}
+          {%- for i in (1..product_limit) -%}
             <li class="grid__item">
               {% render 'card-product', show_vendor: section.settings.show_vendor %}
             </li>
@@ -216,6 +241,11 @@
       {%- endcapture -%}
 
       {%- if section.settings.alignment == 'right' -%}
+        {%- if desktop_spacer_count > 0 -%}
+          {%- for i in (1..desktop_spacer_count) -%}
+            <li class="pj-highlight__spacer" aria-hidden="true"></li>
+          {%- endfor -%}
+        {%- endif -%}
         {{ product_cells }}
         {{ image_cell }}
       {%- else -%}
@@ -236,7 +266,7 @@
 
 {% schema %}
 {
-  "name": "PJ Collection Highlight",
+  "name": "Collection Showcase with Highlight",
   "tag": "section",
   "class": "section",
   "settings": [
@@ -432,7 +462,7 @@
   ],
   "presets": [
     {
-      "name": "PJ Collection Highlight"
+      "name": "Collection Showcase with Highlight"
     }
   ]
 }
