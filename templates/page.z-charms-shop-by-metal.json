@@ -135,14 +135,14 @@
     },
     "pj_collection_highlight_GdFPYJ": {
       "type": "pj-collection-highlight",
-      "name": "Rose Gold Filled Chains",
+      "name": "Gold Vermeil Charms",
       "settings": {
-        "title": "Rose Gold Filled Chains",
+        "title": "Gold Vermeil Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "rose-gold-filled-chains",
-        "image": "shopify://shop_images/2023-02-1314.44.14-2.jpg",
+        "collection": "gold-vermeil-charms",
+        "image": "shopify://shop_images/IMG_8280.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
