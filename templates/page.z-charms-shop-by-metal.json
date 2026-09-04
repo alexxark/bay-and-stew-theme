@@ -109,14 +109,14 @@
     },
     "pj_collection_highlight_4P4mxa": {
       "type": "pj-collection-highlight",
-      "name": "Champagne Chains",
+      "name": "Stainless Steel Charms",
       "settings": {
-        "title": "Champagne Chains",
+        "title": "Stainless Steel Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "champagne-chains",
-        "image": "shopify://shop_images/MG_4974.jpg",
+        "collection": "stainless-steel-charms",
+        "image": "shopify://shop_images/IMG_8366.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
