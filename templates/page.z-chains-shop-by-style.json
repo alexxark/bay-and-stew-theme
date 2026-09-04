@@ -57,13 +57,13 @@
     },
     "pj_collection_highlight_aWibKH": {
       "type": "pj-collection-highlight",
-      "name": "Mixed Metal Chains",
+      "name": "Box Chains",
       "settings": {
-        "title": "Mixed Metal Chains",
+        "title": "Box Chains",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "mixed-metal-chains",
+        "collection": "box-chains",
         "image": "shopify://shop_images/IMG_3469.jpg",
         "image_link": "",
         "columns_desktop": 6,
