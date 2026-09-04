@@ -29,8 +29,8 @@
         "color_scheme": ""
       }
     },
-    "collection_showcase_with_highlight_WVhzdn": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_WVhzdn": {
+      "type": "pj-collection-highlight",
       "name": "Bar & Link Chains",
       "settings": {
         "title": "Bar & Link Chains",
@@ -55,8 +55,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_aWibKH": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_aWibKH": {
+      "type": "pj-collection-highlight",
       "name": "Box Chains",
       "settings": {
         "title": "Box Chains",
@@ -81,8 +81,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_wGH9Cc": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_wGH9Cc": {
+      "type": "pj-collection-highlight",
       "name": "Cable Chains",
       "settings": {
         "title": "Cable Chains",
@@ -107,8 +107,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_4P4mxa": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_4P4mxa": {
+      "type": "pj-collection-highlight",
       "name": "Curb Chains",
       "settings": {
         "title": "Curb Chains",
@@ -133,8 +133,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_GdFPYJ": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_GdFPYJ": {
+      "type": "pj-collection-highlight",
       "name": "Disc Chains",
       "settings": {
         "title": "Disc Chains",
@@ -159,8 +159,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_ge7fTB": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_ge7fTB": {
+      "type": "pj-collection-highlight",
       "name": "Enamel Chains",
       "settings": {
         "title": "Enamel Chains",
@@ -185,8 +185,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_NMwNTG": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_NMwNTG": {
+      "type": "pj-collection-highlight",
       "name": "Figaro Chains",
       "settings": {
         "title": "Figaro Chains",
@@ -211,8 +211,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_BDh83w": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_BDh83w": {
+      "type": "pj-collection-highlight",
       "name": "Figure 8 Chains",
       "settings": {
         "title": "Figure 8 Chains",
@@ -237,8 +237,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_W4rKrG": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_W4rKrG": {
+      "type": "pj-collection-highlight",
       "name": "Heart Chains",
       "settings": {
         "title": "Heart Chains",
@@ -263,8 +263,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_Gyjmr4": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_Gyjmr4": {
+      "type": "pj-collection-highlight",
       "name": "Long and Short Chains",
       "settings": {
         "title": "Long and Short Chains",
@@ -289,8 +289,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_xwVNQB": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_xwVNQB": {
+      "type": "pj-collection-highlight",
       "name": "Mariner Chains",
       "settings": {
         "title": "Mariner Chains",
@@ -315,8 +315,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_L6mfKT": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_L6mfKT": {
+      "type": "pj-collection-highlight",
       "name": "Paperclip Chains",
       "settings": {
         "title": "Paperclip Chains",
@@ -341,8 +341,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_L7xxpj": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_L7xxpj": {
+      "type": "pj-collection-highlight",
       "name": "Rolo Chains",
       "settings": {
         "title": "Rolo Chains",
@@ -367,8 +367,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_MmemgR": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_MmemgR": {
+      "type": "pj-collection-highlight",
       "name": "Rope Chains",
       "settings": {
         "title": "Rope Chains",
@@ -393,8 +393,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_cEj7U4": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_cEj7U4": {
+      "type": "pj-collection-highlight",
       "name": "Satellite Chains",
       "settings": {
         "title": "Satellite Chains",
@@ -419,8 +419,8 @@
         "padding_bottom": 36
       }
     },
-    "collection_showcase_with_highlight_pPiCmn": {
-      "type": "collection-showcase-with-highlight",
+    "pj_collection_highlight_pPiCmn": {
+      "type": "pj-collection-highlight",
       "name": "Scroll Chains",
       "settings": {
         "title": "Scroll Chains",
@@ -541,22 +541,22 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "collection_showcase_with_highlight_WVhzdn",
-    "collection_showcase_with_highlight_aWibKH",
-    "collection_showcase_with_highlight_wGH9Cc",
-    "collection_showcase_with_highlight_4P4mxa",
-    "collection_showcase_with_highlight_GdFPYJ",
-    "collection_showcase_with_highlight_ge7fTB",
-    "collection_showcase_with_highlight_NMwNTG",
-    "collection_showcase_with_highlight_BDh83w",
-    "collection_showcase_with_highlight_W4rKrG",
-    "collection_showcase_with_highlight_Gyjmr4",
-    "collection_showcase_with_highlight_xwVNQB",
-    "collection_showcase_with_highlight_L6mfKT",
-    "collection_showcase_with_highlight_L7xxpj",
-    "collection_showcase_with_highlight_MmemgR",
-    "collection_showcase_with_highlight_cEj7U4",
-    "collection_showcase_with_highlight_pPiCmn",
+    "pj_collection_highlight_WVhzdn",
+    "pj_collection_highlight_aWibKH",
+    "pj_collection_highlight_wGH9Cc",
+    "pj_collection_highlight_4P4mxa",
+    "pj_collection_highlight_GdFPYJ",
+    "pj_collection_highlight_ge7fTB",
+    "pj_collection_highlight_NMwNTG",
+    "pj_collection_highlight_BDh83w",
+    "pj_collection_highlight_W4rKrG",
+    "pj_collection_highlight_Gyjmr4",
+    "pj_collection_highlight_xwVNQB",
+    "pj_collection_highlight_L6mfKT",
+    "pj_collection_highlight_L7xxpj",
+    "pj_collection_highlight_MmemgR",
+    "pj_collection_highlight_cEj7U4",
+    "pj_collection_highlight_pPiCmn",
     "mega_collection_display_4mCxM7"
   ]
 }
