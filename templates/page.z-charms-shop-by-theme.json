@@ -161,14 +161,14 @@
     },
     "pj_collection_highlight_ge7fTB": {
       "type": "pj-collection-highlight",
-      "name": "Gold Plated Charms",
+      "name": "Symbol Charms",
       "settings": {
-        "title": "Gold Plated Charms",
+        "title": "Symbol Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "gold-plated-charms",
-        "image": "shopify://shop_images/IMG_5014.jpg",
+        "collection": "symbol-charms",
+        "image": "shopify://shop_images/CH317.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
