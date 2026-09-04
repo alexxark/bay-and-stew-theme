@@ -83,14 +83,14 @@
     },
     "pj_collection_highlight_wGH9Cc": {
       "type": "pj-collection-highlight",
-      "name": "Gold PVD Charms",
+      "name": "Food & Drink Charms",
       "settings": {
-        "title": "Gold PVD Charms",
+        "title": "Food & Drink Charms",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "gold-pvd-charms",
-        "image": "shopify://shop_images/MG_6917.jpg",
+        "collection": "food-drink-charms",
+        "image": "shopify://shop_images/CH417.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
