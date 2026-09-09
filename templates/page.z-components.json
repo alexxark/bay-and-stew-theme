@@ -35,28 +35,28 @@
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
-            "collection": "gold-filled-connectors",
+            "collection": "jump-rings",
             "custom_label": ""
           }
         },
         "collection_4ntbyB": {
           "type": "collection",
           "settings": {
-            "collection": "sterling-silver-connectors",
-            "custom_label": ""
+            "collection": "findings",
+            "custom_label": "Findings & Clasps"
           }
         },
         "collection_rVtHG8": {
           "type": "collection",
           "settings": {
-            "collection": "gold-plated-connectors",
+            "collection": "blanks",
             "custom_label": ""
           }
         },
         "collection_xN6XDV": {
           "type": "collection",
           "settings": {
-            "collection": "rose-gold-filled-connectors",
+            "collection": "beads",
             "custom_label": ""
           }
         }
