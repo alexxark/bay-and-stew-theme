@@ -29,6 +29,55 @@
         "color_scheme": ""
       }
     },
+    "collection_link_grid_yag7B8": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_Ve3zcK": {
+          "type": "collection",
+          "settings": {
+            "collection": "samples",
+            "custom_label": "Chain Samples"
+          }
+        },
+        "collection_XFxGRz": {
+          "type": "collection",
+          "settings": {
+            "collection": "chain-starter-packs",
+            "custom_label": ""
+          }
+        },
+        "collection_YJB3Xq": {
+          "type": "collection",
+          "settings": {
+            "collection": "mystery-packs",
+            "custom_label": "Mystery Chain Packs"
+          }
+        }
+      },
+      "block_order": [
+        "collection_Ve3zcK",
+        "collection_XFxGRz",
+        "collection_YJB3Xq"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Chain Samples",
@@ -203,6 +252,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_yag7B8",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_NMwNTG",
