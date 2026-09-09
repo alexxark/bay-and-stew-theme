@@ -11,7 +11,10 @@
     endif
   endfor
 
-  assign should_render_section = configured_collection_count > 0 or request.design_mode
+  assign should_render_section = false
+  if configured_collection_count > 0 or request.design_mode
+    assign should_render_section = true
+  endif
 
   assign mobile_page_count = 0
   if renderable_item_count > 0
