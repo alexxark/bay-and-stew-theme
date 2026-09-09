@@ -174,7 +174,7 @@
         "rectangle_background_color": "#ffffff",
         "rectangle_text_color": "#1f1f1f",
         "border_color": "#bcbab7",
-        "border_width": 2,
+        "border_width": 1,
         "corner_radius": 8,
         "desktop_vertical_spacing": 20,
         "mobile_vertical_spacing": 32
