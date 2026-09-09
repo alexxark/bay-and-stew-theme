@@ -146,14 +146,14 @@
     },
     "pj_collection_highlight_aWibKH": {
       "type": "pj-collection-highlight",
-      "name": "Animal Charms",
+      "name": "Animal Connectors",
       "settings": {
-        "title": "Animal Charms",
+        "title": "Animal Connectors",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "right",
-        "collection": "animal-charms",
-        "image": "shopify://shop_images/2023-12-2115.17.49.jpg",
+        "collection": "animal-connectors",
+        "image": "shopify://shop_images/CN453.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
