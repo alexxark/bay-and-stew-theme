@@ -170,13 +170,13 @@
         "heading_size": "h1",
         "heading_alignment": "center",
         "color_scheme": "",
-        "section_background_color": "#FFFFFF",
-        "rectangle_background_color": "#FFFFFF",
-        "rectangle_text_color": "#1F1F1F",
-        "border_color": "#BCBAB7",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
         "border_width": 2,
         "corner_radius": 8,
-        "desktop_vertical_spacing": 48,
+        "desktop_vertical_spacing": 20,
         "mobile_vertical_spacing": 32
       }
     },
