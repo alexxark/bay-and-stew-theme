@@ -175,7 +175,7 @@
         "rectangle_text_color": "#1f1f1f",
         "border_color": "#bcbab7",
         "border_width": 1,
-        "corner_radius": 8,
+        "corner_radius": 3,
         "desktop_spacing_top": 24,
         "desktop_spacing_bottom": 0,
         "mobile_spacing_top": 28,
