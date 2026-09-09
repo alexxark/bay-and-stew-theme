@@ -176,7 +176,7 @@
         "border_color": "#bcbab7",
         "border_width": 1,
         "corner_radius": 8,
-        "desktop_vertical_spacing": 20,
+        "desktop_vertical_spacing": 28,
         "mobile_vertical_spacing": 32
       }
     },
