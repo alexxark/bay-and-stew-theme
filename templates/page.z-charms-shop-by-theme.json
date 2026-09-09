@@ -29,6 +29,95 @@
         "color_scheme": ""
       }
     },
+    "collection_link_grid_RGMcCT": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_TjrQQR": {
+          "type": "collection",
+          "settings": {
+            "collection": "activity-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_UTKpcm": {
+          "type": "collection",
+          "settings": {
+            "collection": "animal-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_YGLAFM": {
+          "type": "collection",
+          "settings": {
+            "collection": "food-drink-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_4LTqjG": {
+          "type": "collection",
+          "settings": {
+            "collection": "nature-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_pPWpnQ": {
+          "type": "collection",
+          "settings": {
+            "collection": "profession-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_qqNnjP": {
+          "type": "collection",
+          "settings": {
+            "collection": "symbol-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_tKyntw": {
+          "type": "collection",
+          "settings": {
+            "collection": "western-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_DMApqL": {
+          "type": "collection",
+          "settings": {
+            "collection": "word-letter-and-number-charms",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_TjrQQR",
+        "collection_UTKpcm",
+        "collection_YGLAFM",
+        "collection_4LTqjG",
+        "collection_pPWpnQ",
+        "collection_qqNnjP",
+        "collection_tKyntw",
+        "collection_DMApqL"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Activity Charms",
@@ -333,6 +422,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_RGMcCT",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_wGH9Cc",
