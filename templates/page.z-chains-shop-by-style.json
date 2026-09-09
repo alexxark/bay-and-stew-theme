@@ -175,9 +175,11 @@
         "rectangle_text_color": "#1f1f1f",
         "border_color": "#bcbab7",
         "border_width": 1,
-        "corner_radius": 8,
-        "desktop_vertical_spacing": 28,
-        "mobile_vertical_spacing": 32
+        "corner_radius": 3,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
       }
     },
     "pj_collection_highlight_WVhzdn": {
