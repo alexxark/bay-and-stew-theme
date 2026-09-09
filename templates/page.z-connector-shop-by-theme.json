@@ -172,14 +172,14 @@
     },
     "pj_collection_highlight_wGH9Cc": {
       "type": "pj-collection-highlight",
-      "name": "Food & Drink Charms",
+      "name": "Food & Drink Connectors",
       "settings": {
-        "title": "Food & Drink Charms",
+        "title": "Food & Drink Connectors",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "food-drink-charms",
-        "image": "shopify://shop_images/CH417.jpg",
+        "collection": "food-drink-connectors",
+        "image": "shopify://shop_images/CN392.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
