@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Shop by Theme (Charms)",
+        "title": "Shop by Theme (Connectors)",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -35,57 +35,64 @@
         "collection_TjrQQR": {
           "type": "collection",
           "settings": {
-            "collection": "activity-charms",
+            "collection": "activity-connectors",
             "custom_label": ""
           }
         },
         "collection_UTKpcm": {
           "type": "collection",
           "settings": {
-            "collection": "animal-charms",
+            "collection": "animal-connectors",
             "custom_label": ""
           }
         },
         "collection_YGLAFM": {
           "type": "collection",
           "settings": {
-            "collection": "food-drink-charms",
+            "collection": "food-drink-connectors",
             "custom_label": ""
           }
         },
         "collection_4LTqjG": {
           "type": "collection",
           "settings": {
-            "collection": "nature-charms",
+            "collection": "nature-connectors",
             "custom_label": ""
           }
         },
         "collection_pPWpnQ": {
           "type": "collection",
           "settings": {
-            "collection": "profession-charms",
+            "collection": "profession-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_8N6d6Y": {
+          "type": "collection",
+          "settings": {
+            "collection": "state-connectors",
             "custom_label": ""
           }
         },
         "collection_qqNnjP": {
           "type": "collection",
           "settings": {
-            "collection": "symbol-charms",
+            "collection": "symbol-connectors",
             "custom_label": ""
           }
         },
         "collection_tKyntw": {
           "type": "collection",
           "settings": {
-            "collection": "western-charms",
+            "collection": "western-connectors",
             "custom_label": ""
           }
         },
         "collection_DMApqL": {
           "type": "collection",
           "settings": {
-            "collection": "word-letter-and-number-charms",
-            "custom_label": ""
+            "collection": "word-letter-and-number-connectors",
+            "custom_label": "Word / Letter / Number Connectors"
           }
         }
       },
@@ -95,6 +102,7 @@
         "collection_YGLAFM",
         "collection_4LTqjG",
         "collection_pPWpnQ",
+        "collection_8N6d6Y",
         "collection_qqNnjP",
         "collection_tKyntw",
         "collection_DMApqL"
