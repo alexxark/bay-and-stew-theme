@@ -28,6 +28,29 @@
   if initial_mobile_total == 0
     assign initial_mobile_total = 1
   endif
+
+  assign desktop_spacing_legacy = section.settings.desktop_vertical_spacing | default: 28
+  assign mobile_spacing_legacy = section.settings.mobile_vertical_spacing | default: 32
+
+  assign desktop_top_spacing = section.settings.desktop_spacing_top
+  if desktop_top_spacing == blank
+    assign desktop_top_spacing = desktop_spacing_legacy | times: 0.85 | round
+  endif
+
+  assign desktop_bottom_spacing = section.settings.desktop_spacing_bottom
+  if desktop_bottom_spacing == blank
+    assign desktop_bottom_spacing = desktop_spacing_legacy | times: 0.4 | round
+  endif
+
+  assign mobile_top_spacing = section.settings.mobile_spacing_top
+  if mobile_top_spacing == blank
+    assign mobile_top_spacing = mobile_spacing_legacy | times: 0.75 | round
+  endif
+
+  assign mobile_bottom_spacing = section.settings.mobile_spacing_bottom
+  if mobile_bottom_spacing == blank
+    assign mobile_bottom_spacing = mobile_spacing_legacy | times: 0.3 | round
+  endif
 -%}
 
 {%- if should_render_section -%}
@@ -39,10 +62,10 @@
       --clg-border-color: {{ section.settings.border_color }};
       --clg-border-width: {{ section.settings.border_width }}px;
       --clg-radius: {{ section.settings.corner_radius }}px;
-      --clg-mobile-top: {{ section.settings.mobile_spacing_top }}px;
-      --clg-mobile-bottom: {{ section.settings.mobile_spacing_bottom }}px;
-      --clg-desktop-top: {{ section.settings.desktop_spacing_top }}px;
-      --clg-desktop-bottom: {{ section.settings.desktop_spacing_bottom }}px;
+      --clg-mobile-top: {{ mobile_top_spacing }}px;
+      --clg-mobile-bottom: {{ mobile_bottom_spacing }}px;
+      --clg-desktop-top: {{ desktop_top_spacing }}px;
+      --clg-desktop-bottom: {{ desktop_bottom_spacing }}px;
       --clg-desktop-gap: 1.2rem;
       --clg-mobile-gap: 1.2rem;
       --clg-columns: 6;
