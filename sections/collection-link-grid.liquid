@@ -29,28 +29,10 @@
     assign initial_mobile_total = 1
   endif
 
-  assign desktop_spacing_legacy = section.settings.desktop_vertical_spacing | default: 28
-  assign mobile_spacing_legacy = section.settings.mobile_vertical_spacing | default: 32
-
-  assign desktop_top_spacing = section.settings.desktop_spacing_top
-  if desktop_top_spacing == blank
-    assign desktop_top_spacing = desktop_spacing_legacy | times: 0.85 | round
-  endif
-
-  assign desktop_bottom_spacing = section.settings.desktop_spacing_bottom
-  if desktop_bottom_spacing == blank
-    assign desktop_bottom_spacing = desktop_spacing_legacy | times: 0.4 | round
-  endif
-
-  assign mobile_top_spacing = section.settings.mobile_spacing_top
-  if mobile_top_spacing == blank
-    assign mobile_top_spacing = mobile_spacing_legacy | times: 0.75 | round
-  endif
-
-  assign mobile_bottom_spacing = section.settings.mobile_spacing_bottom
-  if mobile_bottom_spacing == blank
-    assign mobile_bottom_spacing = mobile_spacing_legacy | times: 0.3 | round
-  endif
+  assign desktop_top_spacing = section.settings.desktop_spacing_top | default: 24
+  assign desktop_bottom_spacing = section.settings.desktop_spacing_bottom | default: 24
+  assign mobile_top_spacing = section.settings.mobile_spacing_top | default: 20
+  assign mobile_bottom_spacing = section.settings.mobile_spacing_bottom | default: 20
 -%}
 
 {%- if should_render_section -%}
@@ -731,14 +713,14 @@
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 12
+      "default": 24
     },
     {
       "type": "range",
       "id": "mobile_spacing_top",
       "label": "Mobile top spacing",
       "min": 0,
-      "max": 80,
+      "max": 120,
       "step": 4,
       "unit": "px",
       "default": 20
@@ -748,10 +730,10 @@
       "id": "mobile_spacing_bottom",
       "label": "Mobile bottom spacing",
       "min": 0,
-      "max": 80,
+      "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 8
+      "default": 20
     }
   ],
   "blocks": [
