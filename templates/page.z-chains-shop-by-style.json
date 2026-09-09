@@ -29,6 +29,157 @@
         "color_scheme": ""
       }
     },
+    "collection_link_grid_ydhbWU": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_9UxHbF": {
+          "type": "collection",
+          "settings": {
+            "collection": "bar-link-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_FDXMgT": {
+          "type": "collection",
+          "settings": {
+            "collection": "box-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_7njFak": {
+          "type": "collection",
+          "settings": {
+            "collection": "cable-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_8xjmXw": {
+          "type": "collection",
+          "settings": {
+            "collection": "curb-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_grfcVC": {
+          "type": "collection",
+          "settings": {
+            "collection": "disc-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_kNJahC": {
+          "type": "collection",
+          "settings": {
+            "collection": "enamel-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_kkcGmX": {
+          "type": "collection",
+          "settings": {
+            "collection": "figaro-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_jzjCMN": {
+          "type": "collection",
+          "settings": {
+            "collection": "figure-8-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_4CRV8p": {
+          "type": "collection",
+          "settings": {
+            "collection": "heart-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_TajLrC": {
+          "type": "collection",
+          "settings": {
+            "collection": "long-and-short-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_cQRwjq": {
+          "type": "collection",
+          "settings": {
+            "collection": "mariner-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_KHQrct": {
+          "type": "collection",
+          "settings": {
+            "collection": "paperclip-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_MNk8BP": {
+          "type": "collection",
+          "settings": {
+            "collection": "rolo-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_qkD4BH": {
+          "type": "collection",
+          "settings": {
+            "collection": "rope-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_CdRkLg": {
+          "type": "collection",
+          "settings": {
+            "collection": "satellite-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_mxcALr": {
+          "type": "collection",
+          "settings": {
+            "collection": "scroll-chains",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_9UxHbF",
+        "collection_FDXMgT",
+        "collection_7njFak",
+        "collection_8xjmXw",
+        "collection_grfcVC",
+        "collection_kNJahC",
+        "collection_kkcGmX",
+        "collection_jzjCMN",
+        "collection_4CRV8p",
+        "collection_TajLrC",
+        "collection_cQRwjq",
+        "collection_KHQrct",
+        "collection_MNk8BP",
+        "collection_qkD4BH",
+        "collection_CdRkLg",
+        "collection_mxcALr"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 2,
+        "corner_radius": 8,
+        "desktop_vertical_spacing": 48,
+        "mobile_vertical_spacing": 32
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Bar & Link Chains",
@@ -541,6 +692,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_ydhbWU",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_wGH9Cc",
