@@ -22,12 +22,92 @@
       "name": "Page banner",
       "settings": {
         "title": "Shop by Metal (Chains)",
-        "description": "<p>Shop permanent jewelry chains and supplies <em><strong>designed for artists and professionals.</strong></em> Our collection features high-quality materials perfect for creating welded bracelets, anklets, and custom permanent jewelry pieces.<br/><br/>Whether you're building a permanent jewelry business or expanding your offerings, you'll find durable chains, connectors, and essential components made for long-lasting wear. Each piece is selected for reliability, consistency, and ease of use during the welding process.<br/><br/>Explore a wide range of permanent jewelry supplies in various styles and finishes to match your clients’ preferences. From everyday staples to unique designs,<strong> our collection supports both creativity and performance.</strong><br/><br/><strong>Trusted by permanent jewelry artists</strong>, our supplies are designed to help you create seamless, high-quality pieces your clients will love. Fast shipping available so you can keep your business running without delays.<br/></p>",
-        "image": "shopify://shop_images/MG_5663.jpg",
+        "description": "",
         "collapsible": true,
         "title_font_size": 32,
         "description_font_size": 13,
         "color_scheme": ""
+      }
+    },
+    "collection_link_grid_FQBHkd": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_E7cwha": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_VpafB3": {
+          "type": "collection",
+          "settings": {
+            "collection": "mixed-metal-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_z4ChFD": {
+          "type": "collection",
+          "settings": {
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_hMzy7r": {
+          "type": "collection",
+          "settings": {
+            "collection": "champagne-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_fraYa4": {
+          "type": "collection",
+          "settings": {
+            "collection": "rose-gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_kKJYi4": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-plated-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_XHBfnW": {
+          "type": "collection",
+          "settings": {
+            "collection": "silver-plated-chains",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_E7cwha",
+        "collection_VpafB3",
+        "collection_z4ChFD",
+        "collection_hMzy7r",
+        "collection_fraYa4",
+        "collection_kKJYi4",
+        "collection_XHBfnW"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
       }
     },
     "pj_collection_highlight_WVhzdn": {
@@ -308,6 +388,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_FQBHkd",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_wGH9Cc",

@@ -29,6 +29,87 @@
         "color_scheme": ""
       }
     },
+    "collection_link_grid_8hxwQt": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_UpETm6": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-filled-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_4ntbyB": {
+          "type": "collection",
+          "settings": {
+            "collection": "sterling-silver-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_rVtHG8": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-pvd-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_xN6XDV": {
+          "type": "collection",
+          "settings": {
+            "collection": "stainless-steel-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_jd69zH": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-vermeil-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_QYt7t9": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-plated-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_mrFQa7": {
+          "type": "collection",
+          "settings": {
+            "collection": "rose-gold-filled-charms",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_UpETm6",
+        "collection_4ntbyB",
+        "collection_rVtHG8",
+        "collection_xN6XDV",
+        "collection_jd69zH",
+        "collection_QYt7t9",
+        "collection_mrFQa7"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Gold Filled Charms",
@@ -307,6 +388,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_8hxwQt",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_wGH9Cc",
