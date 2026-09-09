@@ -178,7 +178,7 @@
         "corner_radius": 3,
         "desktop_spacing_top": 24,
         "desktop_spacing_bottom": 0,
-        "mobile_spacing_top": 28,
+        "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 0
       }
     },
