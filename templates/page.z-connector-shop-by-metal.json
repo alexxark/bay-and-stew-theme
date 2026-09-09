@@ -35,49 +35,28 @@
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
-            "collection": "gold-filled-charms",
+            "collection": "gold-filled-connectors",
             "custom_label": ""
           }
         },
         "collection_4ntbyB": {
           "type": "collection",
           "settings": {
-            "collection": "sterling-silver-charms",
+            "collection": "sterling-silver-connectors",
             "custom_label": ""
           }
         },
         "collection_rVtHG8": {
           "type": "collection",
           "settings": {
-            "collection": "gold-pvd-charms",
+            "collection": "gold-plated-connectors",
             "custom_label": ""
           }
         },
         "collection_xN6XDV": {
           "type": "collection",
           "settings": {
-            "collection": "stainless-steel-charms",
-            "custom_label": ""
-          }
-        },
-        "collection_jd69zH": {
-          "type": "collection",
-          "settings": {
-            "collection": "gold-vermeil-charms",
-            "custom_label": ""
-          }
-        },
-        "collection_QYt7t9": {
-          "type": "collection",
-          "settings": {
-            "collection": "gold-plated-charms",
-            "custom_label": ""
-          }
-        },
-        "collection_mrFQa7": {
-          "type": "collection",
-          "settings": {
-            "collection": "rose-gold-filled-charms",
+            "collection": "rose-gold-filled-connectors",
             "custom_label": ""
           }
         }
@@ -86,10 +65,7 @@
         "collection_UpETm6",
         "collection_4ntbyB",
         "collection_rVtHG8",
-        "collection_xN6XDV",
-        "collection_jd69zH",
-        "collection_QYt7t9",
-        "collection_mrFQa7"
+        "collection_xN6XDV"
       ],
       "name": "Collection link grid",
       "settings": {
