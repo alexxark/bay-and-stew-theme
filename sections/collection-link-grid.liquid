@@ -1,14 +1,36 @@
 {%- liquid
-  assign has_configured_collections = false
+  assign configured_collection_count = 0
+  assign renderable_item_count = 0
+
   for block in section.blocks
     if block.settings.collection != blank
-      assign has_configured_collections = true
-      break
+      assign configured_collection_count = configured_collection_count | plus: 1
+      assign renderable_item_count = renderable_item_count | plus: 1
+    elsif request.design_mode
+      assign renderable_item_count = renderable_item_count | plus: 1
     endif
   endfor
+
+  assign should_render_section = configured_collection_count > 0 or request.design_mode
+
+  assign mobile_page_count = 0
+  if renderable_item_count > 0
+    assign mobile_page_count = renderable_item_count | divided_by: 4
+    assign mobile_page_remainder = renderable_item_count | modulo: 4
+    if mobile_page_remainder > 0
+      assign mobile_page_count = mobile_page_count | plus: 1
+    endif
+  elsif request.design_mode
+    assign mobile_page_count = 1
+  endif
+
+  assign initial_mobile_total = mobile_page_count
+  if initial_mobile_total == 0
+    assign initial_mobile_total = 1
+  endif
 -%}
 
-{%- if has_configured_collections or request.design_mode -%}
+{%- if should_render_section -%}
   {%- style -%}
     #shopify-section-{{ section.id }} .collection-link-grid {
       --clg-section-bg: {{ section.settings.section_background_color }};
@@ -17,49 +39,23 @@
       --clg-border-color: {{ section.settings.border_color }};
       --clg-border-width: {{ section.settings.border_width }}px;
       --clg-radius: {{ section.settings.corner_radius }}px;
-      --clg-mobile-padding: {{ section.settings.mobile_vertical_spacing }}px;
-      --clg-desktop-padding: {{ section.settings.desktop_vertical_spacing }}px;
-      --clg-gap-desktop: 1.2rem;
-      --clg-gap-mobile: 0.8rem;
+      --clg-mobile-top: {{ section.settings.mobile_spacing_top }}px;
+      --clg-mobile-bottom: {{ section.settings.mobile_spacing_bottom }}px;
+      --clg-desktop-top: {{ section.settings.desktop_spacing_top }}px;
+      --clg-desktop-bottom: {{ section.settings.desktop_spacing_bottom }}px;
+      --clg-desktop-gap: 1.2rem;
+      --clg-mobile-gap: 1.2rem;
       --clg-columns: 6;
       background: var(--clg-section-bg);
-      padding-top: var(--clg-mobile-padding);
-      padding-bottom: var(--clg-mobile-padding);
+      padding-top: var(--clg-mobile-top);
+      padding-bottom: var(--clg-mobile-bottom);
       overflow-x: hidden;
       overflow-x: clip;
     }
 
     #shopify-section-{{ section.id }} .collection-link-grid__heading {
-      margin: 0 0 2rem;
+      margin: 0 0 1.6rem;
       text-align: {{ section.settings.heading_alignment }};
-    }
-
-    #shopify-section-{{ section.id }} .collection-link-grid__controls {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
-
-    #shopify-section-{{ section.id }} .collection-link-grid__viewport {
-      flex: 1 1 auto;
-      min-width: 0;
-    }
-
-    #shopify-section-{{ section.id }} .collection-link-grid__list {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: var(--clg-gap-desktop);
-    }
-
-    #shopify-section-{{ section.id }} .collection-link-grid__block {
-      flex: 0 1 calc((100% - (var(--clg-columns) - 1) * var(--clg-gap-desktop)) / var(--clg-columns));
-      min-width: 0;
-      max-width: calc((100% - (var(--clg-columns) - 1) * var(--clg-gap-desktop)) / var(--clg-columns));
-      scroll-snap-align: start;
     }
 
     #shopify-section-{{ section.id }} .collection-link-grid__item {
@@ -99,9 +95,87 @@
       cursor: default;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow {
-      width: 3.6rem;
-      height: 3.6rem;
+    #shopify-section-{{ section.id }} .collection-link-grid__desktop {
+      display: none;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__desktop-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: var(--clg-desktop-gap);
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__desktop-block {
+      flex: 0 1 calc((100% - (var(--clg-columns) - 1) * var(--clg-desktop-gap)) / var(--clg-columns));
+      min-width: 0;
+      max-width: calc((100% - (var(--clg-columns) - 1) * var(--clg-desktop-gap)) / var(--clg-columns));
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile {
+      display: block;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-viewport {
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-viewport::-webkit-scrollbar {
+      display: none;
+      width: 0;
+      height: 0;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-track {
+      display: flex;
+      align-items: stretch;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-page {
+      flex: 0 0 100%;
+      min-width: 100%;
+      scroll-snap-align: start;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: var(--clg-mobile-gap);
+      padding: 0 0.1rem;
+      box-sizing: border-box;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-page--count-1 .collection-link-grid__mobile-block:first-child,
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-page--count-3 .collection-link-grid__mobile-block:last-child {
+      grid-column: 1 / -1;
+      justify-self: center;
+      width: max(14rem, calc(50% - (var(--clg-mobile-gap) / 2)));
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-block {
+      min-width: 0;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile .collection-link-grid__item {
+      min-height: clamp(6.4rem, 15vw, 7.6rem);
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-controls {
+      margin-top: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.2rem;
+    }
+
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow {
+      width: 3.4rem;
+      height: 3.4rem;
       border-radius: 50%;
       border: 0.1rem solid rgba(var(--color-foreground), 0.2);
       background: rgb(var(--color-background));
@@ -110,84 +184,68 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      flex: 0 0 auto;
       transition: opacity 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow .svg-wrapper {
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow .svg-wrapper {
       width: 1.6rem;
       height: 1.6rem;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow .icon-caret {
-      height: 0.8rem;
-      width: auto;
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow .icon-caret {
       position: static;
       right: auto;
       top: auto;
+      width: auto;
+      height: 0.8rem;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow--prev .icon-caret {
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow--prev .icon-caret {
       transform: rotate(90deg);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow--next .icon-caret {
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow--next .icon-caret {
       transform: rotate(-90deg);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__arrow:disabled {
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow:disabled {
       opacity: 0.35;
       cursor: not-allowed;
     }
 
+    #shopify-section-{{ section.id }} .collection-link-grid__mobile-counter {
+      margin: 0;
+      min-width: 5.6rem;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
     @media (prefers-reduced-motion: reduce) {
       #shopify-section-{{ section.id }} .collection-link-grid__item,
-      #shopify-section-{{ section.id }} .collection-link-grid__arrow {
+      #shopify-section-{{ section.id }} .collection-link-grid__mobile-arrow {
         transition: none;
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__list {
+      #shopify-section-{{ section.id }} .collection-link-grid__mobile-viewport {
         scroll-behavior: auto;
       }
     }
 
     @media screen and (min-width: 750px) {
       #shopify-section-{{ section.id }} .collection-link-grid {
-        padding-top: var(--clg-desktop-padding);
-        padding-bottom: var(--clg-desktop-padding);
-      }
-    }
-
-    @media screen and (max-width: 989px) {
-      #shopify-section-{{ section.id }} .collection-link-grid__list {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        gap: var(--clg-gap-mobile);
-        overflow-x: auto;
-        scroll-snap-type: x proximity;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
+        padding-top: var(--clg-desktop-top);
+        padding-bottom: var(--clg-desktop-bottom);
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__list::-webkit-scrollbar {
-        display: none;
-        width: 0;
-        height: 0;
+      #shopify-section-{{ section.id }} .collection-link-grid__heading {
+        margin-bottom: 1.8rem;
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__block {
-        flex: 0 0 clamp(13.5rem, 40vw, 16.5rem);
-        max-width: none;
+      #shopify-section-{{ section.id }} .collection-link-grid__desktop {
+        display: block;
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__item {
-        min-height: clamp(5.8rem, 16vw, 7.2rem);
-      }
-    }
-
-    @media screen and (min-width: 990px) {
-      #shopify-section-{{ section.id }} .collection-link-grid__arrow {
+      #shopify-section-{{ section.id }} .collection-link-grid__mobile {
         display: none;
       }
     }
@@ -201,73 +259,151 @@
         </h2>
       {%- endif -%}
 
-      <div class="collection-link-grid__controls" data-collection-link-grid>
-        <button
-          class="collection-link-grid__arrow collection-link-grid__arrow--prev"
-          type="button"
-          aria-label="{{ 'general.slider.previous_slide' | t }}"
-          aria-controls="CollectionLinkGridList-{{ section.id }}"
-          data-collection-link-grid-prev
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-caret.svg' | inline_asset_content -}}
-          </span>
-        </button>
+      <div class="collection-link-grid__desktop">
+        <ul class="collection-link-grid__desktop-list" role="list">
+          {%- assign desktop_rendered_count = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign selected_collection = block.settings.collection
+              assign item_label = block.settings.custom_label | strip
+              if item_label == blank and selected_collection != blank
+                assign item_label = selected_collection.title
+              endif
+            -%}
 
-        <div class="collection-link-grid__viewport">
-          <ul
-            id="CollectionLinkGridList-{{ section.id }}"
-            class="collection-link-grid__list"
-            role="list"
-            data-collection-link-grid-scroller
-          >
-            {%- assign rendered_count = 0 -%}
-            {%- for block in section.blocks -%}
-              {%- liquid
-                assign selected_collection = block.settings.collection
-                assign item_label = block.settings.custom_label | strip
-                if item_label == blank and selected_collection != blank
-                  assign item_label = selected_collection.title
-                endif
-              -%}
-
-              {%- if selected_collection != blank -%}
-                {%- assign rendered_count = rendered_count | plus: 1 -%}
-                <li class="collection-link-grid__block" {{ block.shopify_attributes }}>
-                  <a class="collection-link-grid__item" href="{{ selected_collection.url }}">
-                    {{ item_label | escape }}
-                  </a>
-                </li>
-              {%- elsif request.design_mode -%}
-                <li class="collection-link-grid__block" {{ block.shopify_attributes }}>
-                  <div class="collection-link-grid__item collection-link-grid__item--placeholder" role="note">
-                    {{ item_label | default: 'Collection' | escape }}
-                  </div>
-                </li>
-              {%- endif -%}
-            {%- endfor -%}
-
-            {%- if rendered_count == 0 and request.design_mode -%}
-              <li class="collection-link-grid__block">
+            {%- if selected_collection != blank -%}
+              {%- assign desktop_rendered_count = desktop_rendered_count | plus: 1 -%}
+              <li class="collection-link-grid__desktop-block" {{ block.shopify_attributes }}>
+                <a class="collection-link-grid__item" href="{{ selected_collection.url }}">
+                  {{ item_label | escape }}
+                </a>
+              </li>
+            {%- elsif request.design_mode -%}
+              {%- assign desktop_rendered_count = desktop_rendered_count | plus: 1 -%}
+              <li class="collection-link-grid__desktop-block" {{ block.shopify_attributes }}>
                 <div class="collection-link-grid__item collection-link-grid__item--placeholder" role="note">
-                  Add collection blocks to show links
+                  {{ item_label | default: 'Collection' | escape }}
                 </div>
               </li>
             {%- endif -%}
-          </ul>
+          {%- endfor -%}
+
+          {%- if desktop_rendered_count == 0 and request.design_mode -%}
+            <li class="collection-link-grid__desktop-block">
+              <div class="collection-link-grid__item collection-link-grid__item--placeholder" role="note">
+                Add collection blocks to show links
+              </div>
+            </li>
+          {%- endif -%}
+        </ul>
+      </div>
+
+      <div class="collection-link-grid__mobile" data-collection-link-grid>
+        <div
+          id="CollectionLinkGridMobile-{{ section.id }}"
+          class="collection-link-grid__mobile-viewport"
+          data-collection-link-grid-scroller
+        >
+          <div class="collection-link-grid__mobile-track">
+            {%- if renderable_item_count > 0 -%}
+              {%- assign mobile_item_index = 0 -%}
+              {%- for block in section.blocks -%}
+                {%- liquid
+                  assign selected_collection = block.settings.collection
+                  assign item_label = block.settings.custom_label | strip
+                  if item_label == blank and selected_collection != blank
+                    assign item_label = selected_collection.title
+                  endif
+
+                  assign render_mobile_item = false
+                  if selected_collection != blank or request.design_mode
+                    assign render_mobile_item = true
+                  endif
+                -%}
+
+                {%- if render_mobile_item -%}
+                  {%- assign mobile_item_index = mobile_item_index | plus: 1 -%}
+                  {%- assign page_position = mobile_item_index | modulo: 4 -%}
+
+                  {%- if page_position == 1 -%}
+                    {%- assign remaining_items = renderable_item_count | minus: mobile_item_index | plus: 1 -%}
+                    {%- assign page_item_count = 4 -%}
+                    {%- if remaining_items < 4 -%}
+                      {%- assign page_item_count = remaining_items -%}
+                    {%- endif -%}
+                    {%- assign page_number = mobile_item_index | minus: 1 | divided_by: 4 | plus: 1 -%}
+                    <div
+                      class="collection-link-grid__mobile-page collection-link-grid__mobile-page--count-{{ page_item_count }}"
+                      role="group"
+                      aria-label="Collections page {{ page_number }} of {{ mobile_page_count }}"
+                    >
+                  {%- endif -%}
+
+                  <div class="collection-link-grid__mobile-block">
+                    {%- if selected_collection != blank -%}
+                      <a class="collection-link-grid__item" href="{{ selected_collection.url }}">
+                        {{ item_label | escape }}
+                      </a>
+                    {%- else -%}
+                      <div class="collection-link-grid__item collection-link-grid__item--placeholder" role="note">
+                        {{ item_label | default: 'Collection' | escape }}
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- if page_position == 0 or mobile_item_index == renderable_item_count -%}
+                    </div>
+                  {%- endif -%}
+                {%- endif -%}
+              {%- endfor -%}
+            {%- elsif request.design_mode -%}
+              <div class="collection-link-grid__mobile-page collection-link-grid__mobile-page--count-1" role="group" aria-label="Collections page 1 of 1">
+                <div class="collection-link-grid__mobile-block">
+                  <div class="collection-link-grid__item collection-link-grid__item--placeholder" role="note">
+                    Add collection blocks to show links
+                  </div>
+                </div>
+              </div>
+            {%- endif -%}
+          </div>
         </div>
 
-        <button
-          class="collection-link-grid__arrow collection-link-grid__arrow--next"
-          type="button"
-          aria-label="{{ 'general.slider.next_slide' | t }}"
-          aria-controls="CollectionLinkGridList-{{ section.id }}"
-          data-collection-link-grid-next
-        >
-          <span class="svg-wrapper">
-            {{- 'icon-caret.svg' | inline_asset_content -}}
-          </span>
-        </button>
+        <div class="collection-link-grid__mobile-controls" data-collection-link-grid-controls>
+          <button
+            class="collection-link-grid__mobile-arrow collection-link-grid__mobile-arrow--prev"
+            type="button"
+            aria-label="Previous collections"
+            aria-controls="CollectionLinkGridMobile-{{ section.id }}"
+            data-collection-link-grid-prev
+            disabled
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+
+          <p class="collection-link-grid__mobile-counter caption" aria-live="polite">
+            <span data-collection-link-grid-current>1</span>
+            <span aria-hidden="true"> / </span>
+            <span class="visually-hidden">{{ 'general.slider.of' | t }}</span>
+            <span data-collection-link-grid-total>{{ initial_mobile_total }}</span>
+          </p>
+
+          <button
+            class="collection-link-grid__mobile-arrow collection-link-grid__mobile-arrow--next"
+            type="button"
+            aria-label="Next collections"
+            aria-controls="CollectionLinkGridMobile-{{ section.id }}"
+            data-collection-link-grid-next
+            {% if initial_mobile_total <= 1 %}
+              disabled
+            {% endif %}
+          >
+            <span class="svg-wrapper">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -276,33 +412,53 @@
     (function() {
       var namespace = 'CollectionLinkGridSection';
 
+      function getRoots(context) {
+        var roots = [];
+        if (!context) return roots;
+
+        if (context.matches && context.matches('[data-collection-link-grid]')) {
+          roots.push(context);
+        }
+
+        if (context.querySelectorAll) {
+          context.querySelectorAll('[data-collection-link-grid]').forEach(function(root) {
+            roots.push(root);
+          });
+        }
+
+        return roots;
+      }
+
       if (!window[namespace]) {
         var instances = new WeakMap();
 
-        function getScrollStep(scroller) {
-          var items = scroller.querySelectorAll('.collection-link-grid__block');
-          if (!items.length) return 0;
-          if (items.length > 1) {
-            var stepFromOffsets = items[1].offsetLeft - items[0].offsetLeft;
-            if (stepFromOffsets > 0) return stepFromOffsets;
-          }
-
-          var style = window.getComputedStyle(scroller);
-          var gap = parseFloat(style.columnGap || style.gap || 0);
-          return items[0].getBoundingClientRect().width + gap;
+        function getPageCount(scroller) {
+          var pages = scroller.querySelectorAll('.collection-link-grid__mobile-page');
+          return pages.length || 1;
         }
 
-        function updateButtons(scroller, previousButton, nextButton) {
-          var desktop = window.matchMedia('(min-width: 990px)').matches;
-          if (desktop || !previousButton || !nextButton) {
-            return;
-          }
+        function getCurrentPage(scroller) {
+          var pageWidth = scroller.clientWidth || 1;
+          var page = Math.round(scroller.scrollLeft / pageWidth) + 1;
+          var pageCount = getPageCount(scroller);
+          return Math.max(1, Math.min(page, pageCount));
+        }
 
-          var left = scroller.scrollLeft;
-          var maxLeft = scroller.scrollWidth - scroller.clientWidth;
-          var tolerance = 2;
-          var atStart = left <= tolerance;
-          var atEnd = left >= maxLeft - tolerance;
+        function updateState(instance) {
+          var scroller = instance.scroller;
+          var previousButton = instance.previousButton;
+          var nextButton = instance.nextButton;
+          var currentLabel = instance.currentLabel;
+          var totalLabel = instance.totalLabel;
+
+          var pageCount = getPageCount(scroller);
+          var currentPage = getCurrentPage(scroller);
+
+          currentLabel.textContent = String(currentPage);
+          totalLabel.textContent = String(pageCount);
+
+          var atStart = currentPage <= 1;
+          var atEnd = currentPage >= pageCount;
 
           previousButton.disabled = atStart;
           nextButton.disabled = atEnd;
@@ -316,59 +472,78 @@
           var scroller = root.querySelector('[data-collection-link-grid-scroller]');
           var previousButton = root.querySelector('[data-collection-link-grid-prev]');
           var nextButton = root.querySelector('[data-collection-link-grid-next]');
+          var currentLabel = root.querySelector('[data-collection-link-grid-current]');
+          var totalLabel = root.querySelector('[data-collection-link-grid-total]');
 
-          if (!scroller || !previousButton || !nextButton) return;
+          if (!scroller || !previousButton || !nextButton || !currentLabel || !totalLabel) return;
 
-          var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var frameRequested = false;
 
-          function scrollByStep(direction) {
-            var step = getScrollStep(scroller);
-            if (!step) return;
-            scroller.scrollBy({
-              left: direction * step,
+          function queueStateUpdate() {
+            if (frameRequested) return;
+            frameRequested = true;
+            requestAnimationFrame(function() {
+              frameRequested = false;
+              updateState(api);
+            });
+          }
+
+          function scrollToPage(pageNumber) {
+            var targetPage = Math.max(1, Math.min(pageNumber, getPageCount(scroller)));
+            var pageWidth = scroller.clientWidth || 1;
+            var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            scroller.scrollTo({
+              left: (targetPage - 1) * pageWidth,
               behavior: reduceMotion ? 'auto' : 'smooth'
             });
           }
 
           function onPreviousClick() {
-            scrollByStep(-1);
+            scrollToPage(getCurrentPage(scroller) - 1);
           }
 
           function onNextClick() {
-            scrollByStep(1);
+            scrollToPage(getCurrentPage(scroller) + 1);
           }
 
-          function onViewportChange() {
-            updateButtons(scroller, previousButton, nextButton);
+          function onScroll() {
+            queueStateUpdate();
+          }
+
+          function onResize() {
+            queueStateUpdate();
           }
 
           previousButton.addEventListener('click', onPreviousClick);
           nextButton.addEventListener('click', onNextClick);
-          scroller.addEventListener('scroll', onViewportChange, { passive: true });
-          window.addEventListener('resize', onViewportChange);
+          scroller.addEventListener('scroll', onScroll, { passive: true });
+          window.addEventListener('resize', onResize);
 
-          onViewportChange();
-
-          instances.set(root, {
+          var api = {
+            scroller: scroller,
+            previousButton: previousButton,
+            nextButton: nextButton,
+            currentLabel: currentLabel,
+            totalLabel: totalLabel,
             destroy: function() {
               previousButton.removeEventListener('click', onPreviousClick);
               nextButton.removeEventListener('click', onNextClick);
-              scroller.removeEventListener('scroll', onViewportChange);
-              window.removeEventListener('resize', onViewportChange);
+              scroller.removeEventListener('scroll', onScroll);
+              window.removeEventListener('resize', onResize);
             }
-          });
+          };
+
+          instances.set(root, api);
+          queueStateUpdate();
         }
 
         function init(context) {
-          var scope = context && context.querySelectorAll ? context : document;
-          var roots = scope.querySelectorAll('[data-collection-link-grid]');
-          roots.forEach(createInstance);
+          getRoots(context).forEach(createInstance);
         }
 
-        function cleanup(event) {
-          if (!event || !event.target) return;
-          var roots = event.target.querySelectorAll('[data-collection-link-grid]');
-          roots.forEach(function(root) {
+        function cleanup(context) {
+          getRoots(context).forEach(function(root) {
             var instance = instances.get(root);
             if (!instance) return;
             instance.destroy();
@@ -377,13 +552,17 @@
         }
 
         window[namespace] = {
-          init: init
+          init: init,
+          cleanup: cleanup
         };
 
         document.addEventListener('shopify:section:load', function(event) {
           init(event.target);
         });
-        document.addEventListener('shopify:section:unload', cleanup);
+
+        document.addEventListener('shopify:section:unload', function(event) {
+          cleanup(event.target);
+        });
 
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', function() {
@@ -513,23 +692,43 @@
     },
     {
       "type": "range",
-      "id": "desktop_vertical_spacing",
-      "label": "Desktop vertical spacing",
+      "id": "desktop_spacing_top",
+      "label": "Desktop top spacing",
       "min": 0,
       "max": 120,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 24
     },
     {
       "type": "range",
-      "id": "mobile_vertical_spacing",
-      "label": "Mobile vertical spacing",
+      "id": "desktop_spacing_bottom",
+      "label": "Desktop bottom spacing",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_top",
+      "label": "Mobile top spacing",
       "min": 0,
       "max": 80,
       "step": 4,
       "unit": "px",
-      "default": 32
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing_bottom",
+      "label": "Mobile bottom spacing",
+      "min": 0,
+      "max": 80,
+      "step": 4,
+      "unit": "px",
+      "default": 8
     }
   ],
   "blocks": [
