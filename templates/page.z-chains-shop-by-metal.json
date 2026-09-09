@@ -30,6 +30,87 @@
         "color_scheme": ""
       }
     },
+    "collection_link_grid_FQBHkd": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_E7cwha": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_VpafB3": {
+          "type": "collection",
+          "settings": {
+            "collection": "mixed-metal-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_z4ChFD": {
+          "type": "collection",
+          "settings": {
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_hMzy7r": {
+          "type": "collection",
+          "settings": {
+            "collection": "champagne-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_fraYa4": {
+          "type": "collection",
+          "settings": {
+            "collection": "rose-gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_kKJYi4": {
+          "type": "collection",
+          "settings": {
+            "collection": "gold-plated-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_XHBfnW": {
+          "type": "collection",
+          "settings": {
+            "collection": "silver-plated-chains",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_E7cwha",
+        "collection_VpafB3",
+        "collection_z4ChFD",
+        "collection_hMzy7r",
+        "collection_fraYa4",
+        "collection_kKJYi4",
+        "collection_XHBfnW"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Gold Filled Chains",
@@ -308,6 +389,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "collection_link_grid_FQBHkd",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_wGH9Cc",
