@@ -257,11 +257,13 @@ function cartUIHarness() {
   window.PUB_SUB_EVENTS = { cartUpdate: 'cart' };
   window.publish = (event, data) => published.push(data);
   window.console.error = () => {};
+  const warnings = [];
+  window.console.warn = (...args) => warnings.push(args);
   const requests = [];
   let handler;
   window.fetch = (url, options) => { requests.push({ url, options }); return handler(url, options); };
   window.eval(source('assets/cart-checkout-guard.js'));
-  return { dom, window, requests, published, setHandler: (next) => { handler = next; } };
+  return { dom, window, requests, published, warnings, setHandler: (next) => { handler = next; } };
 }
 
 function cartSections(value) {
@@ -291,13 +293,20 @@ test('shared cart refresh replaces drawer, full cart, footer and accessible tota
   harness.dom.window.close();
 });
 
-test('missing footer response preserves all existing cart sections', async () => {
+test('successful add with a null optional footer still renders the valid drawer', async () => {
   const harness = cartUIHarness();
-  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js') ? cartWith([]) : { ...cartSections('new'), 'main-cart-footer': null }));
-  await assert.rejects(harness.window.BSCartUI.refresh(), /Missing cart section/);
-  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'old drawer');
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({ items: [line(2000, 1)] });
+    return jsonResponse(url.includes('cart.js') ? cartWith([line(1000, 5), line(2000, 1)]) : { ...cartSections('new product'), 'main-cart-footer': null });
+  });
+  const added = await harness.window.fetch('/en/cart/add.js', { method: 'POST', body: JSON.stringify({ items: [{ id: 2000, quantity: 1 }] }) });
+  assert.equal(added.ok, true);
+  const cart = await harness.window.BSCartUI.refresh();
+  assert.equal(cart.items[1].variant_id, 2000);
+  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'new product');
   assert.equal(harness.window.document.querySelector('#main-cart-footer').textContent, 'old total');
-  assert.equal(harness.published.length, 0);
+  assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+  assert.equal(harness.published.length, 1);
   harness.dom.window.close();
 });
 
@@ -563,4 +572,281 @@ test('cart notification preserves the coordinated cart count while showing the a
   assert.equal(window.document.querySelector('#cart-notification-product').textContent, 'Added product');
   assert.equal(window.document.querySelector('#cart-notification').classList.contains('active'), true);
   harness.dom.window.close();
+});
+
+for (const optionalHTML of [undefined, '<div class="shopify-section">No subtotal block configured</div>']) {
+  test(`successful add skips an optional ${optionalHTML === undefined ? 'omitted section' : 'missing HTML selector'}`, async () => {
+    const harness = cartUIHarness();
+    harness.setHandler(async (url, options) => {
+      if (options?.method === 'POST') return jsonResponse({ items: [line(2000, 2)] });
+      return jsonResponse(url.includes('cart.js') ? cartWith([line(2000, 2)]) : { ...cartSections('added'), 'main-cart-footer': optionalHTML });
+    });
+    await harness.window.fetch('/en/cart/add.js', { method: 'POST' });
+    await harness.window.BSCartUI.refresh();
+    assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'added');
+    assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+    assert.equal(harness.requests.length, 3, 'optional fragments do not trigger retries');
+    harness.dom.window.close();
+  });
+}
+
+test('successful add skips a DOM target removed while sections are being fetched', async () => {
+  const harness = cartUIHarness();
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({ items: [line(2000, 1)] });
+    if (url.includes('cart.js')) return jsonResponse(cartWith([line(2000, 1)]));
+    harness.window.document.querySelector('#main-cart-footer').remove();
+    return jsonResponse(cartSections('new product'));
+  });
+  await harness.window.fetch('/en/cart/add.js', { method: 'POST' });
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'new product');
+  assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+  harness.dom.window.close();
+});
+
+test('product-page refresh requests only mounted drawer and count sections', async () => {
+  const harness = cartUIHarness();
+  for (const selector of ['cart-items', '#main-cart-footer', '#cart-live-region-text']) harness.window.document.querySelector(selector).remove();
+  harness.setHandler(async (url) => {
+    if (url.includes('cart.js')) return jsonResponse(cartWith([line(2000, 1)]));
+    assert.equal(new URL(url).searchParams.get('sections'), 'cart-drawer,cart-icon-bubble');
+    return jsonResponse(cartSections('product page add'));
+  });
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'product page add');
+  harness.dom.window.close();
+});
+
+test('full-cart refresh uses configured instance IDs, including footer blocks', async () => {
+  const harness = cartUIHarness();
+  harness.window.document.querySelector('#main-cart-items').dataset.id = 'template--123__items';
+  harness.window.document.querySelector('#main-cart-footer').dataset.id = 'template--123__footer';
+  harness.setHandler(async (url) => {
+    if (url.includes('cart.js')) return jsonResponse(cartWith([line(2000, 1)]));
+    const requested = new URL(url).searchParams.get('sections').split(',');
+    assert(requested.includes('template--123__footer'));
+    assert(!requested.includes('main-cart-footer'));
+    return jsonResponse({ ...cartSections('instance'), 'template--123__items': '<div class="js-contents">items</div>', 'template--123__footer': '<div class="js-contents">configured subtotal</div>' });
+  });
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.querySelector('#main-cart-footer').textContent, 'configured subtotal');
+  harness.dom.window.close();
+});
+
+for (const failure of ['HTTP 500', 'network', 'invalid JSON', 'null drawer', 'missing drawer selector']) {
+  test(`valid cart recovers from ${failure} with one clean drawer fetch`, async () => {
+    const harness = cartUIHarness();
+    let sectionReads = 0;
+    harness.setHandler(async (url, options) => {
+      if (options?.method === 'POST') return jsonResponse({ items: [line(2000, 1)] });
+      if (url.includes('cart.js')) return jsonResponse(cartWith([line(2000, 1)]));
+      sectionReads++;
+      if (sectionReads === 1) {
+        if (failure === 'HTTP 500') return { ok: false, status: 500 };
+        if (failure === 'network') throw new Error('Disconnected');
+        if (failure === 'invalid JSON') return { ok: true, json: async () => { throw new SyntaxError('Not JSON'); } };
+        return jsonResponse({ ...cartSections('other sections'), 'cart-drawer': failure === 'null drawer' ? null : '<div>No drawer</div>' });
+      }
+      assert.equal(new URL(url).searchParams.get('sections'), 'cart-drawer');
+      return jsonResponse({ 'cart-drawer': '<div id="CartDrawer">recovered new line<div id="CartDrawer-CartErrors"></div></div>' });
+    });
+    await harness.window.fetch('/en/cart/add.js', { method: 'POST' });
+    const cart = await harness.window.BSCartUI.refresh();
+    assert.equal(cart.item_count, 1);
+    assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'recovered new line');
+    assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+    assert.equal(sectionReads, 2);
+    assert.equal(harness.published.length, 1);
+    harness.dom.window.close();
+  });
+}
+
+test('two failed drawer reads preserve valid cart state, stop retrying and allow a later explicit recovery', async () => {
+  const harness = cartUIHarness();
+  harness.window.document.querySelector('#cart-errors').textContent = 'Cart could not be refreshed. Please refresh the page to review your cart.';
+  let sectionReads = 0;
+  let recover = false;
+  harness.setHandler(async (url) => {
+    if (url.includes('cart.js')) return jsonResponse(cartWith([line(2000, 1)]));
+    sectionReads++;
+    return jsonResponse(recover ? cartSections('recovered') : { 'cart-drawer': null });
+  });
+  const cart = await harness.window.BSCartUI.refresh();
+  assert.equal(cart.items[0].variant_id, 2000);
+  assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+  assert.equal(harness.window.document.querySelector('#CartDrawer').dataset.cartRenderState, 'stale');
+  await harness.window.BSCartUI.refresh();
+  assert.equal(sectionReads, 2, 'no unbounded or coalesced-caller retries');
+  recover = true;
+  await harness.window.BSCartUI.refresh({ force: true });
+  assert.equal(sectionReads, 3);
+  assert.equal(harness.window.document.querySelector('#CartDrawer').dataset.cartRenderState, undefined);
+  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'recovered');
+  harness.dom.window.close();
+});
+
+test('valid-cart refresh clears its own error but preserves a real mutation error', async () => {
+  const harness = cartUIHarness();
+  harness.window.document.querySelector('#cart-errors').textContent = 'Only 4 available';
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js') ? cartWith([line(2000, 1)]) : { ...cartSections('valid'), 'cart-drawer': null }));
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.querySelector('#cart-errors').textContent, 'Only 4 available');
+  harness.dom.window.close();
+});
+
+test('unknown cart state still reports a refresh error and clears it after a valid read', async () => {
+  const harness = cartUIHarness();
+  let available = false;
+  harness.setHandler(async (url) => url.includes('cart.js') && !available ? { ok: false, status: 503 } : jsonResponse(url.includes('cart.js') ? cartWith([line(2000, 1)]) : cartSections('valid')));
+  await harness.window.BSCartUI.refresh().catch(harness.window.BSCartUI.reportError);
+  assert(harness.window.document.querySelector('#cart-errors').textContent.includes('Cart could not be refreshed'));
+  available = true;
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+  harness.dom.window.close();
+});
+
+test('full page reload and header drawer opening do not recreate a secondary-fragment error', async () => {
+  for (const reload of [false, true]) {
+    const harness = cartUIHarness();
+    const window = harness.window;
+    installCartItems(harness);
+    window.document.querySelector('#CartDrawer').insertAdjacentHTML('afterbegin', '<div id="CartDrawer-Overlay"></div>');
+    window.requestAnimationFrame = () => 0;
+    window.eval(source('assets/cart-drawer.js'));
+    if (reload) window.document.querySelector('#cart-errors').textContent = 'Cart could not be refreshed. Please refresh the page to review your cart.';
+    harness.setHandler(async (url) => jsonResponse(url.includes('cart.js') ? cartWith([line(2000, 1)]) : { ...cartSections('existing valid cart'), 'cart-icon-bubble': null }));
+    window.document.querySelector('#cart-icon-bubble').click();
+    await window.BSCartUI.refresh();
+    assert.equal(window.document.querySelector('#CartDrawer').textContent, 'existing valid cart');
+    assert.equal(window.document.querySelector('#cart-errors').textContent, '');
+    harness.dom.window.close();
+  }
+});
+
+test('delayed BSS-style price markup and throwing display callbacks do not fail a confirmed cart', async () => {
+  const harness = cartUIHarness();
+  const window = harness.window;
+  window.document.querySelector('cart-drawer').setSummaryAccessibility = () => { throw new TypeError('Markup not ready'); };
+  window.publish = () => { throw new TypeError('App subscriber not ready'); };
+  let initializePrices;
+  window.document.addEventListener('cart:rendered', () => {
+    initializePrices = () => {
+      window.document.querySelector('[bss-b2b-cart-item-key]').innerHTML = '<span bss-b2b-final-line-price>App supplied wholesale price</span>';
+    };
+  });
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({ items: [line(2000, 1)] });
+    return jsonResponse(url.includes('cart.js') ? cartWith([line(2000, 1)]) : { ...cartSections('native'), 'cart-drawer': '<div id="CartDrawer"><div bss-b2b-cart-item-key="2000:b2b"></div><details id="Details-CartDrawer"><summary>Note</summary></details></div>' });
+  });
+  await window.fetch('/en/cart/add.js', { method: 'POST' });
+  await window.BSCartUI.refresh();
+  assert.equal(window.document.querySelector('#cart-errors').textContent, '');
+  assert.equal(typeof initializePrices, 'function');
+  initializePrices();
+  await window.BSCartUI.refresh();
+  assert.equal(window.document.querySelector('[bss-b2b-final-line-price]').textContent, 'App supplied wholesale price');
+  assert.equal(window.document.querySelector('#cart-errors').textContent, '');
+  harness.dom.window.close();
+});
+
+test('consecutive adds, split variants, selling plans, quantity changes and removal render in a 35-line cart', async () => {
+  const harness = cartUIHarness();
+  const items = Array.from({ length: 30 }, (_, index) => ({ ...line(1000 + index, 1), key: `line-${index}`, original_price: 800, final_price: 400, original_line_price: 800, final_line_price: 400, discounts: [], discount_allocations: [] }));
+  const additions = [
+    { ...line(3000, 1), product_type: 'Wholesale' },
+    { ...line(3001, 1), product_type: 'Retail', final_price: 800 },
+    line(1000, 2, { 'Custom Text': 'separate line', __reward_gift_variant: '', BSS: 'fixture', BLOY: 'fixture' }),
+    { ...line(3002, 1), selling_plan_allocation: { selling_plan: { id: 9000 } } },
+    line(3003, 3),
+  ];
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') {
+      const request = JSON.parse(options.body);
+      if (url.includes('/add.js')) {
+        const item = { ...items[0], ...request, key: `new-${items.length}` };
+        items.push(item);
+        return { ...jsonResponse({ items: [item], sections: { 'cart-icon-bubble': null } }), status: 200 };
+      }
+      const index = items.findIndex(item => item.key === request.id);
+      if (request.quantity === 0) items.splice(index, 1);
+      else items[index].quantity = request.quantity;
+      return jsonResponse(cartWith(items));
+    }
+    if (url.includes('cart.js')) return jsonResponse(cartWith(items));
+    const html = items.map(item => `<div data-key="${item.key}" data-quantity="${item.quantity}" data-variant="${item.variant_id}"><span>${item.final_price}</span></div>`).join('');
+    return jsonResponse({ ...cartSections('cart totals'), 'cart-icon-bubble': null, 'cart-drawer': `<div id="CartDrawer">${html}</div>`, 'main-cart-items': `<div class="js-contents">${html}</div>` });
+  });
+  for (const added of additions) {
+    const response = await harness.window.fetch('/en/cart/add.js', { method: 'POST', body: JSON.stringify(added) });
+    assert.equal(response.status, 200);
+    await harness.window.BSCartUI.refresh();
+    assert.equal(harness.window.document.querySelector('#CartDrawer').children.length, items.length);
+    assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+  }
+  assert.equal(items.length, 35);
+  for (const selector of ['#CartDrawer', '#main-cart-items']) {
+    for (const item of items) {
+      const row = harness.window.document.querySelector(`${selector} [data-key="${item.key}"]`);
+      assert.equal(row.dataset.quantity, String(item.quantity));
+      assert.equal(row.dataset.variant, String(item.variant_id));
+      assert.equal(row.textContent, String(item.final_price));
+    }
+  }
+  const key = items.at(-1).key;
+  for (const quantity of [5, 0]) {
+    await harness.window.fetch('/en/cart/change.js', { method: 'POST', body: JSON.stringify({ id: key, quantity }) });
+    await harness.window.BSCartUI.refresh();
+    const row = harness.window.document.querySelector(`#CartDrawer [data-key="${key}"]`);
+    assert.equal(row?.dataset.quantity, quantity ? String(quantity) : undefined);
+  }
+  harness.dom.window.close();
+});
+
+test('a new mutation during drawer recovery invalidates that recovery response', async () => {
+  const harness = cartUIHarness();
+  let releaseRecovery;
+  let recoveryStarted;
+  const started = new Promise(resolve => { recoveryStarted = resolve; });
+  let sectionReads = 0;
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({ items: [line(3000, 1)] });
+    if (url.includes('cart.js')) return jsonResponse(cartWith([line(3000, 1)]));
+    sectionReads++;
+    if (sectionReads === 1) return jsonResponse({ 'cart-drawer': null });
+    if (sectionReads === 2) return new Promise(resolve => { releaseRecovery = resolve; recoveryStarted(); });
+    return jsonResponse(cartSections('latest add'));
+  });
+  const refresh = harness.window.BSCartUI.refresh();
+  await started;
+  await harness.window.fetch('/en/cart/add.js', { method: 'POST' });
+  releaseRecovery(jsonResponse(cartSections('outdated recovery')));
+  await refresh;
+  assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'latest add');
+  assert.equal(harness.published.length, 1);
+  harness.dom.window.close();
+});
+
+test('Shopify cart route content negotiation returns sections rather than cart JSON after add and reload', async () => {
+  for (const afterAdd of [true, false]) {
+    const harness = cartUIHarness();
+    const cart = cartWith([line(2000, 1)]);
+    harness.setHandler(async (url, options) => {
+      if (options?.method === 'POST') return jsonResponse({ items: cart.items, sections: cartSections('bundled drawer') });
+      if (url.includes('cart.js')) {
+        assert.equal(options.headers.Accept, 'application/json');
+        return jsonResponse(cart);
+      }
+      if (options.headers?.Accept === 'application/json') return jsonResponse(cart);
+      return jsonResponse(cartSections('section-rendered drawer'));
+    });
+    if (afterAdd) await harness.window.fetch('/en/cart/add.js', { method: 'POST' });
+    await harness.window.BSCartUI.refresh({ force: !afterAdd });
+    assert.equal(harness.window.document.querySelector('#CartDrawer').textContent, 'section-rendered drawer');
+    assert.equal(harness.warnings.length, 0);
+    assert.equal(harness.requests.filter(request => request.url.includes('?sections=')).length, 1);
+    assert.equal(harness.window.document.querySelector('#cart-errors').textContent, '');
+    harness.dom.window.close();
+  }
 });

@@ -1,6 +1,129 @@
 # Pricing Audit, Theme Remediation, and Promotion Gate
 
-Audit date: 2026-09-10. Scope: this repository and isolated local reproductions. No live cart mutations, orders, app configuration changes, or deployments were performed.
+Audit date: 2026-09-10. The original audit/remediation used isolated local reproductions. The cart-drawer follow-up below additionally uses public storefront requests and temporary, isolated guest carts; those test lines were removed and the carts verified empty. No orders, app configuration changes, or deployments were performed in this follow-up.
+
+## Cart Drawer Regression Follow-up
+
+**Root cause confirmed; fixed locally, not deployed. No promotion or checkout-pricing change.** The affected baseline is `c20bc9d`. The currently served asset is minified, rather than byte-identical to the Git file; executing that actual served asset against live Shopify responses reproduces the same exception, even on an empty cart.
+
+### Authoritative Cart State
+
+Two real guest adds in a new cookie jar returned HTTP 200. A subsequent `/cart.js` returned HTTP 200 and contained every added line. The old renderer still failed afterward. No existing customer cart was used. This independently confirms the storefront failure with a valid cart; the user's affected authenticated B2B cart was not accessible.
+
+Captured per-line fields from the first guest reproduction (amounts in minor units):
+
+| Field | Product A | Product B |
+| --- | --- | --- |
+| Full key | `52152156225857:66a1f06b21e01f0813c6f1a2fb832cad` | `52171849826625:4ab0ba83c24a584868199138b6299ba4` |
+| Product ID | `10358160261441` | `10362983711041` |
+| Variant ID | `52152156225857` | `52171849826625` |
+| Quantity | 1 | 1 |
+| `original_price` / `final_price` | 795 / 795 | 294 / 294 |
+| `original_line_price` / `final_line_price` | 795 / 795 | 294 / 294 |
+| `discounts` | `[]` | `[]` |
+| `discount_allocations` | Absent | Absent |
+| `line_level_discount_allocations` | `[]` | `[]` |
+| Properties | `{}` | `{}` |
+| Selling-plan allocation | Absent | Absent |
+| Product type | Accessories | Charms |
+
+Product A is `tape-measure-ac024`, one variant, no compare-at price, with tags including `Bay Tier 2`, `bulk wholesale`, and `Discount Eligible`. Product B is `27mm-fish-pvd-charm-ch458`, one variant, no compare-at price, with tags including `Bay Tier 1`, `Charms`, and `Discount Eligible`. Their structures are ordinary Shopify lines: no BSS/BLOY properties, no duplicate variants and no selling plan in this guest reproduction. Product B appeared alongside Product A in `/cart.js`, not as a replacement. Actual BSS rules, custom metafields and unusual collection memberships were not inferred from tags. Favorites/bootstrap membership is not read by this renderer. The same response-shape failure on an empty cart rules out a product-specific prerequisite.
+
+### Checkout State
+
+The user confirms that the affected line and correct BSS wholesale discount are present at checkout. This investigation accepts that observation and does **not** diagnose authoritative checkout pricing as broken. No authenticated B2B checkout or order was independently inspected; guest HTTP/render tests are not BSS checkout verification. No BSS pricing rules, markers, discount configuration or checkout handoff were modified.
+
+### Add Response and Exact Exception
+
+Actual successful requests used `POST /cart/add.js`, `Content-Type: application/json`, with these payloads:
+
+```json
+{"items":[{"id":52152156225857,"quantity":1}],"sections":["cart-drawer","cart-icon-bubble"],"sections_url":"/products/tape-measure-ac024"}
+{"items":[{"id":52171849826625,"quantity":1}],"sections":["cart-drawer","cart-icon-bubble"],"sections_url":"/products/27mm-fish-pvd-charm-ch458"}
+```
+
+Both responses were HTTP 200 JSON containing `items` with the fields above and `sections` with **both requested keys**. Product A returned 35,104 characters of drawer HTML and 754 of bubble HTML; Product B returned 44,240 and 755. Neither section was null or omitted. Each drawer contained `#CartDrawer`, `.js-contents` and the section wrapper; each bubble contained its section wrapper. No `Liquid error` text was found. This confirms the add succeeded before the failing follow-up. The large HTML strings are summarized here rather than duplicated. The theme's single-product form submits FormData; these isolated tests used Shopify's supported `items` JSON form with the same section request.
+
+The **next refresh**, not the add response, is the failing stage:
+
+| Request | Header | Status / actual JSON shape |
+| --- | --- | --- |
+| `/cart.js` | `Accept: application/json` | 200; valid cart object with `items`, `item_count`, prices and totals |
+| `/cart?sections=cart-drawer,cart-icon-bubble` | `Accept: application/json` | 200; **another cart object**, not a section map; `cart-drawer` and `cart-icon-bubble` keys absent |
+| Same section URL | `Accept: text/html` or no explicit Accept | 200; section map with string `cart-drawer` and `cart-icon-bubble` HTML |
+
+This header comparison was observed directly against Shopify, not mocked. The failing response has keys including `token`, `note`, `attributes`, `items`, `item_count`, `original_total_price`, `total_price`, `total_discount`, `currency`, and `cart_level_discount_applications`. Cart tokens/cookies are not recorded here.
+
+**Originating exception:** in `c20bc9d`, [assets/cart-checkout-guard.js](assets/cart-checkout-guard.js), `applySections()`, original line 34:
+
+```javascript
+if (!sections[section.id]) throw new Error(`Missing cart section: ${section.id}`);
+```
+
+The exact reproduced exception is **`Error: Missing cart section: cart-drawer`**. Original `refresh()` lines 69-73 reuse the JSON Accept options for both `/cart.js` and the template section URL. `applySections()` line 34 throws before any replacements; `reportError()` original lines 25-28 inserts the global message. The whole-cart JSON is syntactically valid, so the JSON parser succeeds; it is the **wrong response shape**. BSS price nodes are never reached in this failing path. The earlier null-footer test exposed the secondary all-or-nothing defect but was not the principal live trigger.
+
+### Why It Persists After Reload
+
+The literal error has one generator: `BSCartUI.reportError()`. It writes the DOM error container. It is not stored in localStorage, sessionStorage, cart attributes or Liquid. There is no persisted error flag to reset.
+
+Failure A: the successful POST completes, the mutation hook calls `refresh()`, and product-form calls `CartDrawer.renderContents()`. Both share the same pending section refresh and encounter the missing section key.
+
+Failure B: after reload, native Liquid can initially render the valid cart. Opening the header drawer calls `CartDrawer.open(triggeredBy)` in [assets/cart-drawer.js](assets/cart-drawer.js), line 28, which forces the same bad section request and **recreates** the error. Existing restoration/rewards refresh callers can also reach that path; they are not needed to reproduce it. A fresh empty cart with the actual served asset reproduces the same throw. Both failures share content negotiation, not a failed mutation or a stale saved flag.
+
+### Fix and Files Modified
+
+- [assets/cart-checkout-guard.js](assets/cart-checkout-guard.js): `fetchSections()` uses `Accept: text/html` for `/cart?sections=...`, while `/cart.js` retains JSON Accept. This header separation is the root-cause repair. JSON parsing is still correct because the Section Rendering API returns a JSON section map.
+- The same file isolates HTTP/network/JSON/section display failures from cart-state failures. Available sections render independently; absent optional targets/HTML are skipped. Missing drawer HTML gets **one** clean drawer-only fetch per refresh, with the same corrected header and mutation-version checks. If both reads fail, previous HTML remains marked `data-cart-render-state="stale"`, without an automatic retry loop. The next explicit drawer open/new mutation can recover.
+- Confirmed valid cart reads clear only this renderer's exact refresh error, not stock/add/change errors. Display binding/subscriber exceptions are logged separately instead of invalidating a confirmed cart. The global message remains for an unavailable or malformed current `/cart.js` response.
+- [tests/pricing-cart.test.cjs](tests/pricing-cart.test.cjs): replaces the old null-footer rejection expectation and adds the regression coverage below.
+- [PRICING-AUDIT.md](PRICING-AUDIT.md): this report and updated remediation status. **These are the only three modified files.** No templates, BSS hooks/markers, promotion logic, quantity aggregation, favorites lookup, restoration or reward retry logic were changed.
+
+`cart:rendered` and Dawn `cartUpdate` still fire with confirmed cart data; `renderedSections` now lists the successful section IDs. This is display completion, not a BSS quote guarantee. There is no wait for BSS price nodes and no invented vendor reprice API. Missing optional fragments may retain their previous display until the next refresh; native instance IDs are retained for full-cart sections, so configured footer blocks are requested correctly.
+
+### Regression Tests
+
+`npm test`: **57/57 PASS**. Eighteen tests were added and the former null-footer test was corrected. Existing split-line aggregation, favorites safety, restoration and rewards protection tests continue to pass.
+
+| New or corrected test | Result |
+| --- | --- |
+| Successful add + null optional footer | PASS |
+| Successful add + omitted optional section | PASS |
+| Successful add + optional HTML missing expected selector | PASS |
+| DOM target removed during fetch | PASS |
+| Product page requests only mounted drawer/count | PASS |
+| Full-cart section instance IDs and footer blocks | PASS |
+| Section HTTP 500 + clean drawer recovery | PASS |
+| Section network failure + clean drawer recovery | PASS |
+| Invalid section JSON + clean drawer recovery | PASS |
+| Null drawer section + clean drawer recovery | PASS |
+| Missing drawer HTML selector + clean drawer recovery | PASS |
+| Both drawer reads fail, no retry loop, later explicit recovery | PASS |
+| Valid cart preserves unrelated mutation-error message | PASS |
+| Unknown cart still reports error, later valid read clears it | PASS |
+| Fresh DOM/page reload and actual header drawer-open callback | PASS |
+| Delayed BSS-style markup and throwing display callbacks | PASS, simulated integration only |
+| Consecutive B2B/retail-labeled fixture adds, split properties/plans, 35 lines, quantity changes and removal | PASS, supplied prices only |
+| Mutation during drawer recovery rejects the stale response | PASS |
+| Exact Shopify content negotiation on post-add and reload | PASS |
+
+`node --check` and editor diagnostics pass for the touched JavaScript. No Liquid was edited; the previous whole-theme validator baseline below was not reclassified as clean.
+
+### Manual Verification and Limits
+
+The checks below distinguish real HTTP/DOM verification from an interactive authenticated browser session. The local patch was evaluated against live server HTML/responses in jsdom; it was not deployed, and third-party browser scripts were not executed.
+
+| Requested scenario | Verification |
+| --- | --- |
+| B2B add / BSS display initialization / checkout | **BLOCKED:** no authenticated B2B browser session or customer credentials available. User confirms the original checkout result; delayed app markup is covered locally but not a real vendor initialization test. |
+| Retail add | **PASS for guest HTTP/render path:** two products, HTTP 200 adds, full line verification in cart JSON and section-rendered drawer. Logged-in retail browser not exercised. |
+| Page reload | **PASS for fresh-page HTTP/DOM path:** repeated product-page loads and forced refreshes render both lines with no warnings. Browser interaction/focus with real app scripts still needs manual QA. |
+| Different product / quantity >1 | **PASS:** Accessories product at quantity 2, then Charms product at quantity 1. Both add/reload sequences render correctly. Another variant of one live product was not tested; split/variant coverage is local. |
+| Quantity changes | **PASS for live guest HTTP/render path:** changed the new line to 3 and verified full-cart/drawer rendering. |
+| Removal | **PASS for live guest HTTP/render path:** removed a line and verified remaining rendered lines. |
+| 30+ line cart | **PASS locally:** every line in a 35-line fixture checked on drawer and full cart. Not run as a live large cart. |
+| Cleanup | Both isolated guest test carts were confirmed empty after removing only their test lines. No order or payment submitted. |
+
+**Remaining release check:** an authorized person must run the requested wholesale login/add/reload/checkout sequence with the patch on an approved preview theme and the real BSS/BLOY scripts. The authenticated per-line export, vendor initialization, checkout confirmation, product-specific BSS rule and manual browser result cannot be claimed from these guest checks. The verified request-level root cause does not require those unavailable details to reproduce or repair. No commit/push/deploy is performed in this follow-up.
 
 ## Decision
 
@@ -17,7 +140,7 @@ The follow-up implements the confirmed theme-side quantity, lookup, restoration 
 | P1: native variant quantity | [assets/price-per-item.js](assets/price-per-item.js) sums **every** matching variant line, normalizing numeric/string IDs. Partial add responses trigger a complete cart read; request versions reject late responses. The existing native tier renderer is retained. |
 | P2: favorites lookup | [sections/main-favorites.liquid](sections/main-favorites.liquid) no longer uses `all_products` or hidden BSS price markup. [sections/favorites-product-data.liquid](sections/favorites-product-data.liquid) renders inventory in the actual product/customer context, paginating variants by 250 and returning a next-page URL. [assets/favorites.js](assets/favorites.js) follows every inventory page, rejects invalid/repeated URLs, and commits a product's inventory only after completion. Product loading uses four workers; failed products remain saved. |
 | P2: unverified favorites prices | Favorites now displays **Price available in cart**, with an explicit unavailable state, for all accounts. No public product price, hidden wholesale markup or cached apparent quote is substituted. This deliberately removes retail prices here too: the repository has no trustworthy BSS eligibility/quote-completion contract. Product JSON remains product/variant metadata, not a price authority. |
-| P5/P8: complete cart rendering | [assets/cart-checkout-guard.js](assets/cart-checkout-guard.js) now exposes the render-only `window.BSCartUI`. It tracks observed fetch/XHR mutations, coalesces refreshes, discards responses invalidated by newer mutations, and validates all requested sections before changing the DOM. It refreshes the drawer, full-cart items, footer subtotal/allocations, header count and accessible totals when present. Missing sections leave all previous sections intact and report an error. |
+| P5/P8: complete cart rendering | [assets/cart-checkout-guard.js](assets/cart-checkout-guard.js) exposes the render-only `window.BSCartUI`. It tracks observed fetch/XHR mutations, coalesces refreshes and discards stale responses. The follow-up corrects section content negotiation, renders valid available sections independently, skips missing optional fragments and retries missing drawer HTML once. Only failure to establish current cart state produces the global refresh error. |
 | P5/P8: one rendering owner | [assets/cart.js](assets/cart.js), [assets/cart-drawer.js](assets/cart-drawer.js), favorites, saved-for-later and persistent-cart delegate shared cart sections to the coordinator. Native quick-add/order-list rendering skips those shared sections; product-form avoids publishing incomplete add state as a completed cart render. Full-cart checkout availability and drawer overlay, summary and focus bindings are renewed after replacement. No displayed-money parsing, global subtotal copying or inferred BSS total remains in the former guard. |
 | P6: restoration | [assets/persistent-cart.js](assets/persistent-cart.js) restores **only a freshly checked empty cart**. It never clears the current cart. It validates all snapshot entries, preserves properties/plans, checks add/update HTTP responses, verifies restored identities and quantities, and only then acknowledges the snapshot. Existing note/attribute values take precedence. Snapshot pushes pause during restoration or an uncertain outcome; failed proxy saves are not acknowledged. A per-customer attempt marker prevents automatic replay of the same attempted snapshot after reload. |
 | P7/P11: rewards and form integrity | [snippets/cart-rewards.liquid](snippets/cart-rewards.liquid) consumes completed full-cart renders, rejects outdated async exclusion/bootstrap work, and batches actual gift mutations. It no longer removes real rows or inserts fake gift rows ahead of Shopify. Failed gift operations are checked and are not automatically repeated for the same cart-state signature after replacement. No-op syncs do not start another render. Both cart templates now include hidden `updates[]` inputs for real gift rows. Existing BLOY refresh calls are coalesced to one animation frame instead of timer bursts. |
@@ -28,7 +151,7 @@ The follow-up implements the confirmed theme-side quantity, lookup, restoration 
 
 ## Verified
 
-Run `npm ci` then `npm test`. [tests/pricing-cart.test.cjs](tests/pricing-cart.test.cjs) executes actual assets with Node VM/jsdom and mocked Shopify responses. **39 tests pass.** jsdom is a development-only dependency and is not loaded by the storefront.
+Run `npm ci` then `npm test`. [tests/pricing-cart.test.cjs](tests/pricing-cart.test.cjs) executes actual assets with Node VM/jsdom and mocked Shopify responses. **57 tests pass**, including the follow-up regressions above. jsdom is a development-only dependency and is not loaded by the storefront.
 
 | Local check | Result and limit |
 | --- | --- |
@@ -36,7 +159,7 @@ Run `npm ci` then `npm test`. [tests/pricing-cart.test.cjs](tests/pricing-cart.t
 | Original 34-line fixture | All 30 variants checked: variants 1000-1003 now aggregate to 5 instead of 1; the remaining 26 stay at 1. 15 product IDs and 46 total units. No quantity-line cutoff. |
 | Separate 34-line DOM fixture | Every full key, variant ID, quantity and supplied final-price value survives rendering in **both** drawer and full cart. Original/final mock markup is preserved without money arithmetic. Prices are supplied fixtures, not live BSS quotes. |
 | Favorites beyond 20 products | 34 handles and two inventory pages per product complete successfully. Missing/incomplete inventory discards partial data. Missing customer price never becomes a public-price fallback, including guest/retail/B2B-labeled harness cases. Existing favorites-page access remains customer-gated. |
-| Cart add/change and stale responses | Partial adds fetch complete cart data; late reads cannot replace newer quantity state. Shared refreshes coalesce and mutation-invalidated sections are discarded. Missing footer response applies no partial replacement. |
+| Cart add/change and stale responses | Partial adds fetch complete cart data; late reads cannot replace newer quantity state. Shared refreshes coalesce and mutation-invalidated sections are discarded. The corrected missing-footer test now requires the valid drawer to render without a global error. |
 | Failed quantity changes | Full cart and drawer retain actual returned cart state and show the request error after the recovery render. No failed response is rendered as a successful cart. |
 | Restoration success/failure | Guest skips, nonempty-cart preservation, valid empty restores, invalid snapshots, cart filled during preflight, HTTP 422/network add failure, incomplete restored quantities and metadata-update failure are covered. No clear or failure acknowledgment; same attempted snapshot is not replayed automatically. |
 | Rewards | Batch completion, no-op sync, failed gift add/update across replacement elements, absence of placeholder mutations, script parsing and gift hidden quantity fields pass. Real automatic-gift entitlement is not verified. |
@@ -45,7 +168,7 @@ Run `npm ci` then `npm test`. [tests/pricing-cart.test.cjs](tests/pricing-cart.t
 | JavaScript/editor checks | Modified JavaScript assets pass `node --check`; editor diagnostics report no errors in touched files. |
 | Shopify Theme Check | Ran `npx --yes @shopify/cli@3 theme check --output json` on the working tree and an archived `HEAD` baseline. Both report **483 errors and 152 warnings**. Comparison by file/check/severity/message finds **zero new diagnostics**. The new favorites section and edited favorites/rewards/drawer Liquid have no diagnostics. Main-cart-items retains its pre-existing missing translation error and two `card_product` warnings. The whole theme is not lint-clean. |
 
-No live storefront carts, app requests, authenticated customer sessions, browser viewport screenshots, checkout sessions or orders were exercised. No backend-price or checkout-price acceptance test has passed. These tests verify theme behavior and propagation of supplied data, not the correctness of supplied prices. Native quick-order/bulk and saved-item end-to-end interactions, real section pagination and BLOY reinitialization still need staging QA.
+The initial remediation did not exercise live storefront carts. The follow-up above additionally verifies isolated live guest HTTP/DOM flows. No authenticated customer sessions, browser viewport screenshots, checkout sessions or orders were exercised. No backend-price or checkout-price acceptance test has passed. These tests verify theme behavior and propagation of supplied data, not the correctness of supplied prices. Native quick-order/bulk and saved-item end-to-end interactions, real section pagination and BLOY reinitialization still need staging QA.
 
 ## Unresolved
 
