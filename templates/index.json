@@ -60,8 +60,8 @@
           "type": "slide",
           "disabled": true,
           "settings": {
-            "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner.jpg",
-            "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner-mobile.jpg",
+            "image": "shopify://shop_images/Bay_and_Stew_Sale_Banner_-01.jpg",
+            "image_mobile": "shopify://shop_images/Bay_and_Stew_Sale_Banner_-02.jpg",
             "allow_sound": true,
             "heading": "5 for $15",
             "subheading": "<strong>NO CODE NEEDED</strong>",
