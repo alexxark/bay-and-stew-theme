@@ -124,6 +124,7 @@
       "block_order": [
         "text_Crmewi"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -165,9 +166,8 @@
         "text_66mTxa",
         "button_Xx8WkJ"
       ],
-      "disabled": true,
       "custom_css": [],
-      "name": "EXTRA 25 SALE",
+      "name": "5 for $15",
       "settings": {
         "image": "shopify://shop_images/5for15_084589c6-a9be-4bda-be3d-3d816d49061a.jpg",
         "height": "small",
