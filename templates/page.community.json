@@ -141,14 +141,14 @@
         "heading_WJpjHE": {
           "type": "heading",
           "settings": {
-            "heading": "5 FOR $15",
+            "heading": "50% Off Sale",
             "heading_size": "h1"
           }
         },
         "text_66mTxa": {
           "type": "text",
           "settings": {
-            "text": "<h3>Mix & match sale connectors & charms<br/></h3><p>Must purchase 5 eligible items to receive the $15 offer. Regular pricing applies to quantities under 5.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid  through 10/09/2026 from 12:00am to 11:59pm PDT. Discount applies to eligible merchandise and is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text": "<h3>Select connectors & charms<br/></h3><p>A little something extra for your studio! Shop select sale connectors & charms for 50% off and stock up on some favorites while supplies last.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid through 10/09/2026 from 12:00am to 11:59pm PDT. Discount applies to eligible sale merchandise and is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
             "text_style": "body"
           }
         },
@@ -169,7 +169,7 @@
       "custom_css": [],
       "name": "5 for $15",
       "settings": {
-        "image": "shopify://shop_images/5for15_084589c6-a9be-4bda-be3d-3d816d49061a.jpg",
+        "image": "shopify://shop_images/50_percent_off.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
