@@ -15,6 +15,7 @@ if (!customElements.get('price-per-item')) {
 
       updatePricePerItemUnsubscriber = undefined;
       variantIdChangedUnsubscriber = undefined;
+      cartRequestVersion = 0;
 
       connectedCallback() {
         // Update variantId if variant is switched on product page
@@ -23,30 +24,34 @@ if (!customElements.get('price-per-item')) {
           this.getVolumePricingArray();
         });
 
-        this.updatePricePerItemUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (response) => {
-          if (!response.cartData) return;
+        this.updatePricePerItemUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, this.updateFromCart.bind(this));
+      }
 
-          // Item was added to cart via product page
-          if (response.cartData['variant_id'] !== undefined) {
-            if (response.productVariantId === this.variantId) this.updatePricePerItem(response.cartData.quantity);
-            // Qty was updated in cart
-          } else if (response.cartData.item_count !== 0) {
-            const isVariant = response.cartData.items.find((item) => item.variant_id.toString() === this.variantId);
-            if (isVariant && isVariant.id.toString() === this.variantId) {
-              // The variant is still in cart
-              this.updatePricePerItem(isVariant.quantity);
-            } else {
-              // The variant was removed from cart, qty is 0
-              this.updatePricePerItem(0);
-            }
-            // All items were removed from cart
-          } else {
-            this.updatePricePerItem(0);
+      async updateFromCart(response) {
+        const version = ++this.cartRequestVersion;
+        try {
+          let cart = response.cartData;
+          if (!cart || !Array.isArray(cart.items) || typeof cart.item_count !== 'number') {
+            const result = await fetch(`${window.Shopify?.routes?.root || '/'}cart.js`, {
+              credentials: 'same-origin',
+              cache: 'no-store',
+              headers: { Accept: 'application/json' },
+            });
+            if (!result.ok) throw new Error(`cart.js HTTP ${result.status}`);
+            cart = await result.json();
           }
-        });
+          if (version !== this.cartRequestVersion || !Array.isArray(cart.items)) return;
+          const quantity = cart.items.reduce((total, item) => {
+            return String(item.variant_id ?? item.id) === String(this.variantId) ? total + item.quantity : total;
+          }, 0);
+          this.updatePricePerItem(quantity);
+        } catch (error) {
+          console.error('[price-per-item] Could not refresh cart quantity', error);
+        }
       }
 
       disconnectedCallback() {
+        this.cartRequestVersion++;
         if (this.updatePricePerItemUnsubscriber) {
           this.updatePricePerItemUnsubscriber();
         }

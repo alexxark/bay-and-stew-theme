@@ -26,6 +26,7 @@ class CartDrawer extends HTMLElement {
   }
 
   open(triggeredBy) {
+    if (triggeredBy) void window.BSCartUI.refresh({ force: true }).catch(window.BSCartUI.reportError);
     if (triggeredBy) this.setActiveElement(triggeredBy);
     const cartDrawerNote = this.querySelector('[id^="Details-"] summary');
     if (cartDrawerNote && !cartDrawerNote.hasAttribute('role')) this.setSummaryAccessibility(cartDrawerNote);
@@ -71,25 +72,14 @@ class CartDrawer extends HTMLElement {
     cartDrawerNote.parentElement.addEventListener('keyup', onKeyUpEscape);
   }
 
-  renderContents(parsedState) {
-    this.querySelector('.drawer__inner').classList.contains('is-empty') &&
-      this.querySelector('.drawer__inner').classList.remove('is-empty');
+  async renderContents(parsedState) {
     this.productId = parsedState.id;
-    this.getSectionsToRender().forEach((section) => {
-      const sectionElement = section.selector
-        ? document.querySelector(section.selector)
-        : document.getElementById(section.id);
-
-      if (!sectionElement) return;
-      sectionElement.innerHTML = this.getSectionInnerHTML(parsedState.sections[section.id], section.selector);
-    });
-
-    if (window.__runRewardsLast) window.__runRewardsLast();
-
-    setTimeout(() => {
-      this.querySelector('#CartDrawer-Overlay').addEventListener('click', this.close.bind(this));
+    try {
+      await window.BSCartUI.refresh();
       this.open();
-    });
+    } catch (error) {
+      window.BSCartUI.reportError(error);
+    }
   }
 
   getSectionInnerHTML(html, selector = '.shopify-section') {
@@ -138,82 +128,27 @@ class CartDrawerItems extends CartItems {
 
 customElements.define('cart-drawer-items', CartDrawerItems);
 
-/* === Robust "run last" for BLOY (handles late async redraws) === */
 (function () {
-  // Fire a small burst of refreshes over ~3.3s so late scripts can't overtake us
-  const BURST_SCHEDULE_MS = [0, 120, 500, 1500, 3200];
+  let scheduled = false;
 
   function refreshBloy() {
+    scheduled = false;
     if (window.BLOY?.widgets?.refresh) { try { BLOY.widgets.refresh(); } catch(e){} }
     if (window.Bloy?.refresh)          { try { Bloy.refresh(); } catch(e){} }
     document.dispatchEvent(new Event('rewards:refreshed'));
   }
 
   function runBurst() {
-    // clear any in-flight burst
-    (runBurst._ids || []).forEach(id => clearTimeout(id));
-    runBurst._ids = BURST_SCHEDULE_MS.map(ms =>
-      setTimeout(() => {
-        // double-rAF to be strictly post-layout & after sync mutations
-        requestAnimationFrame(() => requestAnimationFrame(refreshBloy));
-      }, ms)
-    );
+    if (scheduled) return;
+    scheduled = true;
+    requestAnimationFrame(refreshBloy);
   }
 
   // Expose a global hook for theme code
   window.__runRewardsLast = runBurst;
 
-  /* ---------- Triggers ---------- */
-
-  // 1) Immediately when the drawer re-renders (Dawn replaces HTML)
   document.addEventListener('DOMContentLoaded', runBurst);
-  document.addEventListener('cart:refresh', runBurst);
-  document.addEventListener('cart:updated', runBurst);
-  document.addEventListener('rewards:refreshed', () => {}); // no-op; keeps listeners consistent
-
-  // 2) Observe the drawer DOM; retrigger if BSS touches price/tax nodes late
-  const attachObservers = () => {
-    const drawer = document.querySelector('cart-drawer');
-    if (!drawer) return;
-    const inner = drawer.querySelector('.drawer__inner');
-    if (!inner) return;
-
-    const priceLike = (node) =>
-      node?.nodeType === 1 && (
-        node.matches?.('[bss-b2b-cart-item-key], [bss-b2b-final-line-price], [bss-b2b-cart-total-price], .bss-b2b-qb-table') ||
-        node.closest?.('[bss-b2b-cart-item-key], [bss-b2b-final-line-price], [bss-b2b-cart-total-price], .bss-b2b-qb-table')
-      );
-
-    const mo = new MutationObserver((mutList) => {
-      // If anything that *looks like* BSS pricing DOM changes, run another burst
-      for (const m of mutList) {
-        if (priceLike(m.target)) { runBurst(); break; }
-        if (m.addedNodes) for (const n of m.addedNodes) { if (priceLike(n)) { runBurst(); break; } }
-        if (m.removedNodes) for (const n of m.removedNodes) { if (priceLike(n)) { runBurst(); break; } }
-      }
-    });
-
-    mo.observe(inner, { childList: true, subtree: true, attributes: true, characterData: false });
-  };
-  document.addEventListener('DOMContentLoaded', attachObservers);
-  document.addEventListener('shopify:section:load', attachObservers);
-
-  // 3) Patch fetch & XHR: whenever /cart/*.js finishes, run a burst
-  const scheduleIfCartUrl = (url) => /\/cart\/(add|change|update|clear)\.js/.test(url || '');
-  const _fetch = window.fetch;
-  window.fetch = async function (input, init) {
-    const res = await _fetch(input, init);
-    try { const url = typeof input === 'string' ? input : input.url; if (scheduleIfCartUrl(url)) runBurst(); } catch {}
-    return res;
-  };
-  const _open = XMLHttpRequest.prototype.open, _send = XMLHttpRequest.prototype.send;
-  XMLHttpRequest.prototype.open = function (m, u) { this.__isCart = scheduleIfCartUrl(String(u)); return _open.apply(this, arguments); };
-  XMLHttpRequest.prototype.send = function () {
-    this.addEventListener('load', () => { if (this.__isCart) runBurst(); });
-    return _send.apply(this, arguments);
-  };
-
-  // 4) If BLOY fires its own pub/sub (from your console dump), respond too
+  document.addEventListener('cart:rendered', runBurst);
   ['bloy:toggle-rewards-modal','bloy:show-popup-toast','bloy:substract-points']
     .forEach(evt => window.addEventListener(evt, runBurst));
 })();

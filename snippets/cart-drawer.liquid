@@ -155,6 +155,7 @@
                           <td class="cart-item__quantity" role="cell" headers="CartDrawer-ColumnQuantity">
                             <div class="cart-item__quantity-wrapper">
                               <span class="cart-item__gift-qty">Qty: {{ item.quantity }}</span>
+                              <input type="hidden" name="updates[]" value="{{ item.quantity }}">
                             </div>
                           </td>
                         </tr>

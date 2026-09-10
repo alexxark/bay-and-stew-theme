@@ -466,23 +466,6 @@
     });
   }
 
-  function fetchCartSections(sectionIds) {
-    return fetch('/?sections=' + sectionIds.join(','), {
-      headers: { Accept: 'application/json' },
-    }).then((r) => r.json());
-  }
-
-  /**
-   * Extract the inner HTML of a Liquid-rendered section. Mirrors what
-   * Dawn's own cart-drawer.js does so the swap is byte-for-byte equivalent.
-   */
-  function getSectionInnerHTML(html, selector) {
-    if (!html) return '';
-    const dom = new DOMParser().parseFromString(html, 'text/html');
-    const el  = dom.querySelector(selector || '.shopify-section');
-    return el ? el.innerHTML : '';
-  }
-
   /**
    * Apply a parsedState returned from /cart/change.js or /cart/add.js
    * (with sections requested) to the current page atomically.
@@ -496,58 +479,7 @@
    */
   function applyCartUpdate(parsedState) {
     if (!parsedState) return;
-
-    // 1. Replace section HTML.
-    if (parsedState.sections) {
-      CART_SECTIONS_TO_RENDER.forEach(function (section) {
-        const html = parsedState.sections[section.id];
-        if (!html) return;
-        const target = document.getElementById(section.targetId);
-        if (!target) return;
-        const inner  = target.querySelector(section.selector) || target;
-        inner.innerHTML = getSectionInnerHTML(html, section.selector);
-      });
-    }
-
-    // 2. Toggle is-empty when we know the count (change.js returns it; add.js
-    //    doesn't, but added items can never produce item_count=0).
-    if (typeof parsedState.item_count === 'number') {
-      const isEmpty    = parsedState.item_count === 0;
-      const cartDrawer = document.querySelector('cart-drawer');
-      const cartItems  = document.querySelector('cart-items');
-      const cartFooter = document.getElementById('main-cart-footer');
-
-      if (cartDrawer) cartDrawer.classList.toggle('is-empty', isEmpty);
-      if (cartItems)  cartItems.classList.toggle('is-empty', isEmpty);
-      if (cartFooter) cartFooter.classList.toggle('is-empty', isEmpty);
-
-      // The new inner HTML from the server already reflects the empty/non-empty
-      // state, but make sure the inner wrapper class is in sync as well.
-      const inner = cartDrawer && cartDrawer.querySelector('.drawer__inner');
-      if (inner) inner.classList.toggle('is-empty', isEmpty);
-    } else {
-      // add.js — we know cart is non-empty after the add, so drop is-empty.
-      const cartDrawer = document.querySelector('cart-drawer');
-      if (cartDrawer) {
-        cartDrawer.classList.remove('is-empty');
-        const inner = cartDrawer.querySelector('.drawer__inner');
-        if (inner) inner.classList.remove('is-empty');
-      }
-    }
-
-    // 3. Notify the rest of the page.
-    if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
-      publish(PUB_SUB_EVENTS.cartUpdate, {
-        source:   'save-for-later',
-        cartData: parsedState,
-      });
-    }
-    document.dispatchEvent(new CustomEvent('cart:refresh'));
-
-    // 4. Re-run the rewards burst (BLOY hook) if present.
-    if (typeof window.__runRewardsLast === 'function') {
-      try { window.__runRewardsLast(); } catch (e) { /* ignore */ }
-    }
+    return window.BSCartUI.refresh().catch(window.BSCartUI.reportError);
   }
 
   /**
@@ -559,53 +491,7 @@
    * consistent across both modules.
    */
   function refreshCartUI() {
-    // Notify the theme's own cart components (cart page CartItems, favourites
-    // page re-render, etc.) that the cart changed.
-    if (typeof publish === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
-      publish(PUB_SUB_EVENTS.cartUpdate, { source: 'save-for-later' });
-    }
-
-    const cartDrawer = document.querySelector('cart-drawer');
-    if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
-      const sections = cartDrawer.getSectionsToRender().map((s) => s.id);
-      return Promise.all([fetchCartSections(sections), fetchCurrentCart()])
-        .then(function (results) {
-          const sectionMap = results[0];
-          const cart       = results[1];
-          const isEmpty    = !cart || cart.item_count === 0;
-
-          cartDrawer.renderContents({ sections: sectionMap });
-
-          // The server-rendered section HTML reflects the new cart state,
-          // but the outer <cart-drawer> element's `is-empty` class is not
-          // re-evaluated by renderContents(). Toggle it ourselves so the
-          // empty-cart layout shows when the last item is removed.
-          cartDrawer.classList.toggle('is-empty', isEmpty);
-          const inner = cartDrawer.querySelector('.drawer__inner');
-          if (inner) inner.classList.toggle('is-empty', isEmpty);
-        })
-        .catch(() => { /* swallow — caller's success path should not flip */ });
-    }
-
-    const cartNotification = document.querySelector('cart-notification');
-    if (cartNotification && typeof cartNotification.renderContents === 'function') {
-      const sections = cartNotification.getSectionsToRender().map((s) => s.id);
-      return fetchCartSections(sections)
-        .then((sectionMap) => { cartNotification.renderContents({ sections: sectionMap }); })
-        .catch(() => {});
-    }
-
-    // Fallback: at minimum update the cart icon count bubble.
-    return fetchCartSections(['cart-icon-bubble'])
-      .then((data) => {
-        const bubble = document.getElementById('cart-icon-bubble');
-        if (bubble && data['cart-icon-bubble']) {
-          bubble.innerHTML = new DOMParser()
-            .parseFromString(data['cart-icon-bubble'], 'text/html')
-            .querySelector('.shopify-section').innerHTML;
-        }
-      })
-      .catch(() => {});
+    return window.BSCartUI.refresh().catch(window.BSCartUI.reportError);
   }
 
   // -----------------------------------------------------------------------

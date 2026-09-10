@@ -246,18 +246,18 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._syncTimer = null;
           this._pendingCart = null;
           this._pendingTotal = 0;
-          this._lastSections = null;
+          this._stateVersion = 0;
         }
 
         connectedCallback() {
           document.addEventListener('cart:change', this._onCartChange);
-          document.addEventListener('cart:refresh', this._onCartRefresh);
+          document.addEventListener('cart:rendered', this._onCartRefresh);
 
           /* Subscribe to Dawn's native cart update pub/sub (fires on cart page quantity changes) */
           if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
             this._cartUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.cartUpdate, (event) => {
-              if (event.cartData) {
-                void this._updateFromCart(event.cartData);
+              if (!window.BSCartUI && event.cartData && typeof event.cartData.item_count === 'number') {
+                void this._updateFromCart(event.cartData).catch(console.error);
               }
             });
           }
@@ -268,7 +268,6 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             const cart = window.__cartRewardsLastCart;
             const total = this._calculateTotal(cart);
             this.style.display = (cart.item_count || 0) > 0 ? '' : 'none';
-            this._hideOrShowGiftRows(total);
             this.dataset.totalPrice = total;
             this._updateProgress(total);
             this._updateMilestones(total);
@@ -279,27 +278,34 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
         disconnectedCallback() {
           document.removeEventListener('cart:change', this._onCartChange);
-          document.removeEventListener('cart:refresh', this._onCartRefresh);
+          document.removeEventListener('cart:rendered', this._onCartRefresh);
+          this._stateVersion++;
+          if (this._syncTimer) cancelAnimationFrame(this._syncTimer);
           if (this._cartUpdateUnsubscriber) this._cartUpdateUnsubscriber();
         }
 
         async _bootstrap() {
-          const cart = await this._fetchCart();
-          void this._updateFromCart(cart);
+          const version = this._stateVersion;
+          try {
+            const cart = await this._fetchCart();
+            if (version === this._stateVersion && this.isConnected) await this._updateFromCart(cart);
+          } catch (error) {
+            console.error('[cart-rewards] Cart load failed', error);
+          }
         }
 
-        async _onCartRefresh() {
-          const cart = await this._fetchCart();
-          void this._updateFromCart(cart);
+        _onCartRefresh(event) {
+          if (event.detail?.cart) void this._updateFromCart(event.detail.cart).catch(console.error);
         }
 
         _onCartChange(event) {
           if (!event.detail || !event.detail.cart) return;
-          void this._updateFromCart(event.detail.cart);
+          void this._updateFromCart(event.detail.cart).catch(console.error);
         }
 
         async _fetchCart() {
           const response = await fetch(`${Shopify.routes.root}cart.js`, { credentials: 'same-origin' });
+          if (!response.ok) throw new Error(`Cart HTTP ${response.status}`);
           return response.json();
         }
 
@@ -317,20 +323,20 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         }
 
         async _updateFromCart(cart) {
+          if (!this.isConnected || !Array.isArray(cart.items) || typeof cart.item_count !== 'number') return;
+          const version = ++this._stateVersion;
           const total = this._calculateTotal(cart);
           const itemCount = cart.item_count || 0;
 
           /* Hide tracker when cart is empty */
           this.style.display = itemCount > 0 ? '' : 'none';
 
-          /* Immediately hide/show gift rows in the DOM to prevent flash */
-          this._hideOrShowGiftRows(total);
-
           this.dataset.totalPrice = total;
           this._updateProgress(total);
           this._updateMilestones(total);
           this._clearPendingGifts(cart.items || []);
-          await this._updateExclusion(cart);
+          await this._updateExclusion(cart, version);
+          if (version !== this._stateVersion || !this.isConnected) return;
           this._pendingCart = cart;
           this._pendingTotal = total;
           this._scheduleGiftSync();
@@ -346,8 +352,8 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           }
           this._syncTimer = requestAnimationFrame(() => {
             this._syncTimer = null;
-            if (!this._pendingCart) return;
-            void this._syncGifts(this._pendingCart, this._pendingTotal);
+            if (!this._pendingCart || !this.isConnected) return;
+            void this._syncGifts(this._pendingCart, this._pendingTotal).catch(console.error);
           });
         }
 
@@ -369,128 +375,14 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           }
         }
 
-        _hideOrShowGiftRows(total) {
-          /* Instantly hide gift rows whose threshold is no longer met (prevents
-             the flash-then-remove when Dawn's section render runs before our
-             _syncGifts call removes the item via the API).
-             ALSO instantly inject placeholder rows for gifts that should be
-             visible but haven't been added to the cart yet (prevents the
-             delayed-appearance when the API add roundtrip is still in-flight). */
-
-          /* Build a map  variantId → { shouldShow, title, image }  from milestone data */
-          const desired = new Map();
-          const milestones = this.querySelectorAll('[data-reward-milestone][data-type="gift"]');
-          for (const m of milestones) {
-            const vid = m.dataset.variantId;
-            if (!vid) continue;
-            const threshold = parseInt(m.dataset.threshold || '0', 10);
-            const show = !this._isExcluded && total >= threshold;
-            /* If multiple milestones share a variant keep the most permissive */
-            if (!desired.has(vid) || show) {
-              desired.set(vid, {
-                shouldShow: show,
-                title: m.dataset.productTitle || '',
-                image: m.dataset.productImage || ''
-              });
-            }
-          }
-
-          /* Track which desired gifts already have a real row */
-          const presentVids = new Set();
-
-          /* Walk every gift row in BOTH drawer and cart page.
-             Important: REMOVE rows we don't want instead of just hiding
-             them with display:none. The BSS B2B app reads every
-             [bss-b2b-cart-item-key] / [bss-b2b-final-line-price] element
-             from the DOM regardless of visibility and sums them into the
-             VAT subtotal — hidden rows would still be double-counted. */
-          document.querySelectorAll('.cart-item--reward-gift').forEach((row) => {
-            const key = row.dataset.cartItemKey || '';
-            /* Shopify key format: {variant_id}:{hash} — placeholder rows use just the vid */
-            const vid = key.split(':')[0];
-            const entry = desired.get(vid);
-            const shouldShow = entry?.shouldShow ?? false;
-            if (shouldShow) {
-              row.style.display = '';
-              presentVids.add(vid);
-            } else {
-              row.remove();
-            }
-          });
-
-          /* Inject placeholder rows for gifts that should be visible but aren't in the DOM */
-          /* First remove any stale placeholders from a previous pass */
-          document.querySelectorAll('.cart-item--reward-placeholder').forEach((p) => p.remove());
-
-          for (const [vid, entry] of desired.entries()) {
-            if (!entry.shouldShow || presentVids.has(vid)) continue;
-
-            /* Find all <tbody> elements that hold cart items (drawer + cart page) */
-            const tbodies = document.querySelectorAll(
-              'cart-drawer-items tbody, #main-cart-items tbody'
-            );
-
-            for (const tbody of tbodies) {
-              const isCartPage = tbody.closest('#main-cart-items') !== null;
-              const placeholder = this._buildGiftPlaceholderRow(vid, entry, isCartPage);
-              tbody.insertBefore(placeholder, tbody.firstChild);
-            }
-          }
-        }
-
-        _buildGiftPlaceholderRow(variantId, { title, image }, isCartPage) {
-          const tr = document.createElement('tr');
-          tr.className = 'cart-item cart-item--reward-gift cart-item--reward-placeholder';
-          tr.dataset.cartItemKey = variantId;
-          tr.setAttribute('role', 'row');
-
-          const imgHtml = image
-            ? `<img class="cart-item__image" src="${image}" alt="${title}" loading="lazy" width="150">`
-            : '';
-
-          if (isCartPage) {
-            tr.innerHTML = `
-              <td class="cart-item__media">
-                ${image ? `<div class="cart-item__image-container gradient global-media-settings">${imgHtml}</div>` : ''}
-              </td>
-              <td class="cart-item__details">
-                <span class="cart-item__name h4 break">${title}</span>
-                <div class="product-option cart-item__gift-label">FREE</div>
-              </td>
-              <td class="cart-item__totals right medium-hide large-up-hide"></td>
-              <td class="cart-item__quantity">
-                <div class="cart-item__quantity-wrapper">
-                  <span class="cart-item__gift-qty">Qty: 1</span>
-                </div>
-              </td>
-              <td class="cart-item__totals right small-hide"></td>`;
-          } else {
-            tr.innerHTML = `
-              <td class="cart-item__media" role="cell">
-                ${imgHtml}
-              </td>
-              <td class="cart-item__details" role="cell">
-                <span class="cart-item__name h4 break">${title}</span>
-                <div class="product-option cart-item__gift-label">FREE</div>
-              </td>
-              <td class="cart-item__totals right" role="cell"></td>
-              <td class="cart-item__quantity" role="cell">
-                <div class="cart-item__quantity-wrapper">
-                  <span class="cart-item__gift-qty">Qty: 1</span>
-                </div>
-              </td>`;
-          }
-
-          return tr;
-        }
-
-        async _updateExclusion(cart) {
+        async _updateExclusion(cart, version) {
           const items = cart.items || [];
           let hasExcluded = false;
 
           for (const item of items) {
             if (!item.handle) continue;
             const tags = await this._fetchProductTags(item.handle);
+            if (version !== this._stateVersion || !this.isConnected) return;
             if (tags.includes('exclude_rewards')) {
               hasExcluded = true;
               break;
@@ -500,14 +392,6 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._isExcluded = hasExcluded;
           document.documentElement.classList.toggle('has-exclude-rewards', hasExcluded);
 
-          if (!hasExcluded) return;
-
-          for (const item of items) {
-            const properties = item.properties || {};
-            if (properties.__reward_gift_variant || properties.__reward_gift) {
-              await this._removeGift(item.key);
-            }
-          }
         }
 
         async _fetchProductTags(handle) {
@@ -637,8 +521,17 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
 
           if (!milestones.length) return;
 
+          const syncState = JSON.stringify({
+            items: cartItems.map((item) => [item.key, item.quantity, item.final_line_price]),
+            total,
+            isExcluded,
+            milestones: milestones.map((milestone) => [milestone.dataset.variantId, milestone.dataset.threshold])
+          });
+          if (window.__cartRewardsFailedState === syncState) return;
+
           this._giftSyncInProgress = true;
           window.__cartRewardsSyncBusy = true;
+          let finishRenderBatch;
           let didMutate = false;
 
           try {
@@ -699,6 +592,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
                 }
 
                 this._pendingGiftAdds.add(variantId);
+                finishRenderBatch ||= window.BSCartUI?.beginBatch();
                 await this._addGift(variantId, desiredQty);
                 didMutate = true;
                 continue;
@@ -716,92 +610,26 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             }
 
             if (Object.keys(updates).length > 0) {
+              finishRenderBatch ||= window.BSCartUI?.beginBatch();
               await this._updateGifts(updates);
               didMutate = true;
             }
+          } catch (error) {
+            window.__cartRewardsFailedState = syncState;
+            throw error;
           } finally {
             this._giftSyncInProgress = false;
             window.__cartRewardsSyncBusy = false;
+            finishRenderBatch?.();
           }
 
           if (didMutate) {
-            /* Use sections already returned by the last add/update call (no extra fetch) */
-            if (this._lastSections) {
-              this._applyDrawerSections(this._lastSections);
-              this._lastSections = null;
-            } else {
-              await this._refreshDrawer();
-            }
+            await this._refreshDrawer();
           }
         }
 
         async _refreshDrawer() {
-          try {
-            const sectionsParam = 'cart-drawer,cart-icon-bubble,main-cart-items';
-            const resp = await fetch(`${Shopify.routes.root}?sections=${sectionsParam}`);
-            const sections = await resp.json();
-            this._applyDrawerSections(sections);
-          } catch (e) {
-            console.error('[cart-rewards] drawer refresh failed', e);
-          }
-        }
-
-        _applyDrawerSections(sections) {
-          try {
-            const drawerHtml = sections['cart-drawer'];
-            const bubbleHtml = sections['cart-icon-bubble'];
-            const cartPageHtml = sections['main-cart-items'];
-
-            /* Stale-tab guard: if the freshly rendered <cart-rewards> reports a
-               different rewards-version than this element, the merchant has
-               changed the rewards settings since this tab loaded. Replace this
-               element with the fresh one so old thresholds/variants stop firing. */
-            const sourceForVersion = drawerHtml || cartPageHtml;
-            if (sourceForVersion) {
-              const versionDoc = new DOMParser().parseFromString(sourceForVersion, 'text/html');
-              const freshEl = versionDoc.querySelector('cart-rewards');
-              const freshVersion = freshEl?.dataset.rewardsVersion;
-              const ownVersion = this.dataset.rewardsVersion;
-              if (freshVersion && ownVersion && freshVersion !== ownVersion) {
-                window.__cartRewardsLastCart = null;
-                this.replaceWith(freshEl);
-                return;
-              }
-            }
-
-            /* Update cart drawer items + footer */
-            if (drawerHtml) {
-              const drawerDoc = new DOMParser().parseFromString(drawerHtml, 'text/html');
-              const selectors = ['cart-drawer-items', '.cart-drawer__footer'];
-              for (const sel of selectors) {
-                const source = drawerDoc.querySelector(sel);
-                const target = document.querySelector(sel);
-                if (source && target) target.replaceWith(source);
-              }
-            }
-
-            /* Update cart icon bubble */
-            if (bubbleHtml) {
-              const bubbleDoc = new DOMParser().parseFromString(bubbleHtml, 'text/html');
-              const bubbleSource = bubbleDoc.querySelector('.shopify-section');
-              const bubbleTarget = document.getElementById('cart-icon-bubble');
-              if (bubbleSource && bubbleTarget) bubbleTarget.innerHTML = bubbleSource.innerHTML;
-            }
-
-            /* Update cart page items (if on /cart) */
-            if (cartPageHtml) {
-              const cartDoc = new DOMParser().parseFromString(cartPageHtml, 'text/html');
-              const cartSource = cartDoc.querySelector('.js-contents');
-              const cartTarget = document.querySelector('#main-cart-items .js-contents');
-              if (cartSource && cartTarget) cartTarget.innerHTML = cartSource.innerHTML;
-            }
-
-            /* Fire events so other scripts (BLOY, etc.) can react */
-            document.dispatchEvent(new CustomEvent('cart:refresh'));
-            if (window.__runRewardsLast) window.__runRewardsLast();
-          } catch (e) {
-            console.error('[cart-rewards] section apply failed', e);
-          }
+          return window.BSCartUI.refresh().catch(window.BSCartUI.reportError);
         }
 
         async _addGift(variantId, quantity) {
@@ -812,30 +640,10 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             body: JSON.stringify({
               id: variantId,
               quantity,
-              properties: { __reward_gift_variant: String(variantId) },
-              sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items']
+              properties: { __reward_gift_variant: String(variantId) }
             })
           });
-          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
-        }
-
-        async _removeGift(lineKey) {
-          const resp = await fetch(`${Shopify.routes.root}cart/change.js`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'same-origin',
-            body: JSON.stringify({ id: lineKey, quantity: 0, sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items'] })
-          });
-          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
-        }
-
-        async _updateGiftQuantity(lineKey, quantity) {
-          await fetch(`${Shopify.routes.root}cart/change.js`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'same-origin',
-            body: JSON.stringify({ id: lineKey, quantity })
-          });
+          if (!resp.ok) throw new Error(`Gift add HTTP ${resp.status}`);
         }
 
         async _updateGifts(updates) {
@@ -843,9 +651,9 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             credentials: 'same-origin',
-            body: JSON.stringify({ updates, sections: ['cart-drawer', 'cart-icon-bubble', 'main-cart-items'] })
+            body: JSON.stringify({ updates })
           });
-          try { this._lastSections = (await resp.json()).sections; } catch(e) {}
+          if (!resp.ok) throw new Error(`Gift update HTTP ${resp.status}`);
         }
       }
 

@@ -317,32 +317,53 @@
 
   // ---------- Favorites page rendering ----------
   const productCache = {};
+  const inventoryMap = {};
+  const storefrontRoot = window.Shopify?.routes?.root || '/';
+
+  async function loadProductInventory(handle) {
+    const productUrl = new URL(storefrontRoot + 'products/' + encodeURIComponent(handle), window.location.origin);
+    let url = new URL(productUrl);
+    url.searchParams.set('section_id', 'favorites-product-data');
+    const visited = new Set();
+    const inventory = {};
+    try {
+      while (url) {
+        if (visited.has(url.href) || url.origin !== productUrl.origin || url.pathname !== productUrl.pathname) {
+          throw new Error('Invalid inventory pagination');
+        }
+        visited.add(url.href);
+        const response = await fetch(url.href, { credentials: 'same-origin', cache: 'no-store' });
+        if (!response.ok) throw new Error(`Inventory HTTP ${response.status}`);
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const node = html.querySelector('[data-bs-favorites-product]');
+        if (!node) throw new Error('Inventory unavailable');
+        const data = JSON.parse(node.textContent);
+        if (data.handle !== handle || !data.variants || Array.isArray(data.variants)) throw new Error('Invalid inventory data');
+        Object.assign(inventory, data.variants);
+        url = data.next_url ? new URL(data.next_url, url) : null;
+        if (url) url.searchParams.set('section_id', 'favorites-product-data');
+      }
+      inventoryMap[handle] = inventory;
+    } catch (error) {
+      delete inventoryMap[handle];
+      console.warn('[favorites] Product inventory unavailable', error);
+    }
+  }
 
   function fetchProduct(handle) {
     if (productCache[handle]) return Promise.resolve(productCache[handle]);
-    return fetch('/products/' + encodeURIComponent(handle) + '.js', {
-      headers: { Accept: 'application/json' },
+    return fetch(storefrontRoot + 'products/' + encodeURIComponent(handle) + '.js', {
+      credentials: 'same-origin', headers: { Accept: 'application/json' },
     })
       .then((r) => {
         if (!r.ok) throw new Error('not found');
         return r.json();
       })
-      .then((p) => {
+      .then(async (p) => {
+        await loadProductInventory(handle);
         productCache[handle] = p;
         return p;
       });
-  }
-
-  function formatMoney(cents) {
-    const fmt = (window.Shopify && Shopify.formatMoney) || null;
-    if (fmt && window.theme && window.theme.moneyFormat) {
-      try {
-        return fmt(cents, window.theme.moneyFormat);
-      } catch (e) {
-        /* fall through */
-      }
-    }
-    return '$' + (cents / 100).toFixed(2);
   }
 
   function escapeHtml(str) {
@@ -351,22 +372,8 @@
     });
   }
 
-  // Server-rendered inventory map (handle -> variantId -> {tracked, qty}).
-  // Storefront product JSON omits inventory_quantity, so we rely on this.
-  let __invMap = null;
-  function getInventoryMap() {
-    if (__invMap) return __invMap;
-    const node = document.querySelector('script[data-bs-favorites-inventory]');
-    if (!node) { __invMap = {}; return __invMap; }
-    try { __invMap = JSON.parse(node.textContent || '{}'); }
-    catch (e) { __invMap = {}; }
-    return __invMap;
-  }
   function getVariantInventory(handle, variantId) {
-    const map = getInventoryMap();
-    const p = map && map[handle];
-    if (!p) return null;
-    return p[variantId] || null;
+    return inventoryMap[handle]?.[variantId] || null;
   }
 
   // Live cart map: variantId -> quantity already in cart. Used to subtract
@@ -440,12 +447,8 @@
       '<div class="bs-fav-variant" data-variant-id="' + variant.id + '">' +
         '<div class="bs-fav-variant__label">' +
           '<span class="bs-fav-variant__name">' + escapeHtml(variant.title) + '</span>' +
-          '<span class="bs-fav-variant__price"' +
-            ' data-bs-fav-price-mirror' +
-            ' data-bs-handle="' + escapeHtml(productHandle) + '"' +
-            ' data-bs-variant="' + variant.id + '"' +
-          '>' +
-            buildPriceHtml(variant, productHandle) +
+          '<span class="bs-fav-variant__price">' +
+            buildPriceHtml() +
           '</span>' +
         '</div>' +
         control +
@@ -453,38 +456,8 @@
     );
   }
 
-  // Use the server-rendered price map (which respects wholesale / B2B
-  // pricing for the signed-in customer) when available, falling back to the
-  // public price from /products/handle.js for guests.
-  function buildPriceHtml(variant, productHandle) {
-    // Prefer the BSS-aware Liquid bootstrap, which has been observed and
-    // potentially rewritten by the BSS B2B app on page load with the
-    // customer's wholesale price.
-    const bootstrap = document.querySelector(
-      '[data-bs-fav-price][data-bs-handle="' +
-        cssEscape(productHandle) +
-        '"][data-bs-variant="' +
-        variant.id +
-        '"]'
-    );
-    if (bootstrap) return bootstrap.innerHTML.trim();
-
-    // Fallback: storefront public price (used for products that weren't in
-    // the bootstrap, e.g. items added to favorites after page load).
-    const compareAt = variant.compare_at_price;
-    const onSale = compareAt && compareAt > variant.price;
-    if (onSale) {
-      return (
-        '<s class="bs-fav-variant__compare">' + formatMoney(compareAt) + '</s> ' +
-        '<span class="bs-fav-variant__sale">' + formatMoney(variant.price) + '</span>'
-      );
-    }
-    return formatMoney(variant.price);
-  }
-
-  function cssEscape(str) {
-    if (window.CSS && typeof CSS.escape === 'function') return CSS.escape(str);
-    return String(str).replace(/(["\\])/g, '\\$1');
+  function buildPriceHtml() {
+    return '<span data-price-state="unavailable">Price available in cart</span>';
   }
 
   function buildItemElement(product) {
@@ -561,49 +534,10 @@
     });
   }
 
-  function fetchCartSections(sectionIds) {
-    const url = '/?sections=' + sectionIds.join(',');
-    return fetch(url, { headers: { Accept: 'application/json' } }).then((r) => r.json());
-  }
-
-  function refreshCartUI() {
+  async function refreshCartUI() {
+    await window.BSCartUI.refresh();
     const cartDrawer = document.querySelector('cart-drawer');
-    if (cartDrawer && typeof cartDrawer.renderContents === 'function') {
-      const sections = cartDrawer.getSectionsToRender().map((s) => s.id);
-      return fetchCartSections(sections).then((sectionMap) => {
-        cartDrawer.renderContents({ sections: sectionMap });
-        // Mirror what product-form.js does: drop the is-empty class on the
-        // host element once items have been added, otherwise CSS hides the
-        // drawer header / items area.
-        if (cartDrawer.classList.contains('is-empty')) {
-          cartDrawer.classList.remove('is-empty');
-        }
-        const inner = cartDrawer.querySelector('.drawer__inner');
-        if (inner && inner.classList.contains('is-empty')) {
-          inner.classList.remove('is-empty');
-        }
-      });
-    }
-
-    const cartNotification = document.querySelector('cart-notification');
-    if (cartNotification && typeof cartNotification.renderContents === 'function') {
-      const sections = cartNotification.getSectionsToRender().map((s) => s.id);
-      return fetchCartSections(sections).then((sectionMap) => {
-        cartNotification.renderContents({ sections: sectionMap });
-      });
-    }
-
-    // Fallback: at minimum, refresh the cart icon bubble.
-    return fetchCartSections(['cart-icon-bubble'])
-      .then((data) => {
-        const bubble = document.getElementById('cart-icon-bubble');
-        if (bubble && data['cart-icon-bubble']) {
-          bubble.innerHTML = new DOMParser()
-            .parseFromString(data['cart-icon-bubble'], 'text/html')
-            .querySelector('.shopify-section').innerHTML;
-        }
-      })
-      .catch(() => {});
+    if (cartDrawer) cartDrawer.open();
   }
 
   function clampQty(input) {
@@ -714,18 +648,25 @@
     // Refresh the cart map first so inventory caps subtract what's already
     // in the cart and "Max in cart" badges render correctly.
     loadCartMap().then(() => {
-      handles.forEach((handle) => {
-        fetchProduct(handle)
-          .then((product) => {
+      let nextIndex = 0;
+      const loadNext = async () => {
+        while (nextIndex < handles.length && list.isConnected) {
+          const handle = handles[nextIndex++];
+          try {
+            const product = await fetchProduct(handle);
+            if (!list.isConnected) return;
             const el = buildItemElement(product);
             attachItemHandlers(el);
             list.appendChild(el);
-          })
-          .catch(() => {
-            /* product missing — silently skip and clean storage */
-            remove(handle);
-          });
-      });
+          } catch (error) {
+            if (!list.isConnected) return;
+            const unavailable = document.createElement('li');
+            unavailable.textContent = 'A saved product is temporarily unavailable.';
+            list.appendChild(unavailable);
+          }
+        }
+      };
+      for (let worker = 0; worker < Math.min(4, handles.length); worker++) void loadNext();
     });
   }
 
@@ -733,7 +674,6 @@
     const page = document.querySelector('[data-bs-favorites-page]');
     if (!page) return;
     if (page.getAttribute('data-logged-in') !== 'true') return;
-    initBssPriceMirroring();
     renderFavoritesPage();
     // Re-render on any external change (e.g. server pull bringing new items).
     document.addEventListener(EVENT_CHANGED, () => {
@@ -746,56 +686,6 @@
         renderFavoritesPage();
       });
     }
-  }
-
-  // Watch the hidden BSS price bootstrap. When the BSS B2B app rewrites a
-  // bootstrap span with the wholesale price, mirror that HTML into every
-  // visible favorites row that displays the same variant. This keeps the
-  // favorites page in sync regardless of whether BSS finishes before or
-  // after we render rows from /products/handle.js.
-  function initBssPriceMirroring() {
-    const bootstrap = document.querySelector('[data-bs-favorites-prices]');
-    if (!bootstrap || typeof MutationObserver === 'undefined') return;
-    const sync = (sourceEl) => {
-      if (!sourceEl) return;
-      const handle = sourceEl.getAttribute('data-bs-handle');
-      const variantId = sourceEl.getAttribute('data-bs-variant');
-      if (!handle || !variantId) return;
-      const html = sourceEl.innerHTML.trim();
-      if (!html) return;
-      document
-        .querySelectorAll(
-          '[data-bs-fav-price-mirror][data-bs-handle="' +
-            cssEscape(handle) +
-            '"][data-bs-variant="' +
-            variantId +
-            '"]'
-        )
-        .forEach((target) => {
-          if (target.innerHTML.trim() !== html) target.innerHTML = html;
-        });
-    };
-    const observer = new MutationObserver((mutations) => {
-      const seen = new Set();
-      mutations.forEach((m) => {
-        const el = m.target.closest && m.target.closest('[data-bs-fav-price]');
-        if (el && !seen.has(el)) {
-          seen.add(el);
-          sync(el);
-        }
-      });
-    });
-    observer.observe(bootstrap, {
-      subtree: true,
-      childList: true,
-      characterData: true,
-      attributes: true,
-    });
-    // Also do an initial sync on a short delay so any synchronous BSS work
-    // that ran before our observer attached still gets mirrored.
-    setTimeout(() => {
-      bootstrap.querySelectorAll('[data-bs-fav-price]').forEach(sync);
-    }, 250);
   }
 
   document.addEventListener('DOMContentLoaded', initFavoritesPageIfPresent);

@@ -1,0 +1,25 @@
+{%- if customer and product != blank -%}
+  {%- paginate product.variants by 250 -%}
+    <script type="application/json" data-bs-favorites-product>
+      {
+        "handle": {{ product.handle | json }},
+        "variants": {
+          {%- for variant in product.variants -%}
+            "{{ variant.id }}": {
+              "tracked": {% if variant.inventory_management == 'shopify' and variant.inventory_policy != 'continue' %}true{% else %}false{% endif %},
+              "qty": {{ variant.inventory_quantity | default: 0 }}
+            }{% unless forloop.last %},{% endunless %}
+          {%- endfor -%}
+        },
+        "next_url": {{ paginate.next.url | json }}
+      }
+    </script>
+  {%- endpaginate -%}
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Favorites product data",
+  "settings": []
+}
+{% endschema %}

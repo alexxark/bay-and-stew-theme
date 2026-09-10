@@ -9,7 +9,7 @@
  *   - On page load, if the customer is logged in AND their server snapshot has
  *     items AND the current browser's cart is empty AND the snapshot didn't
  *     originate from the current browser's cart token, restore the snapshot
- *     into Shopify's cart via /cart/update.js and refresh cart UI.
+ *     into Shopify's cart via /cart/add.js and refresh cart UI.
  *
  * Implementation:
  *   - Wraps window.fetch (and XMLHttpRequest.send) so any successful mutation
@@ -37,6 +37,11 @@
   const DEBOUNCE_MS = 700;
   const CART_MUTATION_PATHS = ['/cart/add', '/cart/change', '/cart/update', '/cart/clear'];
   const LAST_APPLIED_KEY = 'bs:cart-snapshot:last-applied';
+  const RESTORE_ATTEMPT_KEY = 'bs:cart-snapshot:restore-attempt';
+  const cartRoot = window.Shopify?.routes?.root || '/';
+  let restoreInProgress = false;
+  let restoreUncertain = false;
+  let cartMutationVersion = 0;
 
   function getLastApplied() {
     try {
@@ -85,7 +90,7 @@
   }
 
   function fetchCart() {
-    return fetch('/cart.js', { headers: { Accept: 'application/json' } })
+    return fetch(cartRoot + 'cart.js', { cache: 'no-store', credentials: 'same-origin', headers: { Accept: 'application/json' } })
       .then((r) => (r.ok ? r.json() : null))
       .catch(() => null);
   }
@@ -98,15 +103,16 @@
   let lastPushedJson  = null;
 
   function schedulePush() {
-    if (!getCustomerId() || !getEndpoint()) return;
+    if (!getCustomerId() || !getEndpoint() || restoreInProgress || restoreUncertain) return;
     clearTimeout(pushTimer);
     pushTimer = setTimeout(doPush, DEBOUNCE_MS);
   }
 
   function doPush() {
-    if (!getCustomerId() || !getEndpoint()) return;
+    if (!getCustomerId() || !getEndpoint() || restoreInProgress || restoreUncertain) return;
+    const version = cartMutationVersion;
     fetchCart().then((cart) => {
-      if (!cart) return;
+      if (!cart || restoreInProgress || restoreUncertain || version !== cartMutationVersion) return;
 
       const snapshot = {
         items: (cart.items || []).map((it) => ({
@@ -127,7 +133,6 @@
         items: snapshot.items, note: snapshot.note, attributes: snapshot.attributes,
       });
       if (sig === lastPushedJson) return;
-      lastPushedJson = sig;
 
       fetch(getEndpoint(), {
         method:      'PUT',
@@ -135,10 +140,12 @@
         headers:     { 'Content-Type': 'application/json', Accept: 'application/json' },
         body:        payload,
         keepalive:   true,
-      }).then(() => {
+      }).then((response) => {
+        if (!response.ok) throw new Error(`Snapshot save HTTP ${response.status}`);
+        lastPushedJson = sig;
         // Our own push is now the latest applied state for this browser.
         setLastApplied(snapshot.updated_at);
-      }).catch(() => { /* offline / endpoint down — ignore */ });
+      }).catch((error) => console.error('[persistent-cart] Snapshot save failed', error));
     });
   }
 
@@ -166,9 +173,10 @@
    * same variant + same properties + same selling plan = same line.
    */
   function sameLine(a, b) {
-    if (a.id !== b.id) return false;
-    if ((a.selling_plan || null) !== (b.selling_plan || null)) return false;
-    return JSON.stringify(a.properties || {}) === JSON.stringify(b.properties || {});
+    if (String(a.id) !== String(b.id)) return false;
+    if (String(a.selling_plan || '') !== String(b.selling_plan || '')) return false;
+    const sortedProperties = (properties) => Object.entries(properties || {}).sort(([left], [right]) => left.localeCompare(right));
+    return JSON.stringify(sortedProperties(a.properties)) === JSON.stringify(sortedProperties(b.properties));
   }
 
   /**
@@ -177,59 +185,14 @@
    * Mirrors Dawn's CartItems.getSectionsToRender() approach.
    */
   function refreshCartSections() {
-    const targets = [
-      { id: 'cart-icon-bubble',     selector: '#cart-icon-bubble',  inner: '.shopify-section' },
-      { id: 'cart-drawer',          selector: '#CartDrawer',        inner: false },
-      { id: 'cart-live-region-text', selector: '#cart-live-region-text', inner: '.shopify-section' },
-      // Only present on /cart page; harmless if missing.
-      { id: 'main-cart-items',      selector: '#main-cart-items',   inner: '.js-contents' },
-      { id: 'main-cart-footer',     selector: '#main-cart-footer',  inner: '.js-contents' },
-    ];
-
-    const present = targets.filter((t) => document.querySelector(t.selector));
-    if (!present.length) return;
-
-    const sectionsParam = present.map((t) => t.id).join(',');
-
-    fetch('/?sections=' + encodeURIComponent(sectionsParam), {
-      credentials: 'same-origin',
-      headers:     { Accept: 'application/json' },
-    })
-      .then((r) => (r.ok ? r.json() : null))
-      .then((sections) => {
-        if (!sections) return;
-
-        present.forEach((t) => {
-          const html = sections[t.id];
-          if (!html) return;
-          const doc = new DOMParser().parseFromString(html, 'text/html');
-
-          if (t.inner) {
-            const src  = doc.querySelector(t.inner);
-            const dest = document.querySelector(t.selector + ' ' + t.inner)
-                      || document.querySelector(t.selector);
-            if (src && dest) dest.innerHTML = src.innerHTML;
-          } else {
-            // Replace the whole node.
-            const src  = doc.querySelector(t.selector);
-            const dest = document.querySelector(t.selector);
-            if (src && dest) dest.innerHTML = src.innerHTML;
-          }
-        });
-
-        // Let BLOY / rewards bar / anything else listening know.
-        document.dispatchEvent(new CustomEvent('cart:refresh'));
-        if (window.PUB_SUB_EVENTS && window.publish) {
-          fetch('/cart.js').then((r) => r.json()).then((cart) => {
-            try { window.publish(window.PUB_SUB_EVENTS.cartUpdate, { source: 'persistent-cart', cartData: cart }); } catch (e) {}
-          });
-        }
-      })
-      .catch(() => { /* ignore — user can refresh manually if needed */ });
+    if (window.BSCartUI) return window.BSCartUI.refresh().catch(window.BSCartUI.reportError);
+    document.dispatchEvent(new CustomEvent('cart:refresh'));
   }
 
-  function restoreSnapshot(snapshot, currentCart) {
-    if (!snapshot || !Array.isArray(snapshot.items)) return;
+  async function restoreSnapshot(snapshot, currentCart) {
+    if (!getCustomerId() || restoreInProgress || restoreUncertain) return;
+    if (!snapshot || !Array.isArray(snapshot.items) || !snapshot.items.length) return;
+    if (!currentCart || !Array.isArray(currentCart.items) || currentCart.items.length) return;
 
     const snapshotTs   = Number(snapshot.updated_at) || 0;
     const lastApplied  = getLastApplied();
@@ -246,72 +209,73 @@
     // browser has already applied (or has never applied anything).
     if (snapshotTs && snapshotTs <= lastApplied) return;
 
-    // If the snapshot is empty AND the current cart has items added in this
-    // browser since lastApplied, don't wipe them. Otherwise, clear the cart.
-    const snapshotEmpty = !snapshot.items.length;
+    const validId = (id) => /^[1-9]\d*$/.test(String(id)) && (typeof id !== 'number' || Number.isSafeInteger(id));
+    const validObject = (value) => value == null || (typeof value === 'object' && !Array.isArray(value));
+    if (!snapshot.items.every((item) => item && validId(item.id) && Number.isSafeInteger(item.quantity) && item.quantity > 0 &&
+      validObject(item.properties) && (!item.selling_plan || validId(item.selling_plan)))) return;
+    if (!validObject(snapshot.attributes) || (snapshot.note != null && typeof snapshot.note !== 'string')) return;
 
-    // Build the line-item array Shopify's /cart/add.js expects.
-    const items = snapshot.items
-      .filter((it) => it && it.id && it.quantity > 0)
-      .map((it) => ({
-        id:           it.id,
-        quantity:     it.quantity,
-        properties:   it.properties || {},
-        selling_plan: it.selling_plan || undefined,
-      }));
-
-    const applyAndFinish = function () {
-      // Round-trip note + attributes if present.
-      if (snapshot.note || (snapshot.attributes && Object.keys(snapshot.attributes).length)) {
-        fetch('/cart/update.js', {
-          method:  'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body:    JSON.stringify({
-            note:       snapshot.note || '',
-            attributes: snapshot.attributes || {},
-          }),
-        }).catch(() => {});
-      }
-
-      // Suppress the next push (it would just mirror what we just restored).
-      lastPushedJson = JSON.stringify({
-        items: items.map((it) => ({
-          id:           it.id,
-          quantity:     it.quantity,
-          properties:   it.properties,
-          selling_plan: it.selling_plan || null,
-        })),
-        note:       snapshot.note || '',
-        attributes: snapshot.attributes || {},
+    const items = snapshot.items.map((item) => ({
+      id: item.id,
+      quantity: item.quantity,
+      properties: item.properties || {},
+      selling_plan: item.selling_plan || undefined,
+    }));
+    const attemptKey = RESTORE_ATTEMPT_KEY + ':' + getCustomerId();
+    const attempt = JSON.stringify({ timestamp: snapshotTs, items });
+    restoreInProgress = true;
+    clearTimeout(pushTimer);
+    const finishRenderBatch = window.BSCartUI?.beginBatch();
+    let attempted = false;
+    try {
+      if (localStorage.getItem(attemptKey) === attempt) return;
+      const version = cartMutationVersion;
+      const latest = await fetchCart();
+      if (!latest || !Array.isArray(latest.items) || latest.items.length || version !== cartMutationVersion) return;
+      localStorage.setItem(attemptKey, attempt);
+      attempted = true;
+      const result = await fetch(cartRoot + 'cart/add.js', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ items }),
       });
-      setLastApplied(snapshotTs || Date.now());
-
-      document.dispatchEvent(new CustomEvent('cart:refresh'));
-
-      // Soft-refresh the cart UI (header bubble, drawer, /cart page) without
-      // a full page reload.
-      refreshCartSections();
-    };
-
-    // Step 1: clear current cart (so we replace rather than merge / duplicate).
-    fetch('/cart/clear.js', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    })
-      .then(() => {
-        if (snapshotEmpty || !items.length) {
-          // Snapshot is empty — cart is already cleared, just finish.
-          applyAndFinish();
-          return;
-        }
-        // Step 2: add snapshot items.
-        return fetch('/cart/add.js', {
-          method:  'POST',
+      if (!result.ok) throw new Error(`Cart restore HTTP ${result.status}`);
+      let restored = await fetchCart();
+      if (!restored || !Array.isArray(restored.items)) throw new Error('Restored cart could not be verified');
+      const restoredItems = restored.items.map((item) => ({
+        ...item, id: item.variant_id, selling_plan: item.selling_plan_allocation?.selling_plan?.id,
+      }));
+      const complete = items.every((item) => {
+        const expectedQuantity = items.filter((candidate) => sameLine(candidate, item)).reduce((total, candidate) => total + candidate.quantity, 0);
+        const actualQuantity = restoredItems.filter((candidate) => sameLine(candidate, item)).reduce((total, candidate) => total + candidate.quantity, 0);
+        return actualQuantity >= expectedQuantity;
+      });
+      if (!complete) throw new Error('Restored cart is incomplete');
+      if (snapshot.note || Object.keys(snapshot.attributes || {}).length) {
+        const metadata = await fetch(cartRoot + 'cart/update.js', {
+          method: 'POST',
+          credentials: 'same-origin',
           headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body:    JSON.stringify({ items: items }),
-        }).then(() => applyAndFinish());
-      })
-      .catch(() => { /* ignore — next page load will retry */ });
+          body: JSON.stringify({
+            note: restored.note || snapshot.note || '',
+            attributes: { ...snapshot.attributes, ...restored.attributes },
+          }),
+        });
+        if (!metadata.ok) throw new Error(`Cart metadata restore HTTP ${metadata.status}`);
+        restored = await metadata.json();
+      }
+      setLastApplied(snapshotTs || Date.now());
+      return restored;
+    } catch (error) {
+      restoreUncertain = attempted;
+      console.error('[persistent-cart] Restore stopped; current cart preserved', error);
+      document.dispatchEvent(new CustomEvent('cart:restore-error'));
+    } finally {
+      restoreInProgress = false;
+      finishRenderBatch?.();
+      if (attempted) refreshCartSections();
+    }
   }
 
   // ---------------------------------------------------------------------------
@@ -333,6 +297,7 @@
 
       const promise = target.apply(this, arguments);
       if (!isMutation) return promise;
+      cartMutationVersion++;
 
       return promise.then((res) => {
         if (res && res.ok) schedulePush();
@@ -391,6 +356,7 @@
 
     proto.send = function () {
       if (isCartMutationUrl(this.__bsPcUrl) && /POST/i.test(this.__bsPcMethod || '')) {
+        cartMutationVersion++;
         this.addEventListener('load', () => {
           if (this.status >= 200 && this.status < 300) schedulePush();
         });
@@ -417,19 +383,6 @@
 
     const snapshot = readBootstrap();
     if (!snapshot) return;
-
-    // Seed dedupe baseline with the snapshot we just read; this prevents
-    // an immediate redundant push if no mutations occur this session.
-    lastPushedJson = JSON.stringify({
-      items: (snapshot.items || []).map((it) => ({
-        id: it.id,
-        quantity: it.quantity,
-        properties: it.properties || {},
-        selling_plan: it.selling_plan || null,
-      })),
-      note: snapshot.note || '',
-      attributes: snapshot.attributes || {},
-    });
 
     fetchCart().then((cart) => restoreSnapshot(snapshot, cart));
   }

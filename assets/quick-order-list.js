@@ -240,6 +240,7 @@ if (!customElements.get('quick-order-list')) {
         if (intersection.length !== 0) return;
 
         this.getSectionsToRender().forEach((section) => {
+          if (['cart-drawer', 'cart-icon-bubble', 'cart-live-region-text', 'main-cart-items', 'main-cart-footer'].includes(section.section)) return;
           const sectionElement = document.getElementById(section.id);
           if (
             sectionElement &&

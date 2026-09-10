@@ -117,6 +117,7 @@
                       <td class="cart-item__quantity">
                         <div class="cart-item__quantity-wrapper">
                           <span class="cart-item__gift-qty">Qty: {{ item.quantity }}</span>
+                          <input type="hidden" name="updates[]" value="{{ item.quantity }}">
                         </div>
                       </td>
                       <td class="cart-item__totals right small-hide">

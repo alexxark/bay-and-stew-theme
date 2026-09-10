@@ -158,6 +158,7 @@ if (!customElements.get('quick-add-bulk')) {
         const intersection = this.queue.filter((element) => ids.includes(element.id));
         if (intersection.length !== 0) return;
         this.getSectionsToRender().forEach((section) => {
+          if (['cart-drawer', 'cart-icon-bubble', 'cart-live-region-text', 'main-cart-items', 'main-cart-footer'].includes(section.section)) return;
           const sectionElement = document.getElementById(section.id);
           if (
             sectionElement &&
