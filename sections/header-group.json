@@ -16,14 +16,14 @@
       "blocks": {
         "announcement_iihNqX": {
           "type": "announcement",
-          "disabled": true,
           "settings": {
-            "text": "TRIPLE LOYALTY POINTS ON ANY PURCHASE – MAKERS CIRCLE EXCLUSIVE",
-            "link": "https://bayandstew.com/pages/about?view=bloy-loyalty"
+            "text": "50% OFF SALE - Select Charms & Connectors",
+            "link": "https://bayandstew.com/collections/sale-promotion"
           }
         },
         "announcement_yxMhRg": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "WE WILL BE CLOSED ON MONDAY 9/7 FOR LABOR DAY. ORDERS PLACED AFTER 12 PM PDT FRIDAY 9/4 WILL BE SHIPPED ON TUESDAY 9/8",
             "link": ""
@@ -52,7 +52,6 @@
         "announcement-bar-0",
         "announcement_FnhcDx"
       ],
-      "disabled": true,
       "custom_css": [
         ".bs-notice-wrap {margin: 0.75rem auto 0;}"
       ],
