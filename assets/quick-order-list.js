@@ -202,20 +202,44 @@ if (!customElements.get('quick-order-list')) {
       }
 
       validateInput(target) {
+        const rules = this.getInputRules(target);
+        const inputValue = parseInt(target.value, 10);
+        const isStepped = inputValue >= rules.min && (inputValue - rules.min) % rules.step == 0;
         if (target.max) {
           return (
-            parseInt(target.value) == 0 ||
-            (parseInt(target.value) >= parseInt(target.dataset.min) &&
-              parseInt(target.value) <= parseInt(target.max) &&
-              parseInt(target.value) % parseInt(target.step) == 0)
+            inputValue == 0 ||
+            (inputValue >= rules.min &&
+              inputValue <= rules.max &&
+              isStepped)
           );
         } else {
           return (
-            parseInt(target.value) == 0 ||
-            (parseInt(target.value) >= parseInt(target.dataset.min) &&
-              parseInt(target.value) % parseInt(target.step) == 0)
+            inputValue == 0 ||
+            (inputValue >= rules.min &&
+              isStepped)
           );
         }
+      }
+
+      reconcileAuthoritativeQuantities(requestedItems, cartData) {
+        if (!cartData || !Array.isArray(cartData.items)) return;
+
+        Object.entries(requestedItems || {}).forEach(([variantId, requestedQuantity]) => {
+          const requested = parseInt(requestedQuantity, 10);
+          if (!Number.isFinite(requested) || requested <= 0) return;
+
+          const variantIdInt = parseInt(variantId, 10);
+          if (!Number.isFinite(variantIdInt)) return;
+
+          const actual = cartData.items.reduce((sum, item) => {
+            if (parseInt(item.variant_id, 10) !== variantIdInt) return sum;
+            return sum + (Number(item.quantity) || 0);
+          }, 0);
+
+          if (actual !== requested) {
+            this.updateError(actual, variantIdInt);
+          }
+        });
       }
 
       refresh() {
@@ -429,6 +453,7 @@ if (!customElements.get('quick-order-list')) {
               this.defineInputsAndQuickOrderTable();
               this.addMultipleDebounce();
               this.ids = [];
+              this.reconcileAuthoritativeQuantities(items, result.cartData);
               publish(PUB_SUB_EVENTS.cartUpdate, {
                 source: this.quickOrderListId,
                 cartData: result.cartData || {},

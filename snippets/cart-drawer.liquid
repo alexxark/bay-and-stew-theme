@@ -382,8 +382,15 @@
                                     data-cart-quantity="{{ cart | item_count_for_variant: item.variant.id }}"
                                     min="0"
                                     data-min="{{ item.variant.quantity_rule.min }}"
+                                    {% if bss_qty_rule_max != nil %}
+                                      data-quantity-rule-max="{{ bss_qty_rule_max }}"
+                                    {% endif %}
                                     {% if bss_effective_max != nil %}
                                       max="{{ bss_effective_max }}"
+                                      data-max="{{ bss_effective_max }}"
+                                    {% endif %}
+                                    {% if bss_inv_cap != nil %}
+                                      data-inventory-max="{{ bss_inv_cap }}"
                                     {% endif %}
                                     step="{{ item.variant.quantity_rule.increment }}"
                                     {% # theme-check-enable %}

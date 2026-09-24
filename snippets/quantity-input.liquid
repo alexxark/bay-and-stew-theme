@@ -17,7 +17,7 @@
   assign rule_max = variant.quantity_rule.max
   assign inventory_max = nil
   if variant.inventory_management == 'shopify' and variant.inventory_policy != 'continue'
-    assign inventory_max = variant.inventory_quantity
+    assign inventory_max = variant.inventory_quantity | default: 0
     if inventory_max < 0
       assign inventory_max = 0
     endif
@@ -54,8 +54,12 @@
     data-cart-quantity="{{ cart | item_count_for_variant: variant.id }}"
     min="{{ min }}"
     data-min="{{ variant.quantity_rule.min }}"
+    {% if rule_max != null %}
+      data-quantity-rule-max="{{ rule_max }}"
+    {% endif %}
     {% if effective_max != null %}
       max="{{ effective_max }}"
+      data-max="{{ effective_max }}"
     {% endif %}
     {% if inventory_max != null %}
       data-inventory-max="{{ inventory_max }}"

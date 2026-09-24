@@ -214,6 +214,47 @@ function onKeyUpEscape(event) {
   summaryElement.focus();
 }
 
+function parseQuantityValue(value) {
+  if (value === null || value === undefined || value === '') return null;
+  const parsed = parseInt(value, 10);
+  return Number.isNaN(parsed) ? null : parsed;
+}
+
+function normalizeQuantityMax(min, step, max) {
+  if (max === null) return null;
+
+  const safeStep = step > 0 ? step : 1;
+  if (max < min) return max;
+
+  const distanceFromMin = max - min;
+  const stepsFromMin = Math.floor(distanceFromMin / safeStep);
+  return min + stepsFromMin * safeStep;
+}
+
+function isValidSteppedQuantity(value, min, step) {
+  if (!Number.isFinite(value)) return false;
+  const safeStep = step > 0 ? step : 1;
+  if (value < min) return false;
+  return (value - min) % safeStep === 0;
+}
+
+function resolveQuantityRules(input) {
+  const min = parseQuantityValue(input?.dataset?.min) ?? parseQuantityValue(input?.min) ?? 0;
+  const step = parseQuantityValue(input?.step) ?? 1;
+  const maxCandidates = [
+    parseQuantityValue(input?.max),
+    parseQuantityValue(input?.dataset?.max),
+    parseQuantityValue(input?.dataset?.quantityRuleMax),
+    parseQuantityValue(input?.dataset?.inventoryMax),
+  ].filter((value) => value !== null);
+
+  return {
+    min,
+    step,
+    max: normalizeQuantityMax(min, step, maxCandidates.length ? Math.min(...maxCandidates) : null),
+  };
+}
+
 class QuantityInput extends HTMLElement {
   constructor() {
     super();
@@ -228,6 +269,7 @@ class QuantityInput extends HTMLElement {
   quantityUpdateUnsubscriber = undefined;
 
   connectedCallback() {
+    this.syncResolvedMax();
     this.validateQtyRules();
     this.quantityUpdateUnsubscriber = subscribe(PUB_SUB_EVENTS.quantityUpdate, this.validateQtyRules.bind(this));
   }
@@ -239,6 +281,7 @@ class QuantityInput extends HTMLElement {
   }
 
   onInputChange(event) {
+    this.syncResolvedMax();
     const before = this.input.dataset._lastValue || '';
     this.clampToMax(before);
     this.input.dataset._lastValue = this.input.value;
@@ -248,7 +291,7 @@ class QuantityInput extends HTMLElement {
   onButtonClick(event) {
     event.preventDefault();
     const previousValue = this.input.value;
-    const max = parseInt(this.input.max, 10);
+    const max = this.syncResolvedMax();
     const current = parseInt(this.input.value, 10) || 0;
     const isPlus = event.target.name === 'plus' || !!event.target.closest('button[name="plus"]');
 
@@ -260,8 +303,9 @@ class QuantityInput extends HTMLElement {
     }
 
     if (isPlus) {
-      if (parseInt(this.input.dataset.min) > parseInt(this.input.step) && this.input.value == 0) {
-        this.input.value = this.input.dataset.min;
+      const quantityRuleMin = parseQuantityValue(this.input.dataset.min);
+      if (quantityRuleMin !== null && quantityRuleMin > 0 && this.input.value == 0) {
+        this.input.value = quantityRuleMin;
       } else {
         this.input.stepUp();
       }
@@ -278,12 +322,20 @@ class QuantityInput extends HTMLElement {
     }
   }
 
+  syncResolvedMax() {
+    const rules = resolveQuantityRules(this.input);
+    if (rules.max !== null) {
+      this.input.max = String(rules.max);
+    }
+    return rules.max;
+  }
+
   clampToMax(previousValue) {
     // <input type="number"> does not enforce max for typed values, only for
     // stepUp(). Manually cap the input so customers cannot exceed available
     // inventory or quantity-rule maximums.
-    const max = parseInt(this.input.max, 10);
-    if (!isNaN(max) && parseInt(this.input.value, 10) > max) {
+    const max = this.syncResolvedMax();
+    if (max !== null && parseInt(this.input.value, 10) > max) {
       this.input.value = max;
       // Only flash if the value actually changed from what the user had.
       if (previousValue === undefined || previousValue != this.input.value) {
@@ -319,14 +371,22 @@ class QuantityInput extends HTMLElement {
 
   validateQtyRules() {
     const value = parseInt(this.input.value);
-    if (this.input.min) {
+    const rules = resolveQuantityRules(this.input);
+
+    const setButtonState = (button, disabled) => {
+      if (!button) return;
+      button.classList.toggle('disabled', disabled);
+      button.toggleAttribute('disabled', disabled);
+      button.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+    };
+
+    if (this.input.min || this.input.dataset.min) {
       const buttonMinus = this.querySelector(".quantity__button[name='minus']");
-      buttonMinus.classList.toggle('disabled', parseInt(value) <= parseInt(this.input.min));
+      setButtonState(buttonMinus, parseInt(value) <= rules.min);
     }
-    if (this.input.max) {
-      const max = parseInt(this.input.max);
+    if (rules.max !== null) {
       const buttonPlus = this.querySelector(".quantity__button[name='plus']");
-      buttonPlus.classList.toggle('disabled', value >= max);
+      setButtonState(buttonPlus, value >= rules.max);
     }
   }
 }
@@ -1452,16 +1512,29 @@ class BulkAdd extends HTMLElement {
     event.target.select();
   }
 
+  getInputRules(target) {
+    const rules = resolveQuantityRules(target);
+    if (rules.max !== null) {
+      target.max = String(rules.max);
+    }
+    return rules;
+  }
+
   validateQuantity(event) {
     const inputValue = parseInt(event.target.value);
     const index = event.target.dataset.index;
+    const rules = this.getInputRules(event.target);
 
-    if (inputValue < event.target.dataset.min) {
-      this.setValidity(event, index, window.quickOrderListStrings.min_error.replace('[min]', event.target.dataset.min));
-    } else if (inputValue > parseInt(event.target.max)) {
-      this.setValidity(event, index, window.quickOrderListStrings.max_error.replace('[max]', event.target.max));
-    } else if (inputValue % parseInt(event.target.step) != 0) {
-      this.setValidity(event, index, window.quickOrderListStrings.step_error.replace('[step]', event.target.step));
+    if (inputValue < rules.min) {
+      this.setValidity(event, index, window.quickOrderListStrings.min_error.replace('[min]', rules.min));
+    } else if (rules.max !== null && inputValue > rules.max) {
+      event.target.value = rules.max;
+      event.target.setCustomValidity(window.quickOrderListStrings.max_error.replace('[max]', rules.max));
+      event.target.reportValidity();
+      event.target.setCustomValidity('');
+      this.startQueue(index, rules.max);
+    } else if (!isValidSteppedQuantity(inputValue, rules.min, rules.step)) {
+      this.setValidity(event, index, window.quickOrderListStrings.step_error.replace('[step]', rules.step));
     } else {
       event.target.setCustomValidity('');
       event.target.reportValidity();

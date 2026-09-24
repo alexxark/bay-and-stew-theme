@@ -1687,6 +1687,303 @@ test('quick-add-bulk rerenders use pending/ready BSS lifecycle', () => {
   assert(quickAddBulkScript.includes('window.BSPriceState.setReady'));
 });
 
+function loadQuantityRuleResolver() {
+  const block = source('assets/global.js').match(
+    /function parseQuantityValue\(value\) \{[\s\S]*?function resolveQuantityRules\(input\) \{[\s\S]*?\n\}/
+  );
+  assert(block, 'Expected parseQuantityValue/resolveQuantityRules helpers in assets/global.js');
+  const context = {};
+  vm.runInNewContext(`${block[0]}\nthis.testResolveQuantityRules = resolveQuantityRules;`, context);
+  return context.testResolveQuantityRules;
+}
+
+function loadBulkAddClassForValidation() {
+  const resolverBlock = source('assets/global.js').match(
+    /function parseQuantityValue\(value\) \{[\s\S]*?function resolveQuantityRules\(input\) \{[\s\S]*?\n\}/
+  );
+  const bulkAddBlock = source('assets/global.js').match(
+    /class BulkAdd extends HTMLElement \{[\s\S]*?if \(!customElements\.get\('bulk-add'\)\) \{[\s\S]*?\n\}/
+  );
+
+  assert(resolverBlock, 'Expected quantity resolver block in assets/global.js');
+  assert(bulkAddBlock, 'Expected BulkAdd class block in assets/global.js');
+
+  let BulkAddCtor;
+  const context = {
+    HTMLElement: class {},
+    customElements: {
+      get() {},
+      define(name, ctor) {
+        if (name === 'bulk-add') BulkAddCtor = ctor;
+      },
+    },
+    window: {
+      quickOrderListStrings: {
+        min_error: 'min [min]',
+        max_error: 'max [max]',
+        step_error: 'step [step]',
+      },
+    },
+  };
+
+  vm.runInNewContext(`${resolverBlock[0]}\n${bulkAddBlock[0]}`, context);
+  assert(BulkAddCtor, 'Expected bulk-add custom element registration');
+  return BulkAddCtor;
+}
+
+function loadQuantityInputClassForValidation() {
+  const resolverBlock = source('assets/global.js').match(
+    /function parseQuantityValue\(value\) \{[\s\S]*?function resolveQuantityRules\(input\) \{[\s\S]*?\n\}/
+  );
+  const quantityInputBlock = source('assets/global.js').match(
+    /class QuantityInput extends HTMLElement \{[\s\S]*?customElements\.define\('quantity-input', QuantityInput\);/
+  );
+
+  assert(resolverBlock, 'Expected quantity resolver block in assets/global.js');
+  assert(quantityInputBlock, 'Expected QuantityInput class block in assets/global.js');
+
+  const context = {
+    HTMLElement: class {},
+    customElements: {
+      get() {},
+      define() {},
+    },
+    subscribe: () => () => {},
+    PUB_SUB_EVENTS: { quantityUpdate: 'quantityUpdate' },
+    Event: class {
+      constructor(type, options = {}) {
+        this.type = type;
+        this.bubbles = !!options.bubbles;
+      }
+    },
+    setTimeout,
+    clearTimeout,
+  };
+
+  vm.runInNewContext(`${resolverBlock[0]}\n${quantityInputBlock[0]}\nthis.testQuantityInput = QuantityInput;`, context);
+  assert(context.testQuantityInput, 'Expected QuantityInput class export');
+  return context.testQuantityInput;
+}
+
+function createBulkAddValidationHarness() {
+  const BulkAdd = loadBulkAddClassForValidation();
+  const element = new BulkAdd();
+  const queued = [];
+  const messages = [];
+
+  element.startQueue = (id, quantity) => queued.push({ id, quantity });
+  element.resetQuantityInput = () => {};
+
+  const buildEvent = ({ value, min, step, quantityRuleMax = null, inventoryMax = null, index = '1000' }) => {
+    const dataset = { index, min: String(min) };
+    if (quantityRuleMax !== null) dataset.quantityRuleMax = String(quantityRuleMax);
+    if (inventoryMax !== null) dataset.inventoryMax = String(inventoryMax);
+
+    return {
+      target: {
+        value: String(value),
+        max: '',
+        min: '0',
+        step: String(step),
+        dataset,
+        setCustomValidity: (message) => messages.push(message),
+        reportValidity: () => {},
+        select: () => {},
+      },
+    };
+  };
+
+  return { element, queued, messages, buildEvent };
+}
+
+test('effective max normalizes to valid increment under tracked inventory caps (5/5/18 -> 15)', () => {
+  const resolveRules = loadQuantityRuleResolver();
+
+  const tracked = resolveRules({
+    dataset: { min: '5', inventoryMax: '18' },
+    min: '0',
+    max: '',
+    step: '5',
+  });
+
+  assert.equal(tracked.min, 5);
+  assert.equal(tracked.step, 5);
+  assert.equal(tracked.max, 15);
+});
+
+test('bulk add over-max manual attempt clamps to 15 for 5/5/18 instead of raw inventory 18', () => {
+  const harness = createBulkAddValidationHarness();
+
+  const event = harness.buildEvent({ value: 50, min: 5, step: 5, inventoryMax: 18 });
+  harness.element.validateQuantity(event);
+
+  assert.equal(event.target.value, 15);
+  assert.equal(event.target.max, '15');
+  assert.deepEqual(harness.queued, [{ id: '1000', quantity: 15 }]);
+  assert.equal(harness.messages[0], 'max 15');
+});
+
+test('quantity-input plus button at normalized max does not increment or dispatch mutation-driving change', () => {
+  const QuantityInput = loadQuantityInputClassForValidation();
+  let dispatched = 0;
+  let warnings = 0;
+
+  const plusButton = {
+    name: 'plus',
+    closest: (selector) => (selector === 'button[name="plus"]' ? plusButton : null),
+  };
+  const minusButton = {
+    name: 'minus',
+    closest: () => null,
+  };
+
+  const input = {
+    value: '15',
+    min: '0',
+    max: '',
+    step: '5',
+    dataset: { min: '5', inventoryMax: '18' },
+    dispatchEvent: () => {
+      dispatched += 1;
+    },
+    stepUp: () => {
+      input.value = String((parseInt(input.value, 10) || 0) + 5);
+    },
+    stepDown: () => {
+      input.value = String((parseInt(input.value, 10) || 0) - 5);
+    },
+  };
+
+  const component = {
+    input,
+    changeEvent: { type: 'change' },
+    querySelector: (selector) => (selector.includes("name='plus'") ? plusButton : minusButton),
+    flashMaxWarning: () => {
+      warnings += 1;
+    },
+  };
+
+  component.syncResolvedMax = QuantityInput.prototype.syncResolvedMax;
+  component.clampToMax = QuantityInput.prototype.clampToMax;
+
+  QuantityInput.prototype.onButtonClick.call(component, {
+    preventDefault() {},
+    target: plusButton,
+  });
+
+  assert.equal(input.value, '15');
+  assert.equal(input.max, '15');
+  assert.equal(dispatched, 0);
+  assert.equal(warnings, 1);
+});
+
+test('effective max uses min-offset increment math for min=3 increment=4 inventory=20 (max 19)', () => {
+  const resolveRules = loadQuantityRuleResolver();
+
+  const tracked = resolveRules({
+    dataset: { min: '3', inventoryMax: '20' },
+    min: '0',
+    max: '',
+    step: '4',
+  });
+
+  assert.equal(tracked.min, 3);
+  assert.equal(tracked.step, 4);
+  assert.equal(tracked.max, 19);
+});
+
+test('bulk add over-max manual attempt clamps to 19 for min=3 increment=4 inventory=20', () => {
+  const harness = createBulkAddValidationHarness();
+
+  const event = harness.buildEvent({ value: 999, min: 3, step: 4, inventoryMax: 20 });
+  harness.element.validateQuantity(event);
+
+  assert.equal(event.target.value, 19);
+  assert.equal(event.target.max, '19');
+  assert.deepEqual(harness.queued, [{ id: '1000', quantity: 19 }]);
+  assert.equal(harness.messages[0], 'max 19');
+});
+
+test('quantity_rule.max stricter than inventory still wins after increment normalization', () => {
+  const resolveRules = loadQuantityRuleResolver();
+
+  const tracked = resolveRules({
+    dataset: { min: '5', quantityRuleMax: '20', inventoryMax: '50' },
+    min: '0',
+    max: '',
+    step: '5',
+  });
+
+  assert.equal(tracked.max, 20);
+});
+
+test('continue-selling remains uncapped by inventory when no quantity_rule.max is present', () => {
+  const resolveRules = loadQuantityRuleResolver();
+
+  const continueSelling = resolveRules({
+    dataset: { min: '3' },
+    min: '0',
+    max: '',
+    step: '4',
+  });
+
+  assert.equal(continueSelling.min, 3);
+  assert.equal(continueSelling.step, 4);
+  assert.equal(continueSelling.max, null);
+});
+
+test('continue-selling still respects quantity_rule.max and increment progression when provided', () => {
+  const harness = createBulkAddValidationHarness();
+
+  const event = harness.buildEvent({ value: 999, min: 3, step: 4, quantityRuleMax: 20 });
+  harness.element.validateQuantity(event);
+
+  assert.equal(event.target.value, 19);
+  assert.equal(event.target.max, '19');
+  assert.deepEqual(harness.queued, [{ id: '1000', quantity: 19 }]);
+  assert.equal(harness.messages[0], 'max 19');
+});
+
+test('quantity resolver preserves continue-selling uncapped behavior when no max source is present', () => {
+  const resolveRules = loadQuantityRuleResolver();
+
+  const continueSelling = resolveRules({
+    dataset: { min: '1' },
+    min: '0',
+    max: '',
+    step: '1',
+  });
+  assert.equal(continueSelling.min, 1);
+  assert.equal(continueSelling.max, null);
+});
+
+test('bulk add rejects invalid negative, blank, decimal-step, and non-number manual inputs', () => {
+  const harness = createBulkAddValidationHarness();
+  const makeEvent = (value, extras = {}) => harness.buildEvent({
+    value,
+    min: 5,
+    step: 5,
+    quantityRuleMax: 20,
+    ...extras,
+  });
+
+  for (const value of ['-1', '', '7.3', 'abc']) {
+    harness.element.validateQuantity(makeEvent(value));
+  }
+
+  assert.equal(harness.queued.length, 0);
+  assert(harness.messages.includes('min 5'));
+  assert(harness.messages.filter((message) => message === 'step 5').length >= 2);
+});
+
+test('quick-order script reconciles server-authoritative quantity adjustments after mutation', () => {
+  const quickOrderScript = source('assets/quick-order-list.js');
+
+  assert(quickOrderScript.includes('reconcileAuthoritativeQuantities(requestedItems, cartData)'));
+  assert(quickOrderScript.includes('this.reconcileAuthoritativeQuantities(items, result.cartData);'));
+  assert(quickOrderScript.includes('this.updateError(actual, variantIdInt);'));
+});
+
 test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {
   const mainProduct = source('sections/main-product.liquid');
 
