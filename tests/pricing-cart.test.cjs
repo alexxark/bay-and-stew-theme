@@ -244,7 +244,7 @@ test('incomplete inventory response discards partial data and does not change pr
 });
 
 function cartUIHarness(options = {}) {
-  const { bssFailOpenMs, retailFailOpenMs, b2bSafeFallbackMs } = options;
+  const { bssFailOpenMs, retailFailOpenMs, b2bSafeFallbackMs, debugCollect } = options;
   const dom = new JSDOM(`
     <cart-drawer><div id="CartDrawer"><div class="drawer__inner">old drawer</div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div></cart-drawer>
     <div id="cart-icon-bubble">old count</div>
@@ -268,6 +268,7 @@ function cartUIHarness(options = {}) {
   if (Number.isFinite(bssFailOpenMs)) window.__BSPriceFailOpenMs = bssFailOpenMs;
   if (Number.isFinite(retailFailOpenMs)) window.__BSPriceRetailFailOpenMs = retailFailOpenMs;
   if (Number.isFinite(b2bSafeFallbackMs)) window.__BSPriceB2BSafeFallbackMs = b2bSafeFallbackMs;
+  if (debugCollect) window.__BSPriceDebugCollect = true;
   window.eval(source('assets/price-state.js'));
   window.eval(source('assets/cart-checkout-guard.js'));
   return { dom, window, requests, published, warnings, setHandler: (next) => { handler = next; } };
@@ -280,6 +281,15 @@ function cartSections(value) {
     'main-cart-items': `<div class="js-contents"><span bss-b2b-final-line-price>${value}</span></div>`,
     'main-cart-footer': `<div class="js-contents"><span class="totals__total-value">${value}</span></div>`,
     'cart-live-region-text': `<div class="shopify-section">${value}</div>`,
+  };
+}
+
+function b2bCandidateSections(value) {
+  return {
+    ...cartSections(value),
+    'cart-drawer': `<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value" data-bss-payable-candidate="true">${value}</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total" data-bss-payable-candidate="true"></p></div>`,
+    'main-cart-footer': `<div class="js-contents"><p class="totals__total-value" data-bss-payable-candidate="true">${value}</p></div>`,
+    'cart-live-region-text': `<div class="shopify-section">New estimated total: ${value}</div>`,
   };
 }
 
@@ -499,6 +509,417 @@ test('slow B2B updates stay pending and avoid numeric fail-open until payable sn
   assert.deepEqual(totals, ['BSS $25.12 USD', 'BSS $25.12 USD']);
   assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
   assert.equal(failOpenEvents.length, 0);
+
+  harness.dom.window.close();
+});
+
+test('old BSS signal cannot transition a newer in-flight generation to ready', async () => {
+  const harness = cartUIHarness({ debugCollect: true });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 10160, item_count: 10, items: [line(1000, 10)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  let phase = 'initial';
+  let releaseMutationCart;
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({});
+    if (url.includes('cart.js')) {
+      if (phase === 'initial') return jsonResponse({ ...cartWith([line(1000, 10)]), currency: 'USD' });
+      if (phase === 'mutation') {
+        return new Promise((resolve) => {
+          releaseMutationCart = () => resolve(jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' }));
+        });
+      }
+      return jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' });
+    }
+    return jsonResponse(phase === 'initial' ? b2bCandidateSections('$101.60 USD') : b2bCandidateSections('$111.76 USD'));
+  });
+
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+
+  phase = 'mutation';
+  await harness.window.fetch('/en/cart/change.js', { method: 'POST' });
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+  await Promise.resolve();
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  const earlyRejections = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'ready-attempt-rejected' && entry.reason === 'awaiting-shopify-snapshot'
+  );
+  assert(earlyRejections.length >= 1);
+
+  releaseMutationCart();
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 11234, item_count: 11, items: [line(1000, 11)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['BSS $112.34 USD', 'BSS $112.34 USD']);
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+
+  const generationStarts = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'generation:start' && entry.reason === 'cart-fetch-mutation'
+  );
+  const mutationGeneration = generationStarts.at(-1).generation;
+  const finishZeroIndex = harness.window.__bsPricingTrace.findIndex((entry) =>
+    entry.eventName === 'mutation:finish'
+    && entry.reason === 'cart-fetch-mutation-complete'
+    && entry.pendingMutations === 0
+    && entry.generation === mutationGeneration
+  );
+  const snapshotIndex = harness.window.__bsPricingTrace.findIndex((entry) =>
+    entry.eventName === 'generation:snapshot' && entry.generation === mutationGeneration
+  );
+  assert(finishZeroIndex !== -1);
+  assert(snapshotIndex !== -1);
+  assert(finishZeroIndex < snapshotIndex);
+
+  const stateSequence = harness.window.__bsPricingTrace
+    .filter((entry) => entry.eventName === 'state:root' && entry.generation === mutationGeneration)
+    .map((entry) => entry.nextState);
+  const readyPositions = stateSequence
+    .map((state, index) => ({ state, index }))
+    .filter((row) => row.state === 'ready')
+    .map((row) => row.index);
+  assert.equal(readyPositions.length, 1);
+  assert.equal(readyPositions[0], stateSequence.length - 1);
+
+  harness.dom.window.close();
+});
+
+test('module-loaded signal before snapshot bind cannot close the active generation', async () => {
+  const harness = cartUIHarness({ debugCollect: true });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 10160, item_count: 10, items: [line(1000, 10)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+
+  let phase = 'initial';
+  let releaseMutationCart;
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({});
+    if (url.includes('cart.js')) {
+      if (phase === 'initial') return jsonResponse({ ...cartWith([line(1000, 10)]), currency: 'USD' });
+      if (phase === 'mutation') {
+        return new Promise((resolve) => {
+          releaseMutationCart = () => resolve(jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' }));
+        });
+      }
+      return jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' });
+    }
+    return jsonResponse(phase === 'initial' ? b2bCandidateSections('$101.60 USD') : b2bCandidateSections('$111.76 USD'));
+  });
+
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  payableEvents.length = 0;
+
+  phase = 'mutation';
+  await harness.window.fetch('/en/cart/change.js', { method: 'POST' });
+  await Promise.resolve();
+  await Promise.resolve();
+
+  const mutationGenerationStart = harness.window.__bsPricingTrace
+    .filter((entry) => entry.eventName === 'generation:start' && entry.reason === 'cart-fetch-mutation')
+    .at(-1);
+  assert(mutationGenerationStart);
+  const mutationGeneration = mutationGenerationStart.generation;
+
+  harness.window.dispatchEvent(new harness.window.Event('bss_b2b:module:loaded'));
+  await Promise.resolve();
+
+  assert.equal(typeof releaseMutationCart, 'function');
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.equal(payableEvents.length, 0);
+
+  const moduleLoadedRejections = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'ready-attempt-rejected'
+    && entry.eventSource === 'bss_b2b:module:loaded'
+    && entry.generation === mutationGeneration
+  );
+  assert(moduleLoadedRejections.length >= 1);
+  assert(moduleLoadedRejections.some((entry) => entry.reason === 'awaiting-shopify-snapshot'));
+
+  const preBindReadyEvents = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'state:ready' && entry.generation === mutationGeneration
+  );
+  assert.equal(preBindReadyEvents.length, 0);
+  assert.equal(harness.window.__bsPricingTrace.some((entry) =>
+    entry.eventName === 'generation:clear' && entry.generation === mutationGeneration
+  ), false);
+
+  releaseMutationCart();
+  await harness.window.BSCartUI.refresh();
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.equal(payableEvents.length, 0);
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 11234, item_count: 11, items: [line(1000, 11)] };
+  harness.window.dispatchEvent(new harness.window.Event('bss_b2b:module:loaded'));
+
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['BSS $112.34 USD', 'BSS $112.34 USD']);
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  assert.equal(payableEvents.length, 1);
+  assert.equal(payableEvents[0].cents, 11234);
+
+  const stateRoots = harness.window.__bsPricingTrace.filter((entry) => entry.eventName === 'state:root');
+  const mutationStartTraceIndex = harness.window.__bsPricingTrace.findIndex((entry) =>
+    entry.eventName === 'generation:start' && entry.generation === mutationGeneration
+  );
+  assert(mutationStartTraceIndex >= 0);
+  assert(stateRoots.some((entry) => entry.nextState === 'ready' && entry.generation < mutationGeneration));
+
+  const postMutationReadyRoots = harness.window.__bsPricingTrace.filter((entry, index) =>
+    index >= mutationStartTraceIndex
+    && entry.eventName === 'state:root'
+    && entry.nextState === 'ready'
+  );
+  assert.equal(postMutationReadyRoots.length, 1);
+  assert.equal(postMutationReadyRoots[0].generation, mutationGeneration);
+
+  const mutationGenerationStates = stateRoots
+    .filter((entry) => entry.generation === mutationGeneration)
+    .map((entry) => entry.nextState);
+  const mutationReadyIndexes = mutationGenerationStates
+    .map((state, index) => ({ state, index }))
+    .filter((entry) => entry.state === 'ready')
+    .map((entry) => entry.index);
+  assert(mutationGenerationStates.includes('pending'));
+  assert.equal(mutationReadyIndexes.length, 1);
+  assert.equal(mutationReadyIndexes[0], mutationGenerationStates.length - 1);
+
+  harness.dom.window.close();
+});
+
+test('attribute mutation signal before snapshot bind cannot close the active generation', async () => {
+  const harness = cartUIHarness({ debugCollect: true });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 10160, item_count: 10, items: [line(1000, 10)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+
+  let phase = 'initial';
+  let releaseMutationCart;
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({});
+    if (url.includes('cart.js')) {
+      if (phase === 'initial') return jsonResponse({ ...cartWith([line(1000, 10)]), currency: 'USD' });
+      if (phase === 'mutation') {
+        return new Promise((resolve) => {
+          releaseMutationCart = () => resolve(jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' }));
+        });
+      }
+      return jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' });
+    }
+    return jsonResponse(phase === 'initial' ? b2bCandidateSections('$101.60 USD') : b2bCandidateSections('$111.76 USD'));
+  });
+
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  payableEvents.length = 0;
+
+  phase = 'mutation';
+  await harness.window.fetch('/en/cart/change.js', { method: 'POST' });
+  await Promise.resolve();
+  await Promise.resolve();
+
+  const mutationGenerationStart = harness.window.__bsPricingTrace
+    .filter((entry) => entry.eventName === 'generation:start' && entry.reason === 'cart-fetch-mutation')
+    .at(-1);
+  assert(mutationGenerationStart);
+  const mutationGeneration = mutationGenerationStart.generation;
+
+  harness.window.document.documentElement.setAttribute('bss-b2b-cart-price-active', 'seed-1');
+  await Promise.resolve();
+  await Promise.resolve();
+
+  assert.equal(typeof releaseMutationCart, 'function');
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.equal(payableEvents.length, 0);
+
+  const attributeRejections = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'ready-attempt-rejected'
+    && entry.eventSource === 'bss-b2b-cart-price-active'
+    && entry.generation === mutationGeneration
+  );
+  assert(attributeRejections.length >= 1);
+  assert(attributeRejections.some((entry) => entry.reason === 'awaiting-shopify-snapshot'));
+
+  const preBindReadyEvents = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'state:ready' && entry.generation === mutationGeneration
+  );
+  assert.equal(preBindReadyEvents.length, 0);
+  assert.equal(harness.window.__bsPricingTrace.some((entry) =>
+    entry.eventName === 'generation:clear' && entry.generation === mutationGeneration
+  ), false);
+
+  releaseMutationCart();
+  await harness.window.BSCartUI.refresh();
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.equal(payableEvents.length, 0);
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 11234, item_count: 11, items: [line(1000, 11)] };
+  harness.window.document.documentElement.setAttribute('bss-b2b-cart-price-active', 'seed-2');
+  await Promise.resolve();
+  await Promise.resolve();
+
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['BSS $112.34 USD', 'BSS $112.34 USD']);
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  assert.equal(payableEvents.length, 1);
+  assert.equal(payableEvents[0].cents, 11234);
+
+  const stateRoots = harness.window.__bsPricingTrace.filter((entry) => entry.eventName === 'state:root');
+  const mutationStartTraceIndex = harness.window.__bsPricingTrace.findIndex((entry) =>
+    entry.eventName === 'generation:start' && entry.generation === mutationGeneration
+  );
+  assert(mutationStartTraceIndex >= 0);
+  assert(stateRoots.some((entry) => entry.nextState === 'ready' && entry.generation < mutationGeneration));
+
+  const postMutationReadyRoots = harness.window.__bsPricingTrace.filter((entry, index) =>
+    index >= mutationStartTraceIndex
+    && entry.eventName === 'state:root'
+    && entry.nextState === 'ready'
+  );
+  assert.equal(postMutationReadyRoots.length, 1);
+  assert.equal(postMutationReadyRoots[0].generation, mutationGeneration);
+
+  const mutationGenerationStates = stateRoots
+    .filter((entry) => entry.generation === mutationGeneration)
+    .map((entry) => entry.nextState);
+  const mutationReadyIndexes = mutationGenerationStates
+    .map((state, index) => ({ state, index }))
+    .filter((entry) => entry.state === 'ready')
+    .map((entry) => entry.index);
+  assert(mutationGenerationStates.includes('pending'));
+  assert.equal(mutationReadyIndexes.length, 1);
+  assert.equal(mutationReadyIndexes[0], mutationGenerationStates.length - 1);
+
+  harness.dom.window.close();
+});
+
+test('internal batched follow-up cart mutations stay in the same generation without intermediate ready', async () => {
+  const harness = cartUIHarness({ debugCollect: true });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 10160, item_count: 10, items: [line(1000, 10)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  let phase = 'initial';
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') return jsonResponse({});
+    if (url.includes('cart.js')) {
+      if (phase === 'initial') return jsonResponse({ ...cartWith([line(1000, 10)]), currency: 'USD' });
+      return jsonResponse({ ...cartWith([line(1000, 11)]), currency: 'USD' });
+    }
+    return jsonResponse(phase === 'initial' ? b2bCandidateSections('$101.60 USD') : b2bCandidateSections('$111.76 USD'));
+  });
+
+  await harness.window.BSCartUI.refresh();
+  phase = 'mutation';
+
+  await harness.window.fetch('/en/cart/change.js', { method: 'POST' });
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+
+  const finishBatch = harness.window.BSCartUI.beginBatch();
+  await harness.window.fetch('/en/cart/update.js', { method: 'POST' });
+  finishBatch();
+  await harness.window.BSCartUI.refresh();
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 11234, item_count: 11, items: [line(1000, 11)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+
+  const mutationStarts = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'generation:start' && entry.reason === 'cart-fetch-mutation'
+  );
+  assert.equal(mutationStarts.length, 1);
+
+  const mutationGeneration = mutationStarts[0].generation;
+  const generationReadies = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'state:ready' && entry.generation === mutationGeneration
+  );
+  assert.equal(generationReadies.length, 1);
+
+  harness.dom.window.close();
+});
+
+test('rapid quantity updates supersede older generations and only latest generation can become ready', async () => {
+  const harness = cartUIHarness({ debugCollect: true });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 10160, item_count: 10, items: [line(1000, 10)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  let latestQty = 10;
+  let phase = 'initial';
+  harness.setHandler(async (url, options) => {
+    if (options?.method === 'POST') {
+      latestQty += 1;
+      return jsonResponse({});
+    }
+
+    if (url.includes('cart.js')) {
+      return jsonResponse({ ...cartWith([line(1000, latestQty)]), currency: 'USD' });
+    }
+
+    const value = `$${(latestQty * 10.16).toFixed(2)} USD`;
+    return jsonResponse(phase === 'initial' ? b2bCandidateSections('$101.60 USD') : b2bCandidateSections(value));
+  });
+
+  await harness.window.BSCartUI.refresh();
+  phase = 'mutation';
+
+  await Promise.all([
+    harness.window.fetch('/en/cart/change.js', { method: 'POST' }),
+    harness.window.fetch('/en/cart/change.js', { method: 'POST' }),
+    harness.window.fetch('/en/cart/change.js', { method: 'POST' }),
+  ]);
+
+  await harness.window.BSCartUI.refresh();
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+
+  harness.window.BSS_B2B.shopData.cart = {
+    bss_b2b_total_price: 13108,
+    item_count: latestQty,
+    items: [line(1000, latestQty)],
+  };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+
+  const starts = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'generation:start' && entry.reason === 'cart-fetch-mutation'
+  );
+  assert(starts.length >= 3);
+  const latestGeneration = Math.max(...starts.map((entry) => entry.generation));
+
+  const readyEvents = harness.window.__bsPricingTrace.filter((entry) =>
+    entry.eventName === 'state:ready' && starts.some((start) => start.generation === entry.generation)
+  );
+  assert.equal(readyEvents.length, 1);
+  assert.equal(readyEvents[0].generation, latestGeneration);
 
   harness.dom.window.close();
 });
