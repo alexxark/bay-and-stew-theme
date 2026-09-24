@@ -1774,10 +1774,20 @@ function createBulkAddValidationHarness() {
   element.startQueue = (id, quantity) => queued.push({ id, quantity });
   element.resetQuantityInput = () => {};
 
-  const buildEvent = ({ value, min, step, quantityRuleMax = null, inventoryMax = null, index = '1000' }) => {
+  const buildEvent = ({
+    value,
+    min,
+    step,
+    quantityRuleMax = null,
+    inventoryMax = null,
+    cartQuantity = null,
+    quantityInputHost = null,
+    index = '1000',
+  }) => {
     const dataset = { index, min: String(min) };
     if (quantityRuleMax !== null) dataset.quantityRuleMax = String(quantityRuleMax);
     if (inventoryMax !== null) dataset.inventoryMax = String(inventoryMax);
+    if (cartQuantity !== null) dataset.cartQuantity = String(cartQuantity);
 
     return {
       target: {
@@ -1786,6 +1796,7 @@ function createBulkAddValidationHarness() {
         min: '0',
         step: String(step),
         dataset,
+        closest: () => quantityInputHost,
         setCustomValidity: (message) => messages.push(message),
         reportValidity: () => {},
         select: () => {},
@@ -1794,6 +1805,100 @@ function createBulkAddValidationHarness() {
   };
 
   return { element, queued, messages, buildEvent };
+}
+
+function createQuantityButton(name) {
+  return {
+    name,
+    _attrs: {},
+    classList: {
+      _set: new Set(),
+      toggle(className, enabled) {
+        if (enabled) this._set.add(className);
+        else this._set.delete(className);
+      },
+      contains(className) {
+        return this._set.has(className);
+      },
+      add(className) {
+        this._set.add(className);
+      },
+      remove(className) {
+        this._set.delete(className);
+      },
+    },
+    toggleAttribute(name, enabled) {
+      if (enabled) {
+        this._attrs[name] = '';
+      } else {
+        delete this._attrs[name];
+      }
+      if (name === 'disabled') this.disabled = !!enabled;
+    },
+    setAttribute(name, value) {
+      this._attrs[name] = String(value);
+    },
+    getAttribute(name) {
+      return this._attrs[name];
+    },
+    closest(selector) {
+      return selector === `button[name="${this.name}"]` ? this : null;
+    },
+  };
+}
+
+function createQuantityInputHarness({ value, min, step, max = '', quantityRuleMax = null, inventoryMax = null }) {
+  const QuantityInput = loadQuantityInputClassForValidation();
+  const plus = createQuantityButton('plus');
+  const minus = createQuantityButton('minus');
+
+  let dispatched = 0;
+  const input = {
+    value: String(value),
+    min: '0',
+    max: String(max),
+    step: String(step),
+    dataset: { min: String(min) },
+    dispatchEvent: () => {
+      dispatched += 1;
+    },
+    stepUp: () => {
+      input.value = String((parseInt(input.value, 10) || 0) + parseInt(input.step, 10));
+    },
+    stepDown: () => {
+      input.value = String((parseInt(input.value, 10) || 0) - parseInt(input.step, 10));
+    },
+  };
+  if (quantityRuleMax !== null) input.dataset.quantityRuleMax = String(quantityRuleMax);
+  if (inventoryMax !== null) input.dataset.inventoryMax = String(inventoryMax);
+
+  let warnings = 0;
+  const component = {
+    input,
+    changeEvent: { type: 'change' },
+    querySelector(selector) {
+      if (selector === ".quantity__button[name='plus']") return plus;
+      if (selector === ".quantity__button[name='minus']") return minus;
+      return null;
+    },
+    flashMaxWarning() {
+      warnings += 1;
+    },
+  };
+
+  component.syncResolvedMax = QuantityInput.prototype.syncResolvedMax;
+  component.validateQtyRules = QuantityInput.prototype.validateQtyRules;
+  component.clampToMax = QuantityInput.prototype.clampToMax;
+
+  return {
+    QuantityInput,
+    component,
+    input,
+    plus,
+    minus,
+    getDispatched: () => dispatched,
+    getWarnings: () => warnings,
+  };
 }
 
 test('effective max normalizes to valid increment under tracked inventory caps (5/5/18 -> 15)', () => {
@@ -1820,61 +1925,61 @@ test('bulk add over-max manual attempt clamps to 15 for 5/5/18 instead of raw in
   assert.equal(event.target.value, 15);
   assert.equal(event.target.max, '15');
   assert.deepEqual(harness.queued, [{ id: '1000', quantity: 15 }]);
-  assert.equal(harness.messages[0], 'max 15');
+  assert.equal(harness.messages[0], '');
+});
+
+test('quick-order initial render at max disables plus with aria-disabled parity', () => {
+  const harness = createQuantityInputHarness({ value: 22, min: 1, step: 1, inventoryMax: 22 });
+
+  harness.QuantityInput.prototype.connectedCallback.call(harness.component);
+
+  assert.equal(harness.input.value, '22');
+  assert.equal(harness.input.max, '22');
+  assert.equal(harness.plus.disabled, true);
+  assert.equal(harness.plus.getAttribute('aria-disabled'), 'true');
 });
 
 test('quantity-input plus button at normalized max does not increment or dispatch mutation-driving change', () => {
-  const QuantityInput = loadQuantityInputClassForValidation();
-  let dispatched = 0;
-  let warnings = 0;
+  const harness = createQuantityInputHarness({ value: 15, min: 5, step: 5, inventoryMax: 18 });
 
-  const plusButton = {
-    name: 'plus',
-    closest: (selector) => (selector === 'button[name="plus"]' ? plusButton : null),
-  };
-  const minusButton = {
-    name: 'minus',
-    closest: () => null,
-  };
+  harness.QuantityInput.prototype.connectedCallback.call(harness.component);
 
-  const input = {
-    value: '15',
-    min: '0',
-    max: '',
-    step: '5',
-    dataset: { min: '5', inventoryMax: '18' },
-    dispatchEvent: () => {
-      dispatched += 1;
-    },
-    stepUp: () => {
-      input.value = String((parseInt(input.value, 10) || 0) + 5);
-    },
-    stepDown: () => {
-      input.value = String((parseInt(input.value, 10) || 0) - 5);
-    },
-  };
-
-  const component = {
-    input,
-    changeEvent: { type: 'change' },
-    querySelector: (selector) => (selector.includes("name='plus'") ? plusButton : minusButton),
-    flashMaxWarning: () => {
-      warnings += 1;
-    },
-  };
-
-  component.syncResolvedMax = QuantityInput.prototype.syncResolvedMax;
-  component.clampToMax = QuantityInput.prototype.clampToMax;
-
-  QuantityInput.prototype.onButtonClick.call(component, {
+  harness.QuantityInput.prototype.onButtonClick.call(harness.component, {
     preventDefault() {},
-    target: plusButton,
+    target: harness.plus,
   });
 
-  assert.equal(input.value, '15');
-  assert.equal(input.max, '15');
-  assert.equal(dispatched, 0);
-  assert.equal(warnings, 1);
+  assert.equal(harness.input.value, '15');
+  assert.equal(harness.input.max, '15');
+  assert.equal(harness.getDispatched(), 0);
+  assert.equal(harness.getWarnings(), 1);
+  assert.equal(harness.plus.disabled, true);
+  assert.equal(harness.plus.getAttribute('aria-disabled'), 'true');
+});
+
+test('quick-order boundary transition 21 -> 22 disables plus, 22 -> 21 re-enables plus', () => {
+  const harness = createQuantityInputHarness({ value: 21, min: 1, step: 1, inventoryMax: 22 });
+
+  harness.QuantityInput.prototype.connectedCallback.call(harness.component);
+  assert.equal(harness.plus.disabled, false);
+
+  harness.QuantityInput.prototype.onButtonClick.call(harness.component, {
+    preventDefault() {},
+    target: harness.plus,
+  });
+
+  assert.equal(harness.input.value, '22');
+  assert.equal(harness.plus.disabled, true);
+  assert.equal(harness.getDispatched(), 1);
+
+  harness.QuantityInput.prototype.onButtonClick.call(harness.component, {
+    preventDefault() {},
+    target: harness.minus,
+  });
+
+  assert.equal(harness.input.value, '21');
+  assert.equal(harness.plus.disabled, false);
+  assert.equal(harness.getDispatched(), 2);
 });
 
 test('effective max uses min-offset increment math for min=3 increment=4 inventory=20 (max 19)', () => {
@@ -1901,7 +2006,58 @@ test('bulk add over-max manual attempt clamps to 19 for min=3 increment=4 invent
   assert.equal(event.target.value, 19);
   assert.equal(event.target.max, '19');
   assert.deepEqual(harness.queued, [{ id: '1000', quantity: 19 }]);
-  assert.equal(harness.messages[0], 'max 19');
+  assert.equal(harness.messages[0], '');
+});
+
+test('manual over-max entry resolves to max, disables plus, and avoids browser validity popup path', () => {
+  const harness = createBulkAddValidationHarness();
+  const quantityInputHost = { flashed: 0, synced: 0 };
+  let reportValidityCalls = 0;
+
+  const event = harness.buildEvent({
+    value: 50,
+    min: 1,
+    step: 1,
+    inventoryMax: 22,
+    cartQuantity: 0,
+    quantityInputHost: {
+      flashMaxWarning: () => {
+        quantityInputHost.flashed += 1;
+      },
+      validateQtyRules: () => {
+        quantityInputHost.synced += 1;
+      },
+    },
+  });
+  event.target.reportValidity = () => {
+    reportValidityCalls += 1;
+  };
+
+  harness.element.validateQuantity(event);
+
+  assert.equal(event.target.value, 22);
+  assert.equal(event.target.max, '22');
+  assert.equal(quantityInputHost.flashed, 1);
+  assert.equal(quantityInputHost.synced, 1);
+  assert.equal(reportValidityCalls, 0);
+  assert.deepEqual(harness.queued, [{ id: '1000', quantity: 22 }]);
+});
+
+test('known at-max overage correction does not queue redundant mutation when cart already equals max', () => {
+  const harness = createBulkAddValidationHarness();
+
+  const event = harness.buildEvent({
+    value: 23,
+    min: 1,
+    step: 1,
+    inventoryMax: 22,
+    cartQuantity: 22,
+  });
+
+  harness.element.validateQuantity(event);
+
+  assert.equal(event.target.value, 22);
+  assert.equal(harness.queued.length, 0);
 });
 
 test('quantity_rule.max stricter than inventory still wins after increment normalization', () => {
@@ -1941,7 +2097,7 @@ test('continue-selling still respects quantity_rule.max and increment progressio
   assert.equal(event.target.value, 19);
   assert.equal(event.target.max, '19');
   assert.deepEqual(harness.queued, [{ id: '1000', quantity: 19 }]);
-  assert.equal(harness.messages[0], 'max 19');
+  assert.equal(harness.messages[0], '');
 });
 
 test('quantity resolver preserves continue-selling uncapped behavior when no max source is present', () => {
@@ -1982,6 +2138,14 @@ test('quick-order script reconciles server-authoritative quantity adjustments af
   assert(quickOrderScript.includes('reconcileAuthoritativeQuantities(requestedItems, cartData)'));
   assert(quickOrderScript.includes('this.reconcileAuthoritativeQuantities(items, result.cartData);'));
   assert(quickOrderScript.includes('this.updateError(actual, variantIdInt);'));
+});
+
+test('quick-order rerender path re-syncs quantity-input state for disabled-button parity', () => {
+  const quickOrderScript = source('assets/quick-order-list.js');
+
+  assert(quickOrderScript.includes('syncQuantityInputState()'));
+  assert(quickOrderScript.includes('quantityElement.syncResolvedMax?.();'));
+  assert(quickOrderScript.includes('quantityElement.validateQtyRules?.();'));
 });
 
 test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {

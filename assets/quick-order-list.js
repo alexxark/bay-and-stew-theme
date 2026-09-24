@@ -142,6 +142,14 @@ if (!customElements.get('quick-order-list')) {
         this.allInputsArray = Array.from(this.querySelectorAll('input[type="number"]'));
         this.quickOrderListTable = this.querySelector('.quick-order-list__table');
         this.quickOrderListTable.addEventListener('focusin', this.switchVariants.bind(this));
+        this.syncQuantityInputState();
+      }
+
+      syncQuantityInputState() {
+        this.querySelectorAll('quantity-input').forEach((quantityElement) => {
+          quantityElement.syncResolvedMax?.();
+          quantityElement.validateQtyRules?.();
+        });
       }
 
       getPriceStateTargets() {

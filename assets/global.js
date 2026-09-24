@@ -299,6 +299,7 @@ class QuantityInput extends HTMLElement {
     // ourselves since stepUp() will be a no-op.
     if (isPlus && !isNaN(max) && current >= max) {
       this.flashMaxWarning(max);
+      this.validateQtyRules();
       return;
     }
 
@@ -314,6 +315,7 @@ class QuantityInput extends HTMLElement {
     }
 
     this.clampToMax(previousValue);
+    this.validateQtyRules();
 
     if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
 
@@ -1524,14 +1526,19 @@ class BulkAdd extends HTMLElement {
     const inputValue = parseInt(event.target.value);
     const index = event.target.dataset.index;
     const rules = this.getInputRules(event.target);
+    const quantityInput = event.target.closest?.('quantity-input');
 
     if (inputValue < rules.min) {
       this.setValidity(event, index, window.quickOrderListStrings.min_error.replace('[min]', rules.min));
     } else if (rules.max !== null && inputValue > rules.max) {
       event.target.value = rules.max;
-      event.target.setCustomValidity(window.quickOrderListStrings.max_error.replace('[max]', rules.max));
-      event.target.reportValidity();
       event.target.setCustomValidity('');
+      quantityInput?.flashMaxWarning?.(rules.max);
+      quantityInput?.validateQtyRules?.();
+      const cartQuantity = parseQuantityValue(event.target.dataset.cartQuantity);
+      if (cartQuantity !== null && cartQuantity === rules.max) {
+        return;
+      }
       this.startQueue(index, rules.max);
     } else if (!isValidSteppedQuantity(inputValue, rules.min, rules.step)) {
       this.setValidity(event, index, window.quickOrderListStrings.step_error.replace('[step]', rules.step));
