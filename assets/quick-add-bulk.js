@@ -103,21 +103,15 @@ if (!customElements.get('quick-add-bulk')) {
       updateMultipleQty(items) {
         this.selectProgressBar().classList.remove('hidden');
 
-        const ids = Object.keys(items);
-        const body = JSON.stringify({
-          updates: items,
-          sections: this.getSectionsToRender().map((section) => section.section),
-          sections_url: this.getSectionsUrl(),
-        });
-
-        fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } })
-          .then((response) => {
-            return response.text();
-          })
-          .then((state) => {
-            const parsedState = JSON.parse(state);
-            this.renderSections(parsedState, ids);
-            publish(PUB_SUB_EVENTS.cartUpdate, { source: 'quick-add', cartData: parsedState });
+        this.applyVariantUpdatesWithLineIdentity(items)
+          .then((result) => {
+            if (!result.ok) return;
+            return this.onCartUpdate().then(() => {
+              publish(PUB_SUB_EVENTS.cartUpdate, {
+                source: 'quick-add',
+                cartData: result.cartData || {},
+              });
+            });
           })
           .catch(() => {
             // Commented out for now and will be fixed when BE issue is done https://github.com/Shopify/shopify/issues/440605

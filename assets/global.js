@@ -1243,6 +1243,119 @@ class AccountIcon extends HTMLElement {
 
 customElements.define('account-icon', AccountIcon);
 
+function cartRootPath() {
+  return window.Shopify?.routes?.root || '/';
+}
+
+function cartJsonUrl() {
+  return `${cartRootPath()}cart.js`;
+}
+
+function cartChangeUrl() {
+  return (window.routes && window.routes.cart_change_url) || `${cartRootPath()}cart/change.js`;
+}
+
+function cartUpdateUrl() {
+  return (window.routes && window.routes.cart_update_url) || `${cartRootPath()}cart/update.js`;
+}
+
+function hasMeaningfulLineProperties(properties) {
+  if (!properties || typeof properties !== 'object') return false;
+  return Object.keys(properties).some((key) => {
+    const value = properties[key];
+    if (value == null) return false;
+    return String(value) !== '';
+  });
+}
+
+function hasSellingPlan(item) {
+  return Boolean(item?.selling_plan_allocation?.selling_plan?.id || item?.selling_plan);
+}
+
+function isCustomLineIdentity(item) {
+  return hasMeaningfulLineProperties(item?.properties) || hasSellingPlan(item);
+}
+
+function buildLineAwareUpdatePlan(cartItems, variantUpdates) {
+  const normalizedUpdates = {};
+  Object.keys(variantUpdates || {}).forEach((variantId) => {
+    const parsedVariantId = parseInt(variantId, 10);
+    const parsedQty = Number(variantUpdates[variantId]);
+    if (!Number.isSafeInteger(parsedVariantId) || parsedVariantId <= 0) return;
+    if (!Number.isFinite(parsedQty) || parsedQty < 0) return;
+    normalizedUpdates[String(parsedVariantId)] = Math.floor(parsedQty);
+  });
+
+  const linesByVariant = {};
+  (cartItems || []).forEach((item) => {
+    const variantId = String(item?.variant_id || '');
+    if (!variantId) return;
+    if (!linesByVariant[variantId]) linesByVariant[variantId] = [];
+    linesByVariant[variantId].push(item);
+  });
+
+  const plan = {
+    lineUpdates: [],
+    variantUpdates: {},
+    conflicts: [],
+  };
+
+  Object.keys(normalizedUpdates).forEach((variantId) => {
+    const targetQty = normalizedUpdates[variantId];
+    const lines = linesByVariant[variantId] || [];
+
+    if (lines.length === 0) {
+      plan.variantUpdates[variantId] = targetQty;
+      return;
+    }
+
+    if (lines.length === 1) {
+      plan.lineUpdates.push({
+        id: lines[0].key || variantId,
+        quantity: targetQty,
+        variantId,
+      });
+      return;
+    }
+
+    if (targetQty === 0) {
+      lines.forEach((line) => {
+        plan.lineUpdates.push({
+          id: line.key || variantId,
+          quantity: 0,
+          variantId,
+        });
+      });
+      return;
+    }
+
+    const customLines = lines.filter((line) => isCustomLineIdentity(line));
+    const baseLines = lines.filter((line) => !isCustomLineIdentity(line));
+
+    if (baseLines.length === 1) {
+      const customQty = customLines.reduce((sum, line) => sum + (Number(line.quantity) || 0), 0);
+      if (targetQty < customQty) {
+        plan.conflicts.push({ variantId, reason: 'target_below_customized_lines' });
+        return;
+      }
+      plan.lineUpdates.push({
+        id: baseLines[0].key || variantId,
+        quantity: targetQty - customQty,
+        variantId,
+      });
+      return;
+    }
+
+    plan.conflicts.push({ variantId, reason: 'ambiguous_split_lines' });
+  });
+
+  return plan;
+}
+
+window.BSCartLineIdentity = {
+  buildLineAwareUpdatePlan,
+};
+
 class BulkAdd extends HTMLElement {
   constructor() {
     super();
@@ -1273,6 +1386,57 @@ class BulkAdd extends HTMLElement {
     this.queue = this.queue.filter((queueElement) => !queue.includes(queueElement));
     const quickBulkElement = this.closest('quick-order-list') || this.closest('quick-add-bulk');
     quickBulkElement.updateMultipleQty(items);
+  }
+
+  async applyVariantUpdatesWithLineIdentity(items) {
+    const cartResponse = await fetch(cartJsonUrl(), {
+      credentials: 'same-origin',
+      cache: 'no-store',
+      headers: { Accept: 'application/json' },
+    });
+    if (!cartResponse.ok) throw new Error(`Cart read HTTP ${cartResponse.status}`);
+
+    const cartData = await cartResponse.json();
+    const plan = buildLineAwareUpdatePlan(cartData.items || [], items || {});
+
+    if (plan.conflicts.length) {
+      return { ok: false, conflicts: plan.conflicts, cartData };
+    }
+
+    const mutationRequest = (body) => {
+      const base = typeof fetchConfig === 'function'
+        ? fetchConfig()
+        : { method: 'POST', headers: { 'Content-Type': 'application/json' } };
+      return { ...base, body };
+    };
+
+    const finishRenderBatch = window.BSCartUI?.beginBatch?.();
+    try {
+      for (const update of plan.lineUpdates) {
+        const response = await fetch(cartChangeUrl(), mutationRequest(JSON.stringify({
+          id: update.id,
+          quantity: update.quantity,
+        })));
+        if (!response.ok) throw new Error(`Cart change HTTP ${response.status}`);
+      }
+
+      if (Object.keys(plan.variantUpdates).length) {
+        const response = await fetch(cartUpdateUrl(), mutationRequest(JSON.stringify({
+          updates: plan.variantUpdates,
+        })));
+        if (!response.ok) throw new Error(`Cart update HTTP ${response.status}`);
+      }
+    } finally {
+      finishRenderBatch?.();
+    }
+
+    if (window.BSCartUI?.refresh) {
+      const latestCart = await window.BSCartUI.refresh();
+      return { ok: true, conflicts: [], cartData: latestCart };
+    }
+
+    document.dispatchEvent(new CustomEvent('cart:refresh'));
+    return { ok: true, conflicts: [], cartData: null };
   }
 
   resetQuantityInput(id) {

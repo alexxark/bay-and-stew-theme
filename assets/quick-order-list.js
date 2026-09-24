@@ -371,25 +371,26 @@ if (!customElements.get('quick-order-list')) {
 
       updateMultipleQty(items) {
         this.querySelector('.variant-remove-total .loading__spinner')?.classList.remove('hidden');
-        const ids = Object.keys(items);
-
-        const body = JSON.stringify({
-          updates: items,
-          sections: this.getSectionsToRender().map((section) => section.section),
-          sections_url: this.dataset.url,
-        });
 
         this.updateMessage();
         this.setErrorMessage();
 
-        fetch(`${routes.cart_update_url}`, { ...fetchConfig(), ...{ body } })
-          .then((response) => {
-            return response.text();
-          })
-          .then((state) => {
-            const parsedState = JSON.parse(state);
-            this.renderSections(parsedState, ids);
-            publish(PUB_SUB_EVENTS.cartUpdate, { source: this.quickOrderListId, cartData: parsedState });
+        this.applyVariantUpdatesWithLineIdentity(items)
+          .then((result) => {
+            if (!result.ok) {
+              this.setErrorMessage('Some quantities belong to customized cart lines. Update those lines from the cart page.');
+              return;
+            }
+
+            return this.refresh().then(() => {
+              this.defineInputsAndQuickOrderTable();
+              this.addMultipleDebounce();
+              this.ids = [];
+              publish(PUB_SUB_EVENTS.cartUpdate, {
+                source: this.quickOrderListId,
+                cartData: result.cartData || {},
+              });
+            });
           })
           .catch(() => {
             this.setErrorMessage(window.cartStrings.error);
