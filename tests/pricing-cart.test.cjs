@@ -1971,6 +1971,7 @@ function createQuickOrderInventorySyncHarness({
 } = {}) {
   const resolveRules = loadQuantityRuleResolver();
   const plusButton = createQuantityButton('plus');
+  const row = { dataset: { cartQty: String(cartQuantity) } };
 
   const input = {
     value: String(cartQuantity),
@@ -1978,11 +1979,19 @@ function createQuickOrderInventorySyncHarness({
     max: String(inlineInventoryMax),
     step: String(step),
     isConnected: true,
+    _attrs: { value: String(cartQuantity) },
     dataset: {
       quantityVariantId: String(variantId),
       inventoryMax: String(inlineInventoryMax),
       cartQuantity: String(cartQuantity),
       min: String(min),
+    },
+    setAttribute(name, value) {
+      this._attrs[name] = String(value);
+      if (name === 'value') this.value = String(value);
+    },
+    getAttribute(name) {
+      return this._attrs[name];
     },
   };
 
@@ -2015,6 +2024,7 @@ function createQuickOrderInventorySyncHarness({
 
   input.closest = (selector) => {
     if (selector === 'quantity-input') return quantityElement;
+    if (selector === 'tr.variant-item') return row;
     return null;
   };
 
@@ -2025,13 +2035,18 @@ function createQuickOrderInventorySyncHarness({
   quickOrder.quantityMetadataCacheAt = 0;
   quickOrder.quantityMetadataPromise = null;
   quickOrder.quantityMetadataTtlMs = 15000;
+  quickOrder.quantitySyncRequestId = 0;
+  quickOrder.querySelector = (selector) => {
+    if (selector === `.quantity__input[data-quantity-variant-id="${variantId}"]`) return input;
+    return null;
+  };
   quickOrder.querySelectorAll = (selector) => {
     if (selector === 'quantity-input .quantity__input[data-quantity-variant-id]') return [input];
     return [];
   };
   quickOrder.getInputRules = (target) => resolveRules(target);
 
-  return { runtime, quickOrder, input, plusButton, quantityElement, resolveRules };
+  return { runtime, quickOrder, input, plusButton, quantityElement, resolveRules, row };
 }
 
 test('effective max normalizes to valid increment under tracked inventory caps (5/5/18 -> 15)', () => {
@@ -2300,14 +2315,15 @@ test('quick-order rerender path re-syncs quantity-input state for disabled-butto
 test('quick-order inventory cap hydration refreshes quantity inputs from Shopify section-rendered metadata', () => {
   const quickOrderScript = source('assets/quick-order-list.js');
 
-  assert(quickOrderScript.includes('syncQuantityCapsFromServer()'));
+  assert(quickOrderScript.includes('syncQuantityCapsFromServer(forceMetadataRefresh = false)'));
   assert(quickOrderScript.includes("'quick-order-inventory-metadata'"));
   assert(quickOrderScript.includes("url.searchParams.set('section_id', sectionId);"));
   assert(quickOrderScript.includes('data-quick-order-inventory-metadata'));
   assert(quickOrderScript.includes("input.dataset.inventorySyncPending = 'true';"));
   assert(quickOrderScript.includes("delete input.dataset.inventorySyncPending;"));
   assert(quickOrderScript.includes('this.quantityMetadataCache = null;'));
-  assert(quickOrderScript.includes('this.fetchQuantityMetadata()'));
+  assert(quickOrderScript.includes('this.fetchQuantityMetadata(forceMetadataRefresh)'));
+  assert(quickOrderScript.includes('this.defineInputsAndQuickOrderTable(true);'));
 });
 
 test('quick-order inventory metadata Liquid output includes authoritative variant and cart fields', () => {
@@ -2326,8 +2342,8 @@ test('quick-order inventory metadata Liquid output includes authoritative varian
   assert(metadataSection.includes('"Quick Order Inv Data"'));
 });
 
-test('quick-order stale inline cap 23 is replaced by authoritative 19 and overages clamp to 19', async () => {
-  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 0 });
+test('quick-order stale visible 3/data-cart-quantity 3 is reconciled to authoritative 19 with max 19', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 3 });
 
   harness.quickOrder.fetchQuantityMetadata = async () => ({
     variants: {
@@ -2336,16 +2352,22 @@ test('quick-order stale inline cap 23 is replaced by authoritative 19 and overag
         inventory_policy: 'deny',
         inventory_quantity: 19,
         quantity_rule: { min: 1, max: null, increment: 1 },
-        cart_quantity: 0,
+        cart_quantity: 19,
       },
     },
   });
 
   const applied = await harness.quickOrder.syncQuantityCapsFromServer();
   assert.equal(applied, true);
+  assert.equal(harness.input.value, '19');
+  assert.equal(harness.input.getAttribute('value'), '19');
+  assert.equal(harness.input.dataset.cartQuantity, '19');
+  assert.equal(harness.row.dataset.cartQty, '19');
   assert.equal(harness.input.dataset.inventoryMax, '19');
   assert.equal(harness.input.max, '19');
-  assert.equal(harness.input.dataset.remainingAddable, '19');
+  assert.equal(harness.input.dataset.remainingAddable, '0');
+  assert.equal(harness.plusButton.disabled, true);
+  assert.equal(harness.plusButton.getAttribute('aria-disabled'), 'true');
 
   harness.input.value = '18';
   harness.quantityElement.validateQtyRules();
@@ -2358,16 +2380,12 @@ test('quick-order stale inline cap 23 is replaced by authoritative 19 and overag
 
   const bulkHarness = createBulkAddValidationHarness();
   for (const value of [23, 50]) {
-    const event = bulkHarness.buildEvent({ value, min: 1, step: 1, inventoryMax: 19, cartQuantity: 0 });
+    const event = bulkHarness.buildEvent({ value, min: 1, step: 1, inventoryMax: 19, cartQuantity: 19 });
     bulkHarness.element.validateQuantity(event);
     assert.equal(event.target.value, 19);
   }
 
-  assert.deepEqual(bulkHarness.queued, [
-    { id: '1000', quantity: 19 },
-    { id: '1000', quantity: 19 },
-  ]);
-  assert(bulkHarness.queued.every((entry) => entry.quantity <= 19));
+  assert.equal(bulkHarness.queued.length, 0);
 });
 
 test('quick-order metadata fetch treats network/non-200/invalid/missing/malformed responses as unresolved', async () => {
@@ -2438,6 +2456,32 @@ test('quick-order unresolved metadata keeps pending guard and blocks increases b
   assert.deepEqual(bulkHarness.queued[0], { id: '1000', quantity: 4 });
 });
 
+test('quick-order reverse sync updates visible quantity from 19 down to 5 and re-enables plus', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 19 });
+
+  harness.quickOrder.fetchQuantityMetadata = async () => ({
+    variants: {
+      '1000': {
+        inventory_management: 'shopify',
+        inventory_policy: 'deny',
+        inventory_quantity: 19,
+        quantity_rule: { min: 1, max: null, increment: 1 },
+        cart_quantity: 5,
+      },
+    },
+  });
+
+  const applied = await harness.quickOrder.syncQuantityCapsFromServer(true);
+  assert.equal(applied, true);
+  assert.equal(harness.input.value, '5');
+  assert.equal(harness.input.getAttribute('value'), '5');
+  assert.equal(harness.input.dataset.cartQuantity, '5');
+  assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.dataset.remainingAddable, '14');
+  assert.equal(harness.plusButton.disabled, false);
+  assert.equal(harness.plusButton.getAttribute('aria-disabled'), 'false');
+});
+
 test('quick-order keeps trusted maxTotal 19 after later refresh failure and never reverts to stale 23', async () => {
   const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 0 });
 
@@ -2465,6 +2509,7 @@ test('quick-order keeps trusted maxTotal 19 after later refresh failure and neve
   assert.equal(secondApply, false);
   assert.equal(harness.input.dataset.inventoryMax, '19');
   assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.value, '5');
   assert.equal(harness.input.dataset.remainingAddable, '14');
   assert.equal(harness.input.dataset.inventorySyncPending, 'true');
 
@@ -2482,6 +2527,62 @@ test('quick-order keeps trusted maxTotal 19 after later refresh failure and neve
 
   assert.equal(bulkHarness.queued.length, 1);
   assert.deepEqual(bulkHarness.queued[0], { id: '1000', quantity: 4 });
+});
+
+test('quick-order reconcileAuthoritativeQuantities applies authoritative current total to visible input and dataset', () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 3 });
+  harness.quickOrder.updateError = () => {};
+
+  harness.quickOrder.reconcileAuthoritativeQuantities(
+    { '1000': 4 },
+    { items: [{ variant_id: 1000, quantity: 19 }] }
+  );
+
+  assert.equal(harness.input.value, '19');
+  assert.equal(harness.input.getAttribute('value'), '19');
+  assert.equal(harness.input.dataset.cartQuantity, '19');
+  assert.equal(harness.row.dataset.cartQty, '19');
+  assert.equal(harness.input.max, '23');
+});
+
+test('quick-order forced metadata refresh bypasses cached stale cart quantity', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 3 });
+  let snapshot = {
+    variants: {
+      '1000': {
+        inventory_management: 'shopify',
+        inventory_policy: 'deny',
+        inventory_quantity: 19,
+        quantity_rule: { min: 1, max: null, increment: 1 },
+        cart_quantity: 3,
+      },
+    },
+  };
+
+  harness.quickOrder.fetchQuantityMetadata = async (forceRefresh) => {
+    if (forceRefresh) {
+      snapshot = {
+        variants: {
+          '1000': {
+            inventory_management: 'shopify',
+            inventory_policy: 'deny',
+            inventory_quantity: 19,
+            quantity_rule: { min: 1, max: null, increment: 1 },
+            cart_quantity: 19,
+          },
+        },
+      };
+    }
+    return snapshot;
+  };
+
+  await harness.quickOrder.syncQuantityCapsFromServer();
+  assert.equal(harness.input.value, '3');
+
+  await harness.quickOrder.syncQuantityCapsFromServer(true);
+  assert.equal(harness.input.value, '19');
+  assert.equal(harness.input.dataset.cartQuantity, '19');
+  assert.equal(harness.plusButton.disabled, true);
 });
 
 test('quick-order dedicated metadata section contract emits one authoritative payload marker', () => {

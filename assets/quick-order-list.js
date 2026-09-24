@@ -78,6 +78,7 @@ if (!customElements.get('quick-order-list')) {
         this.quantityMetadataCacheAt = 0;
         this.quantityMetadataPromise = null;
         this.quantityMetadataTtlMs = 15000;
+        this.quantitySyncRequestId = 0;
         this.defineInputsAndQuickOrderTable();
 
         this.variantItemStatusElement = document.getElementById('shopping-cart-variant-item-status');
@@ -131,7 +132,7 @@ if (!customElements.get('quick-order-list')) {
           }
           // If its another section that made the update
           this.refresh().then(() => {
-            this.defineInputsAndQuickOrderTable();
+            this.defineInputsAndQuickOrderTable(true);
             this.addMultipleDebounce();
           });
         });
@@ -142,12 +143,12 @@ if (!customElements.get('quick-order-list')) {
         this.cartUpdateUnsubscriber?.();
       }
 
-      defineInputsAndQuickOrderTable() {
+      defineInputsAndQuickOrderTable(forceMetadataRefresh = false) {
         this.allInputsArray = Array.from(this.querySelectorAll('input[type="number"]'));
         this.quickOrderListTable = this.querySelector('.quick-order-list__table');
         this.quickOrderListTable.addEventListener('focusin', this.switchVariants.bind(this));
         this.syncQuantityInputState();
-        this.syncQuantityCapsFromServer();
+        this.syncQuantityCapsFromServer(forceMetadataRefresh);
       }
 
       syncQuantityInputState() {
@@ -238,7 +239,36 @@ if (!customElements.get('quick-order-list')) {
         return this.quantityMetadataPromise;
       }
 
-      syncQuantityCapsFromServer() {
+      applyAuthoritativeQuantity(entry, cartQuantity) {
+        const { input, quantityElement } = entry;
+        const trustedQuantity = Math.max(parseInt(cartQuantity, 10) || 0, 0);
+        input.dataset.cartQuantity = String(trustedQuantity);
+        input.value = String(trustedQuantity);
+        input.setAttribute('value', String(trustedQuantity));
+
+        const row = input.closest('tr.variant-item');
+        if (row) {
+          row.dataset.cartQty = String(trustedQuantity);
+        }
+
+        quantityElement.syncResolvedMax?.();
+        const rules = this.getInputRules(input);
+        const normalizedValue = parseInt(input.value, 10);
+        if (Number.isFinite(normalizedValue) && rules.max !== null && normalizedValue > rules.max) {
+          input.value = String(rules.max);
+          input.setAttribute('value', String(rules.max));
+        }
+
+        if (rules.max !== null) {
+          input.dataset.remainingAddable = String(Math.max(rules.max - trustedQuantity, 0));
+        } else {
+          delete input.dataset.remainingAddable;
+        }
+
+        quantityElement.validateQtyRules?.();
+      }
+
+      syncQuantityCapsFromServer(forceMetadataRefresh = false) {
         const inputs = Array.from(this.querySelectorAll('quantity-input .quantity__input[data-quantity-variant-id]'));
         if (!inputs.length) return Promise.resolve(false);
 
@@ -272,7 +302,10 @@ if (!customElements.get('quick-order-list')) {
 
         entries.forEach(markPending);
 
-        return this.fetchQuantityMetadata().then((metadata) => {
+        const requestId = ++this.quantitySyncRequestId;
+
+        return this.fetchQuantityMetadata(forceMetadataRefresh).then((metadata) => {
+          if (requestId !== this.quantitySyncRequestId) return false;
           if (!metadata?.variants) return false;
 
           let appliedAny = false;
@@ -283,8 +316,6 @@ if (!customElements.get('quick-order-list')) {
             const variant = metadata.variants[String(variantId)];
             if (!variant) return;
             appliedAny = true;
-
-            clearPending(entry);
 
             const tracked = variant.inventory_management === 'shopify' && variant.inventory_policy !== 'continue';
             if (tracked) {
@@ -307,24 +338,9 @@ if (!customElements.get('quick-order-list')) {
               input.step = String(quantityRule.increment);
             }
 
-            const cartQuantity = Math.max(parseInt(variant.cart_quantity, 10) || 0, 0);
-            input.dataset.cartQuantity = String(cartQuantity);
-            input.value = String(cartQuantity);
+            this.applyAuthoritativeQuantity(entry, variant.cart_quantity);
 
-            quantityElement.syncResolvedMax?.();
-            const rules = this.getInputRules(input);
-            const normalizedValue = parseInt(input.value, 10);
-            if (Number.isFinite(normalizedValue) && rules.max !== null && normalizedValue > rules.max) {
-              input.value = String(rules.max);
-            }
-
-            if (rules.max !== null) {
-              input.dataset.remainingAddable = String(Math.max(rules.max - cartQuantity, 0));
-            } else {
-              delete input.dataset.remainingAddable;
-            }
-
-            quantityElement.validateQtyRules?.();
+            clearPending(entry);
           });
 
           return appliedAny;
@@ -422,6 +438,14 @@ if (!customElements.get('quick-order-list')) {
             if (parseInt(item.variant_id, 10) !== variantIdInt) return sum;
             return sum + (Number(item.quantity) || 0);
           }, 0);
+
+          const input = this.querySelector(`.quantity__input[data-quantity-variant-id="${variantIdInt}"]`);
+          if (input) {
+            const quantityElement = input.closest('quantity-input');
+            if (quantityElement) {
+              this.applyAuthoritativeQuantity({ input, quantityElement }, actual);
+            }
+          }
 
           if (actual !== requested) {
             this.updateError(actual, variantIdInt);
@@ -527,7 +551,7 @@ if (!customElements.get('quick-order-list')) {
             }
           }
         });
-        this.defineInputsAndQuickOrderTable();
+        this.defineInputsAndQuickOrderTable(true);
         this.addMultipleDebounce();
         this.ids = [];
         void this.syncPriceStateAfterRender('renderSections');
@@ -637,7 +661,7 @@ if (!customElements.get('quick-order-list')) {
             }
 
             return this.refresh().then(() => {
-              this.defineInputsAndQuickOrderTable();
+              this.defineInputsAndQuickOrderTable(true);
               this.addMultipleDebounce();
               this.ids = [];
               this.reconcileAuthoritativeQuantities(items, result.cartData);
