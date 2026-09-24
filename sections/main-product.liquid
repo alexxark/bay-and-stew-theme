@@ -630,7 +630,44 @@
               </thead>
               <tbody>
                 {%- for variant in product.variants -%}
-                  <tr class="bulk-order-form__row" data-variant-id="{{ variant.id }}">
+                  {%- liquid
+                    assign cart_qty = cart | item_count_for_variant: variant.id
+                    assign bulk_rule_max = variant.quantity_rule.max
+                    assign bulk_inventory_max = nil
+                    if variant.inventory_management == 'shopify' and variant.inventory_policy != 'continue'
+                      assign bulk_inventory_max = variant.inventory_quantity | default: 0
+                      if bulk_inventory_max < 0
+                        assign bulk_inventory_max = 0
+                      endif
+                    endif
+
+                    assign bulk_effective_max = bulk_rule_max
+                    if bulk_inventory_max != nil
+                      if bulk_effective_max == nil or bulk_inventory_max < bulk_effective_max
+                        assign bulk_effective_max = bulk_inventory_max
+                      endif
+                    endif
+                  -%}
+                  <tr
+                    class="bulk-order-form__row"
+                    data-variant-id="{{ variant.id }}"
+                    data-cart-quantity="{{ cart_qty }}"
+                    data-inventory-management="{{ variant.inventory_management | default: '' }}"
+                    data-inventory-policy="{{ variant.inventory_policy | default: '' }}"
+                    data-inventory-quantity="{{ variant.inventory_quantity | default: 0 }}"
+                    data-variant-available="{{ variant.available }}"
+                    data-quantity-rule-min="{{ variant.quantity_rule.min }}"
+                    data-quantity-rule-increment="{{ variant.quantity_rule.increment }}"
+                    {% if bulk_rule_max != nil %}
+                      data-quantity-rule-max="{{ bulk_rule_max }}"
+                    {% endif %}
+                    {% if bulk_inventory_max != nil %}
+                      data-inventory-max="{{ bulk_inventory_max }}"
+                    {% endif %}
+                    {% if bulk_effective_max != nil %}
+                      data-max-total="{{ bulk_effective_max }}"
+                    {% endif %}
+                  >
                     <td data-label="Variant" class="bulk-order-form__cell-variant">
                       {%- if variant.featured_image -%}
                         <img class="variant-image" src="{{ variant.featured_image | image_url: width: 100 }}" alt="{{ variant.featured_image.alt | escape }}" loading="lazy" width="50" height="50">
@@ -649,7 +686,28 @@
                             {{ 'icon-minus.svg' | asset_url | img_tag: '', 'icon icon-minus' }}
                           </span>
                         </button>
-                        <input class="quantity__input" type="number" value="0" min="0" aria-label="Quantity for {{ variant.title | escape }}">
+                        <input
+                          class="quantity__input"
+                          type="number"
+                          data-quantity-variant-id="{{ variant.id }}"
+                          value="{{ cart_qty }}"
+                          data-cart-quantity="{{ cart_qty }}"
+                          min="0"
+                          data-min="{{ variant.quantity_rule.min }}"
+                          {% if bulk_rule_max != nil %}
+                            data-quantity-rule-max="{{ bulk_rule_max }}"
+                          {% endif %}
+                          {% if bulk_effective_max != nil %}
+                            max="{{ bulk_effective_max }}"
+                            data-max="{{ bulk_effective_max }}"
+                          {% endif %}
+                          {% if bulk_inventory_max != nil %}
+                            data-inventory-max="{{ bulk_inventory_max }}"
+                          {% endif %}
+                          step="{{ variant.quantity_rule.increment | default: 1 }}"
+                          data-index="{{ variant.id }}"
+                          aria-label="Quantity for {{ variant.title | escape }}"
+                        >
                         <button class="quantity__button" name="plus" type="button">
                           <span class="visually-hidden">{{ 'products.product.quantity.increase' | t | default: 'Increase quantity' }}</span>
                           <span class="svg-wrapper">
@@ -678,71 +736,7 @@
         </form>
       </div>
 
-      <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          const bulkFormEl = document.querySelector('#BulkOrderForm-{{ section.id }}');
-          if (!bulkFormEl) return;
-
-          const form = bulkFormEl.querySelector('.bulk-order-form__form');
-          const submitButton = form.querySelector('button[type="submit"]');
-
-          // FIX: Precise event listener to prevent double-counting
-          form.addEventListener('click', (event) => {
-            const button = event.target.closest('.quantity__button');
-            if (button) {
-              event.preventDefault(); // Stop the event from bubbling up
-              const quantityInput = button.closest('.quantity').querySelector('.quantity__input');
-              let currentVal = parseInt(quantityInput.value, 10);
-              if (isNaN(currentVal)) currentVal = 0;
-
-              if (button.name === 'plus') {
-                quantityInput.value = currentVal + 1;
-              } else if (currentVal > 0) {
-                quantityInput.value = currentVal - 1;
-              }
-            }
-          });
-
-          form.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            submitButton.classList.add('loading');
-            submitButton.disabled = true;
-
-            const items = Array.from(form.querySelectorAll('.bulk-order-form__row'))
-              .map(row => ({
-                id: row.dataset.variantId,
-                quantity: parseInt(row.querySelector('.quantity__input').value, 10)
-              }))
-              .filter(item => item.quantity > 0);
-
-            if (items.length === 0) {
-              alert('Please select a quantity for at least one item.');
-              submitButton.classList.remove('loading');
-              submitButton.disabled = false;
-              return;
-            }
-
-            try {
-              const res = await fetch(window.Shopify.routes.root + 'cart/add.js', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ items: items })
-              });
-
-              if (res.ok) {
-                window.location.href = '/cart';
-              } else {
-                const errorText = await res.json();
-                throw new Error(errorText.description || 'An error occurred.');
-              }
-            } catch (error) {
-              alert(error.message);
-              submitButton.classList.remove('loading');
-              submitButton.disabled = false;
-            }
-          });
-        });
-      </script>
+      <script src="{{ 'bulk-order-form.js' | asset_url }}" defer="defer"></script>
 
       <style>
         .bulk-order-form { margin-top: 2rem; }
@@ -763,6 +757,7 @@
         .quantity__input { border: none; text-align: center; }
         .bulk-order-form__footer { margin-top: 2rem; }
         .bulk-order-form__footer .button { width: 100%; max-width: 400px; margin: 0 auto; display: block; }
+        .bulk-order-form__success-message--error { color: rgb(var(--color-error)); }
         @media (max-width: 749px) {
           .bulk-order-form__table-wrapper { max-height: none; border: none; }
           .bulk-order-form__table thead { display: none; }
