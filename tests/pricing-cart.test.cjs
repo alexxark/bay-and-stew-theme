@@ -244,13 +244,15 @@ test('incomplete inventory response discards partial data and does not change pr
 });
 
 function cartUIHarness(options = {}) {
-  const { bssFailOpenMs, retailFailOpenMs } = options;
+  const { bssFailOpenMs, retailFailOpenMs, b2bSafeFallbackMs } = options;
   const dom = new JSDOM(`
     <cart-drawer><div id="CartDrawer"><div class="drawer__inner">old drawer</div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div></cart-drawer>
     <div id="cart-icon-bubble">old count</div>
     <cart-items><div id="main-cart-items" data-id="main-cart-items"><div class="js-contents">old lines</div></div></cart-items>
     <div id="main-cart-footer" data-id="main-cart-footer"><div class="js-contents"><span class="totals__total-value">old total</span></div></div>
-    <div id="cart-live-region-text" data-estimated-total-label="New estimated total">old accessible total</div><div id="cart-errors"></div>
+    <div id="cart-live-region-text" data-estimated-total-label="New estimated total">old accessible total</div>
+    <cart-rewards data-rewards-price-state="ready"><p data-rewards-message>Spend $0.00 more</p></cart-rewards>
+    <div id="cart-errors"></div>
   `, { url: 'https://example.test/en/cart', runScripts: 'outside-only' });
   const window = dom.window;
   window.Shopify = { routes: { root: '/en/' } };
@@ -265,6 +267,7 @@ function cartUIHarness(options = {}) {
   window.fetch = (url, options) => { requests.push({ url, options }); return handler(url, options); };
   if (Number.isFinite(bssFailOpenMs)) window.__BSPriceFailOpenMs = bssFailOpenMs;
   if (Number.isFinite(retailFailOpenMs)) window.__BSPriceRetailFailOpenMs = retailFailOpenMs;
+  if (Number.isFinite(b2bSafeFallbackMs)) window.__BSPriceB2BSafeFallbackMs = b2bSafeFallbackMs;
   window.eval(source('assets/price-state.js'));
   window.eval(source('assets/cart-checkout-guard.js'));
   return { dom, window, requests, published, warnings, setHandler: (next) => { handler = next; } };
@@ -342,8 +345,8 @@ test('retail fallback keeps Shopify subtotal and live region text when BSS payab
   harness.dom.window.close();
 });
 
-test('pending subtotal fails open to Shopify pricing when BSS never provides a payable subtotal', async () => {
-  const harness = cartUIHarness({ bssFailOpenMs: 20, retailFailOpenMs: 20 });
+test('B2B unresolved payable timeout falls back to nonnumeric checkout text', async () => {
+  const harness = cartUIHarness({ bssFailOpenMs: 20, retailFailOpenMs: 20, b2bSafeFallbackMs: 20 });
   const failOpenEvents = [];
   harness.window.document.addEventListener('cart:payable-fail-open', (event) => failOpenEvents.push(event.detail));
   harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
@@ -357,12 +360,146 @@ test('pending subtotal fails open to Shopify pricing when BSS never provides a p
 
   await harness.window.BSCartUI.refresh();
   assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'pending'));
-  await new Promise((resolve) => harness.window.setTimeout(resolve, 35));
+  await new Promise((resolve) => harness.window.setTimeout(resolve, 50));
 
   const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
-  assert.deepEqual(totals, ['$44.84 USD', '$44.84 USD']);
+  assert.deepEqual(totals, ['Calculated at checkout', 'Calculated at checkout']);
   assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'ready'));
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'fallback');
+  assert.equal(harness.window.document.querySelector('cart-rewards').dataset.rewardsPriceState, 'fallback');
+  assert.equal(harness.window.document.querySelector('[data-rewards-message]').textContent, 'Calculated at checkout');
   assert.equal(failOpenEvents.length, 1);
+  assert.equal(failOpenEvents[0].mode, 'bss');
+  harness.dom.window.close();
+});
+
+test('replacement subtotal insertion inherits pending lock from root before node-level pending is reapplied', async () => {
+  const harness = cartUIHarness();
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2512, item_count: 1, items: [line(1000, 1)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  const footerContainer = harness.window.document.querySelector('#main-cart-footer .js-contents');
+  const descriptor = Object.getOwnPropertyDescriptor(harness.window.Element.prototype, 'innerHTML');
+  const insertionProbe = { rootStateAtInsert: '', insertedHtml: '' };
+  Object.defineProperty(footerContainer, 'innerHTML', {
+    configurable: true,
+    get() {
+      return descriptor.get.call(this);
+    },
+    set(value) {
+      insertionProbe.rootStateAtInsert = harness.window.document.documentElement.dataset.cartPricingState || '';
+      insertionProbe.insertedHtml = value;
+      descriptor.set.call(this, value);
+    },
+  });
+
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$60.20 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total" data-bss-payable-candidate="true"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $60.20 USD</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+
+  assert.equal(insertionProbe.rootStateAtInsert, 'pending');
+  assert(insertionProbe.insertedHtml.includes('$60.20 USD'));
+  assert.equal(insertionProbe.insertedHtml.includes('data-price-state="pending"'), false);
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'pending'));
+  harness.dom.window.close();
+});
+
+test('6020 seed remains pending through section replacement until matching 2512 BSS snapshot is accepted', async () => {
+  const harness = cartUIHarness();
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2512, item_count: 1, items: [line(1000, 1)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  const payableEvents = [];
+  const revealStates = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => {
+    payableEvents.push(event.detail);
+    const rewardsMessage = harness.window.document.querySelector('[data-rewards-message]');
+    rewardsMessage.textContent = `Spend $${(event.detail.cents / 100).toFixed(2)} more`;
+    revealStates.push(harness.window.document.documentElement.dataset.cartPricingState || '');
+  });
+
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$60.20 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total" data-bss-payable-candidate="true"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $60.20 USD</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+
+  const staleTotals = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert.deepEqual(staleTotals.map((node) => node.textContent), ['$60.20 USD', '$60.20 USD']);
+  assert(staleTotals.every((node) => node.dataset.priceState === 'pending'));
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.equal(harness.window.document.querySelector('cart-rewards').dataset.rewardsPriceState, 'pending');
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 2512, item_count: 5, items: [line(1000, 5)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  const readyTotals = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert.deepEqual(readyTotals.map((node) => node.textContent), ['BSS $25.12 USD', 'BSS $25.12 USD']);
+  assert(readyTotals.every((node) => node.dataset.priceState === 'ready'));
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  assert.equal(harness.window.document.querySelector('cart-rewards').dataset.rewardsPriceState, 'ready');
+  assert.equal(harness.window.document.querySelector('[data-rewards-message]').textContent, 'Spend $25.12 more');
+  assert.deepEqual(revealStates, ['pending']);
+  assert.deepEqual(payableEvents.map((detail) => detail.cents), [2512]);
+  assert.equal(readyTotals.some((node) => node.textContent.includes('$60.20') && node.dataset.priceState === 'ready'), false);
+
+  harness.dom.window.close();
+});
+
+test('slow B2B updates stay pending and avoid numeric fail-open until payable snapshot matches', async () => {
+  const harness = cartUIHarness({ bssFailOpenMs: 20, b2bSafeFallbackMs: 120 });
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2512, item_count: 1, items: [line(1000, 1)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+
+  const failOpenEvents = [];
+  harness.window.document.addEventListener('cart:payable-fail-open', (event) => failOpenEvents.push(event.detail));
+
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$60.20 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total" data-bss-payable-candidate="true"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value" data-bss-payable-candidate="true">$60.20 USD</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $60.20 USD</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+  await new Promise((resolve) => harness.window.setTimeout(resolve, 35));
+
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'pending');
+  assert.deepEqual(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent), ['$60.20 USD', '$60.20 USD']);
+  assert.equal(failOpenEvents.length, 0);
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 2512, item_count: 5, items: [line(1000, 5)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['BSS $25.12 USD', 'BSS $25.12 USD']);
+  assert.equal(harness.window.document.documentElement.dataset.cartPricingState, 'ready');
+  assert.equal(failOpenEvents.length, 0);
+
   harness.dom.window.close();
 });
 
@@ -594,6 +731,7 @@ test('rewards script compiles and uses authoritative cart renders, not placehold
   assert(!script.includes('this._hideOrShowGiftRows('));
   assert(script.includes("document.addEventListener('cart:rendered'"));
   assert(script.includes("document.addEventListener('cart:payable-total'"));
+  assert(script.includes("document.addEventListener('cart:payable-fallback'"));
   assert(script.includes('window.BSCartUI?.beginBatch()'));
 });
 

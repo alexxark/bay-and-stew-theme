@@ -224,6 +224,57 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   right: 0;
 }
 
+html[data-cart-pricing-state='pending'] #main-cart-footer .totals__total-value,
+html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-value,
+html[data-cart-pricing-state='pending'] #cart-live-region-text,
+html[data-cart-pricing-state='pending'] #CartDrawer-LiveRegionText,
+html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price],
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price],
+html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message] {
+  position: relative;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+html[data-cart-pricing-state='pending'] #main-cart-footer .totals__total-value *,
+html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-value *,
+html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price] *,
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price] *,
+html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message] * {
+  color: transparent !important;
+}
+
+html[data-cart-pricing-state='pending'] #main-cart-footer .totals__total-value::after,
+html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-value::after,
+html[data-cart-pricing-state='pending'] #cart-live-region-text::after,
+html[data-cart-pricing-state='pending'] #CartDrawer-LiveRegionText::after,
+html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price]::after,
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price]::after,
+html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message]::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--bs-price-placeholder-width, 7.5ch);
+  max-width: 100%;
+  height: var(--bs-price-placeholder-height, 1em);
+  transform: translateY(-50%);
+  border-radius: 0.3rem;
+  background: rgba(var(--color-foreground), 0.14);
+  pointer-events: none;
+}
+
+html[data-cart-pricing-state='pending'] #main-cart-footer .totals__total-value::after,
+html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-value::after {
+  left: auto;
+  right: 0;
+}
+
+html[data-cart-pricing-state='fallback'] #main-cart-items [bss-b2b-final-line-price],
+html[data-cart-pricing-state='fallback'] #CartDrawer [bss-b2b-final-line-price] {
+  visibility: hidden;
+}
+
 .visually-hidden {
   position: absolute !important;
   overflow: hidden;

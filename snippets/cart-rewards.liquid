@@ -113,6 +113,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
     data-max-threshold="{{ max_threshold }}"
     data-all-unlocked-subtitle="{{ rewards_all_unlocked | escape }}"
     data-rewards-version="{{ rewards_version }}"
+    data-rewards-price-state="ready"
   >
     <p class="cart-rewards__message" data-rewards-message></p>
 
@@ -235,6 +236,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._onCartChange = this._onCartChange.bind(this);
           this._onCartRefresh = this._onCartRefresh.bind(this);
           this._onPayableTotal = this._onPayableTotal.bind(this);
+          this._onPayableFallback = this._onPayableFallback.bind(this);
           this._currencyFormatter = new Intl.NumberFormat(Shopify.locale, {
             style: 'currency',
             currency: Shopify.currency.active
@@ -254,6 +256,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           document.addEventListener('cart:change', this._onCartChange);
           document.addEventListener('cart:rendered', this._onCartRefresh);
           document.addEventListener('cart:payable-total', this._onPayableTotal);
+          document.addEventListener('cart:payable-fallback', this._onPayableFallback);
 
           /* Subscribe to Dawn's native cart update pub/sub (fires on cart page quantity changes) */
           if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
@@ -282,6 +285,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           document.removeEventListener('cart:change', this._onCartChange);
           document.removeEventListener('cart:rendered', this._onCartRefresh);
           document.removeEventListener('cart:payable-total', this._onPayableTotal);
+          document.removeEventListener('cart:payable-fallback', this._onPayableFallback);
           this._stateVersion++;
           if (this._syncTimer) cancelAnimationFrame(this._syncTimer);
           if (this._cartUpdateUnsubscriber) this._cartUpdateUnsubscriber();
@@ -311,6 +315,8 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           const cents = Number(event?.detail?.cents);
           if (!Number.isFinite(cents) || cents < 0) return;
           const total = Math.round(cents);
+          this.dataset.rewardsPriceState = 'ready';
+          this.setAttribute('aria-busy', 'false');
           this.dataset.totalPrice = total;
           this._updateProgress(total);
           this._updateMilestones(total);
@@ -318,6 +324,16 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
             this._pendingTotal = total;
             this._scheduleGiftSync();
           }
+        }
+
+        _onPayableFallback(event) {
+          if (!this.isConnected) return;
+          const text = String(event?.detail?.text || '').trim();
+          if (!text) return;
+          this.dataset.rewardsPriceState = 'fallback';
+          this.setAttribute('aria-busy', 'false');
+          const message = this.querySelector('[data-rewards-message]');
+          if (message) message.textContent = text;
         }
 
         async _fetchCart() {
