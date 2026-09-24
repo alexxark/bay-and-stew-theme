@@ -92,6 +92,19 @@
     input.setAttribute('value', String(safeValue));
   }
 
+  function isRowSoldOut(row) {
+    const availableRaw = String(row?.dataset?.variantAvailable || '').toLowerCase();
+    const inventoryManagement = String(row?.dataset?.inventoryManagement || '').toLowerCase();
+    const inventoryPolicy = String(row?.dataset?.inventoryPolicy || '').toLowerCase();
+    const inventoryQuantity = toInt(row?.dataset?.inventoryQuantity) ?? 0;
+
+    if (availableRaw === 'false') {
+      return true;
+    }
+
+    return inventoryManagement === 'shopify' && inventoryPolicy !== 'continue' && inventoryQuantity <= 0;
+  }
+
   function setButtonState(button, disabled, softDisable) {
     if (!button) return;
     button.classList.toggle('disabled', disabled);
@@ -144,11 +157,13 @@
   function syncRowState(row, input, cartQuantityOverride) {
     const rules = resolveRules(input, row, cartQuantityOverride);
     const currentCartTotal = rules.currentCartTotal;
+    const soldOut = isRowSoldOut(row);
 
     row.dataset.cartQuantity = String(currentCartTotal);
     input.dataset.cartQuantity = String(currentCartTotal);
 
     const inCartCounter = row.querySelector('[data-bulk-cart-quantity]');
+    const inCartNote = row.querySelector('[data-bulk-in-cart-note]');
     if (inCartCounter) {
       inCartCounter.textContent = String(currentCartTotal);
     }
@@ -163,22 +178,45 @@
       delete row.dataset.addableMax;
     }
 
-    const maxInCart = rules.max !== null && rules.max <= 0;
+    const maxInCart = !soldOut && rules.max !== null && rules.max <= 0;
     const quantityControl = row.querySelector('[data-bulk-quantity-control]');
     const maxNote = row.querySelector('[data-bulk-max-note]');
+    const soldOutNote = row.querySelector('[data-bulk-sold-out-note]');
     if (quantityControl) {
-      quantityControl.classList.toggle('hidden', maxInCart);
+      quantityControl.classList.toggle('hidden', soldOut || maxInCart);
     }
     if (maxNote) {
       maxNote.classList.toggle('hidden', !maxInCart);
     }
+    if (inCartNote) {
+      inCartNote.classList.toggle('hidden', soldOut);
+    }
+    if (soldOutNote) {
+      soldOutNote.classList.toggle('hidden', !soldOut);
+    }
 
-    if (maxInCart) {
+    if (soldOut || maxInCart) {
       setInputValue(input, 0);
     }
 
+    if (soldOut) {
+      const minusButton = input.parentElement?.querySelector(".quantity__button[name='minus']");
+      const plusButton = input.parentElement?.querySelector(".quantity__button[name='plus']");
+      setButtonState(minusButton, true, false);
+      setButtonState(plusButton, true, true);
+      return {
+        ...rules,
+        soldOut,
+        maxInCart,
+      };
+    }
+
     updateButtonState(input, row, rules);
-    return rules;
+    return {
+      ...rules,
+      soldOut,
+      maxInCart,
+    };
   }
 
   function clampInput(input, row, sourceEvent) {
@@ -187,7 +225,9 @@
     const requestedAddQuantity = rawValue ?? 0;
     let safeAddQuantity = requestedAddQuantity;
 
-    if (safeAddQuantity > 0) {
+    if (rules.soldOut) {
+      safeAddQuantity = 0;
+    } else if (safeAddQuantity > 0) {
       safeAddQuantity = normalizeTarget(safeAddQuantity, rules);
     }
 
@@ -204,7 +244,7 @@
 
     updateButtonState(input, row, rules);
 
-    if (rules.max !== null && requestedAddQuantity > rules.max) {
+    if (!rules.soldOut && rules.max !== null && requestedAddQuantity > rules.max) {
       flashQuantityWarning(input, rules.max);
     }
 
@@ -223,6 +263,7 @@
       resolvedMin: rules.min,
       resolvedIncrement: rules.step,
       resolvedMax: rules.max,
+      rowSoldOut: rules.soldOut,
       currentCartTotal: rules.currentCartTotal,
       requestedAddQuantity,
       addQuantity: safeAddQuantity,
@@ -402,16 +443,15 @@
       }
     }
 
-    if (window.BSCartUI?.refresh) {
-      await window.BSCartUI.refresh();
-    }
-
-    const updatedCartData = await fetchCartState(routes);
+    const updatedCartData = window.BSCartUI?.refresh
+      ? await window.BSCartUI.refresh()
+      : await fetchCartState(routes);
     syncRowsFromCart(form, updatedCartData);
-    setFormMessage(form, 'Added to cart.', false);
 
-    if (window.__bulkOrderSkipRedirect) {
-      return;
+    const cartDrawer = document.querySelector('cart-drawer');
+    if (cartDrawer?.open && !cartDrawer.classList.contains('active')) {
+      cartDrawer.setActiveElement?.(document.activeElement);
+      cartDrawer.open();
     }
   }
 
