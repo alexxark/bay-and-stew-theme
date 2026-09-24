@@ -243,7 +243,8 @@ test('incomplete inventory response discards partial data and does not change pr
   harness.dom.window.close();
 });
 
-function cartUIHarness() {
+function cartUIHarness(options = {}) {
+  const { bssFailOpenMs, retailFailOpenMs } = options;
   const dom = new JSDOM(`
     <cart-drawer><div id="CartDrawer"><div class="drawer__inner">old drawer</div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div></cart-drawer>
     <div id="cart-icon-bubble">old count</div>
@@ -262,6 +263,9 @@ function cartUIHarness() {
   const requests = [];
   let handler;
   window.fetch = (url, options) => { requests.push({ url, options }); return handler(url, options); };
+  if (Number.isFinite(bssFailOpenMs)) window.__BSPriceFailOpenMs = bssFailOpenMs;
+  if (Number.isFinite(retailFailOpenMs)) window.__BSPriceRetailFailOpenMs = retailFailOpenMs;
+  window.eval(source('assets/price-state.js'));
   window.eval(source('assets/cart-checkout-guard.js'));
   return { dom, window, requests, published, warnings, setHandler: (next) => { handler = next; } };
 }
@@ -338,6 +342,30 @@ test('retail fallback keeps Shopify subtotal and live region text when BSS payab
   harness.dom.window.close();
 });
 
+test('pending subtotal fails open to Shopify pricing when BSS never provides a payable subtotal', async () => {
+  const harness = cartUIHarness({ bssFailOpenMs: 20, retailFailOpenMs: 20 });
+  const failOpenEvents = [];
+  harness.window.document.addEventListener('cart:payable-fail-open', (event) => failOpenEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value" data-bss-payable-candidate="true">$44.84 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total" data-bss-payable-candidate="true"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value" data-bss-payable-candidate="true">$44.84 USD</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $44.84 USD</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+  assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'pending'));
+  await new Promise((resolve) => harness.window.setTimeout(resolve, 35));
+
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['$44.84 USD', '$44.84 USD']);
+  assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'ready'));
+  assert.equal(failOpenEvents.length, 1);
+  harness.dom.window.close();
+});
+
 test('BSS payable zero is treated as valid and synchronizes visible totals and live region', async () => {
   const harness = cartUIHarness();
   harness.window.BSS_B2B = {
@@ -356,6 +384,7 @@ test('BSS payable zero is treated as valid and synchronizes visible totals and l
   await harness.window.BSCartUI.refresh();
   const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
   assert.deepEqual(totals, ['$0.00 USD', '$0.00 USD']);
+  assert(Array.from(harness.window.document.querySelectorAll('.totals__total-value')).every((node) => node.dataset.priceState === 'ready'));
   assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: $0.00 USD');
   assert.equal(payableEvents.length, 1);
   assert.equal(payableEvents[0].cents, 0);
@@ -383,6 +412,8 @@ test('stale BSS payable subtotal is ignored until BSS cart snapshot matches curr
   await harness.window.BSCartUI.refresh();
   const totalsAfterRefresh = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
   assert.deepEqual(totalsAfterRefresh, ['$44.84 native', '$44.84 native']);
+  const subtotalNodesWhileStale = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert(subtotalNodesWhileStale.every((node) => node.dataset.priceState === 'pending'));
   assert.equal(payableEvents.length, 0);
 
   harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 3650, item_count: 5, items: [line(1000, 5)] };
@@ -390,8 +421,44 @@ test('stale BSS payable subtotal is ignored until BSS cart snapshot matches curr
 
   const totalsAfterBss = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
   assert.deepEqual(totalsAfterBss, ['BSS $36.50', 'BSS $36.50']);
+  const subtotalNodesReady = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert(subtotalNodesReady.every((node) => node.dataset.priceState === 'ready'));
   assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: BSS $36.50');
   assert.deepEqual(payableEvents.map((detail) => detail.cents), [3650]);
+  harness.dom.window.close();
+});
+
+test('cart subtotal stays pending on 44.84 seed until matching BSS 21.47 becomes ready', async () => {
+  const harness = cartUIHarness();
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2147, item_count: 1, items: [line(1000, 1)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 seed'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 seed</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 seed</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $44.84 seed</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+  const whileStale = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert.deepEqual(whileStale.map((node) => node.textContent), ['$44.84 seed', '$44.84 seed']);
+  assert(whileStale.every((node) => node.dataset.priceState === 'pending'));
+  assert.equal(payableEvents.length, 0);
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 2147, item_count: 5, items: [line(1000, 5)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  const afterReady = Array.from(harness.window.document.querySelectorAll('.totals__total-value'));
+  assert.deepEqual(afterReady.map((node) => node.textContent), ['BSS $21.47', 'BSS $21.47']);
+  assert(afterReady.every((node) => node.dataset.priceState === 'ready'));
+  assert.deepEqual(payableEvents.map((detail) => detail.cents), [2147]);
   harness.dom.window.close();
 });
 
@@ -1020,6 +1087,56 @@ test('quick order payable totals use final_line_price fields', () => {
   const originalMatches = quickOrderRow.match(/sum: 'original_line_price'/g) || [];
   assert.equal(finalMatches.length, 2);
   assert.equal(originalMatches.length, 0);
+});
+
+test('quick-order rerenders use pending/ready lifecycle with BSS signals and fail-open fallback', () => {
+  const quickOrderScript = source('assets/quick-order-list.js');
+  const quickOrderTemplate = source('snippets/quick-order-list.liquid');
+  const quickOrderRow = source('snippets/quick-order-list-row.liquid');
+
+  assert(quickOrderScript.includes('syncPriceStateAfterRender'));
+  assert(quickOrderScript.includes('window.BSPriceState.setPending'));
+  assert(quickOrderScript.includes('window.BSPriceState.triggerBssRefresh'));
+  assert(quickOrderScript.includes('.waitForBssReady({'));
+  assert(quickOrderScript.includes('window.BSPriceState.setReady'));
+
+  assert(quickOrderTemplate.includes('data-price-surface="quick-order-total"'));
+  assert(quickOrderRow.includes('data-price-surface="quick-order-variant-total"'));
+});
+
+test('quick-add modal injection uses pending-before-exposure and BSS-ready reveal', () => {
+  const quickAddScript = source('assets/quick-add.js');
+  const productInfoScript = source('assets/product-info.js');
+
+  assert(quickAddScript.includes('syncBssPriceState'));
+  assert(quickAddScript.includes('window.BSPriceState.setPending'));
+  assert(quickAddScript.includes('window.BSPriceState.triggerBssRefresh'));
+  assert(quickAddScript.includes('.waitForBssReady({'));
+  assert(quickAddScript.includes('window.BSPriceState.setReady'));
+
+  assert(productInfoScript.includes('syncQuickAddPriceState'));
+  assert(productInfoScript.includes('if (this.closest(\'quick-add-modal\'))'));
+});
+
+test('quick-add-bulk rerenders use pending/ready BSS lifecycle', () => {
+  const quickAddBulkScript = source('assets/quick-add-bulk.js');
+
+  assert(quickAddBulkScript.includes('syncPriceStateAfterRender'));
+  assert(quickAddBulkScript.includes('window.BSPriceState.setPending'));
+  assert(quickAddBulkScript.includes('window.BSPriceState.triggerBssRefresh'));
+  assert(quickAddBulkScript.includes('.waitForBssReady({'));
+  assert(quickAddBulkScript.includes('window.BSPriceState.setReady'));
+});
+
+test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {
+  const mainProduct = source('sections/main-product.liquid');
+
+  assert(mainProduct.includes('data-price-surface="bulk-order-local-price"'));
+  assert(mainProduct.includes('data-price-state="pending"'));
+  assert(mainProduct.includes('const markPricesPending = () =>'));
+  assert(mainProduct.includes('const markPricesReady = () =>'));
+  assert(mainProduct.includes('markPricesPending();'));
+  assert(mainProduct.includes('markPricesReady();'));
 });
 
 function saveForLaterHarness(options = {}) {

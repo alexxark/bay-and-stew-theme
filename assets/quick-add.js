@@ -33,6 +33,8 @@ if (!customElements.get('quick-add-modal')) {
 
             this.preprocessHTML(productElement);
             HTMLUpdateUtility.setInnerHTML(this.modalContent, productElement.outerHTML);
+            const priceScope = this.modalContent.querySelector('product-info') || this.modalContent;
+            const priceSync = this.syncBssPriceState(priceScope, 'quick-add-show');
 
             if (window.Shopify && Shopify.PaymentButton) {
               Shopify.PaymentButton.init();
@@ -40,6 +42,7 @@ if (!customElements.get('quick-add-modal')) {
             if (window.ProductModel) window.ProductModel.loadShopifyXR();
 
             super.show(opener);
+            void priceSync;
           })
           .finally(() => {
             opener.removeAttribute('aria-disabled');
@@ -116,6 +119,44 @@ if (!customElements.get('quick-add-modal')) {
         }
 
         mediaImages.forEach((img) => img.setAttribute('sizes', mediaImageSizes));
+      }
+
+      getPriceStateTargets(root = this.modalContent) {
+        return root.querySelectorAll('[bss-b2b-product-price], [bss-b2b-variant-price]');
+      }
+
+      syncBssPriceState(root = this.modalContent, reason = 'quick-add-render') {
+        if (!window.BSPriceState) return Promise.resolve(false);
+        const targets = this.getPriceStateTargets(root);
+        if (!targets.length) return Promise.resolve(false);
+
+        const expectBss = window.BSPriceState.isBssRuntimePresent();
+        if (!expectBss) {
+          window.BSPriceState.setReady(targets, { clearBusy: true });
+          return Promise.resolve(false);
+        }
+
+        const watchdogMs = 1400;
+        window.BSPriceState.setPending(targets, {
+          busy: false,
+          watchdogMs,
+          onTimeout: () => {
+            console.warn('[quick-add] fail-open price reveal', reason);
+          },
+        });
+        window.BSPriceState.triggerBssRefresh(root);
+
+        return window.BSPriceState
+          .waitForBssReady({
+            root,
+            timeoutMs: watchdogMs,
+            readySelector: '[bss-b2b-product-active], [bss-b2b-cart-price-active]',
+            attributeFilter: ['bss-b2b-product-active', 'bss-b2b-cart-price-active'],
+            resolveOnEvent: true,
+          })
+          .finally(() => {
+            window.BSPriceState.setReady(targets, { clearBusy: true });
+          });
       }
     }
   );

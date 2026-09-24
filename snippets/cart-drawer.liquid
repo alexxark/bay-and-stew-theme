@@ -5,6 +5,24 @@
   {% render 'cart-drawer' %}
 {% endcomment %}
 
+{%- liquid
+  assign bs_price_b2b_candidate = false
+  if customer
+    if customer.current_location
+      assign bs_price_b2b_candidate = true
+    endif
+    unless bs_price_b2b_candidate
+      for _tag in customer.tags
+        assign _tag_normalized = _tag | downcase | strip
+        if _tag_normalized == 'b2b' or _tag_normalized contains 'wholesale'
+          assign bs_price_b2b_candidate = true
+          break
+        endif
+      endfor
+    endunless
+  endif
+-%}
+
 <link rel="stylesheet" href="{{ 'quantity-popover.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-card.css' | asset_url }}" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="{{ 'component-cart-rewards.css' | asset_url }}" media="print" onload="this.media='all'">
@@ -533,6 +551,10 @@
               id="CartDrawer-LiveRegionText"
               class="visually-hidden"
               data-estimated-total-label="{{ 'sections.cart.new_estimated_total' | t | escape }}"
+              data-bss-payable-candidate="{{ bs_price_b2b_candidate }}"
+              data-price-state="{% if bs_price_b2b_candidate %}pending{% else %}ready{% endif %}"
+              aria-live="polite"
+              aria-busy="{% if bs_price_b2b_candidate %}true{% else %}false{% endif %}"
               role="status"
             ></p>
             <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
@@ -587,7 +609,14 @@
 
           <div class="totals" role="status">
             <h2 class="totals__total">{{ 'sections.cart.estimated_total' | t }}</h2>
-            <p class="totals__total-value">{{ cart.total_price | money_with_currency }}</p> {% render "bss-b2b-tax-cart-subtotal" %}
+            <p
+              class="totals__total-value"
+              data-bss-payable="subtotal"
+              data-bss-payable-candidate="{{ bs_price_b2b_candidate }}"
+              data-price-state="{% if bs_price_b2b_candidate %}pending{% else %}ready{% endif %}"
+              data-price-align="end"
+              aria-busy="{% if bs_price_b2b_candidate %}true{% else %}false{% endif %}"
+            >{{ cart.total_price | money_with_currency }}</p> {% render "bss-b2b-tax-cart-subtotal" %}
           </div>
 
           <small class="tax-note caption-large rte">

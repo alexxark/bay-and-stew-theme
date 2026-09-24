@@ -159,6 +159,9 @@ class CartItems extends HTMLElement {
 
     const cartStatus =
       document.getElementById('cart-live-region-text') || document.getElementById('CartDrawer-LiveRegionText');
+    if (!cartStatus || cartStatus.getAttribute('aria-busy') === 'true' || cartStatus.dataset.priceState === 'pending') {
+      return;
+    }
     cartStatus?.setAttribute('aria-hidden', false);
 
     setTimeout(() => {

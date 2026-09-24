@@ -201,6 +201,10 @@ if (!customElements.get('product-info')) {
           this.querySelector(`#Quantity-Rules-${this.dataset.section}`)?.classList.remove('hidden');
           this.querySelector(`#Volume-Note-${this.dataset.section}`)?.classList.remove('hidden');
 
+          if (this.closest('quick-add-modal')) {
+            void this.syncQuickAddPriceState();
+          }
+
           this.productForm?.toggleSubmitButton(
             html.getElementById(`ProductSubmitButton-${this.sectionId}`)?.hasAttribute('disabled') ?? true,
             window.variantStrings.soldOut
@@ -214,6 +218,43 @@ if (!customElements.get('product-info')) {
             },
           });
         };
+      }
+
+      syncQuickAddPriceState() {
+        if (!window.BSPriceState || !this.closest('quick-add-modal')) return Promise.resolve(false);
+
+        const priceRoot = this.querySelector(`#price-${this.dataset.section}`) || this.querySelector('[id^="price-"]') || this;
+        const targets = priceRoot.querySelectorAll('[bss-b2b-product-price], [bss-b2b-variant-price]');
+        if (!targets.length) return Promise.resolve(false);
+
+        const expectBss = window.BSPriceState.isBssRuntimePresent();
+        if (!expectBss) {
+          window.BSPriceState.setReady(targets, { clearBusy: true });
+          return Promise.resolve(false);
+        }
+
+        const watchdogMs = 1400;
+        window.BSPriceState.setPending(targets, {
+          busy: false,
+          watchdogMs,
+          onTimeout: () => {
+            console.warn('[quick-add] fail-open variant reveal');
+          },
+        });
+
+        window.BSPriceState.triggerBssRefresh(this);
+
+        return window.BSPriceState
+          .waitForBssReady({
+            root: this,
+            timeoutMs: watchdogMs,
+            readySelector: '[bss-b2b-product-active], [bss-b2b-cart-price-active]',
+            attributeFilter: ['bss-b2b-product-active', 'bss-b2b-cart-price-active'],
+            resolveOnEvent: true,
+          })
+          .finally(() => {
+            window.BSPriceState.setReady(targets, { clearBusy: true });
+          });
       }
 
       updateVariantInputs(variantId) {

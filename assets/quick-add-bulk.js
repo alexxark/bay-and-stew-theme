@@ -20,6 +20,7 @@ if (!customElements.get('quick-add-bulk')) {
         this.lastActiveInputId = null;
         const pageParams = new URLSearchParams(window.location.search);
         window.pageNumber = decodeURIComponent(pageParams.get('page') || '');
+        void this.syncPriceStateAfterRender('constructor');
       }
 
       connectedCallback() {
@@ -37,6 +38,7 @@ if (!customElements.get('quick-add-bulk')) {
             this.listenForKeydown();
           });
         });
+        void this.syncPriceStateAfterRender('connected');
       }
 
       disconnectedCallback() {
@@ -91,13 +93,51 @@ if (!customElements.get('quick-add-bulk')) {
               if (sourceQty) {
                 this.innerHTML = sourceQty.innerHTML;
               }
-              resolve();
+              this.syncPriceStateAfterRender('onCartUpdate').finally(resolve);
             })
             .catch((e) => {
               console.error(e);
               reject(e);
             });
         });
+      }
+
+      getPriceStateTargets() {
+        return this.querySelectorAll('[bss-b2b-product-price], [bss-b2b-variant-price]');
+      }
+
+      syncPriceStateAfterRender(reason = 'quick-add-bulk-render') {
+        if (!window.BSPriceState) return Promise.resolve(false);
+        const targets = this.getPriceStateTargets();
+        if (!targets.length) return Promise.resolve(false);
+
+        const expectBss = window.BSPriceState.isBssRuntimePresent();
+        if (!expectBss) {
+          window.BSPriceState.setReady(targets, { clearBusy: true });
+          return Promise.resolve(false);
+        }
+
+        const watchdogMs = 1400;
+        window.BSPriceState.setPending(targets, {
+          busy: false,
+          watchdogMs,
+          onTimeout: () => {
+            console.warn('[quick-add-bulk] fail-open price reveal', reason);
+          },
+        });
+        window.BSPriceState.triggerBssRefresh(this);
+
+        return window.BSPriceState
+          .waitForBssReady({
+            root: this,
+            timeoutMs: watchdogMs,
+            readySelector: '[bss-b2b-product-active], [bss-b2b-cart-price-active]',
+            attributeFilter: ['bss-b2b-product-active', 'bss-b2b-cart-price-active'],
+            resolveOnEvent: true,
+          })
+          .finally(() => {
+            window.BSPriceState.setReady(targets, { clearBusy: true });
+          });
       }
 
       updateMultipleQty(items) {

@@ -163,7 +163,7 @@
     {%- render 'loading-spinner' -%}
     {% comment %} TODO: enable theme-check once `line_items_for` is accepted as valid filter {% endcomment %}
     {% # theme-check-disable %}
-    <span class="price">{% capture bss_lock_check %} {% render 'bss-lock-condition', scope: 'subject', subject: product, subject_parent: product, variable: 'price', bss_lock_action: 'bss_hide_price' %} {% endcapture %} {% if bss_lock_check contains 'bss-lock-element' %} {{ bss_lock_check }}  {% else %}{{ cart | line_items_for: item | sum: 'final_line_price' | money }}{% endif %}</span>
+    <span class="price" data-price-state="ready" data-price-align="end" data-price-surface="quick-order-variant-total">{% capture bss_lock_check %} {% render 'bss-lock-condition', scope: 'subject', subject: product, subject_parent: product, variable: 'price', bss_lock_action: 'bss_hide_price' %} {% endcapture %} {% if bss_lock_check contains 'bss-lock-element' %} {{ bss_lock_check }}  {% else %}{{ cart | line_items_for: item | sum: 'final_line_price' | money }}{% endif %}</span>
     {% # theme-check-enable %}
   </td>
 
@@ -433,7 +433,7 @@
     {%- render 'loading-spinner' -%}
     {% comment %} TODO: enable theme-check once `line_items_for` is accepted as valid filter {% endcomment %}
     {% # theme-check-disable %}
-    <span class="price">{% capture bss_lock_check %} {% render 'bss-lock-condition', scope: 'subject', subject: product, subject_parent: product, variable: 'price', bss_lock_action: 'bss_hide_price' %} {% endcapture %} {% if bss_lock_check contains 'bss-lock-element' %} {{ bss_lock_check }}  {% else %}{{ cart | line_items_for: item | sum: 'final_line_price' | money }}{% endif %}</span>
+    <span class="price" data-price-state="ready" data-price-align="end" data-price-surface="quick-order-variant-total">{% capture bss_lock_check %} {% render 'bss-lock-condition', scope: 'subject', subject: product, subject_parent: product, variable: 'price', bss_lock_action: 'bss_hide_price' %} {% endcapture %} {% if bss_lock_check contains 'bss-lock-element' %} {{ bss_lock_check }}  {% else %}{{ cart | line_items_for: item | sum: 'final_line_price' | money }}{% endif %}</span>
     {% # theme-check-enable %}
   </td>
 </tr>

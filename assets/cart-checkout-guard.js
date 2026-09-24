@@ -8,8 +8,141 @@
   let pendingRefresh = null;
   let lastCart = null;
   let lastPayableEventKey = '';
+  let lastAnnouncedPayableKey = '';
   let idleWaiters = [];
+  let payableFallbackTimer = null;
+  let payablePendingVersion = 0;
+  let forcePendingUntilNextRender = false;
   const refreshErrorText = 'Cart could not be refreshed. Please refresh the page to review your cart.';
+  const payableSubtotalSelector = '#main-cart-footer .totals__total-value, .cart-drawer__footer .totals__total-value';
+  const payableLiveRegionSelector = '#cart-live-region-text, #CartDrawer-LiveRegionText';
+  const BSS_FAIL_OPEN_MS = Number(window.__BSPriceFailOpenMs) || 1800;
+  const RETAIL_FAIL_OPEN_MS = Number(window.__BSPriceRetailFailOpenMs) || 550;
+
+  const priceState = window.BSPriceState || {
+    setPending(targets) {
+      (Array.isArray(targets) ? targets : []).forEach((node) => {
+        if (node?.dataset) node.dataset.priceState = 'pending';
+      });
+    },
+    setReady(targets) {
+      (Array.isArray(targets) ? targets : []).forEach((node) => {
+        if (node?.dataset) node.dataset.priceState = 'ready';
+      });
+    },
+    isBssRuntimePresent() {
+      return Boolean(window.BSS_B2B || document.getElementById('bss-b2b-store-data'));
+    },
+    announceOnce() {},
+  };
+
+  function payableSubtotalNodes() {
+    return Array.from(document.querySelectorAll(payableSubtotalSelector));
+  }
+
+  function payableLiveRegionNodes() {
+    return Array.from(document.querySelectorAll(payableLiveRegionSelector));
+  }
+
+  function hasB2BCandidateNode() {
+    return Boolean(document.querySelector('[data-bss-payable-candidate="true"]'));
+  }
+
+  function hasBssSubtotalHint() {
+    const bssCart = window.BSS_B2B?.shopData?.cart;
+    return normalizeCents(bssCart?.bss_b2b_total_price) !== null || normalizeCents(bssCart?.bss_b2b_total_priceTD) !== null;
+  }
+
+  function shouldExpectBssPricing() {
+    if (hasB2BCandidateNode()) return true;
+    if (hasBssSubtotalHint()) return true;
+    return false;
+  }
+
+  function clearPayableFallbackTimer() {
+    if (!payableFallbackTimer) return;
+    clearTimeout(payableFallbackTimer);
+    payableFallbackTimer = null;
+  }
+
+  function readyPayableNodes() {
+    const subtotalNodes = payableSubtotalNodes();
+    const liveNodes = payableLiveRegionNodes();
+    priceState.setReady(subtotalNodes, { clearBusy: true });
+    priceState.setReady(liveNodes, { clearBusy: true, resumeLiveRegion: true, restoreHidden: true });
+  }
+
+  function failOpenPayable(token, reason, timeoutMs) {
+    if (token !== payablePendingVersion) return;
+    readyPayableNodes();
+    clearPayableFallbackTimer();
+    document.dispatchEvent(new CustomEvent('cart:payable-fail-open', { detail: { reason, timeoutMs } }));
+  }
+
+  function setPayablePending(reason, options = {}) {
+    const subtotalNodes = payableSubtotalNodes();
+    const liveNodes = payableLiveRegionNodes();
+    if (!subtotalNodes.length && !liveNodes.length) return 0;
+
+    const expectBss = options.expectBss ?? shouldExpectBssPricing();
+    if (!expectBss) {
+      readyPayableNodes();
+      clearPayableFallbackTimer();
+      return 0;
+    }
+
+    const token = ++payablePendingVersion;
+    const timeoutMs = Number.isFinite(options.timeoutMs)
+      ? options.timeoutMs
+      : (hasB2BCandidateNode() ? BSS_FAIL_OPEN_MS : RETAIL_FAIL_OPEN_MS);
+
+    clearPayableFallbackTimer();
+
+    subtotalNodes.forEach((node) => {
+      node.dataset.payablePendingReason = reason;
+    });
+    liveNodes.forEach((node) => {
+      node.dataset.payablePendingReason = reason;
+    });
+
+    priceState.setPending(subtotalNodes, { busy: false, alignEnd: true });
+    priceState.setPending(liveNodes, { pauseLiveRegion: true, hideLiveRegion: true, busy: true });
+
+    if (timeoutMs > 0) {
+      payableFallbackTimer = setTimeout(() => {
+        failOpenPayable(token, reason, timeoutMs);
+      }, timeoutMs);
+    }
+
+    return token;
+  }
+
+  function setPayableReady(cents, formatted, cart) {
+    const subtotalNodes = payableSubtotalNodes();
+    const liveNodes = payableLiveRegionNodes();
+
+    subtotalNodes.forEach((node) => {
+      if (node.textContent !== formatted) node.textContent = formatted;
+      node.dataset.bssPayableSubtotal = String(cents);
+      delete node.dataset.payablePendingReason;
+    });
+
+    liveNodes.forEach((node) => {
+      const label = node.dataset.estimatedTotalLabel;
+      node.textContent = label ? `${label}: ${formatted}` : formatted;
+      node.dataset.bssPayableSubtotal = String(cents);
+      delete node.dataset.payablePendingReason;
+    });
+
+    readyPayableNodes();
+    clearPayableFallbackTimer();
+
+    const announceKey = `${cents}:${cart?.item_count ?? ''}`;
+    if (announceKey !== lastAnnouncedPayableKey) {
+      lastAnnouncedPayableKey = announceKey;
+      priceState.announceOnce(liveNodes, announceKey);
+    }
+  }
 
   function sectionsToRender() {
     return [
@@ -109,23 +242,11 @@
     document.dispatchEvent(new CustomEvent('cart:payable-total', { detail: { cart, cents, formatted } }));
   }
 
-  function syncPayableLiveRegions(cents, formatted) {
-    document.querySelectorAll('#cart-live-region-text, #CartDrawer-LiveRegionText').forEach((node) => {
-      const label = node.dataset.estimatedTotalLabel;
-      node.textContent = label ? `${label}: ${formatted}` : formatted;
-      node.dataset.bssPayableSubtotal = String(cents);
-    });
-  }
-
   function syncPayableSubtotal(cart) {
     const cents = readBssPayableSubtotalCents(cart);
     if (cents === null) return false;
     const formatted = formatPayableSubtotal(cents, cart);
-    document.querySelectorAll('#main-cart-footer .totals__total-value, .cart-drawer__footer .totals__total-value').forEach((node) => {
-      if (node.textContent !== formatted) node.textContent = formatted;
-      node.dataset.bssPayableSubtotal = String(cents);
-    });
-    syncPayableLiveRegions(cents, formatted);
+    setPayableReady(cents, formatted, cart);
     emitPayableSubtotal(cart, cents, formatted);
     return true;
   }
@@ -197,7 +318,10 @@
     } catch (error) {
       console.warn('[cart-ui] Drawer accessibility binding incomplete', error);
     }
+    const expectBss = forcePendingUntilNextRender || shouldExpectBssPricing();
+    setPayablePending('section-render', { expectBss });
     syncPayableSubtotal(cart);
+    forcePendingUntilNextRender = false;
     document.dispatchEvent(new CustomEvent('cart:rendered', { detail: { cart, renderedSections } }));
     return renderedSections;
   }
@@ -206,6 +330,9 @@
     if (options.force) version++;
     if (pendingRefresh) return pendingRefresh;
     if (!pendingMutations && renderedVersion === version) return Promise.resolve(lastCart);
+    if (shouldExpectBssPricing()) {
+      setPayablePending(options.force ? 'refresh-force' : 'refresh-start', { expectBss: true });
+    }
     pendingRefresh = Promise.resolve().then(async () => {
       while (true) {
         if (pendingMutations) await new Promise((resolve) => idleWaiters.push(resolve));
@@ -253,6 +380,11 @@
   }
 
   function beginMutation() {
+    if (!pendingMutations) {
+      const mutationExpectBss = hasB2BCandidateNode() || hasBssSubtotalHint() || Boolean(priceState.isBssRuntimePresent?.());
+      forcePendingUntilNextRender = mutationExpectBss;
+      setPayablePending('mutation-start', { expectBss: mutationExpectBss });
+    }
     version++;
     pendingMutations++;
   }
@@ -320,6 +452,9 @@
   }
 
   window.BSCartUI = { refresh, reportError, beginBatch };
+  if (document.querySelector(`${payableSubtotalSelector}[data-price-state="pending"], ${payableLiveRegionSelector}[data-price-state="pending"]`)) {
+    setPayablePending('initial-seed', { expectBss: true, timeoutMs: BSS_FAIL_OPEN_MS });
+  }
   document.addEventListener('cart:refresh', () => { void refresh({ force: true }).catch(reportError); });
   document.addEventListener('cart:updated', () => { void refresh({ force: true }).catch(reportError); });
   document.addEventListener('bss_b2b:CustomCartUpdate', schedulePayableSync);

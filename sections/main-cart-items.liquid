@@ -26,6 +26,24 @@
 
 <script src="{{ 'quantity-popover.js' | asset_url }}" defer="defer"></script>
 
+{%- liquid
+  assign bs_price_b2b_candidate = false
+  if customer
+    if customer.current_location
+      assign bs_price_b2b_candidate = true
+    endif
+    unless bs_price_b2b_candidate
+      for _tag in customer.tags
+        assign _tag_normalized = _tag | downcase | strip
+        if _tag_normalized == 'b2b' or _tag_normalized contains 'wholesale'
+          assign bs_price_b2b_candidate = true
+          break
+        endif
+      endfor
+    endunless
+  endif
+-%}
+
 <cart-items class="gradient color-{{ section.settings.color_scheme }} isolate{% if cart == empty %} is-empty{% else %} section-{{ section.id }}-padding{% endif %}">
   <div class="page-width">
     <div class="title-wrapper-with-link">
@@ -531,7 +549,10 @@
         class="visually-hidden"
         id="cart-live-region-text"
         data-estimated-total-label="{{ 'sections.cart.new_estimated_total' | t | escape }}"
+          data-bss-payable-candidate="{{ bs_price_b2b_candidate }}"
+          data-price-state="{% if bs_price_b2b_candidate %}pending{% else %}ready{% endif %}"
         aria-live="polite"
+          aria-busy="{% if bs_price_b2b_candidate %}true{% else %}false{% endif %}"
         role="status"
       ></p>
       <p

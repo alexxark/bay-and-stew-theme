@@ -195,6 +195,35 @@ body:has(.section-header .drawer-menu) .announcement-bar-section .page-width {
   display: none !important;
 }
 
+[data-price-state='pending'] {
+  position: relative;
+  color: transparent !important;
+  text-shadow: none !important;
+}
+
+[data-price-state='pending'] * {
+  color: transparent !important;
+}
+
+[data-price-state='pending']::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: var(--bs-price-placeholder-width, 7.5ch);
+  max-width: 100%;
+  height: var(--bs-price-placeholder-height, 1em);
+  transform: translateY(-50%);
+  border-radius: 0.3rem;
+  background: rgba(var(--color-foreground), 0.14);
+  pointer-events: none;
+}
+
+[data-price-state='pending'][data-price-align='end']::after {
+  left: auto;
+  right: 0;
+}
+
 .visually-hidden {
   position: absolute !important;
   overflow: hidden;

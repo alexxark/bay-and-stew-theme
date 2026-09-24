@@ -660,7 +660,7 @@
                       </div>
                     </td>
                     <td data-label="Price" class="bulk-order-form__cell-price">
-  <span class="price" data-original-price="{{ variant.price }}">{{ variant.price | money }}</span>
+  <span class="price" data-original-price="{{ variant.price }}" data-price-state="pending" data-price-align="end" data-price-surface="bulk-order-local-price">{{ variant.price | money }}</span>
 </td>
                   </tr>
                 {%- endfor -%}
@@ -848,6 +848,32 @@
           const quantityInputs = bulkForm.querySelectorAll('.quantity__input');
           const priceElements = bulkForm.querySelectorAll('.price[data-original-price]');
 
+          const markPricesPending = () => {
+            if (window.BSPriceState) {
+              window.BSPriceState.setPending(priceElements, {
+                busy: false,
+                watchdogMs: 1000,
+                onTimeout: () => {
+                  console.warn('[bulk-order] local price pending fail-open');
+                },
+              });
+              return;
+            }
+            priceElements.forEach((priceEl) => {
+              priceEl.dataset.priceState = 'pending';
+            });
+          };
+
+          const markPricesReady = () => {
+            if (window.BSPriceState) {
+              window.BSPriceState.setReady(priceElements, { clearBusy: true });
+              return;
+            }
+            priceElements.forEach((priceEl) => {
+              priceEl.dataset.priceState = 'ready';
+            });
+          };
+
           const formatMoney = (cents) => {
             const format = config.moneyFormat || '${{amount}}';
             const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
@@ -883,19 +909,24 @@
           };
 
           const updateAllPrices = () => {
-            let totalQuantity = 0;
-            quantityInputs.forEach(input => {
-              totalQuantity += parseInt(input.value, 10) || 0;
-            });
-            const volumePercent = findVolumePercent(totalQuantity);
-            const baseMult = 1 - (basePercent / 100);
-            const volMult = 1 - (volumePercent / 100);
+            markPricesPending();
+            try {
+              let totalQuantity = 0;
+              quantityInputs.forEach(input => {
+                totalQuantity += parseInt(input.value, 10) || 0;
+              });
+              const volumePercent = findVolumePercent(totalQuantity);
+              const baseMult = 1 - (basePercent / 100);
+              const volMult = 1 - (volumePercent / 100);
 
-            priceElements.forEach(priceEl => {
-              const original = parseInt(priceEl.dataset.originalPrice, 10);
-              if (isNaN(original)) return;
-              priceEl.innerHTML = formatMoney(original * baseMult * volMult);
-            });
+              priceElements.forEach(priceEl => {
+                const original = parseInt(priceEl.dataset.originalPrice, 10);
+                if (isNaN(original)) return;
+                priceEl.innerHTML = formatMoney(original * baseMult * volMult);
+              });
+            } finally {
+              markPricesReady();
+            }
           };
 
           bulkForm.addEventListener('change', (event) => {
@@ -906,6 +937,7 @@
           bulkForm.addEventListener('click', (event) => {
             if (event.target.closest('.quantity__button')) {
               // Delay so the +/- handler in the sibling script updates the input first.
+              markPricesPending();
               setTimeout(updateAllPrices, 50);
             }
           });

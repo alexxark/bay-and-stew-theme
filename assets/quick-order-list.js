@@ -103,6 +103,7 @@ if (!customElements.get('quick-order-list')) {
         window.pageNumber = decodeURIComponent(pageParams.get('page') || '');
         form.addEventListener('submit', this.onSubmit.bind(this));
         this.addMultipleDebounce();
+        void this.syncPriceStateAfterRender('constructor');
       }
 
       cartUpdateUnsubscriber = undefined;
@@ -130,6 +131,7 @@ if (!customElements.get('quick-order-list')) {
           });
         });
         this.sectionId = this.dataset.section;
+        void this.syncPriceStateAfterRender('connected');
       }
 
       disconnectedCallback() {
@@ -140,6 +142,46 @@ if (!customElements.get('quick-order-list')) {
         this.allInputsArray = Array.from(this.querySelectorAll('input[type="number"]'));
         this.quickOrderListTable = this.querySelector('.quick-order-list__table');
         this.quickOrderListTable.addEventListener('focusin', this.switchVariants.bind(this));
+      }
+
+      getPriceStateTargets() {
+        return this.querySelectorAll(
+          '[data-price-surface="quick-order-variant-total"], [data-price-surface="quick-order-total"]'
+        );
+      }
+
+      syncPriceStateAfterRender(reason = 'quick-order-render') {
+        if (!window.BSPriceState) return Promise.resolve(false);
+        const targets = this.getPriceStateTargets();
+        if (!targets.length) return Promise.resolve(false);
+
+        const expectBss = window.BSPriceState.isBssRuntimePresent();
+        if (!expectBss) {
+          window.BSPriceState.setReady(targets, { clearBusy: true });
+          return Promise.resolve(false);
+        }
+
+        const watchdogMs = 1400;
+        window.BSPriceState.setPending(targets, {
+          busy: false,
+          watchdogMs,
+          onTimeout: () => {
+            console.warn('[quick-order] fail-open price reveal', reason);
+          },
+        });
+        window.BSPriceState.triggerBssRefresh(this);
+
+        return window.BSPriceState
+          .waitForBssReady({
+            root: this,
+            timeoutMs: watchdogMs,
+            readySelector: '[bss-b2b-product-active], [bss-b2b-cart-price-active]',
+            attributeFilter: ['bss-b2b-product-active', 'bss-b2b-cart-price-active'],
+            resolveOnEvent: true,
+          })
+          .finally(() => {
+            window.BSPriceState.setReady(targets, { clearBusy: true });
+          });
       }
 
       onChange(event) {
@@ -186,7 +228,7 @@ if (!customElements.get('quick-order-list')) {
               if (sourceQty) {
                 this.innerHTML = sourceQty.innerHTML;
               }
-              resolve();
+              this.syncPriceStateAfterRender('refresh').finally(resolve);
             })
             .catch((e) => {
               console.error(e);
@@ -277,6 +319,7 @@ if (!customElements.get('quick-order-list')) {
         this.defineInputsAndQuickOrderTable();
         this.addMultipleDebounce();
         this.ids = [];
+        void this.syncPriceStateAfterRender('renderSections');
       }
 
       getTableHead() {
