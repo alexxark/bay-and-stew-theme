@@ -79,6 +79,8 @@ if (!customElements.get('quick-order-list')) {
         this.quantityMetadataPromise = null;
         this.quantityMetadataTtlMs = 15000;
         this.quantitySyncRequestId = 0;
+        this.trustedQuantityState = new Map();
+        this.lastPreparedMutationDiagnostics = new Map();
         this.defineInputsAndQuickOrderTable();
 
         this.variantItemStatusElement = document.getElementById('shopping-cart-variant-item-status');
@@ -116,6 +118,181 @@ if (!customElements.get('quick-order-list')) {
 
       onSubmit(event) {
         event.preventDefault();
+      }
+
+      isDebugEnabled() {
+        try {
+          return window.localStorage?.getItem('quickOrderDebug') === '1';
+        } catch (_error) {
+          return false;
+        }
+      }
+
+      debugLog(stage, payload = {}) {
+        if (!this.isDebugEnabled()) return;
+        console.info('[quick-order-debug]', stage, payload);
+      }
+
+      getTrustedCap(variantId) {
+        if (!this.trustedQuantityState) this.trustedQuantityState = new Map();
+        const trusted = this.trustedQuantityState.get(String(variantId));
+        if (!trusted) return null;
+        const cap = Number(trusted.max);
+        return Number.isFinite(cap) ? cap : null;
+      }
+
+      resolveMutationCap(rules, trustedCap) {
+        if (rules.max === null && trustedCap === null) return null;
+        if (rules.max === null) return trustedCap;
+        if (trustedCap === null) return rules.max;
+        return Math.min(rules.max, trustedCap);
+      }
+
+      normalizeTargetToRules(requestedTarget, rules) {
+        let safeTarget = Number.isFinite(Number(requestedTarget)) ? Math.floor(Number(requestedTarget)) : 0;
+        if (safeTarget <= 0) return 0;
+
+        const min = Number.isFinite(rules.min) ? rules.min : 0;
+        const step = Number.isFinite(rules.step) && rules.step > 0 ? rules.step : 1;
+        const max = rules.max;
+
+        if (max !== null) {
+          safeTarget = Math.min(safeTarget, max);
+        }
+
+        if (safeTarget <= 0) return 0;
+
+        if (safeTarget < min) {
+          safeTarget = min;
+        }
+
+        if (safeTarget >= min) {
+          safeTarget = min + Math.floor((safeTarget - min) / step) * step;
+        }
+
+        if (max !== null && safeTarget > max) {
+          safeTarget = max;
+        }
+
+        return Math.max(0, safeTarget);
+      }
+
+      logInputValidationState(input, details = {}) {
+        if (!input) return;
+        const variantId = parseInt(input.dataset.quantityVariantId || input.dataset.index, 10);
+        const rules = this.getInputRules(input);
+        const trustedCap = this.getTrustedCap(variantId);
+        const resolvedMax = this.resolveMutationCap(rules, trustedCap);
+        const currentCartTotal = parseInt(input.dataset.cartQuantity, 10) || 0;
+
+        this.debugLog('input-state', {
+          sourceEvent: details.sourceEvent || input.dataset.quickOrderSource || 'change',
+          variantId,
+          inputValue: input.value,
+          inputAttributeValue: input.getAttribute?.('value') || '',
+          inputMin: input.min,
+          inputMax: input.max,
+          inputStep: input.step,
+          datasetCartQuantity: input.dataset.cartQuantity,
+          datasetMax: input.dataset.max,
+          datasetInventoryMax: input.dataset.inventoryMax,
+          datasetInventorySyncPending: input.dataset.inventorySyncPending,
+          resolvedMin: details.resolvedMin ?? rules.min,
+          resolvedIncrement: details.resolvedIncrement ?? rules.step,
+          resolvedMax,
+          currentCartTotal,
+          targetTotal: details.targetTotal,
+          trustedMax: trustedCap,
+        });
+      }
+
+      getCartTotalsByVariant(cartData) {
+        const totals = new Map();
+        (cartData?.items || []).forEach((item) => {
+          const variantId = parseInt(item.variant_id, 10);
+          if (!Number.isFinite(variantId)) return;
+          const qty = Number(item.quantity) || 0;
+          totals.set(String(variantId), (totals.get(String(variantId)) || 0) + qty);
+        });
+        return totals;
+      }
+
+      prepareMutationItems(items, cartData) {
+        const safeItems = {};
+        const diagnostics = new Map();
+        const cartTotals = this.getCartTotalsByVariant(cartData);
+
+        Object.entries(items || {}).forEach(([rawVariantId, rawRequestedTarget]) => {
+          const variantId = parseInt(rawVariantId, 10);
+          const requestedTarget = Number(rawRequestedTarget);
+          if (!Number.isFinite(variantId) || !Number.isFinite(requestedTarget)) return;
+
+          const input = this.querySelector(`.quantity__input[data-quantity-variant-id="${variantId}"]`);
+          const rules = input ? this.getInputRules(input) : { min: 0, step: 1, max: null };
+          const trustedCap = this.getTrustedCap(variantId);
+          const resolvedMax = this.resolveMutationCap(rules, trustedCap);
+          const currentCartTotal = cartTotals.get(String(variantId)) ?? (parseInt(input?.dataset?.cartQuantity, 10) || 0);
+          const pending = input?.dataset?.inventorySyncPending === 'true';
+
+          let safeTarget = Math.floor(requestedTarget);
+          if (pending && safeTarget > currentCartTotal) {
+            safeTarget = currentCartTotal;
+          }
+
+          safeTarget = this.normalizeTargetToRules(safeTarget, {
+            min: rules.min,
+            step: rules.step,
+            max: resolvedMax,
+          });
+
+          safeItems[String(variantId)] = safeTarget;
+
+          diagnostics.set(String(variantId), {
+            variantId,
+            requestedTarget: Math.floor(requestedTarget),
+            safeTarget,
+            currentCartTotal,
+            resolvedMin: rules.min,
+            resolvedIncrement: rules.step,
+            resolvedMax,
+            trustedMax: trustedCap,
+            pending,
+            endpointVariantId: String(variantId),
+          });
+
+          if (input) {
+            this.logInputValidationState(input, {
+              sourceEvent: input.dataset.quickOrderSource || 'mutation-boundary',
+              targetTotal: safeTarget,
+              resolvedMin: rules.min,
+              resolvedIncrement: rules.step,
+              resolvedMax,
+            });
+          }
+        });
+
+        this.lastPreparedMutationDiagnostics = diagnostics;
+        this.debugLog('mutation-boundary-prepare', {
+          itemCount: diagnostics.size,
+          entries: Array.from(diagnostics.values()),
+        });
+
+        return safeItems;
+      }
+
+      logMutationRequest({ endpoint, payload, variantId, route }) {
+        const diagnostic = this.lastPreparedMutationDiagnostics?.get(String(variantId));
+        this.debugLog('mutation-request', {
+          endpoint,
+          route,
+          payload,
+          variantId,
+          requestedQuantity: diagnostic?.requestedTarget,
+          targetTotal: diagnostic?.safeTarget,
+          currentTotal: diagnostic?.currentCartTotal,
+          resolvedMax: diagnostic?.resolvedMax,
+          trustedMax: diagnostic?.trustedMax,
+        });
       }
 
       connectedCallback() {
@@ -201,6 +378,10 @@ if (!customElements.get('quick-order-list')) {
 
       fetchQuantityMetadata(force = false) {
         if (!force && this.isQuantityMetadataFresh()) {
+          this.debugLog('metadata-cache-hit', {
+            cacheAgeMs: Date.now() - this.quantityMetadataCacheAt,
+            ttlMs: this.quantityMetadataTtlMs,
+          });
           return Promise.resolve(this.quantityMetadataCache);
         }
 
@@ -210,26 +391,47 @@ if (!customElements.get('quick-order-list')) {
 
         this.quantityMetadataPromise = (async () => {
           const urls = this.buildInventoryMetadataUrls();
+          const affectedVariantId = this.querySelector('.quantity__input[data-quantity-variant-id]')?.dataset?.quantityVariantId;
 
           for (const url of urls) {
             try {
+              this.debugLog('metadata-request-start', { url, force });
               const response = await fetch(url, {
                 credentials: 'same-origin',
                 cache: 'no-store',
                 headers: { Accept: 'text/html' },
               });
+              this.debugLog('metadata-request-response', {
+                url,
+                status: response.status,
+                contentType: response.headers?.get?.('content-type') || '',
+              });
               if (!response.ok) continue;
               const html = await response.text();
+              const scriptFound = html.includes('data-quick-order-inventory-metadata');
               const metadata = this.parseInventoryMetadataFromHtml(html);
+              const variantCount = metadata?.variants ? Object.keys(metadata.variants).length : 0;
+              const affected = metadata?.variants?.[String(affectedVariantId)];
+              this.debugLog('metadata-request-parse', {
+                url,
+                scriptFound,
+                parsedVariantCount: variantCount,
+                affectedVariantId,
+                affectedInventoryQuantity: affected?.inventory_quantity,
+                affectedCartQuantity: affected?.cart_quantity,
+              });
               if (!metadata) continue;
 
               this.quantityMetadataCache = metadata;
               this.quantityMetadataCacheAt = Date.now();
               return metadata;
             } catch (_error) {
+              this.debugLog('metadata-request-error', { url });
               // Try next URL candidate.
             }
           }
+
+          this.debugLog('metadata-request-unresolved', { urls });
 
           return null;
         })().finally(() => {
@@ -263,6 +465,16 @@ if (!customElements.get('quick-order-list')) {
           input.dataset.remainingAddable = String(Math.max(rules.max - trustedQuantity, 0));
         } else {
           delete input.dataset.remainingAddable;
+        }
+
+        const variantId = parseInt(input.dataset.quantityVariantId, 10);
+        if (Number.isFinite(variantId)) {
+          if (!this.trustedQuantityState) this.trustedQuantityState = new Map();
+          this.trustedQuantityState.set(String(variantId), {
+            max: rules.max,
+            cartQuantity: trustedQuantity,
+            updatedAt: Date.now(),
+          });
         }
 
         quantityElement.validateQtyRules?.();
@@ -389,6 +601,12 @@ if (!customElements.get('quick-order-list')) {
 
       onChange(event) {
         const inputValue = parseInt(event.target.value);
+        const sourceEvent = event.target.dataset.quickOrderSource || 'manual-change';
+        this.logInputValidationState(event.target, {
+          sourceEvent,
+          targetTotal: inputValue,
+        });
+        delete event.target.dataset.quickOrderSource;
         this.cleanErrorMessageOnType(event);
         if (inputValue == 0) {
           this.startQueue(event.target.dataset.index, inputValue);

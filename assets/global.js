@@ -281,6 +281,9 @@ class QuantityInput extends HTMLElement {
   }
 
   onInputChange(event) {
+    if (!this.input.dataset.quickOrderSource) {
+      this.input.dataset.quickOrderSource = 'manual-input';
+    }
     this.syncResolvedMax();
     const before = this.input.dataset._lastValue || '';
     this.clampToMax(before);
@@ -317,7 +320,10 @@ class QuantityInput extends HTMLElement {
     this.clampToMax(previousValue);
     this.validateQtyRules();
 
-    if (previousValue !== this.input.value) this.input.dispatchEvent(this.changeEvent);
+    if (previousValue !== this.input.value) {
+      this.input.dataset.quickOrderSource = isPlus ? 'plus' : 'minus';
+      this.input.dispatchEvent(this.changeEvent);
+    }
 
     if (this.input.dataset.min === previousValue && event.target.name === 'minus') {
       this.input.value = parseInt(this.input.min);
@@ -1459,7 +1465,14 @@ class BulkAdd extends HTMLElement {
     if (!cartResponse.ok) throw new Error(`Cart read HTTP ${cartResponse.status}`);
 
     const cartData = await cartResponse.json();
-    const plan = buildLineAwareUpdatePlan(cartData.items || [], items || {});
+    const preparedItems = typeof this.prepareMutationItems === 'function'
+      ? this.prepareMutationItems(items || {}, cartData)
+      : (items || {});
+    const plan = buildLineAwareUpdatePlan(cartData.items || [], preparedItems || {});
+
+    if (!plan.lineUpdates.length && !Object.keys(plan.variantUpdates).length && !plan.conflicts.length) {
+      return { ok: true, conflicts: [], cartData };
+    }
 
     if (plan.conflicts.length) {
       return { ok: false, conflicts: plan.conflicts, cartData };
@@ -1475,6 +1488,14 @@ class BulkAdd extends HTMLElement {
     const finishRenderBatch = window.BSCartUI?.beginBatch?.();
     try {
       for (const update of plan.lineUpdates) {
+        if (typeof this.logMutationRequest === 'function') {
+          this.logMutationRequest({
+            endpoint: cartChangeUrl(),
+            payload: { id: update.id, quantity: update.quantity },
+            variantId: update.variantId,
+            route: 'line-update',
+          });
+        }
         const response = await fetch(cartChangeUrl(), mutationRequest(JSON.stringify({
           id: update.id,
           quantity: update.quantity,
@@ -1483,6 +1504,16 @@ class BulkAdd extends HTMLElement {
       }
 
       if (Object.keys(plan.variantUpdates).length) {
+        if (typeof this.logMutationRequest === 'function') {
+          Object.entries(plan.variantUpdates).forEach(([variantId, quantity]) => {
+            this.logMutationRequest({
+              endpoint: cartUpdateUrl(),
+              payload: { updates: { [variantId]: quantity } },
+              variantId,
+              route: 'variant-update',
+            });
+          });
+        }
         const response = await fetch(cartUpdateUrl(), mutationRequest(JSON.stringify({
           updates: plan.variantUpdates,
         })));
@@ -1527,6 +1558,16 @@ class BulkAdd extends HTMLElement {
     const index = event.target.dataset.index;
     const rules = this.getInputRules(event.target);
     const quantityInput = event.target.closest?.('quantity-input');
+
+    if (typeof this.logInputValidationState === 'function') {
+      this.logInputValidationState(event.target, {
+        sourceEvent: event.target.dataset.quickOrderSource || 'change',
+        targetTotal: inputValue,
+        resolvedMin: rules.min,
+        resolvedIncrement: rules.step,
+        resolvedMax: rules.max,
+      });
+    }
 
     if (event.target.dataset.inventorySyncPending === 'true') {
       const cartQuantity = parseQuantityValue(event.target.dataset.cartQuantity) ?? 0;

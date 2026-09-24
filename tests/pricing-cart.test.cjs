@@ -2049,6 +2049,259 @@ function createQuickOrderInventorySyncHarness({
   return { runtime, quickOrder, input, plusButton, quantityElement, resolveRules, row };
 }
 
+function loadQuickOrderRuntimeWithRealHandlers() {
+  const resolverBlock = source('assets/global.js').match(
+    /function parseQuantityValue\(value\) \{[\s\S]*?function resolveQuantityRules\(input\) \{[\s\S]*?\n\}/
+  );
+  const quantityInputBlock = source('assets/global.js').match(
+    /class QuantityInput extends HTMLElement \{[\s\S]*?customElements\.define\('quantity-input', QuantityInput\);/
+  );
+  const bulkAddRuntimeBlock = source('assets/global.js').match(
+    /function cartRootPath\(\) \{[\s\S]*?if \(!customElements\.get\('bulk-add'\)\) \{[\s\S]*?\n\}/
+  );
+
+  assert(resolverBlock, 'Expected quantity resolver block in assets/global.js');
+  assert(quantityInputBlock, 'Expected QuantityInput class block in assets/global.js');
+  assert(bulkAddRuntimeBlock, 'Expected BulkAdd runtime block in assets/global.js');
+
+  let fetchImpl = async () => ({ ok: false, status: 500, json: async () => ({}), text: async () => '' });
+  const registry = new Map();
+  const context = {
+    HTMLElement: class {},
+    Event: class {
+      constructor(type, options = {}) {
+        this.type = type;
+        this.bubbles = !!options.bubbles;
+      }
+    },
+    CustomEvent: class {
+      constructor(type, options = {}) {
+        this.type = type;
+        this.detail = options.detail;
+      }
+    },
+    customElements: {
+      get(name) {
+        return registry.get(name);
+      },
+      define(name, ctor) {
+        registry.set(name, ctor);
+      },
+    },
+    subscribe: () => () => {},
+    publish: () => {},
+    PUB_SUB_EVENTS: { quantityUpdate: 'quantityUpdate', cartUpdate: 'cartUpdate' },
+    debounce: (fn) => fn,
+    window: {
+      location: { search: '', pathname: '/products/example', origin: 'https://example.test' },
+      Shopify: { routes: { root: '/' } },
+      routes: { cart_change_url: '/cart/change.js', cart_update_url: '/cart/update.js' },
+      localStorage: { getItem: () => null },
+      quickOrderListStrings: {
+        min_error: 'min [min]',
+        max_error: 'max [max]',
+        step_error: 'step [step]',
+      },
+      cartStrings: {
+        error: 'error',
+        quantityError: 'Only [quantity] items were added to your cart due to availability.',
+      },
+    },
+    document: {
+      dispatchEvent() {},
+      querySelector: () => null,
+      getElementById: () => null,
+      querySelectorAll: () => [],
+    },
+    fetch: (...args) => fetchImpl(...args),
+    DOMParser: class {
+      parseFromString(html) {
+        return new JSDOM(html).window.document;
+      }
+    },
+    URL,
+    URLSearchParams,
+    setTimeout,
+    clearTimeout,
+    setInterval,
+    clearInterval,
+    console: { warn() {}, error() {}, info() {} },
+  };
+
+  vm.runInNewContext(
+    `${resolverBlock[0]}\n${quantityInputBlock[0]}\n${bulkAddRuntimeBlock[0]}\n${source('assets/quick-order-list.js')}`,
+    context
+  );
+
+  const QuantityInput = registry.get('quantity-input');
+  const QuickOrder = registry.get('quick-order-list');
+  assert(QuantityInput, 'Expected quantity-input custom element registration');
+  assert(QuickOrder, 'Expected quick-order-list custom element registration');
+
+  return {
+    QuantityInput,
+    QuickOrder,
+    setFetch(next) {
+      fetchImpl = next;
+    },
+  };
+}
+
+function createQuickOrderRealHandlerHarness({
+  inputValue = 0,
+  inputMax = 23,
+  inventoryMax = 23,
+  cartQuantity = 0,
+  trustedMax = 19,
+  cartItems = [],
+  pending = false,
+} = {}) {
+  const runtime = loadQuickOrderRuntimeWithRealHandlers();
+  const requests = [];
+
+  runtime.setFetch(async (url, init = {}) => {
+    const request = { url: String(url), init };
+    requests.push(request);
+    if (request.url.endsWith('/cart.js')) {
+      return { ok: true, status: 200, json: async () => ({ items: cartItems }) };
+    }
+    if (request.url.includes('/cart/change.js') || request.url.includes('/cart/update.js')) {
+      return { ok: true, status: 200, json: async () => ({}) };
+    }
+    return { ok: true, status: 200, json: async () => ({}), text: async () => '' };
+  });
+
+  const quickOrder = Object.create(runtime.QuickOrder.prototype);
+  quickOrder.queue = [];
+  quickOrder.requestStarted = false;
+  quickOrder.ids = [];
+  quickOrder.dataset = { section: 'main-product', productId: '2000', url: '/products/example' };
+  quickOrder.sectionId = 'main-product';
+  quickOrder.quantityMetadataCache = null;
+  quickOrder.quantityMetadataCacheAt = 0;
+  quickOrder.quantityMetadataPromise = null;
+  quickOrder.quantityMetadataTtlMs = 15000;
+  quickOrder.quantitySyncRequestId = 0;
+  quickOrder.trustedQuantityState = new Map([
+    ['1000', { max: trustedMax, cartQuantity, updatedAt: Date.now() }],
+  ]);
+  quickOrder.lastPreparedMutationDiagnostics = new Map();
+  quickOrder.updateError = () => {};
+  quickOrder.closest = (selector) => (selector === 'quick-order-list' ? quickOrder : null);
+  quickOrder.cleanErrorMessageOnType = () => {};
+
+  const row = { dataset: { cartQty: String(cartQuantity) } };
+  const plusButton = createQuantityButton('plus');
+  const minusButton = createQuantityButton('minus');
+
+  const input = {
+    value: String(inputValue),
+    min: '0',
+    max: String(inputMax),
+    step: '1',
+    dataset: {
+      index: '1000',
+      quantityVariantId: '1000',
+      min: '1',
+      cartQuantity: String(cartQuantity),
+      inventoryMax: String(inventoryMax),
+      inventorySyncPending: pending ? 'true' : undefined,
+    },
+    _attrs: { value: String(inputValue) },
+    setCustomValidity() {},
+    reportValidity() {},
+    select() {},
+    setAttribute(name, value) {
+      this._attrs[name] = String(value);
+      if (name === 'value') this.value = String(value);
+    },
+    getAttribute(name) {
+      return this._attrs[name];
+    },
+  };
+
+  if (!pending) {
+    delete input.dataset.inventorySyncPending;
+  }
+
+  const quantityElement = {
+    input,
+    changeEvent: { type: 'change' },
+    querySelector(selector) {
+      if (selector === ".quantity__button[name='plus']") return plusButton;
+      if (selector === ".quantity__button[name='minus']") return minusButton;
+      return null;
+    },
+    flashMaxWarning() {},
+  };
+  quantityElement.syncResolvedMax = runtime.QuantityInput.prototype.syncResolvedMax;
+  quantityElement.validateQtyRules = runtime.QuantityInput.prototype.validateQtyRules;
+  quantityElement.clampToMax = runtime.QuantityInput.prototype.clampToMax;
+
+  input.stepUp = () => {
+    input.value = String((parseInt(input.value, 10) || 0) + 1);
+  };
+  input.stepDown = () => {
+    input.value = String((parseInt(input.value, 10) || 0) - 1);
+  };
+  input.dispatchEvent = (event) => {
+    if (event.type === 'change') {
+      quickOrder.onChange({ target: input, type: 'change' });
+    }
+    return true;
+  };
+  input.closest = (selector) => {
+    if (selector === 'quantity-input') return quantityElement;
+    if (selector === 'tr.variant-item') return row;
+    return null;
+  };
+
+  quickOrder.querySelector = (selector) => {
+    if (selector === '.quick-order-list__table') return { addEventListener() {} };
+    if (selector === `.quantity__input[data-quantity-variant-id="1000"]`) return input;
+    return null;
+  };
+  quickOrder.querySelectorAll = (selector) => {
+    if (selector === 'quantity-input .quantity__input[data-quantity-variant-id]') return [input];
+    if (selector === 'quantity-input') return [quantityElement];
+    if (selector === 'input[type="number"]') return [input];
+    return [];
+  };
+
+  quickOrder.startQueue = function (id, quantity) {
+    this.__lastMutationPromise = this.applyVariantUpdatesWithLineIdentity({ [id]: quantity });
+  };
+
+  const originalValidateQuantity = quickOrder.validateQuantity.bind(quickOrder);
+  let validateCalls = 0;
+  quickOrder.validateQuantity = function (event) {
+    validateCalls += 1;
+    return originalValidateQuantity(event);
+  };
+
+  const getMutationQuantities = () => requests
+    .filter((request) => request.url.includes('/cart/change.js') || request.url.includes('/cart/update.js'))
+    .flatMap((request) => {
+      const body = request.init?.body ? JSON.parse(request.init.body) : {};
+      if (Number.isFinite(Number(body.quantity))) return [Number(body.quantity)];
+      if (body.updates && typeof body.updates === 'object') return Object.values(body.updates).map((qty) => Number(qty));
+      return [];
+    });
+
+  return {
+    runtime,
+    quickOrder,
+    input,
+    row,
+    plusButton,
+    minusButton,
+    quantityElement,
+    requests,
+    getMutationQuantities,
+    getValidateCalls: () => validateCalls,
+  };
+}
+
 test('effective max normalizes to valid increment under tracked inventory caps (5/5/18 -> 15)', () => {
   const resolveRules = loadQuantityRuleResolver();
 
@@ -2391,6 +2644,7 @@ test('quick-order stale visible 3/data-cart-quantity 3 is reconciled to authorit
 test('quick-order metadata fetch treats network/non-200/invalid/missing/malformed responses as unresolved', async () => {
   const runtime = loadQuickOrderClassForValidation();
   const quickOrder = Object.create(runtime.QuickOrder.prototype);
+  quickOrder.querySelector = () => null;
   quickOrder.quantityMetadataCache = null;
   quickOrder.quantityMetadataCacheAt = 0;
   quickOrder.quantityMetadataPromise = null;
@@ -2594,6 +2848,105 @@ test('quick-order dedicated metadata section contract emits one authoritative pa
   assert.equal((metadataSnippet.match(/data-quick-order-inventory-metadata/g) || []).length, 1);
   assert(metadataSnippet.includes('"product_id"'));
   assert(quickOrderScript.includes("const sectionCandidates = ['quick-order-inventory-metadata', this.sectionId || this.dataset.section].filter("));
+});
+
+test('quick-order debug mode exposes localStorage flag and request-level diagnostics hooks', () => {
+  const quickOrderScript = source('assets/quick-order-list.js');
+  const globalScript = source('assets/global.js');
+
+  assert(quickOrderScript.includes("window.localStorage?.getItem('quickOrderDebug') === '1'"));
+  assert(quickOrderScript.includes("console.info('[quick-order-debug]'"));
+  assert(quickOrderScript.includes('metadata-request-start'));
+  assert(quickOrderScript.includes('metadata-request-response'));
+  assert(quickOrderScript.includes('mutation-request'));
+  assert(globalScript.includes("input.dataset.quickOrderSource = isPlus ? 'plus' : 'minus';"));
+});
+
+test('real quick-order handler manual 50 cannot send outgoing quantity above trusted max 19', async () => {
+  const harness = createQuickOrderRealHandlerHarness({
+    inputValue: 0,
+    inputMax: 23,
+    inventoryMax: 23,
+    cartQuantity: 0,
+    trustedMax: 19,
+    cartItems: [],
+  });
+
+  harness.input.value = '50';
+  harness.quickOrder.onChange({ target: harness.input, type: 'change' });
+  await harness.quickOrder.__lastMutationPromise;
+
+  const mutationQuantities = harness.getMutationQuantities();
+  assert(mutationQuantities.length > 0);
+  assert(mutationQuantities.every((qty) => qty <= 19));
+  assert.equal(harness.getValidateCalls() > 0, true);
+});
+
+test('real quick-order handler plus interaction sends 19 from 18 and blocks second plus at max', async () => {
+  const harness = createQuickOrderRealHandlerHarness({
+    inputValue: 18,
+    inputMax: 19,
+    inventoryMax: 19,
+    cartQuantity: 18,
+    trustedMax: 19,
+    cartItems: [{ variant_id: 1000, quantity: 18 }],
+  });
+
+  harness.quantityElement.syncResolvedMax();
+  harness.quantityElement.validateQtyRules();
+
+  harness.runtime.QuantityInput.prototype.onButtonClick.call(harness.quantityElement, {
+    preventDefault() {},
+    target: harness.plusButton,
+  });
+
+  await harness.quickOrder.__lastMutationPromise;
+  let mutationQuantities = harness.getMutationQuantities();
+  assert.deepEqual(mutationQuantities, [19]);
+
+  harness.runtime.QuantityInput.prototype.onButtonClick.call(harness.quantityElement, {
+    preventDefault() {},
+    target: harness.plusButton,
+  });
+
+  mutationQuantities = harness.getMutationQuantities();
+  assert.deepEqual(mutationQuantities, [19]);
+});
+
+test('real quick-order handler stale DOM 23 with trusted max 19 is clamped at final mutation boundary', async () => {
+  const harness = createQuickOrderRealHandlerHarness({
+    inputValue: 23,
+    inputMax: 23,
+    inventoryMax: 23,
+    cartQuantity: 0,
+    trustedMax: 19,
+    cartItems: [],
+  });
+
+  harness.quickOrder.onChange({ target: harness.input, type: 'change' });
+  await harness.quickOrder.__lastMutationPromise;
+
+  const mutationQuantities = harness.getMutationQuantities();
+  assert(mutationQuantities.length > 0);
+  assert(mutationQuantities.every((qty) => qty <= 19));
+});
+
+test('real quick-order handler pending inventory sync blocks positive manual overage request', async () => {
+  const harness = createQuickOrderRealHandlerHarness({
+    inputValue: 0,
+    inputMax: 23,
+    inventoryMax: 23,
+    cartQuantity: 0,
+    trustedMax: 19,
+    cartItems: [],
+    pending: true,
+  });
+
+  harness.input.value = '50';
+  harness.quickOrder.onChange({ target: harness.input, type: 'change' });
+
+  const mutationQuantities = harness.getMutationQuantities();
+  assert.equal(mutationQuantities.length, 0);
 });
 
 test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {
