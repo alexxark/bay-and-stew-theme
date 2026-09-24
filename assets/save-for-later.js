@@ -11,8 +11,9 @@
  *
  * Wire-format on the metafield (list.single_line_text_field):
  *   each entry is "<variantId>|<quantity>|<productHandle>".
- * The richer object shape (title/image/price/...) lives only in the local cache and
- * is rehydrated lazily from /products/<handle>.js on a fresh device.
+ * This legacy wire format cannot carry line-item properties or selling plans.
+ * Metadata-bearing items therefore remain local-only (to avoid lossy corruption),
+ * while simple items continue cross-device sync via the legacy format.
  *
  * Saved items are separate from Favorites (different key, different metafield).
  *
@@ -20,6 +21,8 @@
  *   {
  *     variantId:     number,
  *     productHandle: string,
+ *     properties:    object,
+ *     sellingPlanId: number|null,
  *     title:         string,
  *     variantTitle:  string,
  *     image:         string|null,
@@ -87,6 +90,88 @@
     if (!options.skipSync) scheduleSync(list);
   }
 
+  function normalizeProperties(properties) {
+    if (!properties || typeof properties !== 'object' || Array.isArray(properties)) return {};
+    const normalized = {};
+    Object.keys(properties)
+      .sort()
+      .forEach((key) => {
+        const value = properties[key];
+        if (value == null) return;
+        const text = String(value);
+        if (text === '') return;
+        normalized[String(key)] = text;
+      });
+    return normalized;
+  }
+
+  function parseSellingPlanId(value) {
+    const parsed = Number(value);
+    if (!Number.isSafeInteger(parsed) || parsed <= 0) return null;
+    return parsed;
+  }
+
+  function normalizeHandle(handle) {
+    return String(handle || '').toLowerCase().replace(/[^a-z0-9-]/g, '');
+  }
+
+  function hasMetadataIdentity(item) {
+    const props = normalizeProperties(item && item.properties);
+    if (Object.keys(props).length) return true;
+    return parseSellingPlanId(item && (item.sellingPlanId || item.selling_plan)) !== null;
+  }
+
+  function isSyncableCrossDeviceItem(item) {
+    return !hasMetadataIdentity(item);
+  }
+
+  function normalizeSavedItem(item) {
+    const variantId = parseInt(item && item.variantId, 10);
+    if (!Number.isSafeInteger(variantId) || variantId <= 0) return null;
+
+    return {
+      ...item,
+      variantId,
+      quantity: Math.max(1, parseInt(item.quantity, 10) || 1),
+      properties: normalizeProperties(item.properties),
+      sellingPlanId: parseSellingPlanId(item.sellingPlanId || item.selling_plan),
+    };
+  }
+
+  function mergeSavedItemsByIdentity(items) {
+    const mergedByKey = new Map();
+    const order = [];
+
+    (items || []).forEach((item) => {
+      const normalized = normalizeSavedItem(item);
+      if (!normalized) return;
+
+      const key = itemIdentityKey(normalized);
+      const existing = mergedByKey.get(key);
+      if (existing) {
+        existing.quantity += normalized.quantity;
+        return;
+      }
+
+      mergedByKey.set(key, { ...normalized });
+      order.push(key);
+    });
+
+    return order.map((key) => mergedByKey.get(key));
+  }
+
+  function itemIdentityKey(item) {
+    const variantId = parseInt(item && item.variantId, 10) || 0;
+    const sellingPlanId = parseSellingPlanId(item && (item.sellingPlanId || item.selling_plan));
+    const props = normalizeProperties(item && item.properties);
+    const propsToken = encodeURIComponent(JSON.stringify(props));
+    return `${variantId}::${sellingPlanId || ''}::${propsToken}`;
+  }
+
+  function escapeAttrSelectorValue(value) {
+    return String(value).replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+  }
+
   // -----------------------------------------------------------------------
   // Wire-format encode / decode for the metafield
   // -----------------------------------------------------------------------
@@ -97,9 +182,9 @@
    */
   function encodeEntry(item) {
     if (!item || !item.variantId || !item.productHandle) return null;
+    if (!isSyncableCrossDeviceItem(item)) return null;
     const qty = Math.max(1, parseInt(item.quantity, 10) || 1);
-    // The worker validates handles as [a-z0-9-]+ — strip anything else.
-    const handle = String(item.productHandle).toLowerCase().replace(/[^a-z0-9-]/g, '');
+    const handle = normalizeHandle(item.productHandle);
     if (!handle) return null;
     return String(item.variantId) + '|' + qty + '|' + handle;
   }
@@ -112,6 +197,8 @@
       variantId:     parseInt(m[1], 10),
       quantity:      parseInt(m[2], 10),
       productHandle: m[3],
+      properties:    {},
+      sellingPlanId: null,
     };
   }
 
@@ -198,13 +285,39 @@
   // -----------------------------------------------------------------------
 
   function rehydrateFromEncoded(encodedList) {
-    const decoded = encodedList.map(decodeEntry).filter(Boolean);
+    const decoded = (encodedList || []).map(decodeEntry).filter(Boolean);
     if (!decoded.length) return Promise.resolve([]);
 
-    // Existing cache → lookup by variantId so we don't re-fetch known items.
+    // Existing cache grouped by legacy sync key (variant + handle). Only
+    // simple cached items are eligible as rehydrate sources.
     const cache = readAll();
-    const byVariant = Object.create(null);
-    cache.forEach((it) => { if (it && it.variantId) byVariant[it.variantId] = it; });
+    const cachedBucketsBySyncKey = Object.create(null);
+    cache.forEach((it) => {
+      const normalized = normalizeSavedItem(it);
+      if (!normalized) return;
+      if (!isSyncableCrossDeviceItem(normalized)) return;
+      const handle = normalizeHandle(normalized.productHandle);
+      if (!handle) return;
+      const key = `${normalized.variantId}|${handle}`;
+      if (!cachedBucketsBySyncKey[key]) cachedBucketsBySyncKey[key] = [];
+      cachedBucketsBySyncKey[key].push(normalized);
+    });
+
+    function syncKeyForEntry(entry) {
+      return `${entry.variantId}|${normalizeHandle(entry.productHandle)}`;
+    }
+
+    function hasCachedCoverage(entries) {
+      const neededByKey = Object.create(null);
+      entries.forEach((entry) => {
+        const key = syncKeyForEntry(entry);
+        neededByKey[key] = (neededByKey[key] || 0) + 1;
+      });
+      return Object.keys(neededByKey).every((key) => {
+        const available = (cachedBucketsBySyncKey[key] && cachedBucketsBySyncKey[key].length) || 0;
+        return available >= neededByKey[key];
+      });
+    }
 
     // Group decoded entries by handle so we hit each product endpoint once.
     const byHandle = Object.create(null);
@@ -218,7 +331,7 @@
     return Promise.all(handles.map((handle) => {
       // Skip the network call when every decoded entry for this handle is
       // already in the local cache.
-      const allCached = byHandle[handle].every((d) => byVariant[d.variantId]);
+      const allCached = hasCachedCoverage(byHandle[handle]);
       if (allCached) return Promise.resolve({ handle: handle, product: null });
 
       return fetch('/products/' + encodeURIComponent(handle) + '.js', {
@@ -231,15 +344,27 @@
       const productByHandle = Object.create(null);
       results.forEach((res) => { productByHandle[res.handle] = res.product; });
 
+      const remainingCachedBuckets = Object.create(null);
+      Object.keys(cachedBucketsBySyncKey).forEach((key) => {
+        remainingCachedBuckets[key] = cachedBucketsBySyncKey[key].slice();
+      });
+
       // Preserve the order returned by the server.
       const out = [];
       decoded.forEach((d) => {
-        const cached  = byVariant[d.variantId];
+        const cachedBucket = remainingCachedBuckets[syncKeyForEntry(d)];
+        const cached  = cachedBucket && cachedBucket.length ? cachedBucket.shift() : null;
         const product = productByHandle[d.productHandle];
 
         if (cached) {
           // Keep cached metadata; update quantity to what the server says.
-          out.push(Object.assign({}, cached, { quantity: d.quantity }));
+          out.push(Object.assign({}, cached, {
+            variantId: d.variantId,
+            productHandle: d.productHandle,
+            quantity: d.quantity,
+            properties: {},
+            sellingPlanId: null,
+          }));
           return;
         }
 
@@ -250,6 +375,8 @@
           out.push({
             variantId:     d.variantId,
             productHandle: d.productHandle,
+            properties:    {},
+            sellingPlanId: null,
             title:         product.title || '',
             variantTitle:  variant ? variant.title : '',
             image:         (variant && variant.featured_image && variant.featured_image.src)
@@ -271,6 +398,8 @@
         out.push({
           variantId:     d.variantId,
           productHandle: d.productHandle,
+          properties:    {},
+          sellingPlanId: null,
           title:         '',
           variantTitle:  '',
           image:         null,
@@ -281,8 +410,16 @@
         });
       });
 
-      return out;
+      return mergeSavedItemsByIdentity(out);
     });
+  }
+
+  function mergeServerHydratedWithLocalMetadata(serverItems, localItems) {
+    const localMetadataItems = (localItems || [])
+      .map((item) => normalizeSavedItem(item))
+      .filter((item) => item && hasMetadataIdentity(item));
+
+    return mergeSavedItemsByIdentity([...(serverItems || []), ...localMetadataItems]);
   }
 
   /**
@@ -302,11 +439,12 @@
     const bootstrap = readBootstrap();
 
     if (bootstrap && bootstrap.length) {
-      rehydrateFromEncoded(bootstrap).then((freshList) => {
-        if (JSON.stringify(freshList) !== JSON.stringify(local)) {
-          writeAll(freshList, { skipSync: true });
+      rehydrateFromEncoded(bootstrap).then((serverList) => {
+        const mergedList = mergeServerHydratedWithLocalMetadata(serverList, local);
+        if (JSON.stringify(mergedList) !== JSON.stringify(local)) {
+          writeAll(mergedList, { skipSync: true });
         }
-        lastSyncedJson = JSON.stringify({ handles: encodeList(freshList) });
+        lastSyncedJson = JSON.stringify({ handles: encodeList(serverList) });
       });
     } else if (bootstrap && bootstrap.length === 0 && local.length === 0) {
       lastSyncedJson = JSON.stringify({ handles: [] });
@@ -320,12 +458,13 @@
       setTimeout(() => {
         pullFromServer().then((serverHandles) => {
           if (!serverHandles) return;
-          rehydrateFromEncoded(serverHandles).then((freshList) => {
+          rehydrateFromEncoded(serverHandles).then((serverList) => {
             const current = readAll();
-            if (JSON.stringify(freshList) !== JSON.stringify(current)) {
-              writeAll(freshList, { skipSync: true });
+            const mergedList = mergeServerHydratedWithLocalMetadata(serverList, current);
+            if (JSON.stringify(mergedList) !== JSON.stringify(current)) {
+              writeAll(mergedList, { skipSync: true });
             }
-            lastSyncedJson = JSON.stringify({ handles: encodeList(freshList) });
+            lastSyncedJson = JSON.stringify({ handles: encodeList(serverList) });
           });
         });
       }, 1200);
@@ -337,22 +476,32 @@
   // -----------------------------------------------------------------------
 
   /**
-   * Persist a saved item. When the same variantId already exists, increment
-   * its stored quantity instead of creating a duplicate row.
+   * Persist a saved item. When the same canonical identity already exists,
+   * increment its stored quantity instead of creating a duplicate row.
    */
   function save(item) {
+    const normalizedItem = normalizeSavedItem(item);
+    if (!normalizedItem) return;
+
     const list = readAll();
-    const idx  = list.findIndex((s) => s.variantId === item.variantId);
+    const key = itemIdentityKey(normalizedItem);
+    const idx  = list.findIndex((s) => itemIdentityKey(s) === key);
     if (idx !== -1) {
-      list[idx].quantity += item.quantity;
+      list[idx].quantity = Math.max(1, parseInt(list[idx].quantity, 10) || 1) + normalizedItem.quantity;
+      list[idx].properties = normalizeProperties(list[idx].properties);
+      list[idx].sellingPlanId = parseSellingPlanId(list[idx].sellingPlanId || list[idx].selling_plan);
     } else {
-      list.push(item);
+      list.push(normalizedItem);
     }
     writeAll(list);
   }
 
-  function remove(variantId) {
-    writeAll(readAll().filter((s) => s.variantId !== variantId));
+  function remove(identityOrVariant) {
+    const list = readAll();
+    const next = typeof identityOrVariant === 'string' && identityOrVariant.includes('::')
+      ? list.filter((item) => itemIdentityKey(item) !== identityOrVariant)
+      : list.filter((item) => String(item.variantId) !== String(identityOrVariant));
+    writeAll(next);
   }
 
   // -----------------------------------------------------------------------
@@ -541,6 +690,7 @@
     const li = document.createElement('li');
     li.className = 'bs-sfl-item';
     li.setAttribute('data-variant-id', item.variantId);
+    li.setAttribute('data-saved-key', itemIdentityKey(item));
 
     const imgHtml = item.image
       ? '<img src="' + escapeHtml(item.image) + '" alt="' + escapeHtml(item.title) + '" loading="lazy">'
@@ -632,6 +782,22 @@
     }
   }
 
+  function buildCartAddItem(savedItem, quantity) {
+    const lineItem = {
+      id: parseInt(savedItem.variantId, 10),
+      quantity: Math.max(1, parseInt(quantity, 10) || parseInt(savedItem.quantity, 10) || 1),
+    };
+    const properties = normalizeProperties(savedItem.properties);
+    if (Object.keys(properties).length) {
+      lineItem.properties = properties;
+    }
+    const sellingPlanId = parseSellingPlanId(savedItem.sellingPlanId || savedItem.selling_plan);
+    if (sellingPlanId) {
+      lineItem.selling_plan = sellingPlanId;
+    }
+    return lineItem;
+  }
+
   /**
    * Pull the first integer out of a Shopify cart error description.
    * Examples handled:
@@ -650,8 +816,8 @@
    * Finalise a successful (full or partial) move to cart:
    * remove from SFL, refresh cart UI, open drawer, toast.
    */
-  function finishMove(variantId, itemEl, container, addedQty, requestedQty, addResponse) {
-    remove(variantId);
+  function finishMove(savedKey, itemEl, container, addedQty, requestedQty, addResponse) {
+    remove(savedKey);
     if (itemEl && itemEl.parentNode) itemEl.remove();
 
     if (addedQty < requestedQty) {
@@ -673,9 +839,11 @@
     if (readAll().length === 0 && container) renderSavedForLaterTab(container);
   }
 
-  function executeMoveToCart(variantId, itemEl, moveBtn, container) {
-    const saved = readAll().find((s) => s.variantId === variantId);
+  function executeMoveToCart(savedKey, itemEl, moveBtn, container) {
+    const saved = readAll().find((s) => itemIdentityKey(s) === savedKey);
     if (!saved) return;
+    const variantId = parseInt(saved.variantId, 10);
+    if (!Number.isSafeInteger(variantId) || variantId <= 0) return;
 
     moveBtn.disabled = true;
     setStatus(itemEl, 'Moving to cart…', null);
@@ -688,7 +856,7 @@
       .then(function (preCart) {
         const preQty = getCartQtyForVariant(preCart, variantId);
 
-        return addItemsToCart([{ id: variantId, quantity: saved.quantity }])
+        return addItemsToCart([buildCartAddItem(saved, saved.quantity)])
           .then(
             function (resp) { return { ok: true,  err: null, resp: resp }; },
             function (err)  { return { ok: false, err: err,  resp: null }; }
@@ -699,7 +867,7 @@
             if (!addResult.ok) {
               const maxAddable = parseQtyFromError(addResult.err);
               if (maxAddable && maxAddable > 0) {
-                return addItemsToCart([{ id: variantId, quantity: maxAddable }])
+                return addItemsToCart([buildCartAddItem(saved, maxAddable)])
                   .then(
                     function (resp) { return { ok: true,  err: null, resp: resp }; },
                     function (err)  { return { ok: false, err: err,  resp: null }; }
@@ -726,7 +894,7 @@
         if (added > 0) {
           // Something was added — success path (full or partial).
           setStatus(itemEl, '', null);
-          finishMove(variantId, itemEl, container, added, saved.quantity, addResp);
+          finishMove(savedKey, itemEl, container, added, saved.quantity, addResp);
           return;
         }
 
@@ -787,8 +955,9 @@
 
         // Update each rendered item row.
         items.forEach((item) => {
+          const savedKey = itemIdentityKey(item);
           const itemEl = container && container.querySelector(
-            '.bs-sfl-item[data-variant-id="' + item.variantId + '"]'
+            '.bs-sfl-item[data-saved-key="' + escapeAttrSelectorValue(savedKey) + '"]'
           );
           if (!itemEl) return;
 
@@ -813,8 +982,8 @@
     itemEl.addEventListener('click', function (e) {
       // --- Remove from Saved for Later ---
       if (e.target.closest('[data-sfl-remove]')) {
-        const variantId = parseInt(itemEl.getAttribute('data-variant-id'), 10);
-        remove(variantId);
+        const savedKey = itemEl.getAttribute('data-saved-key');
+        remove(savedKey || parseInt(itemEl.getAttribute('data-variant-id'), 10));
         itemEl.remove();
         if (readAll().length === 0) renderSavedForLaterTab(container);
         return;
@@ -823,8 +992,9 @@
       // --- Move to Cart ---
       const moveBtn = e.target.closest('[data-sfl-move]');
       if (moveBtn && !moveBtn.disabled) {
-        const variantId = parseInt(itemEl.getAttribute('data-variant-id'), 10);
-        executeMoveToCart(variantId, itemEl, moveBtn, container);
+        const savedKey = itemEl.getAttribute('data-saved-key');
+        if (!savedKey) return;
+        executeMoveToCart(savedKey, itemEl, moveBtn, container);
       }
     });
   }
@@ -937,6 +1107,17 @@
     const price        = parseInt(btn.getAttribute('data-price'),       10) || 0;
     const compareAt    = parseInt(btn.getAttribute('data-compare-at'), 10) || null;
     const handle       = btn.getAttribute('data-product-handle') || '';
+    const sellingPlanId = parseSellingPlanId(btn.getAttribute('data-selling-plan-id'));
+    let properties = {};
+    try {
+      const raw = btn.getAttribute('data-properties') || '{}';
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        properties = parsed;
+      }
+    } catch (e) {
+      properties = {};
+    }
 
     if (!itemKey || !variantId) return;
 
@@ -955,6 +1136,8 @@
           quantity,
           price,
           compareAt: compareAt && compareAt > price ? compareAt : null,
+          properties,
+          sellingPlanId,
         });
         showToast('Item saved for later.');
 
@@ -984,7 +1167,7 @@
   // -----------------------------------------------------------------------
 
   function validateCartInventoryOnLoad() {
-    fetchCurrentCart()
+    return fetchCurrentCart()
       .then(function (cart) {
         if (!cart || !cart.items || cart.items.length === 0) return;
 
@@ -1018,38 +1201,54 @@
           });
 
           // Compare each cart item against available inventory.
-          // { variantId: newQty } — collected here, applied in one request.
-          const updates    = {};
+          // Corrections are collected as line-key updates so split lines
+          // (same variant, different properties/selling plan) stay isolated.
+          const lineUpdates = [];
           let hadRemoved   = false;
           let hadReduced   = false;
 
+          const itemsByVariant = {};
           cart.items.forEach(function (item) {
-            const inv = invMap[item.variant_id];
+            const key = String(item.variant_id);
+            if (!itemsByVariant[key]) itemsByVariant[key] = [];
+            itemsByVariant[key].push(item);
+          });
+
+          Object.keys(itemsByVariant).forEach(function (variantId) {
+            const inv = invMap[variantId];
             // Only act on tracked variants that enforce inventory limits.
             if (!inv || !inv.tracked || inv.policy === 'continue' || inv.qty === null) return;
 
-            const available = Math.max(0, inv.qty);
-
-            if (available === 0) {
-              // Fully out of stock — remove from cart.
-              updates[item.variant_id] = 0;
-              hadRemoved = true;
-            } else if (item.quantity > available) {
-              // Cart quantity exceeds available — cap it.
-              updates[item.variant_id] = available;
-              hadReduced = true;
-            }
+            let remaining = Math.max(0, inv.qty);
+            itemsByVariant[variantId].forEach(function (item) {
+              const nextQty = Math.max(0, Math.min(item.quantity, remaining));
+              if (item.quantity > nextQty && item.key) {
+                lineUpdates.push({ id: item.key, quantity: nextQty });
+                if (nextQty === 0) hadRemoved = true;
+                else hadReduced = true;
+              }
+              remaining = Math.max(0, remaining - nextQty);
+            });
           });
 
-          if (Object.keys(updates).length === 0) return; // nothing to do
+          if (lineUpdates.length === 0) return; // nothing to do
 
-          // Apply all quantity corrections in a single request.
-          return fetch('/cart/update.js', {
-            method:  'POST',
-            headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-            body:    JSON.stringify({ updates: updates }),
-          })
-            .then(function (r) { return r.ok ? r.json() : null; })
+          const finishRenderBatch = window.BSCartUI?.beginBatch?.();
+          const changeUrl = (window.routes && window.routes.cart_change_url) || '/cart/change.js';
+
+          let chain = Promise.resolve();
+          lineUpdates.forEach(function (update) {
+            chain = chain.then(function () {
+              return fetch(changeUrl, {
+                method:  'POST',
+                headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+                body:    JSON.stringify({ id: update.id, quantity: update.quantity }),
+              }).then(function (r) { return r.ok ? r.json() : null; });
+            });
+          });
+
+          return chain
+            .finally(function () { finishRenderBatch?.(); })
             .then(function () {
               // Notify the customer. Out-of-stock removal takes priority.
               if (hadRemoved) {
@@ -1128,6 +1327,8 @@
     save:                    save,
     remove:                  remove,
     readAll:                 readAll,
+    itemIdentityKey:         itemIdentityKey,
+    buildCartAddItem:        buildCartAddItem,
     showToast:               showToast,
     renderSavedForLaterTab:  renderSavedForLaterTab,
     validateCartInventory:   validateCartInventoryOnLoad,

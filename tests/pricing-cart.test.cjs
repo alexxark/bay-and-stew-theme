@@ -850,3 +850,401 @@ test('Shopify cart route content negotiation returns sections rather than cart J
     harness.dom.window.close();
   }
 });
+
+test('quick order payable totals use final_line_price fields', () => {
+  const quickOrder = source('snippets/quick-order-list.liquid');
+  const quickOrderRow = source('snippets/quick-order-list-row.liquid');
+
+  assert(quickOrder.includes("sum: 'final_line_price'"));
+  assert(!quickOrder.includes("sum: 'original_line_price'"));
+
+  const finalMatches = quickOrderRow.match(/sum: 'final_line_price'/g) || [];
+  const originalMatches = quickOrderRow.match(/sum: 'original_line_price'/g) || [];
+  assert.equal(finalMatches.length, 2);
+  assert.equal(originalMatches.length, 0);
+});
+
+function saveForLaterHarness(options = {}) {
+  const { customer = 'retail', fetchImpl } = options;
+  const dom = new JSDOM(`
+    <meta name="bs-customer-id" content="${customer}">
+    <meta name="bs-saveforlater-endpoint" content="/apps/growth/saved-for-later">
+    <meta name="bs-login-url" content="/account/login">
+  `, { url: 'https://example.test/en/cart', runScripts: 'outside-only' });
+
+  const window = dom.window;
+  const requests = [];
+
+  window.Shopify = {
+    routes: { root: '/en/' },
+    formatMoney: (cents) => `$${(cents / 100).toFixed(2)}`,
+  };
+  window.theme = { moneyFormat: '${{amount}}' };
+  window.BSCartUI = {
+    beginBatch: () => () => {},
+    refresh: async () => ({ items: [] }),
+    reportError: () => {},
+  };
+  window.console.error = () => {};
+  window.console.warn = () => {};
+  window.console.log = () => {};
+
+  window.fetch = async (url, init = {}) => {
+    const request = { url: String(url), init };
+    requests.push(request);
+    if (fetchImpl) return fetchImpl(request);
+    if (request.url.includes('/cart.js')) return { ok: true, json: async () => ({ items: [], item_count: 0 }) };
+    if (request.url.includes('/products/')) return { ok: true, json: async () => ({ variants: [] }) };
+    return { ok: true, json: async () => ({}) };
+  };
+
+  const instrumented = source('assets/save-for-later.js')
+    .replace("document.addEventListener('DOMContentLoaded', init);", "window.__sflInit = init;")
+    .replace("if (document.readyState !== 'loading') init();", '')
+    .replace(
+      '  window.BSSavedForLater = {',
+      '  window.testSFL = { save, readAll, writeAll, remove, itemIdentityKey, buildCartAddItem, addItemsToCart, validateCartInventoryOnLoad, encodeEntry, decodeEntry, encodeList, rehydrateFromEncoded, mergeServerHydratedWithLocalMetadata };\n  window.BSSavedForLater = {'
+    );
+  window.eval(instrumented);
+
+  return { dom, window, api: window.testSFL, requests };
+}
+
+test('save-for-later keeps separate items for same variant with different Custom Text properties', () => {
+  const harness = saveForLaterHarness();
+
+  harness.api.save({ variantId: 1000, productHandle: 'chain', quantity: 1, properties: { 'Custom Text': 'ALEX' } });
+  harness.api.save({ variantId: 1000, productHandle: 'chain', quantity: 1, properties: { 'Custom Text': 'SAM' } });
+
+  const saved = harness.api.readAll();
+  assert.equal(saved.length, 2);
+  assert.notEqual(harness.api.itemIdentityKey(saved[0]), harness.api.itemIdentityKey(saved[1]));
+  assert.equal(harness.api.encodeList(saved).length, 0);
+  harness.dom.window.close();
+});
+
+test('save-for-later keeps separate items for same variant with different selling plans', () => {
+  const harness = saveForLaterHarness();
+
+  harness.api.save({ variantId: 1000, productHandle: 'chain', quantity: 1, sellingPlanId: 111 });
+  harness.api.save({ variantId: 1000, productHandle: 'chain', quantity: 1, sellingPlanId: 222 });
+
+  const saved = harness.api.readAll();
+  assert.equal(saved.length, 2);
+  assert.notEqual(harness.api.itemIdentityKey(saved[0]), harness.api.itemIdentityKey(saved[1]));
+  assert.equal(harness.api.encodeList(saved).length, 0);
+  harness.dom.window.close();
+});
+
+test('save-for-later legacy wire format encodes and decodes simple items', () => {
+  const harness = saveForLaterHarness();
+
+  const encoded = harness.api.encodeEntry({ variantId: 1000, productHandle: 'Chain', quantity: 2 });
+  assert.equal(encoded, '1000|2|chain');
+
+  const decoded = harness.api.decodeEntry(encoded);
+  assert.equal(decoded.variantId, 1000);
+  assert.equal(decoded.quantity, 2);
+  assert.equal(decoded.productHandle, 'chain');
+  assert.equal(Object.keys(decoded.properties || {}).length, 0);
+  assert.equal(decoded.sellingPlanId, null);
+  harness.dom.window.close();
+});
+
+test('save-for-later excludes metadata-bearing items from legacy server serialization', () => {
+  const harness = saveForLaterHarness();
+
+  assert.equal(
+    harness.api.encodeEntry({ variantId: 1000, productHandle: 'chain', quantity: 1, properties: { engraving: 'A' } }),
+    null
+  );
+  assert.equal(
+    harness.api.encodeEntry({ variantId: 1000, productHandle: 'chain', quantity: 1, sellingPlanId: 777 }),
+    null
+  );
+  assert.equal(
+    harness.api.encodeEntry({ variantId: 1000, productHandle: 'chain', quantity: 1, properties: { engraving: 'A' }, sellingPlanId: 777 }),
+    null
+  );
+  harness.dom.window.close();
+});
+
+test('save-for-later preserves Unicode and special-property values locally while keeping them out of legacy sync', () => {
+  const harness = saveForLaterHarness();
+
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 1,
+    properties: {
+      message: 'Cafe "special" & snowman ☃',
+      owner: "O'Neil",
+      empty: '',
+    },
+  });
+
+  const saved = harness.api.readAll()[0];
+  assert.equal(saved.properties.message, 'Cafe "special" & snowman ☃');
+  assert.equal(saved.properties.owner, "O'Neil");
+  assert.equal(saved.properties.empty, undefined);
+  assert.equal(harness.api.encodeList(harness.api.readAll()).length, 0);
+  harness.dom.window.close();
+});
+
+test('save-for-later merges quantities only when full line identity matches', () => {
+  const harness = saveForLaterHarness();
+
+  const item = {
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 1,
+    properties: { engraving: 'A' },
+    sellingPlanId: 333,
+  };
+
+  harness.api.save(item);
+  harness.api.save({ ...item, quantity: 2 });
+
+  const saved = harness.api.readAll();
+  assert.equal(saved.length, 1);
+  assert.equal(saved[0].quantity, 3);
+  assert.equal(harness.api.encodeList(saved).length, 0);
+  harness.dom.window.close();
+});
+
+test('save-for-later restore payload preserves private underscore properties', () => {
+  const harness = saveForLaterHarness();
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 1,
+    properties: { _bundle: 'abc123', engraving: 'ALEX' },
+  });
+
+  const saved = harness.api.readAll()[0];
+  const payload = harness.api.buildCartAddItem(saved, saved.quantity);
+  assert.equal(payload.properties._bundle, 'abc123');
+  assert.equal(payload.properties.engraving, 'ALEX');
+  harness.dom.window.close();
+});
+
+test('save-for-later restore payload preserves personalized properties', () => {
+  const harness = saveForLaterHarness();
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 2,
+    properties: { 'Custom Text': 'ALEX' },
+  });
+
+  const saved = harness.api.readAll()[0];
+  const payload = harness.api.buildCartAddItem(saved, saved.quantity);
+  assert.equal(payload.properties['Custom Text'], 'ALEX');
+  assert.equal(payload.quantity, 2);
+  harness.dom.window.close();
+});
+
+test('save-for-later restore payload preserves selling plan identity', () => {
+  const harness = saveForLaterHarness();
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 1,
+    sellingPlanId: 777,
+  });
+
+  const saved = harness.api.readAll()[0];
+  const payload = harness.api.buildCartAddItem(saved, saved.quantity);
+  assert.equal(payload.selling_plan, 777);
+  harness.dom.window.close();
+});
+
+test('save-for-later cart/add payload never sends client-side price fields', async () => {
+  const harness = saveForLaterHarness({
+    fetchImpl: async (request) => {
+      if (request.url.includes('/cart/add.js')) return { ok: true, json: async () => ({}) };
+      return { ok: true, json: async () => ({ items: [] }) };
+    },
+  });
+
+  const lineItem = harness.api.buildCartAddItem({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 3,
+    properties: { engraving: 'ALEX' },
+    sellingPlanId: 444,
+    price: 99999,
+    compareAt: 123456,
+  }, 3);
+
+  await harness.api.addItemsToCart([lineItem]);
+
+  const request = harness.requests.find((entry) => entry.url.includes('/cart/add.js'));
+  const body = JSON.parse(request.init.body);
+  assert.equal(body.items[0].price, undefined);
+  assert.equal(body.items[0].compareAt, undefined);
+  assert.equal(body.items[0].final_price, undefined);
+  assert.deepEqual(body.items[0].properties, { engraving: 'ALEX' });
+  assert.equal(body.items[0].selling_plan, 444);
+  harness.dom.window.close();
+});
+
+test('save-for-later inventory correction uses line keys instead of variant update maps', async () => {
+  const harness = saveForLaterHarness({
+    fetchImpl: async (request) => {
+      if (request.url.includes('/cart.js')) {
+        return {
+          ok: true,
+          json: async () => ({
+            items: [
+              { key: 'line-a', variant_id: 1000, quantity: 5, handle: 'chain' },
+              { key: 'line-b', variant_id: 1000, quantity: 2, handle: 'chain' },
+            ],
+          }),
+        };
+      }
+      if (request.url.includes('/products/chain.js')) {
+        return {
+          ok: true,
+          json: async () => ({
+            variants: [{ id: 1000, inventory_management: 'shopify', inventory_policy: 'deny', inventory_quantity: 1 }],
+          }),
+        };
+      }
+      if (request.url.includes('/cart/change.js')) {
+        return { ok: true, json: async () => ({}) };
+      }
+      return { ok: true, json: async () => ({}) };
+    },
+  });
+
+  await harness.api.validateCartInventoryOnLoad();
+
+  const changeCalls = harness.requests.filter((request) => request.url.includes('/cart/change.js'));
+  const updateCalls = harness.requests.filter((request) => request.url.includes('/cart/update.js'));
+  assert.equal(changeCalls.length, 2);
+  assert.equal(updateCalls.length, 0);
+  assert.deepEqual(
+    changeCalls.map((request) => JSON.parse(request.init.body)),
+    [
+      { id: 'line-a', quantity: 1 },
+      { id: 'line-b', quantity: 0 },
+    ]
+  );
+  harness.dom.window.close();
+});
+
+test('save-for-later server hydration preserves distinct local metadata identities for same-variant legacy rows', async () => {
+  const harness = saveForLaterHarness();
+
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 1,
+    properties: { engraving: 'A' },
+  });
+  harness.api.save({
+    variantId: 1000,
+    productHandle: 'chain',
+    quantity: 2,
+    properties: { engraving: 'B' },
+  });
+
+  const local = harness.api.readAll();
+  const hydrated = await harness.api.rehydrateFromEncoded(['1000|1|chain', '1000|2|chain']);
+  const merged = harness.api.mergeServerHydratedWithLocalMetadata(hydrated, local);
+
+  assert.equal(merged.length, 3);
+  const engravings = merged
+    .map((item) => item.properties && item.properties.engraving)
+    .filter(Boolean)
+    .sort();
+  assert.equal(engravings[0], 'A');
+  assert.equal(engravings[1], 'B');
+
+  const simple = merged.find((item) => !item.properties || Object.keys(item.properties).length === 0);
+  assert(simple);
+  assert.equal(simple.quantity, 3);
+  harness.dom.window.close();
+});
+
+test('save-for-later mixed legacy and metadata records do not collapse on lossy-backend fallback', async () => {
+  const harness = saveForLaterHarness();
+
+  harness.api.writeAll([
+    { variantId: 1000, productHandle: 'chain', quantity: 1, title: 'Legacy' },
+    { variantId: 1000, productHandle: 'chain', quantity: 1, properties: { engraving: 'A' }, title: 'Custom A' },
+    { variantId: 1000, productHandle: 'chain', quantity: 2, properties: { engraving: 'B' }, title: 'Custom B' },
+  ], { skipSync: true });
+
+  const local = harness.api.readAll();
+  const encoded = harness.api.encodeList(local);
+  assert.equal(encoded.length, 1);
+  assert.equal(encoded[0], '1000|1|chain');
+
+  const hydrated = await harness.api.rehydrateFromEncoded(encoded);
+  const merged = harness.api.mergeServerHydratedWithLocalMetadata(hydrated, local);
+
+  assert.equal(merged.length, 3);
+  const identities = merged.map((item) => harness.api.itemIdentityKey(item));
+  assert.equal(new Set(identities).size, 3);
+  harness.dom.window.close();
+});
+
+function loadLineIdentityPlanner() {
+  const block = source('assets/global.js').match(/function cartRootPath\(\) \{[\s\S]*?window\.BSCartLineIdentity = \{[\s\S]*?\};/);
+  assert(block, 'Expected line identity helper block in assets/global.js');
+  const context = { window: {} };
+  vm.runInNewContext(block[0], context);
+  return context.window.BSCartLineIdentity.buildLineAwareUpdatePlan;
+}
+
+test('bulk line-identity planner flags ambiguous split variants', () => {
+  const planner = loadLineIdentityPlanner();
+  const plan = planner(
+    [
+      { variant_id: 1000, key: 'line-a', quantity: 1, properties: { 'Custom Text': 'A' } },
+      { variant_id: 1000, key: 'line-b', quantity: 1, properties: { 'Custom Text': 'B' } },
+    ],
+    { 1000: 3 }
+  );
+
+  assert.equal(plan.lineUpdates.length, 0);
+  assert.equal(plan.conflicts.length, 1);
+  assert.equal(plan.conflicts[0].variantId, '1000');
+});
+
+test('bulk line-identity planner preserves simple one-line behavior', () => {
+  const planner = loadLineIdentityPlanner();
+  const plan = planner([{ variant_id: 1000, key: 'line-a', quantity: 1, properties: {} }], { 1000: 4 });
+
+  assert.equal(plan.conflicts.length, 0);
+  assert.equal(Object.keys(plan.variantUpdates).length, 0);
+  assert.equal(plan.lineUpdates.length, 1);
+  assert.equal(plan.lineUpdates[0].id, 'line-a');
+  assert.equal(plan.lineUpdates[0].quantity, 4);
+  assert.equal(plan.lineUpdates[0].variantId, '1000');
+});
+
+test('bulk line-identity planner can adjust base line without mutating customized lines', () => {
+  const planner = loadLineIdentityPlanner();
+  const plan = planner(
+    [
+      { variant_id: 1000, key: 'line-base', quantity: 2, properties: {} },
+      { variant_id: 1000, key: 'line-custom', quantity: 1, properties: { engraving: 'A' } },
+    ],
+    { 1000: 5 }
+  );
+
+  assert.equal(plan.conflicts.length, 0);
+  assert.equal(Object.keys(plan.variantUpdates).length, 0);
+  assert.equal(plan.lineUpdates.length, 1);
+  assert.equal(plan.lineUpdates[0].id, 'line-base');
+  assert.equal(plan.lineUpdates[0].quantity, 4);
+  assert.equal(plan.lineUpdates[0].variantId, '1000');
+});
+
+test('quick-order and quick-add use line-identity-safe mutation path', () => {
+  assert(source('assets/quick-order-list.js').includes('applyVariantUpdatesWithLineIdentity'));
+  assert(source('assets/quick-add-bulk.js').includes('applyVariantUpdatesWithLineIdentity'));
+});
