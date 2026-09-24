@@ -1528,6 +1528,15 @@ class BulkAdd extends HTMLElement {
     const rules = this.getInputRules(event.target);
     const quantityInput = event.target.closest?.('quantity-input');
 
+    if (event.target.dataset.inventorySyncPending === 'true') {
+      const cartQuantity = parseQuantityValue(event.target.dataset.cartQuantity) ?? 0;
+      if (!Number.isFinite(inputValue) || inputValue > cartQuantity) {
+        quantityInput?.validateQtyRules?.();
+        return;
+      }
+      quantityInput?.validateQtyRules?.();
+    }
+
     if (inputValue < rules.min) {
       this.setValidity(event, index, window.quickOrderListStrings.min_error.replace('[min]', rules.min));
     } else if (rules.max !== null && inputValue > rules.max) {

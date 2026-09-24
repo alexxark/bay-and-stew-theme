@@ -1838,6 +1838,10 @@ function createQuantityButton(name) {
     setAttribute(name, value) {
       this._attrs[name] = String(value);
     },
+    removeAttribute(name) {
+      delete this._attrs[name];
+      if (name === 'disabled') this.disabled = false;
+    },
     getAttribute(name) {
       return this._attrs[name];
     },
@@ -1899,6 +1903,135 @@ function createQuantityInputHarness({ value, min, step, max = '', quantityRuleMa
     getDispatched: () => dispatched,
     getWarnings: () => warnings,
   };
+}
+
+function loadQuickOrderClassForValidation() {
+  let QuickOrderCtor;
+  let fetchImpl = async () => ({ ok: false, text: async () => '' });
+
+  class MockDOMParser {
+    parseFromString(html) {
+      return new JSDOM(html).window.document;
+    }
+  }
+
+  const customRegistry = new Map();
+  const context = {
+    BulkAdd: class {},
+    HTMLElement: class {},
+    customElements: {
+      get(name) {
+        return customRegistry.get(name);
+      },
+      define(name, ctor) {
+        customRegistry.set(name, ctor);
+        if (name === 'quick-order-list') QuickOrderCtor = ctor;
+      },
+    },
+    subscribe: () => () => {},
+    publish: () => {},
+    PUB_SUB_EVENTS: { cartUpdate: 'cartUpdate' },
+    debounce: (fn) => fn,
+    window: {
+      location: { search: '', pathname: '/products/example', origin: 'https://example.test' },
+      Shopify: { routes: { root: '/' } },
+    },
+    document: {
+      querySelector: () => null,
+      getElementById: () => null,
+      querySelectorAll: () => [],
+    },
+    fetch: (...args) => fetchImpl(...args),
+    DOMParser: MockDOMParser,
+    URL,
+    URLSearchParams,
+    setTimeout,
+    clearTimeout,
+    console: { warn() {}, error() {} },
+  };
+
+  vm.runInNewContext(source('assets/quick-order-list.js'), context);
+  assert(QuickOrderCtor, 'Expected quick-order-list custom element registration');
+
+  return {
+    QuickOrder: QuickOrderCtor,
+    setFetch(next) {
+      fetchImpl = next;
+    },
+  };
+}
+
+function createQuickOrderInventorySyncHarness({
+  runtime = loadQuickOrderClassForValidation(),
+  inlineInventoryMax = 23,
+  cartQuantity = 0,
+  variantId = 1000,
+  min = 1,
+  step = 1,
+} = {}) {
+  const resolveRules = loadQuantityRuleResolver();
+  const plusButton = createQuantityButton('plus');
+
+  const input = {
+    value: String(cartQuantity),
+    min: '0',
+    max: String(inlineInventoryMax),
+    step: String(step),
+    isConnected: true,
+    dataset: {
+      quantityVariantId: String(variantId),
+      inventoryMax: String(inlineInventoryMax),
+      cartQuantity: String(cartQuantity),
+      min: String(min),
+    },
+  };
+
+  const quantityElement = {
+    querySelector(selector) {
+      if (selector === ".quantity__button[name='plus']") return plusButton;
+      return null;
+    },
+    syncResolvedMax() {
+      const rules = resolveRules(input);
+      if (rules.max !== null) {
+        input.max = String(rules.max);
+      } else {
+        input.max = '';
+      }
+    },
+    validateQtyRules() {
+      const rules = resolveRules(input);
+      if (rules.max !== null) {
+        input.max = String(rules.max);
+      } else {
+        input.max = '';
+      }
+      const current = parseInt(input.value, 10);
+      const atMax = Number.isFinite(current) && rules.max !== null && current >= rules.max;
+      plusButton.toggleAttribute('disabled', atMax);
+      plusButton.setAttribute('aria-disabled', atMax ? 'true' : 'false');
+    },
+  };
+
+  input.closest = (selector) => {
+    if (selector === 'quantity-input') return quantityElement;
+    return null;
+  };
+
+  const quickOrder = Object.create(runtime.QuickOrder.prototype);
+  quickOrder.dataset = { section: 'main-product', productId: '2000', url: '/products/example' };
+  quickOrder.sectionId = 'main-product';
+  quickOrder.quantityMetadataCache = null;
+  quickOrder.quantityMetadataCacheAt = 0;
+  quickOrder.quantityMetadataPromise = null;
+  quickOrder.quantityMetadataTtlMs = 15000;
+  quickOrder.querySelectorAll = (selector) => {
+    if (selector === 'quantity-input .quantity__input[data-quantity-variant-id]') return [input];
+    return [];
+  };
+  quickOrder.getInputRules = (target) => resolveRules(target);
+
+  return { runtime, quickOrder, input, plusButton, quantityElement, resolveRules };
 }
 
 test('effective max normalizes to valid increment under tracked inventory caps (5/5/18 -> 15)', () => {
@@ -2060,6 +2193,22 @@ test('known at-max overage correction does not queue redundant mutation when car
   assert.equal(harness.queued.length, 0);
 });
 
+test('inventory sync pending blocks mutation queueing until authoritative cap hydration completes', () => {
+  const harness = createBulkAddValidationHarness();
+
+  const event = harness.buildEvent({
+    value: 23,
+    min: 1,
+    step: 1,
+    inventoryMax: 23,
+  });
+  event.target.dataset.inventorySyncPending = 'true';
+
+  harness.element.validateQuantity(event);
+
+  assert.equal(harness.queued.length, 0);
+});
+
 test('quantity_rule.max stricter than inventory still wins after increment normalization', () => {
   const resolveRules = loadQuantityRuleResolver();
 
@@ -2146,6 +2295,204 @@ test('quick-order rerender path re-syncs quantity-input state for disabled-butto
   assert(quickOrderScript.includes('syncQuantityInputState()'));
   assert(quickOrderScript.includes('quantityElement.syncResolvedMax?.();'));
   assert(quickOrderScript.includes('quantityElement.validateQtyRules?.();'));
+});
+
+test('quick-order inventory cap hydration refreshes quantity inputs from Shopify section-rendered metadata', () => {
+  const quickOrderScript = source('assets/quick-order-list.js');
+
+  assert(quickOrderScript.includes('syncQuantityCapsFromServer()'));
+  assert(quickOrderScript.includes("'quick-order-inventory-metadata'"));
+  assert(quickOrderScript.includes("url.searchParams.set('section_id', sectionId);"));
+  assert(quickOrderScript.includes('data-quick-order-inventory-metadata'));
+  assert(quickOrderScript.includes("input.dataset.inventorySyncPending = 'true';"));
+  assert(quickOrderScript.includes("delete input.dataset.inventorySyncPending;"));
+  assert(quickOrderScript.includes('this.quantityMetadataCache = null;'));
+  assert(quickOrderScript.includes('this.fetchQuantityMetadata()'));
+});
+
+test('quick-order inventory metadata Liquid output includes authoritative variant and cart fields', () => {
+  const metadataSnippet = source('snippets/quick-order-inventory-metadata-json.liquid');
+  const metadataSection = source('sections/quick-order-inventory-metadata.liquid');
+
+  assert(metadataSnippet.includes('data-quick-order-inventory-metadata'));
+  assert(metadataSnippet.includes('"inventory_management"'));
+  assert(metadataSnippet.includes('"inventory_policy"'));
+  assert(metadataSnippet.includes('"inventory_quantity"'));
+  assert(metadataSnippet.includes('"quantity_rule"'));
+  assert(metadataSnippet.includes('"cart_quantity"'));
+  assert(metadataSnippet.includes('item_count_for_variant: variant.id'));
+
+  assert(metadataSection.includes("render 'quick-order-inventory-metadata-json'"));
+  assert(metadataSection.includes('"Quick Order Inv Data"'));
+});
+
+test('quick-order stale inline cap 23 is replaced by authoritative 19 and overages clamp to 19', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 0 });
+
+  harness.quickOrder.fetchQuantityMetadata = async () => ({
+    variants: {
+      '1000': {
+        inventory_management: 'shopify',
+        inventory_policy: 'deny',
+        inventory_quantity: 19,
+        quantity_rule: { min: 1, max: null, increment: 1 },
+        cart_quantity: 0,
+      },
+    },
+  });
+
+  const applied = await harness.quickOrder.syncQuantityCapsFromServer();
+  assert.equal(applied, true);
+  assert.equal(harness.input.dataset.inventoryMax, '19');
+  assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.dataset.remainingAddable, '19');
+
+  harness.input.value = '18';
+  harness.quantityElement.validateQtyRules();
+  assert.equal(harness.plusButton.disabled, false);
+
+  harness.input.value = '19';
+  harness.quantityElement.validateQtyRules();
+  assert.equal(harness.plusButton.disabled, true);
+  assert.equal(harness.plusButton.getAttribute('aria-disabled'), 'true');
+
+  const bulkHarness = createBulkAddValidationHarness();
+  for (const value of [23, 50]) {
+    const event = bulkHarness.buildEvent({ value, min: 1, step: 1, inventoryMax: 19, cartQuantity: 0 });
+    bulkHarness.element.validateQuantity(event);
+    assert.equal(event.target.value, 19);
+  }
+
+  assert.deepEqual(bulkHarness.queued, [
+    { id: '1000', quantity: 19 },
+    { id: '1000', quantity: 19 },
+  ]);
+  assert(bulkHarness.queued.every((entry) => entry.quantity <= 19));
+});
+
+test('quick-order metadata fetch treats network/non-200/invalid/missing/malformed responses as unresolved', async () => {
+  const runtime = loadQuickOrderClassForValidation();
+  const quickOrder = Object.create(runtime.QuickOrder.prototype);
+  quickOrder.quantityMetadataCache = null;
+  quickOrder.quantityMetadataCacheAt = 0;
+  quickOrder.quantityMetadataPromise = null;
+  quickOrder.quantityMetadataTtlMs = 15000;
+  quickOrder.buildInventoryMetadataUrls = () => ['https://example.test/products/example?section_id=quick-order-inventory-metadata'];
+
+  const scenarios = [
+    {
+      name: 'network failure',
+      fetch: async () => {
+        throw new Error('offline');
+      },
+    },
+    {
+      name: 'HTTP non-200',
+      fetch: async () => ({ ok: false, status: 503, text: async () => '' }),
+    },
+    {
+      name: 'invalid HTML',
+      fetch: async () => ({ ok: true, text: async () => '<<<not-html>>>' }),
+    },
+    {
+      name: 'missing metadata script',
+      fetch: async () => ({ ok: true, text: async () => '<html><body><div>ok</div></body></html>' }),
+    },
+    {
+      name: 'malformed JSON payload',
+      fetch: async () => ({
+        ok: true,
+        text: async () => '<script type="application/json" data-quick-order-inventory-metadata>{bad json}</script>',
+      }),
+    },
+  ];
+
+  for (const scenario of scenarios) {
+    runtime.setFetch(scenario.fetch);
+    const metadata = await quickOrder.fetchQuantityMetadata(true);
+    assert.equal(metadata, null, scenario.name);
+  }
+});
+
+test('quick-order unresolved metadata keeps pending guard and blocks increases beyond current safe quantity', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 5 });
+  harness.quickOrder.fetchQuantityMetadata = async () => null;
+
+  const applied = await harness.quickOrder.syncQuantityCapsFromServer();
+  assert.equal(applied, false);
+  assert.equal(harness.input.dataset.inventorySyncPending, 'true');
+  assert.equal(harness.plusButton.disabled, true);
+  assert.equal(harness.plusButton.getAttribute('aria-disabled'), 'true');
+  assert.equal(harness.plusButton.getAttribute('title'), 'Checking availability...');
+
+  const bulkHarness = createBulkAddValidationHarness();
+  const blockedIncrease = bulkHarness.buildEvent({ value: 23, min: 1, step: 1, inventoryMax: 23, cartQuantity: 5 });
+  blockedIncrease.target.dataset.inventorySyncPending = 'true';
+  bulkHarness.element.validateQuantity(blockedIncrease);
+
+  const safeDecrease = bulkHarness.buildEvent({ value: 4, min: 1, step: 1, inventoryMax: 23, cartQuantity: 5 });
+  safeDecrease.target.dataset.inventorySyncPending = 'true';
+  bulkHarness.element.validateQuantity(safeDecrease);
+
+  assert.equal(bulkHarness.queued.length, 1);
+  assert.deepEqual(bulkHarness.queued[0], { id: '1000', quantity: 4 });
+});
+
+test('quick-order keeps trusted maxTotal 19 after later refresh failure and never reverts to stale 23', async () => {
+  const harness = createQuickOrderInventorySyncHarness({ inlineInventoryMax: 23, cartQuantity: 0 });
+
+  harness.quickOrder.fetchQuantityMetadata = async () => ({
+    variants: {
+      '1000': {
+        inventory_management: 'shopify',
+        inventory_policy: 'deny',
+        inventory_quantity: 19,
+        quantity_rule: { min: 1, max: null, increment: 1 },
+        cart_quantity: 5,
+      },
+    },
+  });
+
+  const firstApply = await harness.quickOrder.syncQuantityCapsFromServer();
+  assert.equal(firstApply, true);
+  assert.equal(harness.input.dataset.inventoryMax, '19');
+  assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.dataset.cartQuantity, '5');
+  assert.equal(harness.input.dataset.remainingAddable, '14');
+
+  harness.quickOrder.fetchQuantityMetadata = async () => null;
+  const secondApply = await harness.quickOrder.syncQuantityCapsFromServer();
+  assert.equal(secondApply, false);
+  assert.equal(harness.input.dataset.inventoryMax, '19');
+  assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.dataset.remainingAddable, '14');
+  assert.equal(harness.input.dataset.inventorySyncPending, 'true');
+
+  const trustedRules = harness.resolveRules(harness.input);
+  assert.equal(trustedRules.max, 19);
+
+  const bulkHarness = createBulkAddValidationHarness();
+  const blockedIncrease = bulkHarness.buildEvent({ value: 23, min: 1, step: 1, inventoryMax: 19, cartQuantity: 5 });
+  blockedIncrease.target.dataset.inventorySyncPending = 'true';
+  bulkHarness.element.validateQuantity(blockedIncrease);
+
+  const safeDecrease = bulkHarness.buildEvent({ value: 4, min: 1, step: 1, inventoryMax: 19, cartQuantity: 5 });
+  safeDecrease.target.dataset.inventorySyncPending = 'true';
+  bulkHarness.element.validateQuantity(safeDecrease);
+
+  assert.equal(bulkHarness.queued.length, 1);
+  assert.deepEqual(bulkHarness.queued[0], { id: '1000', quantity: 4 });
+});
+
+test('quick-order dedicated metadata section contract emits one authoritative payload marker', () => {
+  const metadataSnippet = source('snippets/quick-order-inventory-metadata-json.liquid');
+  const metadataSection = source('sections/quick-order-inventory-metadata.liquid');
+  const quickOrderScript = source('assets/quick-order-list.js');
+
+  assert.equal((metadataSection.match(/quick-order-inventory-metadata-json/g) || []).length, 1);
+  assert.equal((metadataSnippet.match(/data-quick-order-inventory-metadata/g) || []).length, 1);
+  assert(metadataSnippet.includes('"product_id"'));
+  assert(quickOrderScript.includes("const sectionCandidates = ['quick-order-inventory-metadata', this.sectionId || this.dataset.section].filter("));
 });
 
 test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {

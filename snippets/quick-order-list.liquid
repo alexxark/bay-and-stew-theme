@@ -289,6 +289,8 @@
         </div>
       </div>
     {%- endif -%}
+
+    {% render 'quick-order-inventory-metadata-json', product: product %}
   </quick-order-list>
   <template id="QuickOrderListErrorTemplate-{{ product.id }}">
     {{ 'icon-error.svg' | inline_asset_content }}

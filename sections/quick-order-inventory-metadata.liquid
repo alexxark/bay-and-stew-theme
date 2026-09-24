@@ -1,0 +1,12 @@
+{% render 'quick-order-inventory-metadata-json', product: product %}
+
+{% schema %}
+{
+  "name": "Quick Order Inv Data",
+  "limit": 1,
+  "enabled_on": {
+    "templates": ["product"]
+  },
+  "settings": []
+}
+{% endschema %}

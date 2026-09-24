@@ -1,0 +1,36 @@
+{% comment %}
+  Quick Order inventory metadata
+
+  Emits authoritative server-rendered variant quantity metadata used by
+  Quick Order inventory-cap synchronization.
+
+  Accepts:
+  - product: {Object} Product object
+{% endcomment %}
+
+{%- if product -%}
+  <script type="application/json" data-quick-order-inventory-metadata>
+    {
+      "product_id": {{ product.id | json }},
+      "variants": {
+        {%- for variant in product.variants -%}
+          "{{ variant.id }}": {
+            "id": {{ variant.id | json }},
+            "inventory_management": {{ variant.inventory_management | json }},
+            "inventory_policy": {{ variant.inventory_policy | json }},
+            "inventory_quantity": {{ variant.inventory_quantity | default: 0 | json }},
+            "available": {{ variant.available | json }},
+            "quantity_rule": {
+              "min": {{ variant.quantity_rule.min | json }},
+              "max": {{ variant.quantity_rule.max | json }},
+              "increment": {{ variant.quantity_rule.increment | json }}
+            },
+            {% # theme-check-disable %}
+            "cart_quantity": {{ cart | item_count_for_variant: variant.id | json }}
+            {% # theme-check-enable %}
+          }{%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      }
+    }
+  </script>
+{%- endif -%}

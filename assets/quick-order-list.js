@@ -73,6 +73,11 @@ if (!customElements.get('quick-order-list')) {
         super();
         this.cart = document.querySelector('cart-drawer');
         this.quickOrderListId = `${this.dataset.section}-${this.dataset.productId}`;
+        this.sectionId = this.dataset.section;
+        this.quantityMetadataCache = null;
+        this.quantityMetadataCacheAt = 0;
+        this.quantityMetadataPromise = null;
+        this.quantityMetadataTtlMs = 15000;
         this.defineInputsAndQuickOrderTable();
 
         this.variantItemStatusElement = document.getElementById('shopping-cart-variant-item-status');
@@ -130,7 +135,6 @@ if (!customElements.get('quick-order-list')) {
             this.addMultipleDebounce();
           });
         });
-        this.sectionId = this.dataset.section;
         void this.syncPriceStateAfterRender('connected');
       }
 
@@ -143,12 +147,187 @@ if (!customElements.get('quick-order-list')) {
         this.quickOrderListTable = this.querySelector('.quick-order-list__table');
         this.quickOrderListTable.addEventListener('focusin', this.switchVariants.bind(this));
         this.syncQuantityInputState();
+        this.syncQuantityCapsFromServer();
       }
 
       syncQuantityInputState() {
         this.querySelectorAll('quantity-input').forEach((quantityElement) => {
           quantityElement.syncResolvedMax?.();
           quantityElement.validateQtyRules?.();
+        });
+      }
+
+      buildInventoryMetadataUrls() {
+        const origin = window.location.origin;
+        const root = window.Shopify?.routes?.root || '/';
+        let productPath = this.dataset.url || window.location.pathname;
+
+        if (root && root !== '/') {
+          const rootNoSlash = root.endsWith('/') ? root.slice(0, -1) : root;
+          if (!productPath.startsWith(rootNoSlash + '/')) {
+            productPath = `${rootNoSlash}${productPath.startsWith('/') ? productPath : `/${productPath}`}`;
+          }
+        }
+
+        const sectionCandidates = ['quick-order-inventory-metadata', this.sectionId || this.dataset.section].filter(
+          Boolean
+        );
+
+        return Array.from(new Set(sectionCandidates)).map((sectionId) => {
+          const url = new URL(productPath, origin);
+          url.searchParams.set('section_id', sectionId);
+          return url.toString();
+        });
+      }
+
+      parseInventoryMetadataFromHtml(html) {
+        const doc = new DOMParser().parseFromString(html, 'text/html');
+        const script = doc.querySelector('[data-quick-order-inventory-metadata]');
+        if (!script?.textContent) return null;
+
+        try {
+          const parsed = JSON.parse(script.textContent);
+          if (!parsed || typeof parsed !== 'object' || typeof parsed.variants !== 'object') return null;
+          return parsed;
+        } catch (_error) {
+          return null;
+        }
+      }
+
+      isQuantityMetadataFresh() {
+        return !!this.quantityMetadataCache && Date.now() - this.quantityMetadataCacheAt < this.quantityMetadataTtlMs;
+      }
+
+      fetchQuantityMetadata(force = false) {
+        if (!force && this.isQuantityMetadataFresh()) {
+          return Promise.resolve(this.quantityMetadataCache);
+        }
+
+        if (this.quantityMetadataPromise) {
+          return this.quantityMetadataPromise;
+        }
+
+        this.quantityMetadataPromise = (async () => {
+          const urls = this.buildInventoryMetadataUrls();
+
+          for (const url of urls) {
+            try {
+              const response = await fetch(url, {
+                credentials: 'same-origin',
+                cache: 'no-store',
+                headers: { Accept: 'text/html' },
+              });
+              if (!response.ok) continue;
+              const html = await response.text();
+              const metadata = this.parseInventoryMetadataFromHtml(html);
+              if (!metadata) continue;
+
+              this.quantityMetadataCache = metadata;
+              this.quantityMetadataCacheAt = Date.now();
+              return metadata;
+            } catch (_error) {
+              // Try next URL candidate.
+            }
+          }
+
+          return null;
+        })().finally(() => {
+          this.quantityMetadataPromise = null;
+        });
+
+        return this.quantityMetadataPromise;
+      }
+
+      syncQuantityCapsFromServer() {
+        const inputs = Array.from(this.querySelectorAll('quantity-input .quantity__input[data-quantity-variant-id]'));
+        if (!inputs.length) return Promise.resolve(false);
+
+        const entries = inputs
+          .map((input) => {
+            const variantId = parseInt(input.dataset.quantityVariantId, 10);
+            if (!Number.isFinite(variantId)) return null;
+            const quantityElement = input.closest('quantity-input');
+            if (!quantityElement) return null;
+            const plusButton = quantityElement.querySelector(".quantity__button[name='plus']");
+            return { input, variantId, quantityElement, plusButton };
+          })
+          .filter(Boolean);
+        if (!entries.length) return Promise.resolve(false);
+
+        const markPending = ({ input, plusButton }) => {
+          input.dataset.inventorySyncPending = 'true';
+          if (plusButton) {
+            plusButton.toggleAttribute('disabled', true);
+            plusButton.setAttribute('aria-disabled', 'true');
+            plusButton.setAttribute('title', 'Checking availability...');
+          }
+        };
+
+        const clearPending = ({ input, plusButton }) => {
+          delete input.dataset.inventorySyncPending;
+          if (plusButton) {
+            plusButton.removeAttribute('title');
+          }
+        };
+
+        entries.forEach(markPending);
+
+        return this.fetchQuantityMetadata().then((metadata) => {
+          if (!metadata?.variants) return false;
+
+          let appliedAny = false;
+          entries.forEach((entry) => {
+            const { input, variantId, quantityElement } = entry;
+            if (!input.isConnected) return;
+
+            const variant = metadata.variants[String(variantId)];
+            if (!variant) return;
+            appliedAny = true;
+
+            clearPending(entry);
+
+            const tracked = variant.inventory_management === 'shopify' && variant.inventory_policy !== 'continue';
+            if (tracked) {
+              const inventoryMax = Math.max(parseInt(variant.inventory_quantity, 10) || 0, 0);
+              input.dataset.inventoryMax = String(inventoryMax);
+            } else {
+              delete input.dataset.inventoryMax;
+            }
+
+            const quantityRule = variant.quantity_rule || {};
+            if (quantityRule.max === null || quantityRule.max === undefined || quantityRule.max === '') {
+              delete input.dataset.quantityRuleMax;
+            } else {
+              input.dataset.quantityRuleMax = String(quantityRule.max);
+            }
+            if (quantityRule.min !== null && quantityRule.min !== undefined && quantityRule.min !== '') {
+              input.dataset.min = String(quantityRule.min);
+            }
+            if (quantityRule.increment !== null && quantityRule.increment !== undefined && quantityRule.increment !== '') {
+              input.step = String(quantityRule.increment);
+            }
+
+            const cartQuantity = Math.max(parseInt(variant.cart_quantity, 10) || 0, 0);
+            input.dataset.cartQuantity = String(cartQuantity);
+            input.value = String(cartQuantity);
+
+            quantityElement.syncResolvedMax?.();
+            const rules = this.getInputRules(input);
+            const normalizedValue = parseInt(input.value, 10);
+            if (Number.isFinite(normalizedValue) && rules.max !== null && normalizedValue > rules.max) {
+              input.value = String(rules.max);
+            }
+
+            if (rules.max !== null) {
+              input.dataset.remainingAddable = String(Math.max(rules.max - cartQuantity, 0));
+            } else {
+              delete input.dataset.remainingAddable;
+            }
+
+            quantityElement.validateQtyRules?.();
+          });
+
+          return appliedAny;
         });
       }
 
