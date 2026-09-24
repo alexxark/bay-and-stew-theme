@@ -43,43 +43,69 @@ class CartItems extends HTMLElement {
   }
 
   resetQuantityInput(id) {
-    const input = this.querySelector(`#Quantity-${id}`);
+    const input = this.querySelector(`#Quantity-${id}, #Drawer-quantity-${id}`);
+    if (!input) return;
     input.value = input.getAttribute('value');
     this.isEnterPressed = false;
   }
 
-  setValidity(event, index, message) {
-    event.target.setCustomValidity(message);
-    event.target.reportValidity();
-    this.resetQuantityInput(index);
-    event.target.select();
+  setInlineQuantityMessage(index, message) {
+    const lineItemError =
+      document.getElementById(`Line-item-error-${index}`) || document.getElementById(`CartDrawer-LineItemError-${index}`);
+    if (!lineItemError) return;
+
+    const errorText = lineItemError.querySelector('.cart-item__error-text');
+    if (!errorText) return;
+    errorText.textContent = message || '';
   }
 
   validateQuantity(event) {
-    const inputValue = parseInt(event.target.value);
-    const index = event.target.dataset.index;
+    const input = event.target;
+    const index = input.dataset.index;
+    const previousQuantity = parseInt(input.getAttribute('value'), 10);
+    const min = parseInt(input.dataset.min, 10) || 0;
+    const step = parseInt(input.step, 10) || 1;
+    const max = input.max === '' ? null : parseInt(input.max, 10);
+    let nextQuantity = parseInt(input.value, 10);
     let message = '';
 
-    if (inputValue < event.target.dataset.min) {
-      message = window.quickOrderListStrings.min_error.replace('[min]', event.target.dataset.min);
-    } else if (inputValue > parseInt(event.target.max)) {
-      message = window.quickOrderListStrings.max_error.replace('[max]', event.target.max);
-    } else if (inputValue % parseInt(event.target.step) !== 0) {
-      message = window.quickOrderListStrings.step_error.replace('[step]', event.target.step);
+    if (Number.isNaN(nextQuantity) || nextQuantity < 0) {
+      nextQuantity = 0;
     }
 
-    if (message) {
-      this.setValidity(event, index, message);
-    } else {
-      event.target.setCustomValidity('');
-      event.target.reportValidity();
-      this.updateQuantity(
-        index,
-        inputValue,
-        document.activeElement.getAttribute('name'),
-        event.target.dataset.quantityVariantId
-      );
+    if (nextQuantity > 0 && nextQuantity < min) {
+      nextQuantity = min;
+      message = window.quickOrderListStrings.min_error.replace('[min]', min);
     }
+
+    if (nextQuantity > 0 && (nextQuantity - min) % step !== 0) {
+      nextQuantity = min + Math.floor((nextQuantity - min) / step) * step;
+      if (nextQuantity < min) {
+        nextQuantity = min;
+      }
+      message = window.quickOrderListStrings.step_error.replace('[step]', step);
+    }
+
+    if (max !== null && nextQuantity > max) {
+      nextQuantity = max;
+      message = `Only ${max} available`;
+      input.closest('quantity-input')?.flashMaxWarning?.(max);
+    }
+
+    input.value = String(nextQuantity);
+    input.closest('quantity-input')?.validateQtyRules?.();
+    this.setInlineQuantityMessage(index, message);
+
+    if (Number.isFinite(previousQuantity) && previousQuantity === nextQuantity) {
+      return;
+    }
+
+    this.updateQuantity(
+      index,
+      nextQuantity,
+      document.activeElement.getAttribute('name'),
+      input.dataset.quantityVariantId
+    );
   }
 
   onChange(event) {

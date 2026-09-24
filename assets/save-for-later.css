@@ -253,11 +253,11 @@
   }
 
   .cart-item .quantity {
-    width: calc(10.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+    width: calc(11.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
   }
 
   .cart-item .quantity__button {
-    width: 3rem;
+    width: 3.2rem;
   }
 }
 
@@ -281,11 +281,11 @@
   /* Mobile cart page: narrow the quantity input so the action buttons
      fit alongside without wrapping. */
   .cart-item .quantity {
-    width: calc(9.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
+    width: calc(10.5rem / var(--font-body-scale) + var(--inputs-border-width) * 2);
   }
 
   .cart-item .quantity__button {
-    width: 2.6rem;
+    width: 2.8rem;
   }
 
   .cart-items .cart-item__quantity {

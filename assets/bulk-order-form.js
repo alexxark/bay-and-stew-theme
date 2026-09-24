@@ -39,21 +39,30 @@
     };
   }
 
-  function resolveRules(input, row) {
+  function resolveRules(input, row, cartQuantityOverride) {
     const min = toInt(input?.dataset?.min) ?? toInt(input?.min) ?? 0;
     const step = toInt(input?.step) ?? 1;
-    const maxCandidates = [
-      toInt(input?.max),
-      toInt(input?.dataset?.max),
+    const maxTotalCandidates = [
+      toInt(row?.dataset?.maxTotal),
       toInt(input?.dataset?.quantityRuleMax),
       toInt(input?.dataset?.inventoryMax),
-      toInt(row?.dataset?.maxTotal),
     ].filter((value) => value !== null);
+
+    const maxTotal = normalizeQuantityMax(
+      min,
+      step,
+      maxTotalCandidates.length ? Math.min.apply(null, maxTotalCandidates) : null
+    );
+    const currentCartTotal = cartQuantityOverride ?? toInt(input?.dataset?.cartQuantity) ?? toInt(row?.dataset?.cartQuantity) ?? 0;
+    const maxAddableRaw = maxTotal === null ? null : Math.max(0, maxTotal - currentCartTotal);
+    const maxAddable = maxAddableRaw === null ? null : normalizeQuantityMax(min, step, maxAddableRaw);
 
     return {
       min,
       step,
-      max: normalizeQuantityMax(min, step, maxCandidates.length ? Math.min.apply(null, maxCandidates) : null),
+      max: maxAddable,
+      maxTotal,
+      currentCartTotal,
     };
   }
 
@@ -77,47 +86,127 @@
     return Math.max(0, safeTarget);
   }
 
-  function setButtonState(button, disabled) {
+  function setInputValue(input, value) {
+    const safeValue = Number.isFinite(Number(value)) ? Math.max(0, Math.floor(Number(value))) : 0;
+    input.value = String(safeValue);
+    input.setAttribute('value', String(safeValue));
+  }
+
+  function setButtonState(button, disabled, softDisable) {
     if (!button) return;
     button.classList.toggle('disabled', disabled);
-    button.toggleAttribute('disabled', disabled);
+    if (disabled && softDisable) {
+      button.removeAttribute('disabled');
+      button.disabled = false;
+    } else {
+      button.toggleAttribute('disabled', disabled);
+    }
     button.setAttribute('aria-disabled', disabled ? 'true' : 'false');
   }
 
-  function updateButtonState(input, row) {
-    const rules = resolveRules(input, row);
+  function updateButtonState(input, row, rulesOverride) {
+    const rules = rulesOverride || resolveRules(input, row);
     const quantity = toInt(input.value) || 0;
     const minusButton = input.parentElement?.querySelector(".quantity__button[name='minus']");
     const plusButton = input.parentElement?.querySelector(".quantity__button[name='plus']");
 
-    setButtonState(minusButton, quantity <= 0);
-    setButtonState(plusButton, rules.max !== null && quantity >= rules.max);
+    setButtonState(minusButton, quantity <= 0, false);
+    setButtonState(plusButton, rules.max !== null && quantity >= rules.max, true);
+  }
+
+  function flashQuantityWarning(input, max) {
+    const quantity = input.closest('.quantity');
+    if (!quantity) return;
+
+    let warning = quantity.querySelector('.quantity__warning');
+    if (!warning) {
+      warning = document.createElement('span');
+      warning.className = 'quantity__warning';
+      warning.setAttribute('role', 'status');
+      warning.setAttribute('aria-live', 'polite');
+      warning.hidden = true;
+      quantity.appendChild(warning);
+    }
+
+    warning.textContent = max > 0 ? `Only ${max} available` : 'Max quantity reached';
+    warning.hidden = false;
+    warning.offsetHeight;
+    warning.classList.add('is-visible');
+    if (warning._timer) clearTimeout(warning._timer);
+    warning._timer = setTimeout(() => {
+      warning.classList.remove('is-visible');
+      setTimeout(() => {
+        if (warning && !warning.classList.contains('is-visible')) warning.hidden = true;
+      }, 250);
+    }, 2200);
+  }
+
+  function syncRowState(row, input, cartQuantityOverride) {
+    const rules = resolveRules(input, row, cartQuantityOverride);
+    const currentCartTotal = rules.currentCartTotal;
+
+    row.dataset.cartQuantity = String(currentCartTotal);
+    input.dataset.cartQuantity = String(currentCartTotal);
+
+    const inCartCounter = row.querySelector('[data-bulk-cart-quantity]');
+    if (inCartCounter) {
+      inCartCounter.textContent = String(currentCartTotal);
+    }
+
+    if (rules.max !== null) {
+      input.max = String(rules.max);
+      input.dataset.max = String(rules.max);
+      row.dataset.addableMax = String(rules.max);
+    } else {
+      input.removeAttribute('max');
+      delete input.dataset.max;
+      delete row.dataset.addableMax;
+    }
+
+    const maxInCart = rules.max !== null && rules.max <= 0;
+    const quantityControl = row.querySelector('[data-bulk-quantity-control]');
+    const maxNote = row.querySelector('[data-bulk-max-note]');
+    if (quantityControl) {
+      quantityControl.classList.toggle('hidden', maxInCart);
+    }
+    if (maxNote) {
+      maxNote.classList.toggle('hidden', !maxInCart);
+    }
+
+    if (maxInCart) {
+      setInputValue(input, 0);
+    }
+
+    updateButtonState(input, row, rules);
+    return rules;
   }
 
   function clampInput(input, row, sourceEvent) {
-    const rules = resolveRules(input, row);
-    const raw = toInt(input.value) || 0;
-    const currentCartTotal = toInt(input.dataset.cartQuantity) || 0;
-    let safeTarget = raw;
+    const rules = syncRowState(row, input);
+    const rawValue = toInt(input.value);
+    const requestedAddQuantity = rawValue ?? 0;
+    let safeAddQuantity = requestedAddQuantity;
 
-    if (safeTarget > 0) {
-      safeTarget = normalizeTarget(safeTarget, rules);
+    if (safeAddQuantity > 0) {
+      safeAddQuantity = normalizeTarget(safeAddQuantity, rules);
     }
 
-    if (input.dataset.inventorySyncPending === 'true' && safeTarget > currentCartTotal) {
-      safeTarget = currentCartTotal;
+    if (input.dataset.inventorySyncPending === 'true' && safeAddQuantity > 0) {
+      safeAddQuantity = 0;
     }
 
-    if (rules.max !== null && safeTarget > rules.max) {
-      safeTarget = rules.max;
+    if (rules.max !== null && safeAddQuantity > rules.max) {
+      safeAddQuantity = rules.max;
     }
 
-    safeTarget = Math.max(0, safeTarget);
+    safeAddQuantity = Math.max(0, safeAddQuantity);
+    setInputValue(input, safeAddQuantity);
 
-    input.value = String(safeTarget);
-    input.setAttribute('value', String(safeTarget));
+    updateButtonState(input, row, rules);
 
-    updateButtonState(input, row);
+    if (rules.max !== null && requestedAddQuantity > rules.max) {
+      flashQuantityWarning(input, rules.max);
+    }
 
     debugLog('interaction', {
       sourceEvent,
@@ -134,11 +223,18 @@
       resolvedMin: rules.min,
       resolvedIncrement: rules.step,
       resolvedMax: rules.max,
-      currentCartTotal,
-      targetTotal: safeTarget,
+      currentCartTotal: rules.currentCartTotal,
+      requestedAddQuantity,
+      addQuantity: safeAddQuantity,
+      targetTotal: rules.currentCartTotal + safeAddQuantity,
     });
 
-    return { rules, target: safeTarget };
+    return {
+      rules,
+      addQuantity: safeAddQuantity,
+      currentCartTotal: rules.currentCartTotal,
+      targetTotal: rules.currentCartTotal + safeAddQuantity,
+    };
   }
 
   function cartTotalsByVariant(cartData) {
@@ -174,14 +270,23 @@
     messageElement.classList.toggle('bulk-order-form__success-message--error', !!isError);
   }
 
-  async function submitBulkOrder(root, form) {
-    const submitButton = form.querySelector('button[type="submit"]');
-    submitButton?.classList.add('loading');
-    submitButton?.setAttribute('aria-disabled', 'true');
-    if (submitButton) submitButton.disabled = true;
-    setFormMessage(form, '', false);
+  function syncRowsFromCart(form, cartData) {
+    const totals = cartTotalsByVariant(cartData);
+    form.querySelectorAll('.bulk-order-form__row').forEach((row) => {
+      const variantId = String(row.dataset.variantId || '');
+      if (!variantId) return;
 
-    const routes = getRoutes();
+      const input = row.querySelector('.quantity__input');
+      if (!input) return;
+
+      const nextCartTotal = totals.get(variantId) ?? (toInt(input.dataset.cartQuantity) || 0);
+      syncRowState(row, input, nextCartTotal);
+      setInputValue(input, 0);
+      updateButtonState(input, row);
+    });
+  }
+
+  async function fetchCartState(routes) {
     const cartResponse = await fetch(routes.cartJson, {
       credentials: 'same-origin',
       cache: 'no-store',
@@ -190,8 +295,18 @@
     if (!cartResponse.ok) {
       throw new Error('Unable to read cart state. Please try again.');
     }
+    return cartResponse.json();
+  }
 
-    const cartData = await cartResponse.json();
+  async function submitBulkOrder(root, form) {
+    const submitButton = form.querySelector('button[type="submit"]');
+    submitButton?.classList.add('loading');
+    submitButton?.setAttribute('aria-disabled', 'true');
+    if (submitButton) submitButton.disabled = true;
+    setFormMessage(form, '', false);
+
+    const routes = getRoutes();
+    const cartData = await fetchCartState(routes);
     const totals = cartTotalsByVariant(cartData);
 
     const updatesByVariant = {};
@@ -205,26 +320,18 @@
       if (!input) return;
 
       const currentCartTotal = totals.get(variantId) ?? (toInt(input.dataset.cartQuantity) || 0);
-      input.dataset.cartQuantity = String(currentCartTotal);
+      syncRowState(row, input, currentCartTotal);
 
       const clamped = clampInput(input, row, 'submit-preflight');
-      let targetTotal = clamped.target;
-
-      if (input.dataset.inventorySyncPending === 'true' && targetTotal > currentCartTotal) {
-        targetTotal = currentCartTotal;
-      }
-
-      if (clamped.rules.max !== null && targetTotal > clamped.rules.max) {
-        targetTotal = clamped.rules.max;
-      }
-
-      targetTotal = Math.max(0, targetTotal);
+      const targetTotal = clamped.targetTotal;
 
       diagnostics.push({
         variantId,
         currentTotal: currentCartTotal,
+        addQuantity: clamped.addQuantity,
         targetTotal,
         resolvedMax: clamped.rules.max,
+        resolvedMaxTotal: clamped.rules.maxTotal,
         resolvedMin: clamped.rules.min,
         resolvedIncrement: clamped.rules.step,
       });
@@ -237,7 +344,7 @@
     debugLog('mutation-boundary', diagnostics);
 
     if (!Object.keys(updatesByVariant).length) {
-      setFormMessage(form, 'No quantity changes to apply.', false);
+      setFormMessage(form, 'No quantities selected.', false);
       return;
     }
 
@@ -299,11 +406,13 @@
       await window.BSCartUI.refresh();
     }
 
+    const updatedCartData = await fetchCartState(routes);
+    syncRowsFromCart(form, updatedCartData);
+    setFormMessage(form, 'Added to cart.', false);
+
     if (window.__bulkOrderSkipRedirect) {
       return;
     }
-
-    window.location.href = '/cart';
   }
 
   function initBulkOrderForm(root) {
@@ -318,10 +427,9 @@
       const input = row.querySelector('.quantity__input');
       if (!input) return;
 
-      const initialCartQuantity = toInt(input.dataset.cartQuantity) ?? toInt(input.value) ?? 0;
-      input.dataset.cartQuantity = String(initialCartQuantity);
-      input.value = String(initialCartQuantity);
-      input.setAttribute('value', String(initialCartQuantity));
+      const initialCartQuantity = toInt(input.dataset.cartQuantity) ?? 0;
+      syncRowState(row, input, initialCartQuantity);
+      setInputValue(input, 0);
       clampInput(input, row, 'init');
     });
 
@@ -336,11 +444,16 @@
 
       event.preventDefault();
 
-      const rules = resolveRules(input, row);
+      const rules = syncRowState(row, input);
       const currentValue = toInt(input.value) || 0;
       let nextValue = currentValue;
 
       if (button.name === 'plus') {
+        if (rules.max !== null && currentValue >= rules.max) {
+          flashQuantityWarning(input, rules.max);
+          updateButtonState(input, row, rules);
+          return;
+        }
         if (currentValue === 0 && rules.min > 0) {
           nextValue = rules.min;
         } else {

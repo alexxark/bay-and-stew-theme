@@ -2041,6 +2041,9 @@ quantity-input {
   background-color: transparent;
   border: 0;
   padding: 0 0.5rem;
+  min-width: 3.2ch;
+  line-height: 1.3;
+  font-variant-numeric: tabular-nums;
   width: 100%;
   flex-grow: 1;
   -webkit-appearance: none;

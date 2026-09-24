@@ -1111,6 +1111,71 @@ test('quantity changes target the full line key and refresh both cart surfaces',
   harness.dom.window.close();
 });
 
+test('cart manual over-entry clamps to max and shows inline availability message without reportValidity popup', () => {
+  const harness = cartUIHarness();
+  const element = installCartItems(harness);
+
+  element.querySelector('.js-contents').innerHTML = `
+    <div id="CartItem-1" data-cart-item-key="1000:custom">
+      <quantity-input class="quantity cart-quantity">
+        <button class="quantity__button" name="minus" type="button">-</button>
+        <input
+          id="Quantity-1"
+          class="quantity__input"
+          type="number"
+          value="5"
+          min="0"
+          max="19"
+          step="1"
+          data-min="1"
+          data-index="1"
+          data-quantity-variant-id="1000"
+        >
+        <button class="quantity__button" name="plus" type="button">+</button>
+      </quantity-input>
+      <div class="cart-item__error" id="Line-item-error-1"><small class="cart-item__error-text"></small></div>
+    </div>
+  `;
+
+  const input = element.querySelector('#Quantity-1');
+  let flashed = 0;
+  let synced = 0;
+  let reportValidityCalls = 0;
+  let updateArgs = null;
+  const nativeClosest = input.closest.bind(input);
+
+  input.reportValidity = () => {
+    reportValidityCalls += 1;
+  };
+  input.closest = (selector) => {
+    if (selector === 'quantity-input') {
+      return {
+        flashMaxWarning: () => {
+          flashed += 1;
+        },
+        validateQtyRules: () => {
+          synced += 1;
+        },
+      };
+    }
+    return nativeClosest(selector);
+  };
+  element.updateQuantity = (...args) => {
+    updateArgs = args;
+  };
+
+  input.value = '50';
+  element.validateQuantity({ target: input });
+
+  assert.equal(input.value, '19');
+  assert.equal(flashed, 1);
+  assert.equal(synced, 1);
+  assert.equal(reportValidityCalls, 0);
+  assert.equal(element.querySelector('#Line-item-error-1 .cart-item__error-text').textContent, 'Only 19 available');
+  assert.deepEqual(updateArgs, ['1', 19, null, '1000']);
+  harness.dom.window.close();
+});
+
 test('failed cart/change reports failure without applying an error response as cart state', async () => {
   const harness = cartUIHarness();
   const element = installCartItems(harness);
@@ -1851,7 +1916,7 @@ function createQuantityButton(name) {
   };
 }
 
-function createQuantityInputHarness({ value, min, step, max = '', quantityRuleMax = null, inventoryMax = null }) {
+function createQuantityInputHarness({ value, min, step, max = '', quantityRuleMax = null, inventoryMax = null, isCartQuantity = false }) {
   const QuantityInput = loadQuantityInputClassForValidation();
   const plus = createQuantityButton('plus');
   const minus = createQuantityButton('minus');
@@ -1880,6 +1945,11 @@ function createQuantityInputHarness({ value, min, step, max = '', quantityRuleMa
   const component = {
     input,
     changeEvent: { type: 'change' },
+    classList: {
+      contains(className) {
+        return isCartQuantity && className === 'cart-quantity';
+      },
+    },
     querySelector(selector) {
       if (selector === ".quantity__button[name='plus']") return plus;
       if (selector === ".quantity__button[name='minus']") return minus;
@@ -2356,6 +2426,31 @@ test('quantity-input plus button at normalized max does not increment or dispatc
   assert.equal(harness.getWarnings(), 1);
   assert.equal(harness.plus.disabled, true);
   assert.equal(harness.plus.getAttribute('aria-disabled'), 'true');
+});
+
+test('cart quantity-input keeps plus clickable at max to surface inline warning feedback', () => {
+  const harness = createQuantityInputHarness({
+    value: 19,
+    min: 1,
+    step: 1,
+    max: 19,
+    inventoryMax: 19,
+    isCartQuantity: true,
+  });
+
+  harness.QuantityInput.prototype.connectedCallback.call(harness.component);
+
+  assert.equal(harness.plus.disabled, false);
+  assert.equal(harness.plus.getAttribute('aria-disabled'), 'true');
+
+  harness.QuantityInput.prototype.onButtonClick.call(harness.component, {
+    preventDefault() {},
+    target: harness.plus,
+  });
+
+  assert.equal(harness.input.value, '19');
+  assert.equal(harness.getWarnings(), 1);
+  assert.equal(harness.getDispatched(), 0);
 });
 
 test('quick-order boundary transition 21 -> 22 disables plus, 22 -> 21 re-enables plus', () => {
@@ -2952,7 +3047,7 @@ test('real quick-order handler pending inventory sync blocks positive manual ove
 function createBulkOrderFormHarness(options = {}) {
   const {
     cartQuantity = 0,
-    inputValue = cartQuantity,
+    inputValue = 0,
     min = 1,
     step = 1,
     ruleMax = null,
@@ -2966,6 +3061,9 @@ function createBulkOrderFormHarness(options = {}) {
     variantId = 1000,
   } = options;
 
+  const initialAddableMax = rowMaxTotal === null ? null : Math.max(0, rowMaxTotal - cartQuantity);
+  const startsMaxInCart = initialAddableMax === 0;
+
   const dom = new JSDOM(`
     <div class="bulk-order-form" id="BulkOrderForm-test">
       <form class="bulk-order-form__form" novalidate="novalidate">
@@ -2978,23 +3076,30 @@ function createBulkOrderFormHarness(options = {}) {
             data-inventory-quantity="${inventoryQuantity}"
             ${rowMaxTotal === null ? '' : `data-max-total="${rowMaxTotal}"`}>
             <td class="bulk-order-form__cell-quantity">
-              <div class="quantity">
-                <button class="quantity__button" name="minus" type="button">-</button>
-                <input
-                  class="quantity__input"
-                  type="number"
-                  data-quantity-variant-id="${variantId}"
-                  value="${inputValue}"
-                  data-cart-quantity="${cartQuantity}"
-                  min="0"
-                  data-min="${min}"
-                  ${ruleMax === null ? '' : `data-quantity-rule-max="${ruleMax}"`}
-                  ${inventoryMax === null ? '' : `max="${inventoryMax}" data-max="${inventoryMax}" data-inventory-max="${inventoryMax}"`}
-                  step="${step}"
-                  data-index="${variantId}"
-                  ${pending ? 'data-inventory-sync-pending="true"' : ''}
-                >
-                <button class="quantity__button" name="plus" type="button">+</button>
+              <div class="bulk-order-form__quantity-shell">
+                <div class="bulk-order-form__quantity-control${startsMaxInCart ? ' hidden' : ''}" data-bulk-quantity-control>
+                  <div class="quantity">
+                    <button class="quantity__button" name="minus" type="button">-</button>
+                    <input
+                      class="quantity__input"
+                      type="number"
+                      data-quantity-variant-id="${variantId}"
+                      value="${inputValue}"
+                      data-cart-quantity="${cartQuantity}"
+                      min="0"
+                      data-min="${min}"
+                      ${ruleMax === null ? '' : `data-quantity-rule-max="${ruleMax}"`}
+                      ${initialAddableMax === null ? '' : `max="${initialAddableMax}" data-max="${initialAddableMax}"`}
+                      ${inventoryMax === null ? '' : `data-inventory-max="${inventoryMax}"`}
+                      step="${step}"
+                      data-index="${variantId}"
+                      ${pending ? 'data-inventory-sync-pending="true"' : ''}
+                    >
+                    <button class="quantity__button" name="plus" type="button">+</button>
+                  </div>
+                </div>
+                <p class="bulk-order-form__max-note${startsMaxInCart ? '' : ' hidden'}" data-bulk-max-note>Max in cart</p>
+                <p class="bulk-order-form__in-cart-note"><span data-bulk-cart-quantity>${cartQuantity}</span> in cart</p>
               </div>
             </td>
           </tr>
@@ -3007,6 +3112,23 @@ function createBulkOrderFormHarness(options = {}) {
 
   const { window } = dom;
   const requests = [];
+  let mutableCartItems = cartItems.map((item) => ({ ...item }));
+
+  const setVariantQuantity = (variantIdToSet, quantity) => {
+    const variantIdInt = Number(variantIdToSet);
+    const existingIndex = mutableCartItems.findIndex((item) => Number(item.variant_id) === variantIdInt);
+    if (quantity <= 0) {
+      if (existingIndex >= 0) mutableCartItems.splice(existingIndex, 1);
+      return;
+    }
+
+    if (existingIndex >= 0) {
+      mutableCartItems[existingIndex] = { ...mutableCartItems[existingIndex], quantity };
+      return;
+    }
+
+    mutableCartItems.push({ variant_id: variantIdInt, quantity });
+  };
 
   window.Shopify = { routes: { root: '/' } };
   window.routes = { cart_change_url: '/cart/change.js', cart_update_url: '/cart/update.js' };
@@ -3024,10 +3146,27 @@ function createBulkOrderFormHarness(options = {}) {
     const request = { url: String(url), init };
     requests.push(request);
     if (request.url.endsWith('/cart.js')) {
-      return { ok: true, status: 200, json: async () => ({ items: cartItems }) };
+      return { ok: true, status: 200, json: async () => ({ items: mutableCartItems }) };
     }
-    if (request.url.endsWith('/cart/change.js') || request.url.endsWith('/cart/update.js')) {
-      return { ok: true, status: 200, json: async () => ({}) };
+    if (request.url.endsWith('/cart/change.js')) {
+      if (request.init?.body) {
+        const payload = JSON.parse(request.init.body);
+        if (payload.id && Number.isFinite(Number(payload.quantity))) {
+          setVariantQuantity(payload.id, Number(payload.quantity));
+        }
+      }
+      return { ok: true, status: 200, json: async () => ({ items: mutableCartItems }) };
+    }
+    if (request.url.endsWith('/cart/update.js')) {
+      if (request.init?.body) {
+        const payload = JSON.parse(request.init.body);
+        if (payload.updates && typeof payload.updates === 'object') {
+          Object.entries(payload.updates).forEach(([nextVariantId, nextQuantity]) => {
+            setVariantQuantity(nextVariantId, Number(nextQuantity));
+          });
+        }
+      }
+      return { ok: true, status: 200, json: async () => ({ items: mutableCartItems }) };
     }
     return { ok: true, status: 200, json: async () => ({}) };
   };
@@ -3072,6 +3211,10 @@ function createBulkOrderFormHarness(options = {}) {
     getMutationQuantities,
     getMutationRequests,
     getCartAddRequests,
+    getInCartText: () => root.querySelector('[data-bulk-cart-quantity]')?.textContent,
+    isMaxNoteVisible: () => !root.querySelector('[data-bulk-max-note]')?.classList.contains('hidden'),
+    isQuantityControlVisible: () => !root.querySelector('[data-bulk-quantity-control]')?.classList.contains('hidden'),
+    getWarningText: () => root.querySelector('.quantity__warning')?.textContent || '',
   };
 }
 
@@ -3084,11 +3227,14 @@ test('bulk-order-form includes authoritative inventory/cart metadata in markup a
   assert(mainProduct.includes("data-quantity-rule-max="));
   assert(mainProduct.includes("data-inventory-max="));
   assert(mainProduct.includes("data-max-total="));
+  assert(mainProduct.includes("data-addable-max="));
   assert(mainProduct.includes("data-cart-quantity=\"{{ cart_qty }}\""));
+  assert(mainProduct.includes("data-bulk-cart-quantity"));
+  assert(mainProduct.includes("data-bulk-max-note"));
   assert(mainProduct.includes("<script src=\"{{ 'bulk-order-form.js' | asset_url }}\" defer=\"defer\"></script>"));
 });
 
-test('real bulk-order-form handler clamps manual 50 to max 19 before submit request', async () => {
+test('real bulk-order-form add semantics clamps manual 50 to remaining 19 and resets after submit', async () => {
   const harness = createBulkOrderFormHarness({
     cartQuantity: 0,
     inputValue: 0,
@@ -3097,9 +3243,14 @@ test('real bulk-order-form handler clamps manual 50 to max 19 before submit requ
     cartItems: [],
   });
 
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.getInCartText(), '0');
+  assert.equal(harness.isQuantityControlVisible(), true);
+
   harness.input.value = '50';
   harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
   assert.equal(harness.input.value, '19');
+  assert.equal(harness.getWarningText(), 'Only 19 available');
 
   harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
   await harness.form.__bulkOrderSubmitPromise;
@@ -3110,25 +3261,34 @@ test('real bulk-order-form handler clamps manual 50 to max 19 before submit requ
   assert(mutationQuantities.every((quantity) => quantity <= 19));
   assert.equal(mutationRequests.length, 1);
   assert.equal(harness.getCartAddRequests().length, 0);
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.getInCartText(), '19');
+  assert.equal(harness.isMaxNoteVisible(), true);
+  assert.equal(harness.isQuantityControlVisible(), false);
   harness.dom.window.close();
 });
 
-test('real bulk-order-form plus behavior reaches 19 then blocks extra plus and requests no quantity above 19', async () => {
+test('real bulk-order-form plus behavior in add mode reaches remaining cap then shows inline warning', async () => {
   const harness = createBulkOrderFormHarness({
     cartQuantity: 18,
-    inputValue: 18,
+    inputValue: 0,
     inventoryMax: 19,
     rowMaxTotal: 19,
     cartItems: [{ variant_id: 1000, quantity: 18 }],
   });
 
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.input.max, '1');
+  assert.equal(harness.getInCartText(), '18');
+
   harness.plus.dispatchEvent(new harness.window.MouseEvent('click', { bubbles: true, cancelable: true }));
-  assert.equal(harness.input.value, '19');
-  assert.equal(harness.plus.disabled, true);
+  assert.equal(harness.input.value, '1');
+  assert.equal(harness.plus.disabled, false);
   assert.equal(harness.plus.getAttribute('aria-disabled'), 'true');
 
   harness.plus.dispatchEvent(new harness.window.MouseEvent('click', { bubbles: true, cancelable: true }));
-  assert.equal(harness.input.value, '19');
+  assert.equal(harness.input.value, '1');
+  assert.equal(harness.getWarningText(), 'Only 1 available');
 
   harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
   await harness.form.__bulkOrderSubmitPromise;
@@ -3137,6 +3297,9 @@ test('real bulk-order-form plus behavior reaches 19 then blocks extra plus and r
   assert(mutationQuantities.every((quantity) => quantity <= 19));
   assert.equal(mutationRequests.length, 1);
   assert.equal(harness.getCartAddRequests().length, 0);
+  assert.equal(harness.getInCartText(), '19');
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.isMaxNoteVisible(), true);
   harness.dom.window.close();
 });
 
@@ -3161,27 +3324,47 @@ test('real bulk-order-form final mutation boundary clamps stale dom 23 to truste
   harness.dom.window.close();
 });
 
-test('real bulk-order-form cart=5 maxTotal=19 keeps total semantics and avoids double subtraction', async () => {
+test('real bulk-order-form cart=5 maxTotal=19 uses add semantics and avoids double subtraction', async () => {
   const harness = createBulkOrderFormHarness({
     cartQuantity: 5,
-    inputValue: 5,
+    inputValue: 0,
     inventoryMax: 19,
     rowMaxTotal: 19,
     cartItems: [{ variant_id: 1000, quantity: 5 }],
   });
 
-  assert.equal(harness.input.value, '5');
-  assert.equal(harness.input.max, '19');
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.getInCartText(), '5');
+  assert.equal(harness.input.max, '14');
 
   harness.input.value = '50';
   harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
-  assert.equal(harness.input.value, '19');
+  assert.equal(harness.input.value, '14');
+  assert.equal(harness.getWarningText(), 'Only 14 available');
 
   harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
   await harness.form.__bulkOrderSubmitPromise;
 
   const mutationQuantities = harness.getMutationQuantities();
   assert.deepEqual(mutationQuantities, [19]);
+  assert.equal(harness.getInCartText(), '19');
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.isMaxNoteVisible(), true);
+  harness.dom.window.close();
+});
+
+test('real bulk-order-form cart already at max hides quantity control and shows Max in cart', () => {
+  const harness = createBulkOrderFormHarness({
+    cartQuantity: 19,
+    inputValue: 0,
+    inventoryMax: 19,
+    rowMaxTotal: 19,
+    cartItems: [{ variant_id: 1000, quantity: 19 }],
+  });
+
+  assert.equal(harness.isQuantityControlVisible(), false);
+  assert.equal(harness.isMaxNoteVisible(), true);
+  assert.equal(harness.getInCartText(), '19');
   harness.dom.window.close();
 });
 

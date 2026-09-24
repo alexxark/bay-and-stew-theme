@@ -380,11 +380,17 @@ class QuantityInput extends HTMLElement {
   validateQtyRules() {
     const value = parseInt(this.input.value);
     const rules = resolveQuantityRules(this.input);
+    const keepPlusClickableAtMax = this.classList?.contains('cart-quantity');
 
     const setButtonState = (button, disabled) => {
       if (!button) return;
       button.classList.toggle('disabled', disabled);
-      button.toggleAttribute('disabled', disabled);
+      if (disabled && keepPlusClickableAtMax && button.name === 'plus') {
+        button.removeAttribute('disabled');
+        button.disabled = false;
+      } else {
+        button.toggleAttribute('disabled', disabled);
+      }
       button.setAttribute('aria-disabled', disabled ? 'true' : 'false');
     };
 
