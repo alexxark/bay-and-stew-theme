@@ -529,7 +529,12 @@
                 </table>
               </div>
             {%- endif -%}
-            <p id="CartDrawer-LiveRegionText" class="visually-hidden" role="status"></p>
+            <p
+              id="CartDrawer-LiveRegionText"
+              class="visually-hidden"
+              data-estimated-total-label="{{ 'sections.cart.new_estimated_total' | t | escape }}"
+              role="status"
+            ></p>
             <p id="CartDrawer-LineItemStatus" class="visually-hidden" aria-hidden="true" role="status">
               {{ 'accessibility.loading' | t }}
             </p>

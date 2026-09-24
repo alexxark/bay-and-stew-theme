@@ -234,6 +234,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           super();
           this._onCartChange = this._onCartChange.bind(this);
           this._onCartRefresh = this._onCartRefresh.bind(this);
+          this._onPayableTotal = this._onPayableTotal.bind(this);
           this._currencyFormatter = new Intl.NumberFormat(Shopify.locale, {
             style: 'currency',
             currency: Shopify.currency.active
@@ -252,6 +253,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         connectedCallback() {
           document.addEventListener('cart:change', this._onCartChange);
           document.addEventListener('cart:rendered', this._onCartRefresh);
+          document.addEventListener('cart:payable-total', this._onPayableTotal);
 
           /* Subscribe to Dawn's native cart update pub/sub (fires on cart page quantity changes) */
           if (typeof subscribe === 'function' && typeof PUB_SUB_EVENTS !== 'undefined') {
@@ -279,6 +281,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         disconnectedCallback() {
           document.removeEventListener('cart:change', this._onCartChange);
           document.removeEventListener('cart:rendered', this._onCartRefresh);
+          document.removeEventListener('cart:payable-total', this._onPayableTotal);
           this._stateVersion++;
           if (this._syncTimer) cancelAnimationFrame(this._syncTimer);
           if (this._cartUpdateUnsubscriber) this._cartUpdateUnsubscriber();
@@ -303,13 +306,41 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           void this._updateFromCart(event.detail.cart).catch(console.error);
         }
 
+        _onPayableTotal(event) {
+          if (!this.isConnected) return;
+          const cents = Number(event?.detail?.cents);
+          if (!Number.isFinite(cents) || cents < 0) return;
+          const total = Math.round(cents);
+          this.dataset.totalPrice = total;
+          this._updateProgress(total);
+          this._updateMilestones(total);
+          if (this._pendingCart) {
+            this._pendingTotal = total;
+            this._scheduleGiftSync();
+          }
+        }
+
         async _fetchCart() {
           const response = await fetch(`${Shopify.routes.root}cart.js`, { credentials: 'same-origin' });
           if (!response.ok) throw new Error(`Cart HTTP ${response.status}`);
           return response.json();
         }
 
+        _readBssPayableTotal() {
+          const bssCart = window.BSS_B2B && BSS_B2B.shopData && BSS_B2B.shopData.cart;
+          if (!bssCart) return null;
+          for (const value of [bssCart.bss_b2b_total_price, bssCart.bss_b2b_total_priceTD]) {
+            const numeric = typeof value === 'string' ? Number(value) : value;
+            if (Number.isFinite(numeric) && numeric >= 0) {
+              return Math.round(numeric);
+            }
+          }
+          return null;
+        }
+
         _calculateTotal(cart) {
+          const bssTotal = this._readBssPayableTotal();
+          if (bssTotal !== null) return bssTotal;
           const priceForItems = (cart.items || [])
             .filter((item) => item.requires_shipping)
             .reduce((sum, item) => sum + item.final_line_price, 0);

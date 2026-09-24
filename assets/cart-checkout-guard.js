@@ -7,6 +7,7 @@
   let pendingMutations = 0;
   let pendingRefresh = null;
   let lastCart = null;
+  let lastPayableEventKey = '';
   let idleWaiters = [];
   const refreshErrorText = 'Cart could not be refreshed. Please refresh the page to review your cart.';
 
@@ -33,6 +34,109 @@
     document.querySelectorAll('#cart-errors, #CartDrawer-CartErrors').forEach((message) => {
       if (message.textContent === refreshErrorText) message.textContent = '';
     });
+  }
+
+  function normalizeCents(value) {
+    const numeric = typeof value === 'string' ? Number(value) : value;
+    if (!Number.isFinite(numeric) || numeric < 0) return null;
+    return Math.round(numeric);
+  }
+
+  function cartLineSignature(cart) {
+    if (!Array.isArray(cart?.items)) return null;
+    return cart.items.map((item) => {
+      const key = item?.key || item?.id || item?.variant_id || '';
+      const quantity = Number(item?.quantity || 0);
+      return `${key}:${Number.isFinite(quantity) ? quantity : 0}`;
+    }).sort().join('|');
+  }
+
+  function bssCartMatchesCartSnapshot(cart, bssCart) {
+    if (!cart || !bssCart) return false;
+    if (typeof cart.item_count === 'number' && typeof bssCart.item_count === 'number' && cart.item_count !== bssCart.item_count) {
+      return false;
+    }
+    const cartSignature = cartLineSignature(cart);
+    const bssSignature = cartLineSignature(bssCart);
+    if (cartSignature !== null && bssSignature !== null && cartSignature !== bssSignature) {
+      return false;
+    }
+    return true;
+  }
+
+  function readBssPayableSubtotalCents(cart) {
+    const bssCart = window.BSS_B2B?.shopData?.cart;
+    if (!bssCart) return null;
+    if (!bssCartMatchesCartSnapshot(cart, bssCart)) return null;
+    const subtotal = normalizeCents(bssCart.bss_b2b_total_price);
+    if (subtotal !== null) return subtotal;
+    return normalizeCents(bssCart.bss_b2b_total_priceTD);
+  }
+
+  function ensureCurrencyCode(formatted, cart) {
+    if (typeof formatted !== 'string' || !formatted.trim()) return formatted;
+    const currency = cart?.currency || window.Shopify?.currency?.active;
+    if (!currency) return formatted;
+    const currencyPattern = new RegExp(`\\b${currency}\\b`);
+    if (currencyPattern.test(formatted)) return formatted;
+    const sample = document.querySelector('#main-cart-footer .totals__total-value, .cart-drawer__footer .totals__total-value')?.textContent || '';
+    if (!currencyPattern.test(sample)) return formatted;
+    return `${formatted} ${currency}`;
+  }
+
+  function formatPayableSubtotal(cents, cart) {
+    const bssFormatter = window.BSS_B2B?.formatMoney;
+    if (typeof bssFormatter === 'function') {
+      try {
+        const formatted = bssFormatter(cents);
+        if (typeof formatted === 'string' && formatted.trim()) return ensureCurrencyCode(formatted.trim(), cart);
+      } catch (error) {
+        console.warn('[cart-ui] BSS formatter failed', error);
+      }
+    }
+    const currency = cart?.currency || window.Shopify?.currency?.active;
+    if (currency && typeof Intl !== 'undefined' && typeof Intl.NumberFormat === 'function') {
+      const formatted = new Intl.NumberFormat(window.Shopify?.locale || undefined, { style: 'currency', currency }).format(cents / 100);
+      return ensureCurrencyCode(formatted, cart);
+    }
+    return ensureCurrencyCode(`$${(cents / 100).toFixed(2)}`, cart);
+  }
+
+  function emitPayableSubtotal(cart, cents, formatted) {
+    const eventKey = `${cents}:${cart?.item_count ?? ''}`;
+    if (eventKey === lastPayableEventKey) return;
+    lastPayableEventKey = eventKey;
+    document.dispatchEvent(new CustomEvent('cart:payable-total', { detail: { cart, cents, formatted } }));
+  }
+
+  function syncPayableLiveRegions(cents, formatted) {
+    document.querySelectorAll('#cart-live-region-text, #CartDrawer-LiveRegionText').forEach((node) => {
+      const label = node.dataset.estimatedTotalLabel;
+      node.textContent = label ? `${label}: ${formatted}` : formatted;
+      node.dataset.bssPayableSubtotal = String(cents);
+    });
+  }
+
+  function syncPayableSubtotal(cart) {
+    const cents = readBssPayableSubtotalCents(cart);
+    if (cents === null) return false;
+    const formatted = formatPayableSubtotal(cents, cart);
+    document.querySelectorAll('#main-cart-footer .totals__total-value, .cart-drawer__footer .totals__total-value').forEach((node) => {
+      if (node.textContent !== formatted) node.textContent = formatted;
+      node.dataset.bssPayableSubtotal = String(cents);
+    });
+    syncPayableLiveRegions(cents, formatted);
+    emitPayableSubtotal(cart, cents, formatted);
+    return true;
+  }
+
+  function schedulePayableSync() {
+    if (!lastCart) return;
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(() => { syncPayableSubtotal(lastCart); });
+      return;
+    }
+    setTimeout(() => { syncPayableSubtotal(lastCart); }, 0);
   }
 
   async function fetchSections(targets, options) {
@@ -93,6 +197,7 @@
     } catch (error) {
       console.warn('[cart-ui] Drawer accessibility binding incomplete', error);
     }
+    syncPayableSubtotal(cart);
     document.dispatchEvent(new CustomEvent('cart:rendered', { detail: { cart, renderedSections } }));
     return renderedSections;
   }
@@ -217,6 +322,21 @@
   window.BSCartUI = { refresh, reportError, beginBatch };
   document.addEventListener('cart:refresh', () => { void refresh({ force: true }).catch(reportError); });
   document.addEventListener('cart:updated', () => { void refresh({ force: true }).catch(reportError); });
+  document.addEventListener('bss_b2b:CustomCartUpdate', schedulePayableSync);
+  window.addEventListener('bss_b2b:module:loaded', schedulePayableSync);
+  if (typeof MutationObserver === 'function' && document.documentElement) {
+    const observer = new MutationObserver((mutations) => {
+      if (!lastCart) return;
+      if (mutations.some((mutation) => mutation.attributeName === 'bss-b2b-cart-price-active')) {
+        schedulePayableSync();
+      }
+    });
+    observer.observe(document.documentElement, {
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['bss-b2b-cart-price-active'],
+    });
+  }
   document.addEventListener('shopify:section:load', (event) => {
     if (event.target.matches?.('#shopify-section-cart-drawer, #shopify-section-main-cart-items, #shopify-section-main-cart-footer')) {
       void refresh({ force: true }).catch(reportError);

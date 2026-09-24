@@ -527,7 +527,13 @@
         </div>
       </div>
 
-      <p class="visually-hidden" id="cart-live-region-text" aria-live="polite" role="status"></p>
+      <p
+        class="visually-hidden"
+        id="cart-live-region-text"
+        data-estimated-total-label="{{ 'sections.cart.new_estimated_total' | t | escape }}"
+        aria-live="polite"
+        role="status"
+      ></p>
       <p
         class="visually-hidden"
         id="shopping-cart-line-item-status"

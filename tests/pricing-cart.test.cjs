@@ -245,11 +245,11 @@ test('incomplete inventory response discards partial data and does not change pr
 
 function cartUIHarness() {
   const dom = new JSDOM(`
-    <cart-drawer><div id="CartDrawer"><div class="drawer__inner">old drawer</div></div></cart-drawer>
+    <cart-drawer><div id="CartDrawer"><div class="drawer__inner">old drawer</div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div></cart-drawer>
     <div id="cart-icon-bubble">old count</div>
     <cart-items><div id="main-cart-items" data-id="main-cart-items"><div class="js-contents">old lines</div></div></cart-items>
     <div id="main-cart-footer" data-id="main-cart-footer"><div class="js-contents"><span class="totals__total-value">old total</span></div></div>
-    <div id="cart-live-region-text">old accessible total</div><div id="cart-errors"></div>
+    <div id="cart-live-region-text" data-estimated-total-label="New estimated total">old accessible total</div><div id="cart-errors"></div>
   `, { url: 'https://example.test/en/cart', runScripts: 'outside-only' });
   const window = dom.window;
   window.Shopify = { routes: { root: '/en/' } };
@@ -290,6 +290,128 @@ test('shared cart refresh replaces drawer, full cart, footer and accessible tota
   total.textContent = 'BSS adjusted amount';
   await Promise.resolve();
   assert.equal(total.textContent, 'BSS adjusted amount', 'theme must not overwrite externally adjusted prices');
+  harness.dom.window.close();
+});
+
+test('BSS payable subtotal replaces native estimated totals and emits payable-total updates', async () => {
+  const harness = cartUIHarness();
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2147, item_count: 5, items: [line(1000, 5)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 native'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 native</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 native</p></div>',
+    }));
+  await harness.window.BSCartUI.refresh();
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['BSS $21.47', 'BSS $21.47']);
+  assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: BSS $21.47');
+  assert.equal(harness.window.document.querySelector('#CartDrawer-LiveRegionText').textContent, 'New estimated total: BSS $21.47');
+  assert.equal(payableEvents.length, 1);
+  assert.equal(payableEvents[0].cents, 2147);
+  harness.dom.window.close();
+});
+
+test('retail fallback keeps Shopify subtotal and live region text when BSS payable is unavailable', async () => {
+  const harness = cartUIHarness();
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 USD</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $44.84 USD</div>',
+    }));
+  await harness.window.BSCartUI.refresh();
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['$44.84 USD', '$44.84 USD']);
+  assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: $44.84 USD');
+  assert.equal(payableEvents.length, 0);
+  harness.dom.window.close();
+});
+
+test('BSS payable zero is treated as valid and synchronizes visible totals and live region', async () => {
+  const harness = cartUIHarness();
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 0, item_count: 5, items: [line(1000, 5)] } },
+    formatMoney: () => '$0.00',
+  };
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 USD</p></div>',
+    }));
+  await harness.window.BSCartUI.refresh();
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['$0.00 USD', '$0.00 USD']);
+  assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: $0.00 USD');
+  assert.equal(payableEvents.length, 1);
+  assert.equal(payableEvents[0].cents, 0);
+  harness.dom.window.close();
+});
+
+test('stale BSS payable subtotal is ignored until BSS cart snapshot matches current cart', async () => {
+  const harness = cartUIHarness();
+  harness.window.requestAnimationFrame = (callback) => { callback(); return 1; };
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2147, item_count: 9, items: [line(1000, 9)] } },
+    formatMoney: (cents) => `BSS $${(cents / 100).toFixed(2)}`,
+  };
+  const payableEvents = [];
+  harness.window.document.addEventListener('cart:payable-total', (event) => payableEvents.push(event.detail));
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 native'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 native</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 native</p></div>',
+      'cart-live-region-text': '<div class="shopify-section">New estimated total: $44.84 native</div>',
+    }));
+
+  await harness.window.BSCartUI.refresh();
+  const totalsAfterRefresh = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totalsAfterRefresh, ['$44.84 native', '$44.84 native']);
+  assert.equal(payableEvents.length, 0);
+
+  harness.window.BSS_B2B.shopData.cart = { bss_b2b_total_price: 3650, item_count: 5, items: [line(1000, 5)] };
+  harness.window.document.dispatchEvent(new harness.window.Event('bss_b2b:CustomCartUpdate'));
+
+  const totalsAfterBss = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totalsAfterBss, ['BSS $36.50', 'BSS $36.50']);
+  assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: BSS $36.50');
+  assert.deepEqual(payableEvents.map((detail) => detail.cents), [3650]);
+  harness.dom.window.close();
+});
+
+test('BSS payable formatting preserves currency code when native subtotal includes one', async () => {
+  const harness = cartUIHarness();
+  harness.window.BSS_B2B = {
+    shopData: { cart: { bss_b2b_total_price: 2147, item_count: 5, items: [line(1000, 5)] } },
+    formatMoney: () => '$21.47',
+  };
+  harness.setHandler(async (url) => jsonResponse(url.includes('cart.js')
+    ? { ...cartWith([line(1000, 5)]), currency: 'USD' }
+    : {
+      ...cartSections('$44.84 USD'),
+      'cart-drawer': '<div id="CartDrawer"><div class="cart-drawer__footer"><div class="totals"><p class="totals__total-value">$44.84 USD</p></div></div><p id="CartDrawer-LiveRegionText" data-estimated-total-label="New estimated total"></p></div>',
+      'main-cart-footer': '<div class="js-contents"><p class="totals__total-value">$44.84 USD</p></div>',
+    }));
+  await harness.window.BSCartUI.refresh();
+  const totals = Array.from(harness.window.document.querySelectorAll('.totals__total-value')).map((node) => node.textContent);
+  assert.deepEqual(totals, ['$21.47 USD', '$21.47 USD']);
+  assert.equal(harness.window.document.querySelector('#cart-live-region-text').textContent, 'New estimated total: $21.47 USD');
   harness.dom.window.close();
 });
 
@@ -404,7 +526,43 @@ test('rewards script compiles and uses authoritative cart renders, not placehold
   assert.doesNotThrow(() => new vm.Script(script));
   assert(!script.includes('this._hideOrShowGiftRows('));
   assert(script.includes("document.addEventListener('cart:rendered'"));
+  assert(script.includes("document.addEventListener('cart:payable-total'"));
   assert(script.includes('window.BSCartUI?.beginBatch()'));
+});
+
+test('rewards totals prefer BSS payable subtotal when available', () => {
+  const script = source('snippets/cart-rewards.liquid').match(/<script>([\s\S]*?)<\/script>/)[1];
+  let implementation;
+  const context = {
+    HTMLElement: class {},
+    customElements: { get() {}, define(name, component) { implementation = component; } },
+    BSS_B2B: { shopData: { cart: { bss_b2b_total_price: 2147 } } },
+  };
+  context.window = context;
+  vm.runInNewContext(script, context);
+  const element = Object.create(implementation.prototype);
+  const total = element._calculateTotal({
+    items: [{ requires_shipping: true, final_line_price: 4484 }],
+    cart_level_discount_applications: [{ total_allocated_amount: 100 }],
+  });
+  assert.equal(total, 2147);
+});
+
+test('rewards totals fall back to Shopify cart fields when BSS payable data is unavailable', () => {
+  const script = source('snippets/cart-rewards.liquid').match(/<script>([\s\S]*?)<\/script>/)[1];
+  let implementation;
+  const context = {
+    HTMLElement: class {},
+    customElements: { get() {}, define(name, component) { implementation = component; } },
+  };
+  context.window = context;
+  vm.runInNewContext(script, context);
+  const element = Object.create(implementation.prototype);
+  const total = element._calculateTotal({
+    items: [{ requires_shipping: true, final_line_price: 4484 }],
+    cart_level_discount_applications: [{ total_allocated_amount: 100 }],
+  });
+  assert.equal(total, 4384);
 });
 
 test('a settled reward gift does not trigger another render batch', async () => {
