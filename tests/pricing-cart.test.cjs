@@ -1256,6 +1256,50 @@ test('rewards totals fall back to Shopify cart fields when BSS payable data is u
   assert.equal(total, 4384);
 });
 
+test('pending rewards state keeps static sentence and masks only the dynamic amount until ready', () => {
+  const script = source('snippets/cart-rewards.liquid').match(/<script>([\s\S]*?)<\/script>/)[1];
+  const dom = new JSDOM('<!doctype html><html><body></body></html>', { url: 'https://example.test', runScripts: 'outside-only' });
+  const { window } = dom;
+  window.Shopify = { locale: 'en-US', currency: { active: 'USD' }, routes: { root: '/en/' } };
+  window.eval(script);
+
+  const element = window.document.createElement('cart-rewards');
+  element.dataset.maxThreshold = '5000';
+  element.dataset.rewardsPriceState = 'ready';
+  element.dataset.allUnlockedSubtitle = 'You have unlocked all rewards!';
+  element.innerHTML = `
+    <p data-rewards-message><span data-rewards-prefix></span><span class="cart-rewards__amount" data-rewards-amount aria-hidden="true"></span><span data-rewards-suffix></span></p>
+    <span class="visually-hidden" data-rewards-live-region aria-live="polite" aria-atomic="true"></span>
+    <div data-reward-milestone data-threshold="3000" data-message="Spend [amount_left] more to receive [reward]!"><span class="cart-rewards__label">Free Shipping</span></div>
+    <div data-reward-milestone data-threshold="5000" data-message="Spend [amount_left] more to receive [reward]!"><span class="cart-rewards__label">Free Gift</span></div>
+  `;
+
+  element._updateMilestones(2000);
+  assert.equal(element.querySelector('[data-rewards-message]').textContent, 'Spend $10.00 more to receive Free Shipping!');
+
+  element.applyPricingState('pending');
+  element._updateMilestones(3200);
+  const pendingAmount = element.querySelector('[data-rewards-amount]');
+  assert.equal(element.querySelector('[data-rewards-message]').textContent, 'Spend $10.00 more to receive Free Shipping!');
+  assert.equal(pendingAmount.dataset.priceState, 'pending');
+
+  element.applyPricingState('ready');
+  element._updateMilestones(3200);
+  const readyAmount = element.querySelector('[data-rewards-amount]');
+  assert.equal(element.querySelector('[data-rewards-message]').textContent, 'Spend $18.00 more to receive Free Gift!');
+  assert.equal(readyAmount.dataset.priceState, 'ready');
+  assert.equal(element.querySelector('[data-rewards-live-region]').textContent, 'Spend $18.00 more to receive Free Gift!');
+
+  dom.window.close();
+});
+
+test('global pending CSS does not mask the entire rewards sentence', () => {
+  const baseCss = source('assets/base.css');
+  const rewardsCss = source('assets/component-cart-rewards.css');
+  assert(!baseCss.includes("html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message]"));
+  assert(rewardsCss.includes(".cart-rewards__amount[data-price-state='pending']"));
+});
+
 test('a settled reward gift does not trigger another render batch', async () => {
   const script = source('snippets/cart-rewards.liquid').match(/<script>([\s\S]*?)<\/script>/)[1];
   let implementation;

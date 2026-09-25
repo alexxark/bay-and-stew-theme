@@ -229,8 +229,7 @@ html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-valu
 html[data-cart-pricing-state='pending'] #cart-live-region-text,
 html[data-cart-pricing-state='pending'] #CartDrawer-LiveRegionText,
 html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price],
-html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price],
-html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message] {
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price] {
   position: relative;
   color: transparent !important;
   text-shadow: none !important;
@@ -239,8 +238,7 @@ html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message] {
 html[data-cart-pricing-state='pending'] #main-cart-footer .totals__total-value *,
 html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-value *,
 html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price] *,
-html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price] *,
-html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message] * {
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price] * {
   color: transparent !important;
 }
 
@@ -249,8 +247,7 @@ html[data-cart-pricing-state='pending'] .cart-drawer__footer .totals__total-valu
 html[data-cart-pricing-state='pending'] #cart-live-region-text::after,
 html[data-cart-pricing-state='pending'] #CartDrawer-LiveRegionText::after,
 html[data-cart-pricing-state='pending'] #main-cart-items [bss-b2b-final-line-price]::after,
-html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price]::after,
-html[data-cart-pricing-state='pending'] cart-rewards [data-rewards-message]::after {
+html[data-cart-pricing-state='pending'] #CartDrawer [bss-b2b-final-line-price]::after {
   content: '';
   position: absolute;
   top: 50%;

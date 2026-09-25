@@ -115,7 +115,10 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
     data-rewards-version="{{ rewards_version }}"
     data-rewards-price-state="ready"
   >
-    <p class="cart-rewards__message" data-rewards-message></p>
+    <p class="cart-rewards__message" data-rewards-message>
+      <span data-rewards-prefix></span><span class="cart-rewards__amount" data-rewards-amount aria-hidden="true"></span><span data-rewards-suffix></span>
+    </p>
+    <span class="visually-hidden" data-rewards-live-region aria-live="polite" aria-atomic="true"></span>
 
     <div class="cart-rewards__bar-row">
       {%- comment -%} Start circle {%- endcomment -%}
@@ -250,6 +253,10 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           this._pendingCart = null;
           this._pendingTotal = 0;
           this._stateVersion = 0;
+          this._stableMessageParts = null;
+          this._currentMessageParts = null;
+          this._lastAnnouncedMessage = '';
+          this._fallbackMessageText = '';
         }
 
         connectedCallback() {
@@ -317,6 +324,7 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           const total = Math.round(cents);
           this.dataset.rewardsPriceState = 'ready';
           this.setAttribute('aria-busy', 'false');
+          this._fallbackMessageText = '';
           this.dataset.totalPrice = total;
           this._updateProgress(total);
           this._updateMilestones(total);
@@ -330,10 +338,33 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           if (!this.isConnected) return;
           const text = String(event?.detail?.text || '').trim();
           if (!text) return;
-          this.dataset.rewardsPriceState = 'fallback';
-          this.setAttribute('aria-busy', 'false');
-          const message = this.querySelector('[data-rewards-message]');
-          if (message) message.textContent = text;
+          this.applyPricingState('fallback', text);
+        }
+
+        applyPricingState(state, fallbackText = '') {
+          this.dataset.rewardsPriceState = state;
+          this.setAttribute('aria-busy', state === 'pending' ? 'true' : 'false');
+
+          if (state === 'fallback' && fallbackText) {
+            this._fallbackMessageText = fallbackText;
+            const fallbackParts = this._buildFallbackMessageParts(fallbackText);
+            this._currentMessageParts = fallbackParts;
+            this._stableMessageParts = fallbackParts;
+            this._renderMessage(fallbackParts, { announce: true });
+            return;
+          }
+
+          if (state === 'pending') {
+            const pendingParts = this._stableMessageParts || this._currentMessageParts;
+            if (pendingParts) {
+              this._renderMessage(pendingParts, { maskAmount: true });
+            }
+            return;
+          }
+
+          if (state === 'ready') {
+            this._fallbackMessageText = '';
+          }
         }
 
         async _fetchCart() {
@@ -477,7 +508,6 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
         _updateMilestones(total) {
           const milestoneElements = Array.from(this.querySelectorAll('[data-reward-milestone]'));
           const markers = Array.from(this.querySelectorAll('[data-reward-marker]'));
-          const message = this.querySelector('[data-rewards-message]');
           const maxThreshold = parseInt(this.dataset.maxThreshold || '0', 10);
           const unlockedSubtitle = this.dataset.allUnlockedSubtitle || 'You have unlocked all rewards!';
 
@@ -511,6 +541,8 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
           if (endDot) endDot.classList.toggle('is-reached', maxThreshold > 0 && total >= maxThreshold);
 
           const nextMilestone = milestones.find((m) => total < m.threshold);
+          const rewardsPriceState = this.dataset.rewardsPriceState || 'ready';
+          let nextParts;
 
           if (nextMilestone) {
             const remaining = Math.max(nextMilestone.threshold - total, 0);
@@ -520,11 +552,146 @@ Each milestone can be type "shipping" (visual only) or "gift" (auto-adds a produ
               reward: nextMilestone.label,
               nearest_reward: nextMilestone.label
             };
-            if (message) message.textContent = this._formatTemplate(nextMilestone.msg, tokens);
+            nextParts = this._buildMessageParts(nextMilestone.msg, tokens);
           } else {
             const lastLabel = milestones.length ? milestones[milestones.length - 1].label : 'reward';
             const tokens = { reward: lastLabel, nearest_reward: lastLabel };
-            if (message) message.textContent = this._formatTemplate(unlockedSubtitle, tokens);
+            nextParts = this._buildMessageParts(unlockedSubtitle, tokens);
+          }
+
+          this._currentMessageParts = nextParts;
+
+          if (rewardsPriceState === 'fallback' && this._fallbackMessageText) {
+            this._renderMessage(this._buildFallbackMessageParts(this._fallbackMessageText));
+            return;
+          }
+
+          if (rewardsPriceState === 'pending') {
+            this._renderMessage(this._stableMessageParts || nextParts, { maskAmount: true });
+            return;
+          }
+
+          this._stableMessageParts = nextParts;
+          this._fallbackMessageText = '';
+          this._renderMessage(nextParts, { announce: true });
+        }
+
+        _ensureMessageStructure() {
+          const message = this.querySelector('[data-rewards-message]');
+          if (!message) return null;
+
+          let prefixNode = message.querySelector('[data-rewards-prefix]');
+          let amountNode = message.querySelector('[data-rewards-amount]');
+          let suffixNode = message.querySelector('[data-rewards-suffix]');
+
+          if (!prefixNode || !amountNode || !suffixNode) {
+            const existingText = message.textContent || '';
+            message.textContent = '';
+
+            prefixNode = document.createElement('span');
+            prefixNode.dataset.rewardsPrefix = '';
+
+            amountNode = document.createElement('span');
+            amountNode.className = 'cart-rewards__amount';
+            amountNode.dataset.rewardsAmount = '';
+            amountNode.setAttribute('aria-hidden', 'true');
+
+            suffixNode = document.createElement('span');
+            suffixNode.dataset.rewardsSuffix = '';
+
+            message.append(prefixNode, amountNode, suffixNode);
+            if (existingText) {
+              prefixNode.textContent = existingText;
+            }
+          }
+
+          amountNode.classList.add('cart-rewards__amount');
+          amountNode.setAttribute('aria-hidden', 'true');
+
+          return {
+            message,
+            prefixNode,
+            amountNode,
+            suffixNode,
+            liveRegion: this.querySelector('[data-rewards-live-region]')
+          };
+        }
+
+        _buildMessageParts(template, tokens) {
+          const amountText = tokens.amount_left || tokens.amount || '';
+          const amountSentinel = '__BS_REWARDS_AMOUNT__';
+
+          let tokenized = this._replaceTemplateToken(String(template), 'amount_left', amountSentinel);
+          tokenized = this._replaceTemplateToken(tokenized, 'amount', amountSentinel);
+          tokenized = this._replaceTemplateToken(tokenized, 'reward', tokens.reward || '');
+          tokenized = this._replaceTemplateToken(tokenized, 'nearest_reward', tokens.nearest_reward || '');
+
+          const fullText = this._formatTemplate(template, tokens);
+          if (!tokenized.includes(amountSentinel)) {
+            return { prefix: fullText, amount: '', suffix: '', hasAmount: false, fullText };
+          }
+
+          const [prefix, ...suffixParts] = tokenized.split(amountSentinel);
+          const suffix = suffixParts.join(amountText);
+
+          return {
+            prefix,
+            amount: amountText,
+            suffix,
+            hasAmount: true,
+            fullText: `${prefix}${amountText}${suffix}`
+          };
+        }
+
+        _buildFallbackMessageParts(text) {
+          return {
+            prefix: text,
+            amount: '',
+            suffix: '',
+            hasAmount: false,
+            fullText: text
+          };
+        }
+
+        _replaceTemplateToken(template, key, value) {
+          return String(template)
+            .replace(new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g'), value)
+            .replace(new RegExp(`\\[\\[\\s*${key}\\s*\\]\\]`, 'g'), value)
+            .replace(new RegExp(`\\[\\s*${key}\\s*\\]`, 'g'), value)
+            .replace(new RegExp(`\\{\\s*${key}\\s*\\}`, 'g'), value);
+        }
+
+        _renderMessage(parts, options = {}) {
+          const refs = this._ensureMessageStructure();
+          if (!refs || !parts) return;
+
+          const { message, prefixNode, amountNode, suffixNode, liveRegion } = refs;
+          const maskAmount = Boolean(options.maskAmount);
+          const announce = Boolean(options.announce);
+          const hasAmount = Boolean(parts.hasAmount);
+          const displayText = hasAmount
+            ? `${parts.prefix || ''}${parts.amount || ''}${parts.suffix || ''}`
+            : (parts.fullText || parts.prefix || '');
+
+          prefixNode.textContent = hasAmount ? (parts.prefix || '') : displayText;
+          suffixNode.textContent = hasAmount ? (parts.suffix || '') : '';
+          amountNode.textContent = hasAmount ? (parts.amount || '') : '';
+          amountNode.hidden = !hasAmount;
+
+          if (hasAmount) {
+            const widthCh = Math.max((parts.amount || '').length, 4);
+            amountNode.style.setProperty('--bs-price-placeholder-width', `${widthCh}ch`);
+            amountNode.dataset.priceState = maskAmount ? 'pending' : 'ready';
+          } else {
+            amountNode.style.removeProperty('--bs-price-placeholder-width');
+            delete amountNode.dataset.priceState;
+          }
+
+          message.setAttribute('aria-label', displayText);
+
+          if (announce && liveRegion && displayText !== this._lastAnnouncedMessage) {
+            liveRegion.textContent = displayText;
+            this._lastAnnouncedMessage = displayText;
           }
         }
 

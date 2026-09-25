@@ -131,11 +131,18 @@
     rewardsRoots.forEach((element) => {
       element.dataset.rewardsPriceState = state;
       element.setAttribute('aria-busy', state === 'pending' ? 'true' : 'false');
+      if (typeof element.applyPricingState === 'function') {
+        element.applyPricingState(state, fallbackText);
+      }
     });
 
     if (state !== 'fallback' || !fallbackText) return;
 
     document.querySelectorAll('cart-rewards [data-rewards-message]').forEach((node) => {
+      const rewardsRoot = node.closest('cart-rewards');
+      if (rewardsRoot && typeof rewardsRoot.applyPricingState === 'function') {
+        return;
+      }
       node.textContent = fallbackText;
     });
   }

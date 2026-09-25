@@ -19,6 +19,16 @@
   color: rgb(var(--color-foreground));
 }
 
+.cart-rewards__amount {
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: baseline;
+}
+
+.cart-rewards__amount[data-price-state='pending'] {
+  min-width: var(--bs-price-placeholder-width, 6ch);
+}
+
 /* ---------- progress bar row ---------- */
 
 .cart-rewards__bar-row {
