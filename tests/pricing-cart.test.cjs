@@ -3240,7 +3240,42 @@ function createBulkOrderFormHarness(options = {}) {
     mutableCartItems.push({ variant_id: variantIdInt, quantity });
   };
 
-  window.Shopify = { routes: { root: '/' } };
+  window.Shopify = {
+    routes: { root: '/' },
+    formatMoney(cents, format = '${{amount}}') {
+      const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+      const withDelimiters = (amount, precision = 2, thousands = ',', decimal = '.') => {
+        const numeric = Number(amount);
+        if (!Number.isFinite(numeric)) return '0';
+        const parts = (numeric / 100).toFixed(precision).split('.');
+        parts[0] = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, `$1${thousands}`);
+        return parts.join(decimal);
+      };
+
+      const match = String(format || '${{amount}}').match(placeholderRegex);
+      const placeholder = match ? match[1] : 'amount';
+      const rounded = Math.round(Number(cents) || 0);
+      let value;
+
+      switch (placeholder) {
+        case 'amount_no_decimals':
+          value = withDelimiters(rounded, 0);
+          break;
+        case 'amount_with_comma_separator':
+          value = withDelimiters(rounded, 2, '.', ',');
+          break;
+        case 'amount_no_decimals_with_comma_separator':
+          value = withDelimiters(rounded, 0, '.', ',');
+          break;
+        default:
+          value = withDelimiters(rounded, 2);
+          break;
+      }
+
+      return String(format || '${{amount}}').replace(placeholderRegex, value);
+    },
+  };
+  window.theme = { moneyFormat };
   window.routes = { cart_change_url: '/cart/change.js', cart_update_url: '/cart/update.js' };
   window.__bulkOrderSkipRedirect = true;
   window.console.info = () => {};
@@ -3358,6 +3393,7 @@ function createBulkOrderFormHarness(options = {}) {
     getRowByVariant,
     getRowInput,
     getRowPriceText: (targetVariantId) => getRowPrice(targetVariantId)?.textContent || '',
+    getRowPriceHtml: (targetVariantId) => getRowPrice(targetVariantId)?.innerHTML || '',
     getRowPreviewCents: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.previewCents || 0),
     getRowProjectedTotal: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.projectedTotal || 0),
     getInCartText: () => root.querySelector('[data-bulk-cart-quantity]')?.textContent,
@@ -3671,6 +3707,39 @@ test('bulk-order pricing config is serialized in Liquid and owned by bulk-order-
   assert(bulkOrderScript.includes('__testing: {'));
 });
 
+test('bulk-order money format with HTML wrapper renders visible currency text instead of literal tags', () => {
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice: 891,
+    moneyFormat: '<span hidewlm>${{ amount }}</span>',
+    cartItems: [],
+  });
+
+  const visible = harness.getRowPriceText(1000).trim();
+  const html = harness.getRowPriceHtml(1000);
+
+  assert.equal(visible, '$8.91');
+  assert(/<span[^>]*hidewlm[^>]*>\$8\.91<\/span>/.test(html));
+  assert.equal(html.includes('&lt;span'), false);
+  assert.equal(visible.includes('<span'), false);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order plain money format still renders correctly', () => {
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice: 891,
+    moneyFormat: '${{ amount }}',
+    cartItems: [],
+  });
+
+  assert.equal(harness.getRowPriceText(1000).trim(), '$8.91');
+  assert.equal(harness.getRowPriceHtml(1000), '$8.91');
+
+  harness.dom.window.close();
+});
+
 test('bulk-order wholesale pricing preview matches established rule calculation at tier checkpoints', () => {
   const volumeRules = bulkVolumeRulesFixture();
   const productTags = ['Bay Tier 2'];
@@ -3789,6 +3858,55 @@ test('bulk-order projected total uses current cart plus add amount and persists 
   assert.equal(harness.getInCartText(), '15');
   assert.equal(harness.getRowProjectedTotal(1000), 15);
   assert.equal(harness.getRowPreviewCents(1000), previewAtFifteen);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order HTML money format stays unescaped through tier updates and post-submit reset', async () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const moneyFormat = '<span hidewlm>${{ amount }}</span>';
+  const originalPrice = 1000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    cartQuantity: 5,
+    inputValue: 0,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent: 0,
+    moneyFormat,
+    cartItems: [{ variant_id: 1000, quantity: 5 }],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  const expectedVisibleText = (cents) => {
+    const rendered = helpers.formatMoney(cents, moneyFormat);
+    const probe = harness.window.document.createElement('div');
+    probe.innerHTML = rendered;
+    return (probe.textContent || '').trim();
+  };
+
+  const assertRenderedState = (projectedTotal) => {
+    const expectedCents = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, projectedTotal);
+    assert.equal(harness.getRowProjectedTotal(1000), projectedTotal);
+    assert.equal(harness.getRowPreviewCents(1000), expectedCents);
+    assert.equal(harness.getRowPriceText(1000).trim(), expectedVisibleText(expectedCents));
+    assert.equal(harness.getRowPriceHtml(1000).includes('&lt;span'), false);
+  };
+
+  assertRenderedState(5);
+
+  harness.input.value = '10';
+  harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+  assertRenderedState(15);
+
+  harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
+  await harness.form.__bulkOrderSubmitPromise;
+
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.getInCartText(), '15');
+  assertRenderedState(15);
 
   harness.dom.window.close();
 });

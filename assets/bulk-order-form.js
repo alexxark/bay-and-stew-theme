@@ -79,7 +79,7 @@
     return matchedTier ? toFiniteNumber(matchedTier.percent, 0) : 0;
   }
 
-  function formatMoney(cents, moneyFormat) {
+  function fallbackFormatMoney(cents, moneyFormat) {
     const format = moneyFormat || DEFAULT_MONEY_FORMAT;
     const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
     const number = toFiniteNumber(cents, 0);
@@ -111,6 +111,48 @@
     }
 
     return format.replace(placeholderRegex, value);
+  }
+
+  function formatMoney(cents, moneyFormat) {
+    const normalizedCents = Math.round(toFiniteNumber(cents, 0));
+    const format = moneyFormat || DEFAULT_MONEY_FORMAT;
+    const shopifyFormatter = window.Shopify && typeof window.Shopify.formatMoney === 'function'
+      ? window.Shopify.formatMoney
+      : null;
+
+    if (shopifyFormatter) {
+      try {
+        return String(shopifyFormatter(normalizedCents, format));
+      } catch (_error) {
+        // Fall through to local formatter.
+      }
+    }
+
+    return fallbackFormatMoney(normalizedCents, format);
+  }
+
+  function setPriceContent(priceElement, formattedMoney) {
+    const output = String(formattedMoney || '');
+
+    if (!/[<>]/.test(output)) {
+      priceElement.textContent = output;
+      return;
+    }
+
+    const template = document.createElement('template');
+    template.innerHTML = output;
+    template.content.querySelectorAll('script').forEach((node) => node.remove());
+
+    const hasElementNodes = Array.from(template.content.childNodes)
+      .some((node) => node.nodeType === Node.ELEMENT_NODE);
+
+    if (!hasElementNodes) {
+      priceElement.textContent = output;
+      return;
+    }
+
+    priceElement.replaceChildren();
+    priceElement.append(template.content);
   }
 
   function markPricesPending(priceElements) {
@@ -220,7 +262,9 @@
 
     priceElement.dataset.previewCents = String(Math.round(previewCents));
     priceElement.dataset.projectedTotal = String(projectedTotal);
-    priceElement.textContent = formatMoney(previewCents, pricingContext?.moneyFormat);
+
+    const formattedMoney = formatMoney(previewCents, pricingContext?.moneyFormat);
+    setPriceContent(priceElement, formattedMoney);
   }
 
   function refreshAllPrices(root, pricingContext) {
@@ -762,6 +806,7 @@
       findVolumePercentForQuantity,
       computePreviewUnitPriceCents,
       formatMoney,
+      setPriceContent,
       buildPricingContext,
     },
   };
