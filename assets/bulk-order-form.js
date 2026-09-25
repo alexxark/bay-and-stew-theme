@@ -1,9 +1,15 @@
 (function () {
   const DEBUG_KEY = 'bulkOrderDebug';
+  const DEFAULT_MONEY_FORMAT = '${{amount}}';
 
   function toInt(value) {
     const parsed = parseInt(value, 10);
     return Number.isNaN(parsed) ? null : parsed;
+  }
+
+  function toFiniteNumber(value, fallback = 0) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : fallback;
   }
 
   function normalizeQuantityMax(min, step, max) {
@@ -37,6 +43,202 @@
       cartChange: (window.routes && window.routes.cart_change_url) || root + 'cart/change.js',
       cartUpdate: (window.routes && window.routes.cart_update_url) || root + 'cart/update.js',
     };
+  }
+
+  function pickActiveVolumeRule(volumeRules, productTags) {
+    const safeRules = Array.isArray(volumeRules) ? volumeRules : [];
+    const tagSet = new Set((Array.isArray(productTags) ? productTags : []).map((tag) => String(tag).toLowerCase()));
+    return safeRules.find((rule) => {
+      const ruleTag = String(rule?.tag || '').toLowerCase();
+      return ruleTag && tagSet.has(ruleTag);
+    }) || null;
+  }
+
+  function getTierQuantityForLookup(projectedTotal, tiers) {
+    const normalizedProjectedTotal = Math.max(0, toInt(projectedTotal) || 0);
+    if (normalizedProjectedTotal > 0) return normalizedProjectedTotal;
+
+    const tierMins = (Array.isArray(tiers) ? tiers : [])
+      .map((tier) => toInt(tier?.from))
+      .filter((value) => value !== null && value > 0);
+    if (!tierMins.length) return 1;
+
+    return Math.min.apply(null, tierMins);
+  }
+
+  function findVolumePercentForQuantity(tiers, quantity) {
+    const lookupQuantity = Math.max(0, toInt(quantity) || 0);
+    const safeTiers = Array.isArray(tiers) ? tiers : [];
+
+    const matchedTier = safeTiers.find((tier) => {
+      const from = toFiniteNumber(tier?.from, 0);
+      const to = (tier?.to == null || tier.to === '') ? Infinity : toFiniteNumber(tier.to, Infinity);
+      return lookupQuantity >= from && lookupQuantity <= to;
+    });
+
+    return matchedTier ? toFiniteNumber(matchedTier.percent, 0) : 0;
+  }
+
+  function formatMoney(cents, moneyFormat) {
+    const format = moneyFormat || DEFAULT_MONEY_FORMAT;
+    const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+    const number = toFiniteNumber(cents, 0);
+
+    const withDelimiters = (value, precision = 2, thousands = ',', decimal = '.') => {
+      const parsed = toFiniteNumber(value, 0);
+      const parts = (parsed / 100.0).toFixed(precision).split('.');
+      parts[0] = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, `$1${thousands}`);
+      return parts.join(decimal);
+    };
+
+    const match = format.match(placeholderRegex);
+    const placeholder = match ? match[1] : 'amount';
+    let value;
+
+    switch (placeholder) {
+      case 'amount_no_decimals':
+        value = withDelimiters(number, 0);
+        break;
+      case 'amount_with_comma_separator':
+        value = withDelimiters(number, 2, '.', ',');
+        break;
+      case 'amount_no_decimals_with_comma_separator':
+        value = withDelimiters(number, 0, '.', ',');
+        break;
+      default:
+        value = withDelimiters(number, 2);
+        break;
+    }
+
+    return format.replace(placeholderRegex, value);
+  }
+
+  function markPricesPending(priceElements) {
+    if (!priceElements || !priceElements.length) return;
+
+    if (window.BSPriceState) {
+      window.BSPriceState.setPending(priceElements, {
+        busy: false,
+        watchdogMs: 1000,
+        onTimeout: () => {
+          console.warn('[bulk-order] local price pending fail-open');
+        },
+      });
+      return;
+    }
+
+    priceElements.forEach((priceElement) => {
+      priceElement.dataset.priceState = 'pending';
+    });
+  }
+
+  function markPricesReady(priceElements) {
+    if (!priceElements || !priceElements.length) return;
+
+    if (window.BSPriceState) {
+      window.BSPriceState.setReady(priceElements, { clearBusy: true });
+      return;
+    }
+
+    priceElements.forEach((priceElement) => {
+      priceElement.dataset.priceState = 'ready';
+    });
+  }
+
+  function readPricingConfig(root) {
+    const fallback = {
+      basePercent: 0,
+      productTags: [],
+      volumeRules: [],
+      moneyFormat: DEFAULT_MONEY_FORMAT,
+    };
+
+    if (!root) return fallback;
+
+    const directConfigId = String(root.dataset.pricingConfigId || '').trim();
+    const derivedSectionId = String(root.id || '').startsWith('BulkOrderForm-')
+      ? String(root.id).slice('BulkOrderForm-'.length)
+      : '';
+    const derivedConfigId = derivedSectionId ? `BulkOrderForm-Config-${derivedSectionId}` : '';
+
+    const configElement = (directConfigId && document.getElementById(directConfigId))
+      || (derivedConfigId && document.getElementById(derivedConfigId))
+      || root.parentElement?.querySelector('script[type="application/json"][id^="BulkOrderForm-Config-"]')
+      || null;
+
+    if (!configElement) return fallback;
+
+    try {
+      const parsed = JSON.parse(configElement.textContent || '{}');
+      return {
+        basePercent: toFiniteNumber(parsed.basePercent, 0),
+        productTags: Array.isArray(parsed.productTags) ? parsed.productTags : [],
+        volumeRules: Array.isArray(parsed.volumeRules) ? parsed.volumeRules : [],
+        moneyFormat: parsed.moneyFormat || DEFAULT_MONEY_FORMAT,
+      };
+    } catch (error) {
+      console.warn('[bulk-order] Invalid pricing config JSON; falling back to base prices.', error);
+      return fallback;
+    }
+  }
+
+  function buildPricingContext(root) {
+    const config = readPricingConfig(root);
+    const activeRule = pickActiveVolumeRule(config.volumeRules, config.productTags);
+
+    return {
+      basePercent: toFiniteNumber(config.basePercent, 0),
+      tiers: Array.isArray(activeRule?.tiers) ? activeRule.tiers : [],
+      moneyFormat: config.moneyFormat || DEFAULT_MONEY_FORMAT,
+      activeRuleTag: String(activeRule?.tag || ''),
+    };
+  }
+
+  function computePreviewUnitPriceCents(originalPriceCents, pricingContext, projectedTotal) {
+    const basePercent = toFiniteNumber(pricingContext?.basePercent, 0);
+    const tiers = Array.isArray(pricingContext?.tiers) ? pricingContext.tiers : [];
+    const tierLookupQuantity = getTierQuantityForLookup(projectedTotal, tiers);
+    const volumePercent = findVolumePercentForQuantity(tiers, tierLookupQuantity);
+
+    const baseMultiplier = 1 - (basePercent / 100);
+    const volumeMultiplier = 1 - (volumePercent / 100);
+
+    return toFiniteNumber(originalPriceCents, 0) * baseMultiplier * volumeMultiplier;
+  }
+
+  function updateRowPrice(row, input, pricingContext) {
+    const priceElement = row?.querySelector('.price[data-original-price]');
+    if (!priceElement) return;
+
+    const originalPrice = toInt(priceElement.dataset.originalPrice);
+    if (originalPrice === null) return;
+
+    const addQuantity = Math.max(0, toInt(input?.value) || 0);
+    const currentCartQuantity = Math.max(0, toInt(input?.dataset?.cartQuantity) ?? toInt(row?.dataset?.cartQuantity) ?? 0);
+    const projectedTotal = currentCartQuantity + addQuantity;
+    const previewCents = computePreviewUnitPriceCents(originalPrice, pricingContext, projectedTotal);
+
+    priceElement.dataset.previewCents = String(Math.round(previewCents));
+    priceElement.dataset.projectedTotal = String(projectedTotal);
+    priceElement.textContent = formatMoney(previewCents, pricingContext?.moneyFormat);
+  }
+
+  function refreshAllPrices(root, pricingContext) {
+    if (!root) return;
+
+    const priceElements = Array.from(root.querySelectorAll('.price[data-original-price]'));
+    if (!priceElements.length) return;
+
+    markPricesPending(priceElements);
+    try {
+      root.querySelectorAll('.bulk-order-form__row').forEach((row) => {
+        const input = row.querySelector('.quantity__input');
+        if (!input) return;
+        updateRowPrice(row, input, pricingContext);
+      });
+    } finally {
+      markPricesReady(priceElements);
+    }
   }
 
   function resolveRules(input, row, cartQuantityOverride) {
@@ -319,7 +521,7 @@
     messageElement.classList.toggle('bulk-order-form__success-message--error', !!isError);
   }
 
-  function syncRowsFromCart(form, cartData) {
+  function syncRowsFromCart(root, form, cartData, pricingContext) {
     const totals = cartTotalsByVariant(cartData);
     form.querySelectorAll('.bulk-order-form__row').forEach((row) => {
       const variantId = String(row.dataset.variantId || '');
@@ -333,6 +535,8 @@
       setInputValue(input, 0);
       updateButtonState(input, row);
     });
+
+    refreshAllPrices(root, pricingContext);
   }
 
   async function fetchCartState(routes) {
@@ -347,7 +551,7 @@
     return cartResponse.json();
   }
 
-  async function submitBulkOrder(root, form) {
+  async function submitBulkOrder(root, form, pricingContext) {
     const submitButton = form.querySelector('button[type="submit"]');
     submitButton?.classList.add('loading');
     submitButton?.setAttribute('aria-disabled', 'true');
@@ -454,7 +658,7 @@
     const updatedCartData = window.BSCartUI?.refresh
       ? await window.BSCartUI.refresh()
       : await fetchCartState(routes);
-    syncRowsFromCart(form, updatedCartData);
+    syncRowsFromCart(root, form, updatedCartData, pricingContext);
 
     const cartDrawer = document.querySelector('cart-drawer');
     if (cartDrawer?.open && !cartDrawer.classList.contains('active')) {
@@ -469,6 +673,8 @@
     const form = root.querySelector('.bulk-order-form__form');
     if (!form) return;
 
+    const pricingContext = buildPricingContext(root);
+
     root.dataset.bulkOrderInitialized = 'true';
 
     form.querySelectorAll('.bulk-order-form__row').forEach((row) => {
@@ -480,6 +686,7 @@
       setInputValue(input, 0);
       clampInput(input, row, 'init');
     });
+    refreshAllPrices(root, pricingContext);
 
     form.addEventListener('click', (event) => {
       const button = event.target.closest('.quantity__button');
@@ -523,11 +730,12 @@
       const row = input.closest('.bulk-order-form__row');
       if (!row) return;
       clampInput(input, row, 'manual-change');
+      refreshAllPrices(root, pricingContext);
     });
 
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      form.__bulkOrderSubmitPromise = submitBulkOrder(root, form)
+      form.__bulkOrderSubmitPromise = submitBulkOrder(root, form, pricingContext)
         .catch((error) => {
           setFormMessage(form, error.message || 'Unable to update cart.', true);
         })
@@ -548,5 +756,13 @@
 
   window.BSBulkOrderForm = {
     initBulkOrderForm,
+    __testing: {
+      pickActiveVolumeRule,
+      getTierQuantityForLookup,
+      findVolumePercentForQuantity,
+      computePreviewUnitPriceCents,
+      formatMoney,
+      buildPricingContext,
+    },
   };
 })();

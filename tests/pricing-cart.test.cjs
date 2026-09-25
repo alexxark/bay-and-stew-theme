@@ -3092,6 +3092,7 @@ function createBulkOrderFormHarness(options = {}) {
   const {
     cartQuantity = 0,
     inputValue = 0,
+    originalPrice = 1000,
     min = 1,
     step = 1,
     ruleMax = null,
@@ -3105,59 +3106,115 @@ function createBulkOrderFormHarness(options = {}) {
     cartItems = [],
     variantId = 1000,
     mutationFailure = null,
+    basePercent = 0,
+    productTags = [],
+    volumeRules = [],
+    moneyFormat = '${{amount}}',
+    rows = null,
   } = options;
 
-  const initialAddableMax = rowMaxTotal === null ? null : Math.max(0, rowMaxTotal - cartQuantity);
-  const startsSoldOut = variantAvailable === false
-    || (inventoryManagement === 'shopify' && inventoryPolicy !== 'continue' && Number(inventoryQuantity) <= 0);
-  const startsMaxInCart = !startsSoldOut && initialAddableMax === 0;
+  const rowModels = Array.isArray(rows) && rows.length
+    ? rows.map((row, index) => ({
+      variantId: row.variantId ?? (variantId + index),
+      cartQuantity: row.cartQuantity ?? cartQuantity,
+      inputValue: row.inputValue ?? inputValue,
+      originalPrice: row.originalPrice ?? originalPrice,
+      min: row.min ?? min,
+      step: row.step ?? step,
+      ruleMax: Object.prototype.hasOwnProperty.call(row, 'ruleMax') ? row.ruleMax : ruleMax,
+      inventoryMax: Object.prototype.hasOwnProperty.call(row, 'inventoryMax') ? row.inventoryMax : inventoryMax,
+      rowMaxTotal: Object.prototype.hasOwnProperty.call(row, 'rowMaxTotal') ? row.rowMaxTotal : rowMaxTotal,
+      inventoryManagement: row.inventoryManagement || inventoryManagement,
+      inventoryPolicy: row.inventoryPolicy || inventoryPolicy,
+      inventoryQuantity: Object.prototype.hasOwnProperty.call(row, 'inventoryQuantity') ? row.inventoryQuantity : inventoryQuantity,
+      variantAvailable: Object.prototype.hasOwnProperty.call(row, 'variantAvailable') ? row.variantAvailable : variantAvailable,
+      pending: Object.prototype.hasOwnProperty.call(row, 'pending') ? row.pending : pending,
+    }))
+    : [{
+      variantId,
+      cartQuantity,
+      inputValue,
+      originalPrice,
+      min,
+      step,
+      ruleMax,
+      inventoryMax,
+      rowMaxTotal,
+      inventoryManagement,
+      inventoryPolicy,
+      inventoryQuantity,
+      variantAvailable,
+      pending,
+    }];
+
+  const rowMarkup = rowModels.map((model) => {
+    const initialAddableMax = model.rowMaxTotal === null ? null : Math.max(0, model.rowMaxTotal - model.cartQuantity);
+    const startsSoldOut = model.variantAvailable === false
+      || (model.inventoryManagement === 'shopify' && model.inventoryPolicy !== 'continue' && Number(model.inventoryQuantity) <= 0);
+    const startsMaxInCart = !startsSoldOut && initialAddableMax === 0;
+
+    return `
+      <tr class="bulk-order-form__row"
+        data-variant-id="${model.variantId}"
+        data-cart-quantity="${model.cartQuantity}"
+        data-variant-available="${model.variantAvailable}"
+        data-inventory-management="${model.inventoryManagement}"
+        data-inventory-policy="${model.inventoryPolicy}"
+        data-inventory-quantity="${model.inventoryQuantity}"
+        ${model.rowMaxTotal === null ? '' : `data-max-total="${model.rowMaxTotal}"`}>
+        <td class="bulk-order-form__cell-quantity">
+          <div class="bulk-order-form__quantity-shell">
+            <div class="bulk-order-form__quantity-control${startsMaxInCart || startsSoldOut ? ' hidden' : ''}" data-bulk-quantity-control>
+              <div class="quantity">
+                <button class="quantity__button" name="minus" type="button">-</button>
+                <input
+                  class="quantity__input"
+                  type="number"
+                  data-quantity-variant-id="${model.variantId}"
+                  value="${model.inputValue}"
+                  data-cart-quantity="${model.cartQuantity}"
+                  min="0"
+                  data-min="${model.min}"
+                  ${model.ruleMax === null ? '' : `data-quantity-rule-max="${model.ruleMax}"`}
+                  ${initialAddableMax === null ? '' : `max="${initialAddableMax}" data-max="${initialAddableMax}"`}
+                  ${model.inventoryMax === null ? '' : `data-inventory-max="${model.inventoryMax}"`}
+                  step="${model.step}"
+                  data-index="${model.variantId}"
+                  ${model.pending ? 'data-inventory-sync-pending="true"' : ''}
+                >
+                <button class="quantity__button" name="plus" type="button">+</button>
+              </div>
+            </div>
+            <p class="bulk-order-form__sold-out-note${startsSoldOut ? '' : ' hidden'}" data-bulk-sold-out-note>Sold out</p>
+            <p class="bulk-order-form__max-note${startsMaxInCart ? '' : ' hidden'}" data-bulk-max-note>Max in cart</p>
+            <p class="bulk-order-form__in-cart-note${startsSoldOut ? ' hidden' : ''}" data-bulk-in-cart-note><span data-bulk-cart-quantity>${model.cartQuantity}</span> in cart</p>
+          </div>
+        </td>
+        <td class="bulk-order-form__cell-price">
+          <span class="price" data-original-price="${model.originalPrice}" data-price-state="pending" data-price-align="end" data-price-surface="bulk-order-local-price">$0.00</span>
+        </td>
+      </tr>
+    `;
+  }).join('');
+
+  const pricingConfigJson = JSON.stringify({
+    basePercent,
+    productTags,
+    volumeRules,
+    moneyFormat,
+  }).replace(/</g, '\\u003c');
 
   const dom = new JSDOM(`
-    <div class="bulk-order-form" id="BulkOrderForm-test">
+    <div class="bulk-order-form" id="BulkOrderForm-test" data-pricing-config-id="BulkOrderForm-Config-test">
       <form class="bulk-order-form__form" novalidate="novalidate">
         <table class="bulk-order-form__table"><tbody>
-          <tr class="bulk-order-form__row"
-            data-variant-id="${variantId}"
-            data-cart-quantity="${cartQuantity}"
-            data-variant-available="${variantAvailable}"
-            data-inventory-management="${inventoryManagement}"
-            data-inventory-policy="${inventoryPolicy}"
-            data-inventory-quantity="${inventoryQuantity}"
-            ${rowMaxTotal === null ? '' : `data-max-total="${rowMaxTotal}"`}>
-            <td class="bulk-order-form__cell-quantity">
-              <div class="bulk-order-form__quantity-shell">
-                <div class="bulk-order-form__quantity-control${startsMaxInCart || startsSoldOut ? ' hidden' : ''}" data-bulk-quantity-control>
-                  <div class="quantity">
-                    <button class="quantity__button" name="minus" type="button">-</button>
-                    <input
-                      class="quantity__input"
-                      type="number"
-                      data-quantity-variant-id="${variantId}"
-                      value="${inputValue}"
-                      data-cart-quantity="${cartQuantity}"
-                      min="0"
-                      data-min="${min}"
-                      ${ruleMax === null ? '' : `data-quantity-rule-max="${ruleMax}"`}
-                      ${initialAddableMax === null ? '' : `max="${initialAddableMax}" data-max="${initialAddableMax}"`}
-                      ${inventoryMax === null ? '' : `data-inventory-max="${inventoryMax}"`}
-                      step="${step}"
-                      data-index="${variantId}"
-                      ${pending ? 'data-inventory-sync-pending="true"' : ''}
-                    >
-                    <button class="quantity__button" name="plus" type="button">+</button>
-                  </div>
-                </div>
-                <p class="bulk-order-form__sold-out-note${startsSoldOut ? '' : ' hidden'}" data-bulk-sold-out-note>Sold out</p>
-                <p class="bulk-order-form__max-note${startsMaxInCart ? '' : ' hidden'}" data-bulk-max-note>Max in cart</p>
-                <p class="bulk-order-form__in-cart-note${startsSoldOut ? ' hidden' : ''}" data-bulk-in-cart-note><span data-bulk-cart-quantity>${cartQuantity}</span> in cart</p>
-              </div>
-            </td>
-          </tr>
+          ${rowMarkup}
         </tbody></table>
         <button type="submit" name="add">Add Selected to Cart</button>
         <p class="bulk-order-form__success-message hidden" role="status"></p>
       </form>
     </div>
+    <script type="application/json" id="BulkOrderForm-Config-test">${pricingConfigJson}</script>
   `, { url: 'https://example.test/products/example', runScripts: 'outside-only' });
 
   const { window } = dom;
@@ -3264,6 +3321,10 @@ function createBulkOrderFormHarness(options = {}) {
   const plus = root.querySelector(".quantity__button[name='plus']");
   const minus = root.querySelector(".quantity__button[name='minus']");
 
+  const getRowByVariant = (targetVariantId) => root.querySelector(`.bulk-order-form__row[data-variant-id="${targetVariantId}"]`);
+  const getRowInput = (targetVariantId) => getRowByVariant(targetVariantId)?.querySelector('.quantity__input') || null;
+  const getRowPrice = (targetVariantId) => getRowByVariant(targetVariantId)?.querySelector('.price[data-original-price]') || null;
+
   const getMutationQuantities = () => requests
     .filter((request) => request.url.endsWith('/cart/change.js') || request.url.endsWith('/cart/update.js'))
     .flatMap((request) => {
@@ -3294,6 +3355,11 @@ function createBulkOrderFormHarness(options = {}) {
     getMutationQuantities,
     getMutationRequests,
     getCartAddRequests,
+    getRowByVariant,
+    getRowInput,
+    getRowPriceText: (targetVariantId) => getRowPrice(targetVariantId)?.textContent || '',
+    getRowPreviewCents: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.previewCents || 0),
+    getRowProjectedTotal: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.projectedTotal || 0),
     getInCartText: () => root.querySelector('[data-bulk-cart-quantity]')?.textContent,
     isMaxNoteVisible: () => !root.querySelector('[data-bulk-max-note]')?.classList.contains('hidden'),
     isSoldOutVisible: () => !root.querySelector('[data-bulk-sold-out-note]')?.classList.contains('hidden'),
@@ -3572,15 +3638,266 @@ test('real bulk-order-form debug mode uses localStorage bulkOrderDebug key', () 
   assert(bulkOrderScript.includes("console.info('[bulk-order-debug]'"));
 });
 
-test('custom bulk-order local pricing uses pending -> local calculate -> ready lifecycle', () => {
+function bulkVolumeRulesFixture() {
+  const snippet = source('snippets/bulk-order-volume-rules.liquid')
+    .replace(/\{%-\s*comment\s*-%\}[\s\S]*?\{%-\s*endcomment\s*-%\}/, '')
+    .trim();
+  return JSON.parse(snippet);
+}
+
+function expectedPreviewCents(helpers, originalPrice, basePercent, volumeRules, productTags, projectedTotal) {
+  const activeRule = helpers.pickActiveVolumeRule(volumeRules, productTags);
+  const pricingContext = {
+    basePercent,
+    tiers: activeRule?.tiers || [],
+  };
+  return Math.round(helpers.computePreviewUnitPriceCents(originalPrice, pricingContext, projectedTotal));
+}
+
+test('bulk-order pricing config is serialized in Liquid and owned by bulk-order-form runtime', () => {
   const mainProduct = source('sections/main-product.liquid');
+  const bulkOrderScript = source('assets/bulk-order-form.js');
 
   assert(mainProduct.includes('data-price-surface="bulk-order-local-price"'));
+  assert(mainProduct.includes('data-pricing-config-id="BulkOrderForm-Config-{{ section.id }}"'));
+  assert(mainProduct.includes('"basePercent": {{ _base_pct | json }}'));
+  assert(mainProduct.includes('"volumeRules": {{ _volume_rules_safe }}'));
+  assert(mainProduct.includes('"moneyFormat": {{ shop.money_format | json }}'));
   assert(mainProduct.includes('data-price-state="pending"'));
-  assert(mainProduct.includes('const markPricesPending = () =>'));
-  assert(mainProduct.includes('const markPricesReady = () =>'));
-  assert(mainProduct.includes('markPricesPending();'));
-  assert(mainProduct.includes('markPricesReady();'));
+  assert(!mainProduct.includes('const updateAllPrices = () =>'));
+  assert(bulkOrderScript.includes('function buildPricingContext(root)'));
+  assert(bulkOrderScript.includes('function refreshAllPrices(root, pricingContext)'));
+  assert(bulkOrderScript.includes('window.BSBulkOrderForm = {'));
+  assert(bulkOrderScript.includes('__testing: {'));
+});
+
+test('bulk-order wholesale pricing preview matches established rule calculation at tier checkpoints', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const basePercent = 12;
+  const originalPrice = 12345;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent,
+    cartItems: [],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+
+  [1, 5, 15, 25, 50].forEach((qty) => {
+    harness.input.value = String(qty);
+    harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+    const expected = expectedPreviewCents(helpers, originalPrice, basePercent, volumeRules, productTags, qty);
+    assert.equal(harness.getRowProjectedTotal(1000), qty);
+    assert.equal(harness.getRowPreviewCents(1000), expected);
+  });
+
+  harness.dom.window.close();
+});
+
+test('bulk-order retail pricing preview does not apply wholesale base adjustment', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const originalPrice = 12345;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent: 0,
+    cartItems: [],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+
+  const expectedAtZero = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 0);
+  assert.equal(harness.getRowProjectedTotal(1000), 0);
+  assert.equal(harness.getRowPreviewCents(1000), expectedAtZero);
+
+  [1, 5, 15, 25, 50].forEach((qty) => {
+    harness.input.value = String(qty);
+    harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+    const expected = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, qty);
+    assert.equal(harness.getRowPreviewCents(1000), expected);
+  });
+
+  harness.dom.window.close();
+});
+
+test('bulk-order pricing uses clamped stepped quantity when input is not on a valid increment', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const originalPrice = 10000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    min: 3,
+    step: 4,
+    rowMaxTotal: 19,
+    cartItems: [],
+  });
+
+  harness.input.value = '6';
+  harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  const expected = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 3);
+  assert.equal(harness.input.value, '3');
+  assert.equal(harness.getRowProjectedTotal(1000), 3);
+  assert.equal(harness.getRowPreviewCents(1000), expected);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order projected total uses current cart plus add amount and persists after submit reset', async () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const originalPrice = 10000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    cartQuantity: 5,
+    inputValue: 0,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent: 0,
+    cartItems: [{ variant_id: 1000, quantity: 5 }],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  const previewAtFive = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 5);
+  assert.equal(harness.getRowProjectedTotal(1000), 5);
+  assert.equal(harness.getRowPreviewCents(1000), previewAtFive);
+
+  harness.input.value = '10';
+  harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+  const previewAtFifteen = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 15);
+  assert.equal(harness.getRowProjectedTotal(1000), 15);
+  assert.equal(harness.getRowPreviewCents(1000), previewAtFifteen);
+
+  harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
+  await harness.form.__bulkOrderSubmitPromise;
+
+  assert.equal(harness.input.value, '0');
+  assert.equal(harness.getInCartText(), '15');
+  assert.equal(harness.getRowProjectedTotal(1000), 15);
+  assert.equal(harness.getRowPreviewCents(1000), previewAtFifteen);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order tier boundaries follow selected rule breakpoints with projected totals', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const originalPrice = 10000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent: 0,
+    cartItems: [],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  [4, 5, 14, 15, 24, 25, 49, 50].forEach((qty) => {
+    harness.input.value = String(qty);
+    harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+    const expected = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, qty);
+    assert.equal(harness.getRowProjectedTotal(1000), qty);
+    assert.equal(harness.getRowPreviewCents(1000), expected);
+  });
+
+  harness.dom.window.close();
+});
+
+test('bulk-order max-in-cart row still displays the established unit preview for current cart quantity', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const originalPrice = 10000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    cartQuantity: 19,
+    inputValue: 0,
+    rowMaxTotal: 19,
+    cartItems: [{ variant_id: 1000, quantity: 19 }],
+  });
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  const expected = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 19);
+
+  assert.equal(harness.isMaxNoteVisible(), true);
+  assert.equal(harness.isQuantityControlVisible(), false);
+  assert.equal(harness.getRowProjectedTotal(1000), 19);
+  assert.equal(harness.getRowPreviewCents(1000), expected);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order first-match tag precedence follows volume rule ordering', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 1', 'Tier 4 Chain'];
+  const originalPrice = 10000;
+  const harness = createBulkOrderFormHarness({
+    variantId: 1000,
+    originalPrice,
+    productTags,
+    volumeRules,
+    basePercent: 0,
+    cartItems: [],
+  });
+
+  harness.input.value = '50';
+  harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+  const helpers = harness.window.BSBulkOrderForm.__testing;
+  const expectedFromOrderedRule = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 50);
+  const expectedFromBayTier1 = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, ['Bay Tier 1'], 50);
+
+  assert.equal(harness.getRowPreviewCents(1000), expectedFromOrderedRule);
+  assert.notEqual(harness.getRowPreviewCents(1000), expectedFromBayTier1);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order variant rows use their own base prices under the same projected quantity tier', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    rows: [
+      { variantId: 1000, originalPrice: 10000, cartQuantity: 0, inputValue: 0 },
+      { variantId: 2000, originalPrice: 20000, cartQuantity: 0, inputValue: 0 },
+    ],
+    cartItems: [],
+  });
+
+  const firstInput = harness.getRowInput(1000);
+  const secondInput = harness.getRowInput(2000);
+  firstInput.value = '25';
+  secondInput.value = '25';
+  firstInput.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+  secondInput.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+  const firstCents = harness.getRowPreviewCents(1000);
+  const secondCents = harness.getRowPreviewCents(2000);
+
+  assert.equal(secondCents, firstCents * 2);
+  assert.equal(harness.getRowProjectedTotal(1000), 25);
+  assert.equal(harness.getRowProjectedTotal(2000), 25);
+
+  harness.dom.window.close();
 });
 
 function saveForLaterHarness(options = {}) {
