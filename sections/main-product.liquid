@@ -699,8 +699,8 @@
                         <span class="variant-sku">{{ variant.sku }}</span>
                       </div>
                     </td>
-                    <td data-label="Quantity" class="bulk-order-form__cell-quantity">
-                      <div class="bulk-order-form__quantity-shell">
+                    <td data-label="Quantity" class="bulk-order-form__cell-quantity{% if bulk_is_sold_out %} bulk-order-form__cell-quantity--sold-out{% endif %}">
+                      <div class="bulk-order-form__quantity-shell{% if bulk_is_sold_out %} bulk-order-form__quantity-shell--sold-out{% endif %}">
                         <div class="bulk-order-form__quantity-control{% if bulk_is_max_in_cart or bulk_is_sold_out %} hidden{% endif %}" data-bulk-quantity-control>
                           <div class="quantity">
                             <button class="quantity__button" name="minus" type="button">
@@ -779,6 +779,18 @@
         .bulk-order-form__cell-variant .variant-sku { font-size: 1.2rem; color: rgba(var(--color-foreground), 0.6); }
         .bulk-order-form__cell-quantity, .bulk-order-form__cell-price { text-align: right; }
         .bulk-order-form__quantity-shell { display: inline-flex; flex-direction: column; align-items: flex-end; gap: 0.4rem; }
+        .bulk-order-form__cell-quantity--sold-out .bulk-order-form__quantity-shell {
+          display: flex;
+          width: 100%;
+          min-height: 4.5rem;
+          align-items: center;
+          justify-content: center;
+          gap: 0;
+        }
+        .bulk-order-form__cell-quantity--sold-out .bulk-order-form__sold-out-note {
+          width: 100%;
+          text-align: center;
+        }
         .bulk-order-form__cell-quantity .quantity { display: inline-flex; align-items: center; width: 13.2rem; max-width: 100%; border: 1px solid rgba(var(--color-foreground), 0.2); border-radius: var(--buttons-radius); position: relative; z-index: 0; }
         .bulk-order-form__cell-quantity .quantity__button { width: 3.8rem; padding: 0; }
         .bulk-order-form__cell-quantity .quantity__button .icon { width: 1rem; height: 1rem; }

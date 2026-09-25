@@ -179,9 +179,17 @@
     }
 
     const maxInCart = !soldOut && rules.max !== null && rules.max <= 0;
+    const quantityCell = row.querySelector('.bulk-order-form__cell-quantity');
+    const quantityShell = row.querySelector('.bulk-order-form__quantity-shell');
     const quantityControl = row.querySelector('[data-bulk-quantity-control]');
     const maxNote = row.querySelector('[data-bulk-max-note]');
     const soldOutNote = row.querySelector('[data-bulk-sold-out-note]');
+    if (quantityCell) {
+      quantityCell.classList.toggle('bulk-order-form__cell-quantity--sold-out', soldOut);
+    }
+    if (quantityShell) {
+      quantityShell.classList.toggle('bulk-order-form__quantity-shell--sold-out', soldOut);
+    }
     if (quantityControl) {
       quantityControl.classList.toggle('hidden', soldOut || maxInCart);
     }
