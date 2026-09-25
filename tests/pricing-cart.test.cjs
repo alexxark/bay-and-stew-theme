@@ -3396,6 +3396,8 @@ function createBulkOrderFormHarness(options = {}) {
     getRowPriceHtml: (targetVariantId) => getRowPrice(targetVariantId)?.innerHTML || '',
     getRowPreviewCents: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.previewCents || 0),
     getRowProjectedTotal: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.projectedTotal || 0),
+    getRowAggregateCurrentCartQuantity: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.aggregateCurrentCartQuantity || 0),
+    getRowAggregatePendingAddQuantity: (targetVariantId) => Number(getRowPrice(targetVariantId)?.dataset.aggregatePendingAddQuantity || 0),
     getInCartText: () => root.querySelector('[data-bulk-cart-quantity]')?.textContent,
     isMaxNoteVisible: () => !root.querySelector('[data-bulk-max-note]')?.classList.contains('hidden'),
     isSoldOutVisible: () => !root.querySelector('[data-bulk-sold-out-note]')?.classList.contains('hidden'),
@@ -3842,12 +3844,16 @@ test('bulk-order projected total uses current cart plus add amount and persists 
 
   const helpers = harness.window.BSBulkOrderForm.__testing;
   const previewAtFive = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 5);
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 5);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 0);
   assert.equal(harness.getRowProjectedTotal(1000), 5);
   assert.equal(harness.getRowPreviewCents(1000), previewAtFive);
 
   harness.input.value = '10';
   harness.input.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
   const previewAtFifteen = expectedPreviewCents(helpers, originalPrice, 0, volumeRules, productTags, 15);
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 5);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 10);
   assert.equal(harness.getRowProjectedTotal(1000), 15);
   assert.equal(harness.getRowPreviewCents(1000), previewAtFifteen);
 
@@ -3856,6 +3862,8 @@ test('bulk-order projected total uses current cart plus add amount and persists 
 
   assert.equal(harness.input.value, '0');
   assert.equal(harness.getInCartText(), '15');
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 15);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 0);
   assert.equal(harness.getRowProjectedTotal(1000), 15);
   assert.equal(harness.getRowPreviewCents(1000), previewAtFifteen);
 
@@ -4012,10 +4020,267 @@ test('bulk-order variant rows use their own base prices under the same projected
   const secondCents = harness.getRowPreviewCents(2000);
 
   assert.equal(secondCents, firstCents * 2);
-  assert.equal(harness.getRowProjectedTotal(1000), 25);
-  assert.equal(harness.getRowProjectedTotal(2000), 25);
+  assert.equal(harness.getRowProjectedTotal(1000), 50);
+  assert.equal(harness.getRowProjectedTotal(2000), 50);
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 0);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 50);
 
   harness.dom.window.close();
+});
+
+test('bulk-order live fixture uses aggregate cart quantity across variants for tier selection (19 + 19 => 38)', () => {
+  const productTags = ['Observed Tier'];
+  const volumeRules = [{
+    tag: 'Observed Tier',
+    tiers: [
+      { from: 1, to: 4, percent: 0 },
+      { from: 5, to: 14, percent: 5 },
+      { from: 15, to: 24, percent: 7 },
+      { from: 25, to: 49, percent: 8.55 },
+      { from: 50, to: null, percent: 10.25 },
+    ],
+  }];
+
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 2,
+    rows: [
+      { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 19 },
+      { variantId: 2000, originalPrice: 827, cartQuantity: 19, inputValue: 0, rowMaxTotal: 19 },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 19 },
+    ],
+  });
+
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 38);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 0);
+  assert.equal(harness.getRowProjectedTotal(1000), 38);
+  assert.equal(harness.getRowProjectedTotal(2000), 38);
+  assert.equal(harness.getRowPreviewCents(1000), 859);
+  assert.equal(harness.getRowPreviewCents(2000), 741);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order cross-variant pending adds move all rows to the shared aggregate tier immediately', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    rows: [
+      { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 80 },
+      { variantId: 2000, originalPrice: 827, cartQuantity: 19, inputValue: 0, rowMaxTotal: 80 },
+      { variantId: 3000, originalPrice: 650, cartQuantity: 0, inputValue: 0, rowMaxTotal: 80 },
+      { variantId: 4000, originalPrice: 500, cartQuantity: 0, inputValue: 0, rowMaxTotal: 80 },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 19 },
+    ],
+  });
+
+  const beforeCents = {
+    jan: harness.getRowPreviewCents(1000),
+    feb: harness.getRowPreviewCents(2000),
+    mar: harness.getRowPreviewCents(3000),
+    apr: harness.getRowPreviewCents(4000),
+  };
+  assert.equal(harness.getRowProjectedTotal(1000), 38);
+
+  const marchInput = harness.getRowInput(3000);
+  marchInput.value = '12';
+  marchInput.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 38);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 12);
+  assert.equal(harness.getRowProjectedTotal(1000), 50);
+  assert.equal(harness.getRowProjectedTotal(2000), 50);
+  assert.equal(harness.getRowProjectedTotal(3000), 50);
+  assert.equal(harness.getRowProjectedTotal(4000), 50);
+
+  const afterCents = {
+    jan: harness.getRowPreviewCents(1000),
+    feb: harness.getRowPreviewCents(2000),
+    mar: harness.getRowPreviewCents(3000),
+    apr: harness.getRowPreviewCents(4000),
+  };
+
+  assert(afterCents.jan < beforeCents.jan);
+  assert(afterCents.feb < beforeCents.feb);
+  assert(afterCents.mar < beforeCents.mar);
+  assert(afterCents.apr < beforeCents.apr);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order aggregate projected tier persists after submit when add inputs reset to zero', async () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    rows: [
+      { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 2000, originalPrice: 827, cartQuantity: 19, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 3000, originalPrice: 650, cartQuantity: 0, inputValue: 0, rowMaxTotal: 120 },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 19 },
+    ],
+  });
+
+  const marchInput = harness.getRowInput(3000);
+  marchInput.value = '12';
+  marchInput.dispatchEvent(new harness.window.Event('change', { bubbles: true }));
+
+  const beforeSubmit = {
+    jan: harness.getRowPreviewCents(1000),
+    feb: harness.getRowPreviewCents(2000),
+    mar: harness.getRowPreviewCents(3000),
+  };
+  assert.equal(harness.getRowProjectedTotal(1000), 50);
+
+  harness.form.dispatchEvent(new harness.window.Event('submit', { bubbles: true, cancelable: true }));
+  await harness.form.__bulkOrderSubmitPromise;
+
+  assert.equal(harness.getRowInput(1000).value, '0');
+  assert.equal(harness.getRowInput(2000).value, '0');
+  assert.equal(harness.getRowInput(3000).value, '0');
+
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(1000), 50);
+  assert.equal(harness.getRowAggregatePendingAddQuantity(1000), 0);
+  assert.equal(harness.getRowProjectedTotal(1000), 50);
+
+  const afterSubmit = {
+    jan: harness.getRowPreviewCents(1000),
+    feb: harness.getRowPreviewCents(2000),
+    mar: harness.getRowPreviewCents(3000),
+  };
+  assert.deepEqual(afterSubmit, beforeSubmit);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order sold-out rows with existing cart quantity still contribute to aggregate tier quantity', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    rows: [
+      {
+        variantId: 1000,
+        originalPrice: 958,
+        cartQuantity: 19,
+        inputValue: 0,
+        rowMaxTotal: 19,
+        variantAvailable: false,
+        inventoryQuantity: 0,
+      },
+      {
+        variantId: 2000,
+        originalPrice: 827,
+        cartQuantity: 19,
+        inputValue: 0,
+        rowMaxTotal: 80,
+      },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 19 },
+    ],
+  });
+
+  assert.equal(harness.getRowAggregateCurrentCartQuantity(2000), 38);
+  assert.equal(harness.getRowProjectedTotal(2000), 38);
+
+  harness.dom.window.close();
+});
+
+test('bulk-order aggregate quantity tier selection is identical for retail and wholesale customers', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const sharedRows = [
+    { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 80 },
+    { variantId: 2000, originalPrice: 827, cartQuantity: 19, inputValue: 0, rowMaxTotal: 80 },
+  ];
+  const sharedCart = [
+    { variant_id: 1000, quantity: 19 },
+    { variant_id: 2000, quantity: 19 },
+  ];
+
+  const retailHarness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 0,
+    rows: sharedRows,
+    cartItems: sharedCart,
+  });
+
+  const wholesaleHarness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 2,
+    rows: sharedRows,
+    cartItems: sharedCart,
+  });
+
+  assert.equal(retailHarness.getRowProjectedTotal(1000), 38);
+  assert.equal(wholesaleHarness.getRowProjectedTotal(1000), 38);
+  assert(retailHarness.getRowPreviewCents(1000) > wholesaleHarness.getRowPreviewCents(1000));
+  assert(retailHarness.getRowPreviewCents(2000) > wholesaleHarness.getRowPreviewCents(2000));
+
+  retailHarness.dom.window.close();
+  wholesaleHarness.dom.window.close();
+});
+
+test('bulk-order aggregate tier boundaries follow selected rule when quantities are split across variants', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const helpersHarness = createBulkOrderFormHarness({ volumeRules, productTags, cartItems: [] });
+  const helpers = helpersHarness.window.BSBulkOrderForm.__testing;
+  helpersHarness.dom.window.close();
+
+  const cases = [
+    { jan: 2, feb: 2, aggregate: 4 },
+    { jan: 2, feb: 3, aggregate: 5 },
+    { jan: 7, feb: 7, aggregate: 14 },
+    { jan: 7, feb: 8, aggregate: 15 },
+    { jan: 12, feb: 12, aggregate: 24 },
+    { jan: 12, feb: 13, aggregate: 25 },
+    { jan: 24, feb: 25, aggregate: 49 },
+    { jan: 25, feb: 25, aggregate: 50 },
+  ];
+
+  cases.forEach((entry) => {
+    const harness = createBulkOrderFormHarness({
+      volumeRules,
+      productTags,
+      rows: [
+        { variantId: 1000, originalPrice: 10000, cartQuantity: entry.jan, inputValue: 0, rowMaxTotal: 120 },
+        { variantId: 2000, originalPrice: 8000, cartQuantity: entry.feb, inputValue: 0, rowMaxTotal: 120 },
+      ],
+      cartItems: [
+        { variant_id: 1000, quantity: entry.jan },
+        { variant_id: 2000, quantity: entry.feb },
+      ],
+    });
+
+    const expectedJan = expectedPreviewCents(helpers, 10000, 0, volumeRules, productTags, entry.aggregate);
+    const expectedFeb = expectedPreviewCents(helpers, 8000, 0, volumeRules, productTags, entry.aggregate);
+
+    assert.equal(harness.getRowProjectedTotal(1000), entry.aggregate);
+    assert.equal(harness.getRowProjectedTotal(2000), entry.aggregate);
+    assert.equal(harness.getRowPreviewCents(1000), expectedJan);
+    assert.equal(harness.getRowPreviewCents(2000), expectedFeb);
+
+    harness.dom.window.close();
+  });
 });
 
 function saveForLaterHarness(options = {}) {

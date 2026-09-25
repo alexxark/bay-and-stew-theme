@@ -248,20 +248,54 @@
     return toFiniteNumber(originalPriceCents, 0) * baseMultiplier * volumeMultiplier;
   }
 
-  function updateRowPrice(row, input, pricingContext) {
+  function getAllRowInputs(root) {
+    if (!root) return [];
+    return Array.from(root.querySelectorAll('.bulk-order-form__row .quantity__input'));
+  }
+
+  function getAggregateCurrentCartQuantity(root) {
+    return getAllRowInputs(root).reduce((total, input) => {
+      const row = input.closest('.bulk-order-form__row');
+      const currentCartQuantity = Math.max(0, toInt(input?.dataset?.cartQuantity) ?? toInt(row?.dataset?.cartQuantity) ?? 0);
+      return total + currentCartQuantity;
+    }, 0);
+  }
+
+  function getAggregatePendingAddQuantity(root) {
+    return getAllRowInputs(root).reduce((total, input) => {
+      const pendingAddQuantity = Math.max(0, toInt(input?.value) || 0);
+      return total + pendingAddQuantity;
+    }, 0);
+  }
+
+  function getAggregateProjectedQuantity(root) {
+    const aggregateCurrentCartQuantity = getAggregateCurrentCartQuantity(root);
+    const aggregatePendingAddQuantity = getAggregatePendingAddQuantity(root);
+
+    return {
+      aggregateCurrentCartQuantity,
+      aggregatePendingAddQuantity,
+      aggregateProjectedQuantity: aggregateCurrentCartQuantity + aggregatePendingAddQuantity,
+    };
+  }
+
+  function updateRowPrice(row, input, pricingContext, aggregatePricingState) {
     const priceElement = row?.querySelector('.price[data-original-price]');
     if (!priceElement) return;
 
     const originalPrice = toInt(priceElement.dataset.originalPrice);
     if (originalPrice === null) return;
 
-    const addQuantity = Math.max(0, toInt(input?.value) || 0);
-    const currentCartQuantity = Math.max(0, toInt(input?.dataset?.cartQuantity) ?? toInt(row?.dataset?.cartQuantity) ?? 0);
-    const projectedTotal = currentCartQuantity + addQuantity;
-    const previewCents = computePreviewUnitPriceCents(originalPrice, pricingContext, projectedTotal);
+    const aggregateCurrentCartQuantity = Math.max(0, toInt(aggregatePricingState?.aggregateCurrentCartQuantity) || 0);
+    const aggregatePendingAddQuantity = Math.max(0, toInt(aggregatePricingState?.aggregatePendingAddQuantity) || 0);
+    const aggregateProjectedQuantity = Math.max(0, toInt(aggregatePricingState?.aggregateProjectedQuantity) || 0);
+
+    const previewCents = computePreviewUnitPriceCents(originalPrice, pricingContext, aggregateProjectedQuantity);
 
     priceElement.dataset.previewCents = String(Math.round(previewCents));
-    priceElement.dataset.projectedTotal = String(projectedTotal);
+    priceElement.dataset.aggregateCurrentCartQuantity = String(aggregateCurrentCartQuantity);
+    priceElement.dataset.aggregatePendingAddQuantity = String(aggregatePendingAddQuantity);
+    priceElement.dataset.projectedTotal = String(aggregateProjectedQuantity);
 
     const formattedMoney = formatMoney(previewCents, pricingContext?.moneyFormat);
     setPriceContent(priceElement, formattedMoney);
@@ -273,12 +307,14 @@
     const priceElements = Array.from(root.querySelectorAll('.price[data-original-price]'));
     if (!priceElements.length) return;
 
+    const aggregatePricingState = getAggregateProjectedQuantity(root);
+
     markPricesPending(priceElements);
     try {
       root.querySelectorAll('.bulk-order-form__row').forEach((row) => {
         const input = row.querySelector('.quantity__input');
         if (!input) return;
-        updateRowPrice(row, input, pricingContext);
+        updateRowPrice(row, input, pricingContext, aggregatePricingState);
       });
     } finally {
       markPricesReady(priceElements);
@@ -807,6 +843,9 @@
       computePreviewUnitPriceCents,
       formatMoney,
       setPriceContent,
+      getAggregateCurrentCartQuantity,
+      getAggregatePendingAddQuantity,
+      getAggregateProjectedQuantity,
       buildPricingContext,
     },
   };
