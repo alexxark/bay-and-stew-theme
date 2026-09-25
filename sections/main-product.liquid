@@ -828,19 +828,39 @@
         assign _disc_pct = block.settings.discount_eligible_percent | default: 0
         assign _rtw_pct = block.settings.ready_to_wear_percent | default: 0
 
+        assign _normalized_b2b_tag = _b2b_tag | downcase | strip
+        assign _normalized_disc_tag = _disc_tag | downcase | strip
+        assign _normalized_rtw_handle = _rtw_handle | downcase | strip
+
         assign _is_b2b = false
-        if customer and customer.tags contains _b2b_tag
-          assign _is_b2b = true
+        if customer
+          if customer.current_location
+            assign _is_b2b = true
+          endif
+          unless _is_b2b
+            for _tag in customer.tags
+              assign _tag_normalized = _tag | downcase | strip
+              if _tag_normalized == _normalized_b2b_tag or _tag_normalized contains 'wholesale'
+                assign _is_b2b = true
+                break
+              endif
+            endfor
+          endunless
         endif
 
         assign _has_disc_tag = false
-        if product.tags contains _disc_tag
-          assign _has_disc_tag = true
-        endif
+        for _product_tag in product.tags
+          assign _product_tag_normalized = _product_tag | downcase | strip
+          if _product_tag_normalized == _normalized_disc_tag
+            assign _has_disc_tag = true
+            break
+          endif
+        endfor
 
         assign _is_rtw = false
         for _c in product.collections
-          if _c.handle == _rtw_handle
+          assign _collection_handle_normalized = _c.handle | downcase | strip
+          if _collection_handle_normalized == _normalized_rtw_handle
             assign _is_rtw = true
             break
           endif
@@ -862,6 +882,9 @@
       <script type="application/json" id="BulkOrderForm-Config-{{ section.id }}">
         {
           "basePercent": {{ _base_pct | json }},
+          "customerWholesaleDetected": {{ _is_b2b | json }},
+          "discountEligibleMatched": {{ _has_disc_tag | json }},
+          "readyToWearMatched": {{ _is_rtw | json }},
           "productTags": {{ product.tags | json }},
           "volumeRules": {{ _volume_rules_safe }},
           "moneyFormat": {{ shop.money_format | json }}

@@ -193,6 +193,9 @@
       productTags: [],
       volumeRules: [],
       moneyFormat: DEFAULT_MONEY_FORMAT,
+      customerWholesaleDetected: false,
+      discountEligibleMatched: false,
+      readyToWearMatched: false,
     };
 
     if (!root) return fallback;
@@ -217,6 +220,9 @@
         productTags: Array.isArray(parsed.productTags) ? parsed.productTags : [],
         volumeRules: Array.isArray(parsed.volumeRules) ? parsed.volumeRules : [],
         moneyFormat: parsed.moneyFormat || DEFAULT_MONEY_FORMAT,
+        customerWholesaleDetected: Boolean(parsed.customerWholesaleDetected),
+        discountEligibleMatched: Boolean(parsed.discountEligibleMatched),
+        readyToWearMatched: Boolean(parsed.readyToWearMatched),
       };
     } catch (error) {
       console.warn('[bulk-order] Invalid pricing config JSON; falling back to base prices.', error);
@@ -233,10 +239,13 @@
       tiers: Array.isArray(activeRule?.tiers) ? activeRule.tiers : [],
       moneyFormat: config.moneyFormat || DEFAULT_MONEY_FORMAT,
       activeRuleTag: String(activeRule?.tag || ''),
+      customerWholesaleDetected: Boolean(config.customerWholesaleDetected),
+      discountEligibleMatched: Boolean(config.discountEligibleMatched),
+      readyToWearMatched: Boolean(config.readyToWearMatched),
     };
   }
 
-  function computePreviewUnitPriceCents(originalPriceCents, pricingContext, projectedTotal) {
+  function getPricingBreakdown(pricingContext, projectedTotal) {
     const basePercent = toFiniteNumber(pricingContext?.basePercent, 0);
     const tiers = Array.isArray(pricingContext?.tiers) ? pricingContext.tiers : [];
     const tierLookupQuantity = getTierQuantityForLookup(projectedTotal, tiers);
@@ -244,6 +253,19 @@
 
     const baseMultiplier = 1 - (basePercent / 100);
     const volumeMultiplier = 1 - (volumePercent / 100);
+
+    return {
+      basePercent,
+      volumePercent,
+      tierLookupQuantity,
+      baseMultiplier,
+      volumeMultiplier,
+    };
+  }
+
+  function computePreviewUnitPriceCents(originalPriceCents, pricingContext, projectedTotal) {
+    const breakdown = getPricingBreakdown(pricingContext, projectedTotal);
+    const { baseMultiplier, volumeMultiplier } = breakdown;
 
     return toFiniteNumber(originalPriceCents, 0) * baseMultiplier * volumeMultiplier;
   }
@@ -290,7 +312,8 @@
     const aggregatePendingAddQuantity = Math.max(0, toInt(aggregatePricingState?.aggregatePendingAddQuantity) || 0);
     const aggregateProjectedQuantity = Math.max(0, toInt(aggregatePricingState?.aggregateProjectedQuantity) || 0);
 
-    const previewCents = computePreviewUnitPriceCents(originalPrice, pricingContext, aggregateProjectedQuantity);
+    const breakdown = getPricingBreakdown(pricingContext, aggregateProjectedQuantity);
+    const previewCents = toFiniteNumber(originalPrice, 0) * breakdown.baseMultiplier * breakdown.volumeMultiplier;
 
     priceElement.dataset.previewCents = String(Math.round(previewCents));
     priceElement.dataset.aggregateCurrentCartQuantity = String(aggregateCurrentCartQuantity);
@@ -299,6 +322,20 @@
 
     const formattedMoney = formatMoney(previewCents, pricingContext?.moneyFormat);
     setPriceContent(priceElement, formattedMoney);
+
+    debugLog('pricing', {
+      customerWholesaleDetected: Boolean(pricingContext?.customerWholesaleDetected),
+      discountEligibleMatched: Boolean(pricingContext?.discountEligibleMatched),
+      readyToWearMatched: Boolean(pricingContext?.readyToWearMatched),
+      basePercent: breakdown.basePercent,
+      volumePercent: breakdown.volumePercent,
+      aggregateCurrentCartQuantity,
+      aggregatePendingAddQuantity,
+      aggregateProjectedQuantity,
+      variantId: row?.dataset?.variantId || input?.dataset?.quantityVariantId || '',
+      originalPriceCents: originalPrice,
+      calculatedPriceCents: Math.round(previewCents),
+    });
   }
 
   function refreshAllPrices(root, pricingContext) {

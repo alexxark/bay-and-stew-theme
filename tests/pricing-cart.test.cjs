@@ -3107,6 +3107,9 @@ function createBulkOrderFormHarness(options = {}) {
     variantId = 1000,
     mutationFailure = null,
     basePercent = 0,
+    customerWholesaleDetected = false,
+    discountEligibleMatched = false,
+    readyToWearMatched = false,
     productTags = [],
     volumeRules = [],
     moneyFormat = '${{amount}}',
@@ -3199,6 +3202,9 @@ function createBulkOrderFormHarness(options = {}) {
 
   const pricingConfigJson = JSON.stringify({
     basePercent,
+    customerWholesaleDetected,
+    discountEligibleMatched,
+    readyToWearMatched,
     productTags,
     volumeRules,
     moneyFormat,
@@ -3699,12 +3705,16 @@ test('bulk-order pricing config is serialized in Liquid and owned by bulk-order-
   assert(mainProduct.includes('data-price-surface="bulk-order-local-price"'));
   assert(mainProduct.includes('data-pricing-config-id="BulkOrderForm-Config-{{ section.id }}"'));
   assert(mainProduct.includes('"basePercent": {{ _base_pct | json }}'));
+  assert(mainProduct.includes('"customerWholesaleDetected": {{ _is_b2b | json }}'));
+  assert(mainProduct.includes('"discountEligibleMatched": {{ _has_disc_tag | json }}'));
+  assert(mainProduct.includes('"readyToWearMatched": {{ _is_rtw | json }}'));
   assert(mainProduct.includes('"volumeRules": {{ _volume_rules_safe }}'));
   assert(mainProduct.includes('"moneyFormat": {{ shop.money_format | json }}'));
   assert(mainProduct.includes('data-price-state="pending"'));
   assert(!mainProduct.includes('const updateAllPrices = () =>'));
   assert(bulkOrderScript.includes('function buildPricingContext(root)'));
   assert(bulkOrderScript.includes('function refreshAllPrices(root, pricingContext)'));
+  assert(bulkOrderScript.includes("debugLog('pricing'"));
   assert(bulkOrderScript.includes('window.BSBulkOrderForm = {'));
   assert(bulkOrderScript.includes('__testing: {'));
 });
@@ -4237,6 +4247,122 @@ test('bulk-order aggregate quantity tier selection is identical for retail and w
 
   retailHarness.dom.window.close();
   wholesaleHarness.dom.window.close();
+});
+
+test('bulk-order wholesale live fixture at aggregate 53 applies 2% base and 10% volume discounts', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 2,
+    customerWholesaleDetected: true,
+    discountEligibleMatched: true,
+    rows: [
+      { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 2000, originalPrice: 827, cartQuantity: 21, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 3000, originalPrice: 692, cartQuantity: 13, inputValue: 0, rowMaxTotal: 120 },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 21 },
+      { variant_id: 3000, quantity: 13 },
+    ],
+  });
+
+  assert.equal(harness.getRowProjectedTotal(1000), 53);
+  assert.equal(harness.getRowProjectedTotal(2000), 53);
+  assert.equal(harness.getRowProjectedTotal(3000), 53);
+
+  assert.equal(harness.getRowPreviewCents(1000), 845);
+  assert.equal(harness.getRowPreviewCents(2000), 729);
+  assert.equal(harness.getRowPreviewCents(3000), 610);
+
+  assert.equal(harness.getRowPriceText(1000).trim(), '$8.45');
+  assert.equal(harness.getRowPriceText(2000).trim(), '$7.29');
+  assert.equal(harness.getRowPriceText(3000).trim(), '$6.10');
+
+  harness.dom.window.close();
+});
+
+test('bulk-order retail control at aggregate 53 remains volume-only pricing', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+
+  const harness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 0,
+    customerWholesaleDetected: false,
+    rows: [
+      { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 2000, originalPrice: 827, cartQuantity: 21, inputValue: 0, rowMaxTotal: 120 },
+      { variantId: 3000, originalPrice: 692, cartQuantity: 13, inputValue: 0, rowMaxTotal: 120 },
+    ],
+    cartItems: [
+      { variant_id: 1000, quantity: 19 },
+      { variant_id: 2000, quantity: 21 },
+      { variant_id: 3000, quantity: 13 },
+    ],
+  });
+
+  assert.equal(harness.getRowPreviewCents(1000), 862);
+  assert.equal(harness.getRowPreviewCents(2000), 744);
+  assert.equal(harness.getRowPreviewCents(3000), 623);
+
+  assert.equal(harness.getRowPriceText(1000).trim(), '$8.62');
+  assert.equal(harness.getRowPriceText(2000).trim(), '$7.44');
+  assert.equal(harness.getRowPriceText(3000).trim(), '$6.23');
+
+  harness.dom.window.close();
+});
+
+test('bulk-order wholesale and retail previews diverge by wholesale base factor at aggregate 53', () => {
+  const volumeRules = bulkVolumeRulesFixture();
+  const productTags = ['Bay Tier 2'];
+  const sharedRows = [
+    { variantId: 1000, originalPrice: 958, cartQuantity: 19, inputValue: 0, rowMaxTotal: 120 },
+    { variantId: 2000, originalPrice: 827, cartQuantity: 21, inputValue: 0, rowMaxTotal: 120 },
+    { variantId: 3000, originalPrice: 692, cartQuantity: 13, inputValue: 0, rowMaxTotal: 120 },
+  ];
+  const sharedCart = [
+    { variant_id: 1000, quantity: 19 },
+    { variant_id: 2000, quantity: 21 },
+    { variant_id: 3000, quantity: 13 },
+  ];
+
+  const wholesaleHarness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 2,
+    customerWholesaleDetected: true,
+    discountEligibleMatched: true,
+    rows: sharedRows,
+    cartItems: sharedCart,
+  });
+  const retailHarness = createBulkOrderFormHarness({
+    volumeRules,
+    productTags,
+    basePercent: 0,
+    customerWholesaleDetected: false,
+    rows: sharedRows,
+    cartItems: sharedCart,
+  });
+
+  assert.equal(wholesaleHarness.getRowProjectedTotal(1000), 53);
+  assert.equal(retailHarness.getRowProjectedTotal(1000), 53);
+
+  assert.equal(wholesaleHarness.getRowPreviewCents(1000), 845);
+  assert.equal(wholesaleHarness.getRowPreviewCents(2000), 729);
+  assert.equal(wholesaleHarness.getRowPreviewCents(3000), 610);
+
+  assert.equal(retailHarness.getRowPreviewCents(1000), 862);
+  assert.equal(retailHarness.getRowPreviewCents(2000), 744);
+  assert.equal(retailHarness.getRowPreviewCents(3000), 623);
+
+  wholesaleHarness.dom.window.close();
+  retailHarness.dom.window.close();
 });
 
 test('bulk-order aggregate tier boundaries follow selected rule when quantities are split across variants', () => {
