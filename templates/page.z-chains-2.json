@@ -75,7 +75,7 @@
         "collection_hMzy7r",
         "collection_fraYa4"
       ],
-      "name": "Collection link grid",
+      "name": "Navigation Grid",
       "settings": {
         "heading": "Shop Chains",
         "show_heading": false,
@@ -96,7 +96,7 @@
     },
     "navigation_grid_eUmmq7": {
       "type": "navigation-grid",
-      "name": "Collection link grid",
+      "name": "Navigation Grid",
       "settings": {
         "heading": "Shop by collection",
         "show_heading": false,
