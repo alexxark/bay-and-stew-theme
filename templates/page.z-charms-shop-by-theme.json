@@ -30,7 +30,7 @@
       }
     },
     "collection_link_grid_RGMcCT": {
-      "type": "collection-link-grid",
+      "type": "navigation-grid",
       "blocks": {
         "collection_TjrQQR": {
           "type": "collection",

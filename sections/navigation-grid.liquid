@@ -43,7 +43,7 @@
 
 {%- if should_render_section -%}
   {%- style -%}
-    #shopify-section-{{ section.id }} .collection-link-grid {
+    #shopify-section-{{ section.id }} .navigation-grid {
       --clg-section-bg: {{ section.settings.section_background_color }};
       --clg-card-bg: {{ section.settings.rectangle_background_color }};
       --clg-card-text: {{ section.settings.rectangle_text_color }};
@@ -69,27 +69,27 @@
       overflow: hidden;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__content {
+    #shopify-section-{{ section.id }} .navigation-grid__content {
       max-width: min(100%, var(--clg-content-max));
       margin: 0 auto;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__heading {
+    #shopify-section-{{ section.id }} .navigation-grid__heading {
       margin: 0 0 0.8rem;
       text-align: {{ section.settings.heading_alignment }};
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__description {
+    #shopify-section-{{ section.id }} .navigation-grid__description {
       margin: 0 0 1.8rem;
       color: rgba(var(--color-foreground), 0.75);
       text-align: {{ section.settings.heading_alignment }};
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__description > * {
+    #shopify-section-{{ section.id }} .navigation-grid__description > * {
       margin: 0;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__list {
+    #shopify-section-{{ section.id }} .navigation-grid__list {
       list-style: none;
       margin: 0;
       padding: 0;
@@ -100,14 +100,14 @@
       gap: var(--clg-mobile-gap);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__block {
+    #shopify-section-{{ section.id }} .navigation-grid__block {
       flex: 0 1 calc((100% - (var(--clg-mobile-columns) - 1) * var(--clg-mobile-gap)) / var(--clg-mobile-columns));
       max-width: calc((100% - (var(--clg-mobile-columns) - 1) * var(--clg-mobile-gap)) / var(--clg-mobile-columns));
       min-width: 0;
       display: flex;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card {
+    #shopify-section-{{ section.id }} .navigation-grid__card {
       width: 100%;
       min-height: var(--clg-card-min-height);
       border: var(--clg-border-width) solid var(--clg-border-color);
@@ -121,7 +121,7 @@
       transition: border-color 0.2s ease, background-color 0.2s ease;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card-content {
+    #shopify-section-{{ section.id }} .navigation-grid__card-content {
       padding: 1.1rem 1.3rem 1.2rem;
       display: flex;
       flex: 1;
@@ -130,17 +130,17 @@
       justify-content: center;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid--text-center .collection-link-grid__card-content {
+    #shopify-section-{{ section.id }} .navigation-grid--text-center .navigation-grid__card-content {
       align-items: center;
       text-align: center;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid--text-left .collection-link-grid__card-content {
+    #shopify-section-{{ section.id }} .navigation-grid--text-left .navigation-grid__card-content {
       align-items: flex-start;
       text-align: left;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__title {
+    #shopify-section-{{ section.id }} .navigation-grid__title {
       margin: 0;
       color: currentColor;
       text-transform: uppercase;
@@ -152,7 +152,7 @@
       hyphens: auto;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__subtitle {
+    #shopify-section-{{ section.id }} .navigation-grid__subtitle {
       margin: 0;
       color: rgba(var(--color-foreground), 0.78);
       text-transform: none;
@@ -162,7 +162,7 @@
       font-weight: 400;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__media {
+    #shopify-section-{{ section.id }} .navigation-grid__media {
       position: relative;
       width: 100%;
       aspect-ratio: var(--clg-image-ratio);
@@ -170,11 +170,11 @@
       background: rgba(var(--color-foreground), 0.05);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__media--adapt {
+    #shopify-section-{{ section.id }} .navigation-grid__media--adapt {
       aspect-ratio: auto;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__media-image {
+    #shopify-section-{{ section.id }} .navigation-grid__media-image {
       width: 100%;
       height: 100%;
       object-fit: cover;
@@ -182,67 +182,67 @@
       transition: transform 0.28s ease;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__media--adapt .collection-link-grid__media-image {
+    #shopify-section-{{ section.id }} .navigation-grid__media--adapt .navigation-grid__media-image {
       height: auto;
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card:hover {
+    #shopify-section-{{ section.id }} .navigation-grid__card:hover {
       background: linear-gradient(0deg, rgba(var(--color-foreground), 0.03), rgba(var(--color-foreground), 0.03)), var(--clg-card-bg);
       border-color: rgba(var(--color-foreground), 0.35);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card:hover .collection-link-grid__media-image {
+    #shopify-section-{{ section.id }} .navigation-grid__card:hover .navigation-grid__media-image {
       transform: scale(1.03);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card:focus-visible {
+    #shopify-section-{{ section.id }} .navigation-grid__card:focus-visible {
       outline: 0.2rem solid rgba(var(--color-foreground), 0.7);
       outline-offset: 0.2rem;
       border-color: rgba(var(--color-foreground), 0.5);
     }
 
-    #shopify-section-{{ section.id }} .collection-link-grid__card--placeholder {
+    #shopify-section-{{ section.id }} .navigation-grid__card--placeholder {
       justify-content: center;
       opacity: 0.72;
     }
 
     @media (prefers-reduced-motion: reduce) {
-      #shopify-section-{{ section.id }} .collection-link-grid__card,
-      #shopify-section-{{ section.id }} .collection-link-grid__media-image {
+      #shopify-section-{{ section.id }} .navigation-grid__card,
+      #shopify-section-{{ section.id }} .navigation-grid__media-image {
         transition: none;
       }
     }
 
     @media screen and (min-width: 750px) {
-      #shopify-section-{{ section.id }} .collection-link-grid {
+      #shopify-section-{{ section.id }} .navigation-grid {
         padding-top: var(--clg-desktop-top);
         padding-bottom: var(--clg-desktop-bottom);
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__heading {
+      #shopify-section-{{ section.id }} .navigation-grid__heading {
         margin-bottom: 1rem;
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__description {
+      #shopify-section-{{ section.id }} .navigation-grid__description {
         margin-bottom: 2rem;
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__list {
+      #shopify-section-{{ section.id }} .navigation-grid__list {
         gap: var(--clg-tablet-gap);
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__block {
+      #shopify-section-{{ section.id }} .navigation-grid__block {
         flex-basis: calc((100% - (var(--clg-tablet-columns) - 1) * var(--clg-tablet-gap)) / var(--clg-tablet-columns));
         max-width: calc((100% - (var(--clg-tablet-columns) - 1) * var(--clg-tablet-gap)) / var(--clg-tablet-columns));
       }
     }
 
     @media screen and (min-width: 990px) {
-      #shopify-section-{{ section.id }} .collection-link-grid__list {
+      #shopify-section-{{ section.id }} .navigation-grid__list {
         gap: var(--clg-desktop-gap);
       }
 
-      #shopify-section-{{ section.id }} .collection-link-grid__block {
+      #shopify-section-{{ section.id }} .navigation-grid__block {
         flex-basis: calc((100% - (var(--clg-desktop-columns) - 1) * var(--clg-desktop-gap)) / var(--clg-desktop-columns));
         max-width: calc((100% - (var(--clg-desktop-columns) - 1) * var(--clg-desktop-gap)) / var(--clg-desktop-columns));
       }
@@ -250,23 +250,23 @@
   {%- endstyle -%}
 
   <div
-    class="collection-link-grid color-{{ section.settings.color_scheme }} gradient {% if section.settings.card_text_alignment == 'left' %}collection-link-grid--text-left{% else %}collection-link-grid--text-center{% endif %}"
+    class="navigation-grid color-{{ section.settings.color_scheme }} gradient {% if section.settings.card_text_alignment == 'left' %}navigation-grid--text-left{% else %}navigation-grid--text-center{% endif %}"
   >
     <div class="page-width">
-      <div class="collection-link-grid__content">
+      <div class="navigation-grid__content">
         {%- if section.settings.show_heading and section.settings.heading != blank -%}
-          <h2 class="collection-link-grid__heading title inline-richtext {{ section.settings.heading_size }}">
+          <h2 class="navigation-grid__heading title inline-richtext {{ section.settings.heading_size }}">
             {{ section.settings.heading }}
           </h2>
         {%- endif -%}
 
         {%- if section.settings.description != blank -%}
-          <div class="collection-link-grid__description rte">
+          <div class="navigation-grid__description rte">
             {{ section.settings.description }}
           </div>
         {%- endif -%}
 
-        <ul class="collection-link-grid__list" role="list">
+        <ul class="navigation-grid__list" role="list">
           {%- assign rendered_count = 0 -%}
           {%- for block in section.blocks -%}
             {%- liquid
@@ -284,9 +284,6 @@
               endif
               if card_title == blank and selected_collection != blank
                 assign card_title = selected_collection.title
-              endif
-              if card_title == blank and card_url != blank
-                assign card_title = 'View'
               endif
 
               assign card_subtitle = block.settings.subtitle | strip
@@ -312,17 +309,17 @@
 
             {%- if render_block -%}
               {%- assign rendered_count = rendered_count | plus: 1 -%}
-              <li class="collection-link-grid__block" {{ block.shopify_attributes }}>
+              <li class="navigation-grid__block" {{ block.shopify_attributes }}>
                 {%- if card_url != blank -%}
                   <a
-                    class="collection-link-grid__card"
+                    class="navigation-grid__card"
                     href="{{ card_url }}"
                     {% if card_aria_label != blank %}
                       aria-label="{{ card_aria_label | escape }}"
                     {% endif %}
                   >
                     {%- if show_card_image -%}
-                      <span class="collection-link-grid__media{% if section.settings.image_ratio == 'adapt' %} collection-link-grid__media--adapt{% endif %}">
+                      <span class="navigation-grid__media{% if section.settings.image_ratio == 'adapt' %} navigation-grid__media--adapt{% endif %}">
                         {{
                           card_image
                           | image_url: width: 720
@@ -331,22 +328,22 @@
                             sizes: '(min-width: 990px) 20vw, (min-width: 750px) 33vw, 50vw',
                             loading: 'lazy',
                             alt: '',
-                            class: 'collection-link-grid__media-image'
+                            class: 'navigation-grid__media-image'
                         }}
                       </span>
                     {%- endif -%}
 
-                    <span class="collection-link-grid__card-content">
-                      <span class="collection-link-grid__title">{{ card_title | escape }}</span>
+                    <span class="navigation-grid__card-content">
+                      <span class="navigation-grid__title">{{ card_title | escape }}</span>
                       {%- if card_subtitle != blank -%}
-                        <span class="collection-link-grid__subtitle">{{ card_subtitle | escape }}</span>
+                        <span class="navigation-grid__subtitle">{{ card_subtitle | escape }}</span>
                       {%- endif -%}
                     </span>
                   </a>
                 {%- else -%}
-                  <div class="collection-link-grid__card collection-link-grid__card--placeholder" role="note">
-                    <span class="collection-link-grid__card-content">
-                      <span class="collection-link-grid__title">{{ card_title | default: 'Navigation card' | escape }}</span>
+                  <div class="navigation-grid__card navigation-grid__card--placeholder" role="note">
+                    <span class="navigation-grid__card-content">
+                      <span class="navigation-grid__title">{{ card_title | default: 'Navigation Card' | escape }}</span>
                     </span>
                   </div>
                 {%- endif -%}
@@ -355,10 +352,10 @@
           {%- endfor -%}
 
           {%- if rendered_count == 0 and request.design_mode -%}
-            <li class="collection-link-grid__block">
-              <div class="collection-link-grid__card collection-link-grid__card--placeholder" role="note">
-                <span class="collection-link-grid__card-content">
-                  <span class="collection-link-grid__title">Add navigation cards to show links</span>
+            <li class="navigation-grid__block">
+              <div class="navigation-grid__card navigation-grid__card--placeholder" role="note">
+                <span class="navigation-grid__card-content">
+                  <span class="navigation-grid__title">Add navigation cards to show links</span>
                 </span>
               </div>
             </li>
@@ -371,9 +368,9 @@
 
 {% schema %}
 {
-  "name": "Collection link grid",
+  "name": "Navigation Grid",
   "tag": "section",
-  "class": "section section-collection-link-grid",
+  "class": "section section-navigation-grid",
   "max_blocks": 30,
   "disabled_on": {
     "groups": ["header", "footer"]
@@ -666,7 +663,7 @@
   "blocks": [
     {
       "type": "collection",
-      "name": "Navigation card",
+      "name": "Navigation Card",
       "settings": [
         {
           "type": "text",
@@ -700,19 +697,19 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "Collection"
+          "label": "Collection fallback"
         },
         {
           "type": "text",
           "id": "custom_label",
-          "label": "Custom label"
+          "label": "Legacy custom label"
         }
       ]
     }
   ],
   "presets": [
     {
-      "name": "Collection link grid"
+      "name": "Navigation Grid"
     }
   ]
 }

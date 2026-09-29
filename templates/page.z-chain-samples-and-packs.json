@@ -30,7 +30,7 @@
       }
     },
     "collection_link_grid_yag7B8": {
-      "type": "collection-link-grid",
+      "type": "navigation-grid",
       "blocks": {
         "collection_Ve3zcK": {
           "type": "collection",
