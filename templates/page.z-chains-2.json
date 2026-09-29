@@ -1,0 +1,103 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "page_banner_B7mnAe": {
+      "type": "page-banner",
+      "name": "Page banner",
+      "settings": {
+        "title": "Shop by Metal (Chains)",
+        "description": "",
+        "collapsible": true,
+        "title_font_size": 32,
+        "description_font_size": 13,
+        "color_scheme": ""
+      }
+    },
+    "collection_link_grid_FQBHkd": {
+      "type": "collection-link-grid",
+      "blocks": {
+        "collection_E7cwha": {
+          "type": "collection",
+          "settings": {
+            "collection": "chains",
+            "custom_label": "Shop All"
+          }
+        },
+        "collection_VpafB3": {
+          "type": "collection",
+          "settings": {
+            "collection": "mixed-metal-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_z4ChFD": {
+          "type": "collection",
+          "settings": {
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_hMzy7r": {
+          "type": "collection",
+          "settings": {
+            "collection": "champagne-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_fraYa4": {
+          "type": "collection",
+          "settings": {
+            "collection": "rose-gold-filled-chains",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_E7cwha",
+        "collection_VpafB3",
+        "collection_z4ChFD",
+        "collection_hMzy7r",
+        "collection_fraYa4"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop Chains",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 56,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 56
+      }
+    }
+  },
+  "order": [
+    "main",
+    "page_banner_B7mnAe",
+    "collection_link_grid_FQBHkd"
+  ]
+}
