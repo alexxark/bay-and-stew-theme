@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Shop by Metal (Chains)",
+        "title": "Chains",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -35,6 +35,10 @@
         "collection_E7cwha": {
           "type": "collection",
           "settings": {
+            "title": "",
+            "subtitle": "",
+            "link": "",
+            "aria_label": "",
             "collection": "chains",
             "custom_label": "Shop All"
           }
@@ -42,6 +46,10 @@
         "collection_VpafB3": {
           "type": "collection",
           "settings": {
+            "title": "",
+            "subtitle": "",
+            "link": "",
+            "aria_label": "",
             "collection": "mixed-metal-chains",
             "custom_label": ""
           }
@@ -49,6 +57,10 @@
         "collection_z4ChFD": {
           "type": "collection",
           "settings": {
+            "title": "",
+            "subtitle": "",
+            "link": "",
+            "aria_label": "",
             "collection": "sterling-silver-chains",
             "custom_label": ""
           }
@@ -56,6 +68,10 @@
         "collection_hMzy7r": {
           "type": "collection",
           "settings": {
+            "title": "",
+            "subtitle": "",
+            "link": "",
+            "aria_label": "",
             "collection": "champagne-chains",
             "custom_label": ""
           }
@@ -63,6 +79,10 @@
         "collection_fraYa4": {
           "type": "collection",
           "settings": {
+            "title": "",
+            "subtitle": "",
+            "link": "",
+            "aria_label": "",
             "collection": "rose-gold-filled-chains",
             "custom_label": ""
           }
@@ -79,8 +99,17 @@
       "settings": {
         "heading": "Shop Chains",
         "show_heading": false,
+        "description": "",
         "heading_size": "h1",
-        "heading_alignment": "center",
+        "heading_alignment": "left",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
         "color_scheme": "",
         "section_background_color": "#ffffff",
         "rectangle_background_color": "#ffffff",
@@ -93,11 +122,42 @@
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 56
       }
+    },
+    "collection_link_grid_eUmmq7": {
+      "type": "collection-link-grid",
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
     }
   },
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "collection_link_grid_FQBHkd"
+    "collection_link_grid_FQBHkd",
+    "collection_link_grid_eUmmq7"
   ]
 }
