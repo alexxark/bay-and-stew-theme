@@ -29,63 +29,6 @@
         "color_scheme": ""
       }
     },
-    "collection_link_grid_8hxwQt": {
-      "type": "navigation-grid",
-      "blocks": {
-        "collection_UpETm6": {
-          "type": "collection",
-          "settings": {
-            "collection": "jump-rings",
-            "custom_label": ""
-          }
-        },
-        "collection_4ntbyB": {
-          "type": "collection",
-          "settings": {
-            "collection": "findings",
-            "custom_label": "Findings & Clasps"
-          }
-        },
-        "collection_rVtHG8": {
-          "type": "collection",
-          "settings": {
-            "collection": "blanks",
-            "custom_label": ""
-          }
-        },
-        "collection_xN6XDV": {
-          "type": "collection",
-          "settings": {
-            "collection": "beads",
-            "custom_label": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_UpETm6",
-        "collection_4ntbyB",
-        "collection_rVtHG8",
-        "collection_xN6XDV"
-      ],
-      "name": "Collection link grid",
-      "settings": {
-        "heading": "Shop by collection",
-        "show_heading": false,
-        "heading_size": "h1",
-        "heading_alignment": "center",
-        "color_scheme": "",
-        "section_background_color": "#ffffff",
-        "rectangle_background_color": "#ffffff",
-        "rectangle_text_color": "#1f1f1f",
-        "border_color": "#bcbab7",
-        "border_width": 1,
-        "corner_radius": 5,
-        "desktop_spacing_top": 24,
-        "desktop_spacing_bottom": 0,
-        "mobile_spacing_top": 20,
-        "mobile_spacing_bottom": 0
-      }
-    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Jump Rings",
@@ -281,12 +224,69 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "navigation_grid_8hxwQt": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_UpETm6": {
+          "type": "collection",
+          "settings": {
+            "collection": "jump-rings",
+            "custom_label": ""
+          }
+        },
+        "collection_4ntbyB": {
+          "type": "collection",
+          "settings": {
+            "collection": "findings",
+            "custom_label": "Findings & Clasps"
+          }
+        },
+        "collection_rVtHG8": {
+          "type": "collection",
+          "settings": {
+            "collection": "blanks",
+            "custom_label": ""
+          }
+        },
+        "collection_xN6XDV": {
+          "type": "collection",
+          "settings": {
+            "collection": "beads",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_UpETm6",
+        "collection_4ntbyB",
+        "collection_rVtHG8",
+        "collection_xN6XDV"
+      ],
+      "name": "Collection link grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
     }
   },
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "collection_link_grid_8hxwQt",
+    "navigation_grid_8hxwQt",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_ge7fTB",

@@ -29,16 +29,12 @@
         "color_scheme": ""
       }
     },
-    "collection_link_grid_FQBHkd": {
+    "navigation_grid_FQBHkd": {
       "type": "navigation-grid",
       "blocks": {
         "collection_E7cwha": {
           "type": "collection",
           "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
             "collection": "chains",
             "custom_label": "Shop All"
           }
@@ -46,10 +42,6 @@
         "collection_VpafB3": {
           "type": "collection",
           "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
             "collection": "mixed-metal-chains",
             "custom_label": ""
           }
@@ -57,10 +49,6 @@
         "collection_z4ChFD": {
           "type": "collection",
           "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
             "collection": "sterling-silver-chains",
             "custom_label": ""
           }
@@ -68,10 +56,6 @@
         "collection_hMzy7r": {
           "type": "collection",
           "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
             "collection": "champagne-chains",
             "custom_label": ""
           }
@@ -79,10 +63,6 @@
         "collection_fraYa4": {
           "type": "collection",
           "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
             "collection": "rose-gold-filled-chains",
             "custom_label": ""
           }
@@ -99,17 +79,8 @@
       "settings": {
         "heading": "Shop Chains",
         "show_heading": false,
-        "description": "",
         "heading_size": "h1",
-        "heading_alignment": "left",
-        "max_content_width": 1200,
-        "desktop_columns": "6",
-        "tablet_columns": "3",
-        "mobile_columns": "2",
-        "card_style": "auto",
-        "image_ratio": "landscape",
-        "use_collection_image_fallback": true,
-        "card_text_alignment": "center",
+        "heading_alignment": "center",
         "color_scheme": "",
         "section_background_color": "#ffffff",
         "rectangle_background_color": "#ffffff",
@@ -123,8 +94,8 @@
         "mobile_spacing_bottom": 56
       }
     },
-    "collection_link_grid_eUmmq7": {
-      "type": "collection-link-grid",
+    "navigation_grid_eUmmq7": {
+      "type": "navigation-grid",
       "name": "Collection link grid",
       "settings": {
         "heading": "Shop by collection",
@@ -157,7 +128,7 @@
   "order": [
     "main",
     "page_banner_B7mnAe",
-    "collection_link_grid_FQBHkd",
-    "collection_link_grid_eUmmq7"
+    "navigation_grid_FQBHkd",
+    "navigation_grid_eUmmq7"
   ]
 }
