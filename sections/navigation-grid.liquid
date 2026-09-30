@@ -121,6 +121,11 @@
       transition: border-color 0.2s ease, background-color 0.2s ease;
     }
 
+    #shopify-section-{{ section.id }} .navigation-grid__card--text-only {
+      min-height: 0;
+      align-self: flex-start;
+    }
+
     #shopify-section-{{ section.id }} .navigation-grid__card-content {
       padding: 1.1rem 1.3rem 1.2rem;
       display: flex;
@@ -128,6 +133,10 @@
       flex-direction: column;
       gap: 0.5rem;
       justify-content: center;
+    }
+
+    #shopify-section-{{ section.id }} .navigation-grid__card--text-only .navigation-grid__card-content {
+      padding: 0.95rem 1.3rem;
     }
 
     #shopify-section-{{ section.id }} .navigation-grid--text-center .navigation-grid__card-content {
@@ -290,7 +299,7 @@
               assign card_aria_label = block.settings.aria_label | strip
 
               assign card_image = block.settings.card_image
-              if card_image == blank and section.settings.use_collection_image_fallback and selected_collection != blank
+              if card_image == blank and section.settings.use_collection_image_fallback and block.settings.use_collection_image and selected_collection != blank
                 assign card_image = selected_collection.featured_image
               endif
 
@@ -312,7 +321,7 @@
               <li class="navigation-grid__block" {{ block.shopify_attributes }}>
                 {%- if card_url != blank -%}
                   <a
-                    class="navigation-grid__card"
+                    class="navigation-grid__card{% unless show_card_image %} navigation-grid__card--text-only{% endunless %}"
                     href="{{ card_url }}"
                     {% if card_aria_label != blank %}
                       aria-label="{{ card_aria_label | escape }}"
@@ -679,6 +688,12 @@
           "type": "image_picker",
           "id": "card_image",
           "label": "Image"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_collection_image",
+          "label": "Use collection image when no custom image is selected",
+          "default": true
         },
         {
           "type": "url",
