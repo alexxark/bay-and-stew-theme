@@ -246,12 +246,266 @@
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 24
       }
+    },
+    "navigation_grid_EqPRVi": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_TFLWRF": {
+          "type": "collection",
+          "settings": {
+            "title": "Bar & Link Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_2500-2.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "bar-link-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_X4HFJq": {
+          "type": "collection",
+          "settings": {
+            "title": "Box Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-08-0319.33.23.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "box-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_MUCW37": {
+          "type": "collection",
+          "settings": {
+            "title": "Cable Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_4176.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "cable-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_PCwYQe": {
+          "type": "collection",
+          "settings": {
+            "title": "Curb Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-12-2919.05.01.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "curb-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_kReBC9": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_UVkaCF": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_hjTTbV": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_zXggtg": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_HQzNRD": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_Rm9VMe": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Filled Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/photos-01.jpg",
+            "use_collection_image": false,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_3jMnjQ": {
+          "type": "collection",
+          "settings": {
+            "title": "Mixed Metal Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_3469.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "mixed-metal-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_Q3ibxE": {
+          "type": "collection",
+          "settings": {
+            "title": "Sterling Silver Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/photos-02.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_Bze6VT": {
+          "type": "collection",
+          "settings": {
+            "title": "Champagne Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_4974.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "champagne-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_DjW6R8": {
+          "type": "collection",
+          "settings": {
+            "title": "Rose Gold Filled Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-02-1314.44.14-2.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "rose-gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_yKEYMw": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Plated Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-08-1213.20.53.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-plated-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_Ajb6d8": {
+          "type": "collection",
+          "settings": {
+            "title": "Silver Plated Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_TFLWRF",
+        "collection_X4HFJq",
+        "collection_MUCW37",
+        "collection_PCwYQe",
+        "collection_kReBC9",
+        "collection_UVkaCF",
+        "collection_hjTTbV",
+        "collection_zXggtg",
+        "collection_HQzNRD",
+        "collection_Rm9VMe",
+        "collection_3jMnjQ",
+        "collection_Q3ibxE",
+        "collection_Bze6VT",
+        "collection_DjW6R8",
+        "collection_yKEYMw",
+        "collection_Ajb6d8"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop by Style",
+        "show_heading": true,
+        "description": "<p>Explore different chain styles for any project</p>",
+        "heading_size": "h2",
+        "heading_alignment": "right",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
     }
   },
   "order": [
     "main",
     "page_banner_B7mnAe",
     "navigation_grid_FQBHkd",
-    "navigation_grid_eUmmq7"
+    "navigation_grid_eUmmq7",
+    "navigation_grid_EqPRVi"
   ]
 }
