@@ -121,18 +121,103 @@
         "collection_tkcpqh": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Gold Filled Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/photos-01.jpg",
             "use_collection_image": false,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_DN7FiQ": {
+          "type": "collection",
+          "settings": {
+            "title": "Mixed Metal Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_3469.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "mixed-metal-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_YEgcVP": {
+          "type": "collection",
+          "settings": {
+            "title": "Sterling Silver Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/photos-02.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_B6WVUP": {
+          "type": "collection",
+          "settings": {
+            "title": "Champagne Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_4974.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "champagne-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_gE7LqF": {
+          "type": "collection",
+          "settings": {
+            "title": "Rose Gold Filled Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-02-1314.44.14-2.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "rose-gold-filled-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_RGbLRF": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Plated Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-08-1213.20.53.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-plated-chains",
+            "custom_label": ""
+          }
+        },
+        "collection_jUcMz3": {
+          "type": "collection",
+          "settings": {
+            "title": "Silver Plated Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-chains",
             "custom_label": ""
           }
         }
       },
       "block_order": [
-        "collection_tkcpqh"
+        "collection_tkcpqh",
+        "collection_DN7FiQ",
+        "collection_YEgcVP",
+        "collection_B6WVUP",
+        "collection_gE7LqF",
+        "collection_RGbLRF",
+        "collection_jUcMz3"
       ],
       "name": "Navigation Grid",
       "settings": {
@@ -157,9 +242,9 @@
         "border_width": 1,
         "corner_radius": 5,
         "desktop_spacing_top": 24,
-        "desktop_spacing_bottom": 0,
+        "desktop_spacing_bottom": 24,
         "mobile_spacing_top": 20,
-        "mobile_spacing_bottom": 0
+        "mobile_spacing_bottom": 24
       }
     }
   },
