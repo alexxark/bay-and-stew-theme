@@ -469,9 +469,9 @@
       ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Chain Samples & Packs",
+        "heading": "Shop Connectors by Metal",
         "show_heading": true,
-        "description": "<p>Explore chain samples, starter packs, and mystery packs</p>",
+        "description": "",
         "heading_size": "h2",
         "heading_alignment": "left",
         "max_content_width": 1200,
