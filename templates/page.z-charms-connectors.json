@@ -508,6 +508,166 @@
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 44
       }
+    },
+    "navigation_grid_r7Mc6M": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_dYYzaP": {
+          "type": "collection",
+          "settings": {
+            "title": "Activity Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216278copy2.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "activity-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_GxF48G": {
+          "type": "collection",
+          "settings": {
+            "title": "Animal Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN453.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "animal-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_4xrGej": {
+          "type": "collection",
+          "settings": {
+            "title": "Food & Drink Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN392.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "food-drink-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_LHdymU": {
+          "type": "collection",
+          "settings": {
+            "title": "Nature Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN396.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "nature-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_PLzCyP": {
+          "type": "collection",
+          "settings": {
+            "title": "Profession Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216245.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "profession-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_dKKTci": {
+          "type": "collection",
+          "settings": {
+            "title": "State Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN362.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "state-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_PqzaQD": {
+          "type": "collection",
+          "settings": {
+            "title": "Symbol Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN192.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "symbol-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_rEALTR": {
+          "type": "collection",
+          "settings": {
+            "title": "Western Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN158.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "western-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_RtVj9H": {
+          "type": "collection",
+          "settings": {
+            "title": "Word / Letter / Number Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216262copy.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "word-letter-and-number-connectors",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_dYYzaP",
+        "collection_GxF48G",
+        "collection_4xrGej",
+        "collection_LHdymU",
+        "collection_PLzCyP",
+        "collection_dKKTci",
+        "collection_PqzaQD",
+        "collection_rEALTR",
+        "collection_RtVj9H"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Connectors by Theme",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h2",
+        "heading_alignment": "right",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
     }
   },
   "order": [
@@ -516,6 +676,7 @@
     "navigation_grid_FQBHkd",
     "navigation_grid_eUmmq7",
     "navigation_grid_EqPRVi",
-    "navigation_grid_bKLTfT"
+    "navigation_grid_bKLTfT",
+    "navigation_grid_r7Mc6M"
   ]
 }
