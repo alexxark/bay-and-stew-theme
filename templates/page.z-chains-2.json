@@ -305,86 +305,91 @@
         "collection_kReBC9": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Disc Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/MG_5962.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "disc-chains",
             "custom_label": ""
           }
         },
         "collection_UVkaCF": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Enamel Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/2023-07-0612.58.20.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "enamel-chains",
             "custom_label": ""
           }
         },
         "collection_hjTTbV": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Figaro Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/MG_2923.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "figaro-chains",
             "custom_label": ""
           }
         },
         "collection_zXggtg": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Figure 8 Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_7458-2.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "figure-8-chains",
             "custom_label": ""
           }
         },
         "collection_HQzNRD": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Heart Chains",
             "subtitle": "",
+            "card_image": "shopify://shop_images/MG_7910.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "heart-chains",
             "custom_label": ""
           }
         },
         "collection_Rm9VMe": {
           "type": "collection",
           "settings": {
-            "title": "Gold Filled Chains",
+            "title": "Long and Short Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/photos-01.jpg",
+            "card_image": "shopify://shop_images/Untitleddesign_6.png",
             "use_collection_image": false,
             "link": "",
             "aria_label": "",
-            "collection": "gold-filled-chains",
+            "collection": "long-and-short-chains",
             "custom_label": ""
           }
         },
         "collection_3jMnjQ": {
           "type": "collection",
           "settings": {
-            "title": "Mixed Metal Chains",
+            "title": "Mariner Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_3469.jpg",
+            "card_image": "shopify://shop_images/IMG_4439.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "mixed-metal-chains",
+            "collection": "mariner-chains",
             "custom_label": ""
           }
         },
