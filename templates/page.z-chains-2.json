@@ -396,65 +396,65 @@
         "collection_Q3ibxE": {
           "type": "collection",
           "settings": {
-            "title": "Sterling Silver Chains",
+            "title": "Paperclip Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/photos-02.jpg",
+            "card_image": "shopify://shop_images/IMG_7420.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
+            "collection": "paperclip-chains",
             "custom_label": ""
           }
         },
         "collection_Bze6VT": {
           "type": "collection",
           "settings": {
-            "title": "Champagne Chains",
+            "title": "Rolo Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_4974.jpg",
+            "card_image": "shopify://shop_images/IMG_5674.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "champagne-chains",
+            "collection": "rolo-chains",
             "custom_label": ""
           }
         },
         "collection_DjW6R8": {
           "type": "collection",
           "settings": {
-            "title": "Rose Gold Filled Chains",
+            "title": "Rope Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-02-1314.44.14-2.jpg",
+            "card_image": "shopify://shop_images/MG_4116.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "rose-gold-filled-chains",
+            "collection": "rope-chains",
             "custom_label": ""
           }
         },
         "collection_yKEYMw": {
           "type": "collection",
           "settings": {
-            "title": "Gold Plated Chains",
+            "title": "Satellite Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-08-1213.20.53.jpg",
+            "card_image": "shopify://shop_images/IMG_3610.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "gold-plated-chains",
+            "collection": "satellite-chains",
             "custom_label": ""
           }
         },
         "collection_Ajb6d8": {
           "type": "collection",
           "settings": {
-            "title": "Silver Plated Chains",
+            "title": "Scroll Chains",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+            "card_image": "shopify://shop_images/MG_6772.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
+            "collection": "scroll-chains",
             "custom_label": ""
           }
         }
