@@ -115,7 +115,7 @@
       ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Shop Chains",
+        "heading": "",
         "show_heading": false,
         "description": "",
         "heading_size": "h1",
@@ -147,91 +147,91 @@
         "collection_tkcpqh": {
           "type": "collection",
           "settings": {
-            "title": "Gold Filled Chains",
+            "title": "Gold Filled Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/photos-01.jpg",
+            "card_image": "shopify://shop_images/2023-10-2115.19.22.jpg",
             "use_collection_image": false,
             "link": "",
             "aria_label": "",
-            "collection": "gold-filled-chains",
+            "collection": "gold-filled-charms",
             "custom_label": ""
           }
         },
         "collection_DN7FiQ": {
           "type": "collection",
           "settings": {
-            "title": "Mixed Metal Chains",
+            "title": "Sterling Silver Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_3469.jpg",
+            "card_image": "shopify://shop_images/silverch4.webp",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "mixed-metal-chains",
+            "collection": "sterling-silver-charms",
             "custom_label": ""
           }
         },
         "collection_YEgcVP": {
           "type": "collection",
           "settings": {
-            "title": "Sterling Silver Chains",
+            "title": "Gold PVD Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/photos-02.jpg",
+            "card_image": "shopify://shop_images/MG_6917.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
+            "collection": "gold-pvd-charms",
             "custom_label": ""
           }
         },
         "collection_B6WVUP": {
           "type": "collection",
           "settings": {
-            "title": "Champagne Chains",
+            "title": "Stainless Steel Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_4974.jpg",
+            "card_image": "shopify://shop_images/IMG_8366.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "champagne-chains",
+            "collection": "stainless-steel-charms",
             "custom_label": ""
           }
         },
         "collection_gE7LqF": {
           "type": "collection",
           "settings": {
-            "title": "Rose Gold Filled Chains",
+            "title": "Gold Vermeil Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-02-1314.44.14-2.jpg",
+            "card_image": "shopify://shop_images/IMG_8280.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "rose-gold-filled-chains",
+            "collection": "gold-vermeil-charms",
             "custom_label": ""
           }
         },
         "collection_RGbLRF": {
           "type": "collection",
           "settings": {
-            "title": "Gold Plated Chains",
+            "title": "Gold Plated Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-08-1213.20.53.jpg",
+            "card_image": "shopify://shop_images/IMG_5014.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "gold-plated-chains",
+            "collection": "gold-plated-charms",
             "custom_label": ""
           }
         },
         "collection_jUcMz3": {
           "type": "collection",
           "settings": {
-            "title": "Silver Plated Chains",
+            "title": "Rose Gold Filled Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+            "card_image": "shopify://shop_images/CH106RG.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
+            "collection": "rose-gold-filled-charms",
             "custom_label": ""
           }
         }
@@ -247,9 +247,9 @@
       ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Shop by Metal",
+        "heading": "Shop Charms by Metal",
         "show_heading": true,
-        "description": "<p>Find chains in your favorite material & finish</p>",
+        "description": "<p>Find charms in your favorite material</p>",
         "heading_size": "h2",
         "heading_alignment": "left",
         "max_content_width": 1200,
