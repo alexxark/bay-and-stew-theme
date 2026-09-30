@@ -422,47 +422,61 @@
     "navigation_grid_bKLTfT": {
       "type": "navigation-grid",
       "blocks": {
-        "collection_ha9VT8": {
+        "collection_mFtEGd": {
           "type": "collection",
           "settings": {
-            "title": "Chain Samples",
+            "title": "Gold Filled Connectors",
             "subtitle": "",
-            "card_image": "shopify://shop_images/gold-filled-permanent-jewelry-chains_bay-and-stew.jpg",
+            "card_image": "shopify://shop_images/CN403-gold.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "samples",
+            "collection": "gold-filled-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_ha9VT8": {
+          "type": "collection",
+          "settings": {
+            "title": "Sterling Silver Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN444S.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-connectors",
             "custom_label": ""
           }
         },
         "collection_ypaCiX": {
           "type": "collection",
           "settings": {
-            "title": "Chain Starter Packs",
+            "title": "Gold Plated Connectors",
             "subtitle": "",
-            "card_image": "shopify://shop_images/94_53ad433c-97fa-47c8-9dd8-bf349cc23a36.jpg",
+            "card_image": "shopify://shop_images/2024-01-1914.04.56.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "chain-starter-packs",
+            "collection": "gold-plated-connectors",
             "custom_label": ""
           }
         },
         "collection_PhEUyE": {
           "type": "collection",
           "settings": {
-            "title": "Mystery Chain Packs",
+            "title": "Rose Gold Filled Connectors",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_6778.jpg",
+            "card_image": "shopify://shop_images/CN195RG.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "mystery-packs",
+            "collection": "rose-gold-filled-connectors",
             "custom_label": ""
           }
         }
       },
       "block_order": [
+        "collection_mFtEGd",
         "collection_ha9VT8",
         "collection_ypaCiX",
         "collection_PhEUyE"
