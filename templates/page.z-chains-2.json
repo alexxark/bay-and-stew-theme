@@ -576,9 +576,9 @@
         "border_width": 1,
         "corner_radius": 5,
         "desktop_spacing_top": 24,
-        "desktop_spacing_bottom": 24,
+        "desktop_spacing_bottom": 44,
         "mobile_spacing_top": 20,
-        "mobile_spacing_bottom": 24
+        "mobile_spacing_bottom": 44
       }
     }
   },
