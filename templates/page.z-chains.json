@@ -110,9 +110,9 @@
         "border_width": 1,
         "corner_radius": 5,
         "desktop_spacing_top": 24,
-        "desktop_spacing_bottom": 56,
+        "desktop_spacing_bottom": 12,
         "mobile_spacing_top": 20,
-        "mobile_spacing_bottom": 56
+        "mobile_spacing_bottom": 12
       }
     },
     "navigation_grid_eUmmq7": {
@@ -569,10 +569,10 @@
         "use_collection_image_fallback": true,
         "card_text_alignment": "center",
         "color_scheme": "",
-        "section_background_color": "#FFFFFF",
-        "rectangle_background_color": "#FFFFFF",
-        "rectangle_text_color": "#1F1F1F",
-        "border_color": "#BCBAB7",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
         "border_width": 1,
         "corner_radius": 5,
         "desktop_spacing_top": 24,
