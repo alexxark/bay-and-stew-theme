@@ -29,6 +29,92 @@
         "color_scheme": ""
       }
     },
+    "navigation_grid_8hxwQt": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_UpETm6": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-filled-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_4ntbyB": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_rVtHG8": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-plated-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_xN6XDV": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "rose-gold-filled-connectors",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_UpETm6",
+        "collection_4ntbyB",
+        "collection_rVtHG8",
+        "collection_xN6XDV"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop by collection",
+        "show_heading": false,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": false,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Gold Filled Connectors",
@@ -132,155 +218,6 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "mega_collection_display_4mCxM7": {
-      "type": "mega-collection-display",
-      "blocks": {
-        "featured_collection_AXfWUX": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "gold-filled-permanent-jewelry",
-            "label": "Gold Filled",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_trBeF7": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "sterling-silver-permanent-jewelry",
-            "label": "Sterling Silver",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_BJWfwg": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "chains",
-            "label": "",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_kfNLik": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "connectors-permanent-jewelry",
-            "label": "Connectors",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_HBc8ky": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "charms-permanent-jewelry",
-            "label": "Charms",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_8hLWVW": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "findings-permanent-jewelry",
-            "label": "Findings",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        },
-        "featured_collection_9a4rzP": {
-          "type": "featured_collection",
-          "settings": {
-            "collection": "jump-rings-permanent-jewelry",
-            "label": "Jump Rings",
-            "products_to_show": 6,
-            "show_view_all": true
-          }
-        }
-      },
-      "block_order": [
-        "featured_collection_AXfWUX",
-        "featured_collection_trBeF7",
-        "featured_collection_BJWfwg",
-        "featured_collection_kfNLik",
-        "featured_collection_HBc8ky",
-        "featured_collection_8hLWVW",
-        "featured_collection_9a4rzP"
-      ],
-      "disabled": true,
-      "name": "Mega collection display",
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "description": "",
-        "columns_desktop": "6",
-        "columns_mobile": "2",
-        "image_ratio": "adapt",
-        "links_title": "More categories",
-        "links_columns": "4",
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "navigation_grid_8hxwQt": {
-      "type": "navigation-grid",
-      "blocks": {
-        "collection_UpETm6": {
-          "type": "collection",
-          "settings": {
-            "collection": "gold-filled-connectors",
-            "custom_label": ""
-          }
-        },
-        "collection_4ntbyB": {
-          "type": "collection",
-          "settings": {
-            "collection": "sterling-silver-connectors",
-            "custom_label": ""
-          }
-        },
-        "collection_rVtHG8": {
-          "type": "collection",
-          "settings": {
-            "collection": "gold-plated-connectors",
-            "custom_label": ""
-          }
-        },
-        "collection_xN6XDV": {
-          "type": "collection",
-          "settings": {
-            "collection": "rose-gold-filled-connectors",
-            "custom_label": ""
-          }
-        }
-      },
-      "block_order": [
-        "collection_UpETm6",
-        "collection_4ntbyB",
-        "collection_rVtHG8",
-        "collection_xN6XDV"
-      ],
-      "name": "Navigation Grid",
-      "settings": {
-        "heading": "Shop by collection",
-        "show_heading": false,
-        "heading_size": "h1",
-        "heading_alignment": "center",
-        "color_scheme": "",
-        "section_background_color": "#ffffff",
-        "rectangle_background_color": "#ffffff",
-        "rectangle_text_color": "#1f1f1f",
-        "border_color": "#bcbab7",
-        "border_width": 1,
-        "corner_radius": 5,
-        "desktop_spacing_top": 24,
-        "desktop_spacing_bottom": 0,
-        "mobile_spacing_top": 20,
-        "mobile_spacing_bottom": 0
-      }
     }
   },
   "order": [
@@ -290,7 +227,6 @@
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_ge7fTB",
-    "pj_collection_highlight_NMwNTG",
-    "mega_collection_display_4mCxM7"
+    "pj_collection_highlight_NMwNTG"
   ]
 }
