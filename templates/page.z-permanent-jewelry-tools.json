@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Shop by Metal (Connectors)",
+        "title": "Permanent Jewelry Tools",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -89,7 +89,7 @@
       ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Shop by collection",
+        "heading": "Permanent Jewelry Tools",
         "show_heading": false,
         "description": "",
         "heading_size": "h1",
