@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Permanent Jewelry Tools",
+        "title": "Jewelry Tools",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -35,7 +35,7 @@
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
-            "title": "Welders",
+            "title": "Ring Mandrels",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -47,7 +47,7 @@
         "collection_rVtHG8": {
           "type": "collection",
           "settings": {
-            "title": "Argon",
+            "title": "Calipers",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -59,7 +59,7 @@
         "collection_4ntbyB": {
           "type": "collection",
           "settings": {
-            "title": "Grounding Pliers & Electrodes",
+            "title": "Pliers",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -67,25 +67,12 @@
             "collection": "grounding-pliers-electrodes",
             "custom_label": ""
           }
-        },
-        "collection_xN6XDV": {
-          "type": "collection",
-          "settings": {
-            "title": "Safety Glasses",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "rose-gold-filled-connectors",
-            "custom_label": ""
-          }
         }
       },
       "block_order": [
         "collection_UpETm6",
         "collection_rVtHG8",
-        "collection_4ntbyB",
-        "collection_xN6XDV"
+        "collection_4ntbyB"
       ],
       "name": "Navigation Grid",
       "settings": {
@@ -113,6 +100,76 @@
         "desktop_spacing_bottom": 0,
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 0
+      }
+    },
+    "featured_product_8eYP6Q": {
+      "type": "featured-product",
+      "blocks": {
+        "text_KngfxM": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_hj4RTX": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_Hb789n": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_rYzgtm": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_BgtEJx": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_UKTKni": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_RRC6tt": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_KngfxM",
+        "title_hj4RTX",
+        "price_Hb789n",
+        "variant_picker_rYzgtm",
+        "quantity_selector_BgtEJx",
+        "buy_buttons_UKTKni",
+        "share_RRC6tt"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "ring-sizer-ac022",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "contain",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "pj_collection_highlight_WVhzdn": {
@@ -192,41 +249,15 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "pj_collection_highlight_NMwNTG": {
-      "type": "pj-collection-highlight",
-      "name": "Rose Gold Filled Connectors",
-      "settings": {
-        "title": "Safety Glasses",
-        "heading_size": "h2",
-        "subtitle": "",
-        "alignment": "right",
-        "collection": "safety-glasses",
-        "image": "shopify://shop_images/SunstoneShadesAutoDarkeningLensSunglassesforPermanentJewelryWelding.png",
-        "image_link": "",
-        "columns_desktop": 6,
-        "products_to_show": 4,
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "show_view_all": true,
-        "view_all_text": "View all",
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
     }
   },
   "order": [
     "main",
     "page_banner_B7mnAe",
     "navigation_grid_8hxwQt",
+    "featured_product_8eYP6Q",
     "pj_collection_highlight_WVhzdn",
     "pj_collection_highlight_aWibKH",
-    "pj_collection_highlight_ge7fTB",
-    "pj_collection_highlight_NMwNTG"
+    "pj_collection_highlight_ge7fTB"
   ]
 }
