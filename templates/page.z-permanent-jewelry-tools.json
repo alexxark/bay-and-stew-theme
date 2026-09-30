@@ -35,19 +35,19 @@
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Welders",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "gold-filled-connectors",
+            "collection": "welders",
             "custom_label": ""
           }
         },
         "collection_4ntbyB": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Grounding Pilers",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -59,7 +59,7 @@
         "collection_rVtHG8": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Electrodes",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -71,7 +71,7 @@
         "collection_xN6XDV": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Safety Glasses",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
@@ -119,12 +119,12 @@
       "type": "pj-collection-highlight",
       "name": "Gold Filled Connectors",
       "settings": {
-        "title": "Gold Filled Connectors",
+        "title": "Welders",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "gold-filled-connectors",
-        "image": "shopify://shop_images/CN403-gold.jpg",
+        "collection": "welders",
+        "image": "shopify://shop_images/Black_Zapp_Plus_Permanent_Jewelry_Welder_New_Design.png",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
