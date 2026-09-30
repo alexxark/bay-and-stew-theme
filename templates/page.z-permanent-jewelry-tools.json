@@ -44,27 +44,27 @@
             "custom_label": ""
           }
         },
-        "collection_4ntbyB": {
-          "type": "collection",
-          "settings": {
-            "title": "Grounding Pilers",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "sterling-silver-connectors",
-            "custom_label": ""
-          }
-        },
         "collection_rVtHG8": {
           "type": "collection",
           "settings": {
-            "title": "Electrodes",
+            "title": "Argon",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
             "collection": "gold-plated-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_4ntbyB": {
+          "type": "collection",
+          "settings": {
+            "title": "Grounding Pliers & Electrodes",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-connectors",
             "custom_label": ""
           }
         },
@@ -83,8 +83,8 @@
       },
       "block_order": [
         "collection_UpETm6",
-        "collection_4ntbyB",
         "collection_rVtHG8",
+        "collection_4ntbyB",
         "collection_xN6XDV"
       ],
       "name": "Navigation Grid",
