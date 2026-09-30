@@ -37,6 +37,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "use_collection_image": true,
             "link": "",
             "aria_label": "",
             "collection": "chains",
@@ -48,6 +49,7 @@
           "settings": {
             "title": "Chains by Metal",
             "subtitle": "",
+            "use_collection_image": true,
             "link": "shopify://pages/chains-shop-by-metal",
             "aria_label": "",
             "collection": "",
@@ -57,33 +59,24 @@
         "collection_z4ChFD": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Shop by Style",
             "subtitle": "",
-            "link": "",
+            "use_collection_image": false,
+            "link": "shopify://pages/chains-shop-by-style",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_hMzy7r": {
-          "type": "collection",
-          "settings": {
-            "title": "",
-            "subtitle": "",
-            "link": "",
-            "aria_label": "",
-            "collection": "champagne-chains",
+            "collection": "",
             "custom_label": ""
           }
         },
         "collection_fraYa4": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Chain Samples & Packs",
             "subtitle": "",
-            "link": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/chain-samples-packs",
             "aria_label": "",
-            "collection": "rose-gold-filled-chains",
+            "collection": "",
             "custom_label": ""
           }
         }
@@ -92,7 +85,6 @@
         "collection_E7cwha",
         "collection_VpafB3",
         "collection_z4ChFD",
-        "collection_hMzy7r",
         "collection_fraYa4"
       ],
       "name": "Navigation Grid",
