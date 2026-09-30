@@ -504,6 +504,82 @@
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 24
       }
+    },
+    "navigation_grid_bKLTfT": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_ha9VT8": {
+          "type": "collection",
+          "settings": {
+            "title": "Chain Samples",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/gold-filled-permanent-jewelry-chains_bay-and-stew.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "samples",
+            "custom_label": ""
+          }
+        },
+        "collection_ypaCiX": {
+          "type": "collection",
+          "settings": {
+            "title": "Chain Starter Packs",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/94_53ad433c-97fa-47c8-9dd8-bf349cc23a36.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "chain-starter-packs",
+            "custom_label": ""
+          }
+        },
+        "collection_PhEUyE": {
+          "type": "collection",
+          "settings": {
+            "title": "Mystery Chain Packs",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_6778.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "mystery-packs",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_ha9VT8",
+        "collection_ypaCiX",
+        "collection_PhEUyE"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Chain Samples & Packs",
+        "show_heading": true,
+        "description": "<p>Explore chain samples, starter packs, and mystery packs</p>",
+        "heading_size": "h2",
+        "heading_alignment": "left",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
     }
   },
   "order": [
@@ -511,6 +587,7 @@
     "page_banner_B7mnAe",
     "navigation_grid_FQBHkd",
     "navigation_grid_eUmmq7",
-    "navigation_grid_EqPRVi"
+    "navigation_grid_EqPRVi",
+    "navigation_grid_bKLTfT"
   ]
 }
