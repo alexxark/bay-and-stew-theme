@@ -279,208 +279,104 @@
         "collection_TFLWRF": {
           "type": "collection",
           "settings": {
-            "title": "Bar & Link Chains",
+            "title": "Activity Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_2500-2.jpg",
+            "card_image": "shopify://shop_images/MG_4884.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "bar-link-chains",
+            "collection": "activity-charms",
             "custom_label": ""
           }
         },
         "collection_X4HFJq": {
           "type": "collection",
           "settings": {
-            "title": "Box Chains",
+            "title": "Animal Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-08-0319.33.23.jpg",
+            "card_image": "shopify://shop_images/2023-12-2115.17.49.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "box-chains",
+            "collection": "animal-charms",
             "custom_label": ""
           }
         },
         "collection_MUCW37": {
           "type": "collection",
           "settings": {
-            "title": "Cable Chains",
+            "title": "Food & Drink Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_4176.jpg",
+            "card_image": "shopify://shop_images/CH417.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "cable-chains",
+            "collection": "food-drink-charms",
             "custom_label": ""
           }
         },
         "collection_PCwYQe": {
           "type": "collection",
           "settings": {
-            "title": "Curb Chains",
+            "title": "Nature Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-12-2919.05.01.jpg",
+            "card_image": "shopify://shop_images/IMG_8282.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "curb-chains",
+            "collection": "nature-charms",
             "custom_label": ""
           }
         },
         "collection_kReBC9": {
           "type": "collection",
           "settings": {
-            "title": "Disc Chains",
+            "title": "Profession Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_5962.jpg",
+            "card_image": "shopify://shop_images/MG_1049.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "disc-chains",
+            "collection": "profession-charms",
             "custom_label": ""
           }
         },
         "collection_UVkaCF": {
           "type": "collection",
           "settings": {
-            "title": "Enamel Chains",
+            "title": "Symbol Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/2023-07-0612.58.20.jpg",
+            "card_image": "shopify://shop_images/CH317.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "enamel-chains",
+            "collection": "symbol-charms",
             "custom_label": ""
           }
         },
         "collection_hjTTbV": {
           "type": "collection",
           "settings": {
-            "title": "Figaro Chains",
+            "title": "Western Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/MG_2923.jpg",
+            "card_image": "shopify://shop_images/IMG_8247_3aa37958-c288-4747-9e3e-15502b6f1772.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "figaro-chains",
+            "collection": "western-charms",
             "custom_label": ""
           }
         },
         "collection_zXggtg": {
           "type": "collection",
           "settings": {
-            "title": "Figure 8 Chains",
+            "title": "Word / Letter / Number Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_7458-2.jpg",
+            "card_image": "shopify://shop_images/IMG_6792_0eaeecae-d94f-4d60-ad00-a74a82ff4031.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "figure-8-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_HQzNRD": {
-          "type": "collection",
-          "settings": {
-            "title": "Heart Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/MG_7910.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "heart-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_Rm9VMe": {
-          "type": "collection",
-          "settings": {
-            "title": "Long and Short Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/Untitleddesign_6.png",
-            "use_collection_image": false,
-            "link": "",
-            "aria_label": "",
-            "collection": "long-and-short-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_3jMnjQ": {
-          "type": "collection",
-          "settings": {
-            "title": "Mariner Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_4439.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "mariner-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_Q3ibxE": {
-          "type": "collection",
-          "settings": {
-            "title": "Paperclip Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_7420.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "paperclip-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_Bze6VT": {
-          "type": "collection",
-          "settings": {
-            "title": "Rolo Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_5674.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "rolo-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_DjW6R8": {
-          "type": "collection",
-          "settings": {
-            "title": "Rope Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/MG_4116.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "rope-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_yKEYMw": {
-          "type": "collection",
-          "settings": {
-            "title": "Satellite Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_3610.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "satellite-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_Ajb6d8": {
-          "type": "collection",
-          "settings": {
-            "title": "Scroll Chains",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/MG_6772.jpg",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "scroll-chains",
+            "collection": "word-letter-and-number-charms",
             "custom_label": ""
           }
         }
@@ -493,21 +389,13 @@
         "collection_kReBC9",
         "collection_UVkaCF",
         "collection_hjTTbV",
-        "collection_zXggtg",
-        "collection_HQzNRD",
-        "collection_Rm9VMe",
-        "collection_3jMnjQ",
-        "collection_Q3ibxE",
-        "collection_Bze6VT",
-        "collection_DjW6R8",
-        "collection_yKEYMw",
-        "collection_Ajb6d8"
+        "collection_zXggtg"
       ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Shop by Style",
+        "heading": "Shop Charms by Theme",
         "show_heading": true,
-        "description": "<p>Explore different chain styles for any project</p>",
+        "description": "",
         "heading_size": "h2",
         "heading_alignment": "right",
         "max_content_width": 1200,
