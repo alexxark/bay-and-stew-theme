@@ -117,13 +117,30 @@
     },
     "navigation_grid_eUmmq7": {
       "type": "navigation-grid",
+      "blocks": {
+        "collection_tkcpqh": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": false,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_tkcpqh"
+      ],
       "name": "Navigation Grid",
       "settings": {
-        "heading": "Shop by collection",
-        "show_heading": false,
-        "description": "",
-        "heading_size": "h1",
-        "heading_alignment": "center",
+        "heading": "Shop by Metal",
+        "show_heading": true,
+        "description": "<p>Find chains in your favorite material & finish</p>",
+        "heading_size": "h2",
+        "heading_alignment": "left",
         "max_content_width": 1200,
         "desktop_columns": "6",
         "tablet_columns": "3",
