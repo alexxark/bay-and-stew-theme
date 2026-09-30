@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Chains",
+        "title": "Charms & Connectors",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -35,34 +35,58 @@
         "collection_E7cwha": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Shop All Charms",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "chains",
+            "collection": "charms",
             "custom_label": "Shop All"
+          }
+        },
+        "collection_3XmVFC": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Charms by Metal",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/charms-shop-by-metal",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_PPF8VV": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Charms by Theme",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/charms-shop-by-theme",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
           }
         },
         "collection_VpafB3": {
           "type": "collection",
           "settings": {
-            "title": "Chains by Metal",
+            "title": "Shop All Connectors",
             "subtitle": "",
             "use_collection_image": true,
-            "link": "shopify://pages/chains-shop-by-metal",
+            "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "connectors",
             "custom_label": ""
           }
         },
         "collection_z4ChFD": {
           "type": "collection",
           "settings": {
-            "title": "Shop by Style",
+            "title": "Shop Connectors by Metal",
             "subtitle": "",
             "use_collection_image": false,
-            "link": "shopify://pages/chains-shop-by-style",
+            "link": "shopify://pages/connectors-shop-by-metal",
             "aria_label": "",
             "collection": "",
             "custom_label": ""
@@ -71,10 +95,10 @@
         "collection_fraYa4": {
           "type": "collection",
           "settings": {
-            "title": "Chain Samples & Packs",
+            "title": "Shop Connectors by Theme",
             "subtitle": "",
             "use_collection_image": true,
-            "link": "shopify://pages/chain-samples-packs",
+            "link": "shopify://pages/connectors-shop-by-theme",
             "aria_label": "",
             "collection": "",
             "custom_label": ""
@@ -83,6 +107,8 @@
       },
       "block_order": [
         "collection_E7cwha",
+        "collection_3XmVFC",
+        "collection_PPF8VV",
         "collection_VpafB3",
         "collection_z4ChFD",
         "collection_fraYa4"
