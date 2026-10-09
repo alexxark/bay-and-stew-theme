@@ -124,7 +124,6 @@
       "block_order": [
         "text_Crmewi"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -166,6 +165,7 @@
         "text_66mTxa",
         "button_Xx8WkJ"
       ],
+      "disabled": true,
       "custom_css": [],
       "name": "5 for $15",
       "settings": {
