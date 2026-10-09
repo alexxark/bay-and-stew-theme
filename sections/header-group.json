@@ -16,6 +16,7 @@
       "blocks": {
         "announcement_iihNqX": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "50% OFF SALE - Select Charms & Connectors",
             "link": "https://bayandstew.com/collections/sale-promotion"
