@@ -217,7 +217,6 @@
         "heading_XNzwh3",
         "text_XQ9Wm8"
       ],
-      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -284,22 +283,22 @@
         "heading_DqgmxL": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>MEMORIAL DAY SALE</strong> — 10% OFF SITEWIDE",
+            "heading": "<strong>PJ Patch Set On Us!</strong>",
             "heading_size": "h1"
           }
         },
         "text_khN6Lz": {
           "type": "text",
           "settings": {
-            "text": "<h3>One Day Only • May 25<br/></h3><p>Celebrate Memorial Day with 10% off sitewide for one day only. Stock up on your favorite supplies and save while you create.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid 05/25/2026 from 12:00am to 11:59pm PDT. Discount applies to eligible merchandise and is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</h6>",
+            "text": "<h3>Spend $600+ and get our 5-piece Permanent Jewelry Iron-On Patch Set FREE.<br/></h3><p>Show off your permanent jewelry pride. Spend $600+ and we’ll add a 5-piece set of Bay & Stew iron-on patches to your order, featuring all five of our favorite designs.<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/><strong>Valid through 11/02/2026 11:59pm PDT while supplies last. Offer is automatically applied at checkout; exclusions apply. Offer cannot be combined with other promotions, offers, or discount codes. No price adjustments will be made on prior purchases. Orders placed during the promotion are considered final sale and are ineligible for exchange or returns. Offer valid while supplies last. Bay & Stew reserves the right to modify or cancel this promotion at any time.</strong></h6>",
             "text_style": "body"
           }
         },
         "button_EMX98j": {
           "type": "button",
           "settings": {
-            "button_label": "Shop Sale",
-            "button_link": "shopify://collections/sale",
+            "button_label": "Shop Now",
+            "button_link": "shopify://collections/all",
             "button_style_secondary": false
           }
         }
@@ -309,11 +308,10 @@
         "text_khN6Lz",
         "button_EMX98j"
       ],
-      "disabled": true,
       "custom_css": [],
       "name": "MEMORIAL SALE",
       "settings": {
-        "image": "shopify://shop_images/sale-2.jpg",
+        "image": "shopify://shop_images/GWP_11801cc8-4978-4494-a94f-cb8725db1134.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
