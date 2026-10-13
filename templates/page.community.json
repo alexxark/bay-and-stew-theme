@@ -124,6 +124,7 @@
       "block_order": [
         "text_Crmewi"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -186,6 +187,7 @@
     },
     "rich_text_dXNmG6": {
       "type": "rich-text",
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -217,6 +219,7 @@
         "heading_XNzwh3",
         "text_XQ9Wm8"
       ],
+      "disabled": true,
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
