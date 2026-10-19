@@ -1,0 +1,682 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "page_banner_B7mnAe": {
+      "type": "page-banner",
+      "name": "Page banner",
+      "settings": {
+        "title": "Charms & Connectors",
+        "description": "",
+        "collapsible": true,
+        "title_font_size": 32,
+        "description_font_size": 13,
+        "color_scheme": ""
+      }
+    },
+    "navigation_grid_FQBHkd": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_E7cwha": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop All Charms",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "charms",
+            "custom_label": "Shop All"
+          }
+        },
+        "collection_3XmVFC": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Charms by Metal",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/charms-shop-by-metal",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_PPF8VV": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Charms by Theme",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/charms-shop-by-theme",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_VpafB3": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop All Connectors",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_z4ChFD": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Connectors by Metal",
+            "subtitle": "",
+            "use_collection_image": false,
+            "link": "shopify://pages/connectors-shop-by-metal",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_fraYa4": {
+          "type": "collection",
+          "settings": {
+            "title": "Shop Connectors by Theme",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://pages/connectors-shop-by-theme",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_E7cwha",
+        "collection_3XmVFC",
+        "collection_PPF8VV",
+        "collection_VpafB3",
+        "collection_z4ChFD",
+        "collection_fraYa4"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "",
+        "show_heading": false,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": false,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 12,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 12
+      }
+    },
+    "navigation_grid_eUmmq7": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_tkcpqh": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Filled Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-10-2115.19.22.jpg",
+            "use_collection_image": false,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-filled-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_DN7FiQ": {
+          "type": "collection",
+          "settings": {
+            "title": "Sterling Silver Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/silverch4.webp",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_YEgcVP": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold PVD Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_6917.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-pvd-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_B6WVUP": {
+          "type": "collection",
+          "settings": {
+            "title": "Stainless Steel Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_8366.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "stainless-steel-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_gE7LqF": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Vermeil Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_8280.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-vermeil-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_RGbLRF": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Plated Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_5014.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-plated-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_jUcMz3": {
+          "type": "collection",
+          "settings": {
+            "title": "Rose Gold Filled Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CH106RG.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "rose-gold-filled-charms",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_tkcpqh",
+        "collection_DN7FiQ",
+        "collection_YEgcVP",
+        "collection_B6WVUP",
+        "collection_gE7LqF",
+        "collection_RGbLRF",
+        "collection_jUcMz3"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Charms by Metal",
+        "show_heading": true,
+        "description": "<p>Find charms in your favorite material</p>",
+        "heading_size": "h2",
+        "heading_alignment": "left",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
+    },
+    "navigation_grid_EqPRVi": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_TFLWRF": {
+          "type": "collection",
+          "settings": {
+            "title": "Activity Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_4884.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "activity-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_X4HFJq": {
+          "type": "collection",
+          "settings": {
+            "title": "Animal Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2023-12-2115.17.49.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "animal-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_MUCW37": {
+          "type": "collection",
+          "settings": {
+            "title": "Food & Drink Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CH417.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "food-drink-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_PCwYQe": {
+          "type": "collection",
+          "settings": {
+            "title": "Nature Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_8282.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "nature-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_kReBC9": {
+          "type": "collection",
+          "settings": {
+            "title": "Profession Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/MG_1049.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "profession-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_UVkaCF": {
+          "type": "collection",
+          "settings": {
+            "title": "Symbol Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CH317.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "symbol-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_hjTTbV": {
+          "type": "collection",
+          "settings": {
+            "title": "Western Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_8247_3aa37958-c288-4747-9e3e-15502b6f1772.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "western-charms",
+            "custom_label": ""
+          }
+        },
+        "collection_zXggtg": {
+          "type": "collection",
+          "settings": {
+            "title": "Word / Letter / Number Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/IMG_6792_0eaeecae-d94f-4d60-ad00-a74a82ff4031.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "word-letter-and-number-charms",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_TFLWRF",
+        "collection_X4HFJq",
+        "collection_MUCW37",
+        "collection_PCwYQe",
+        "collection_kReBC9",
+        "collection_UVkaCF",
+        "collection_hjTTbV",
+        "collection_zXggtg"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Charms by Theme",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h2",
+        "heading_alignment": "right",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
+    },
+    "navigation_grid_bKLTfT": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_mFtEGd": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Filled Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN403-gold.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-filled-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_ha9VT8": {
+          "type": "collection",
+          "settings": {
+            "title": "Sterling Silver Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN444S.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "sterling-silver-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_ypaCiX": {
+          "type": "collection",
+          "settings": {
+            "title": "Gold Plated Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/2024-01-1914.04.56.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "gold-plated-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_PhEUyE": {
+          "type": "collection",
+          "settings": {
+            "title": "Rose Gold Filled Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN195RG.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "rose-gold-filled-connectors",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_mFtEGd",
+        "collection_ha9VT8",
+        "collection_ypaCiX",
+        "collection_PhEUyE"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Connectors by Metal",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h2",
+        "heading_alignment": "left",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 44,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 44
+      }
+    },
+    "navigation_grid_r7Mc6M": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_dYYzaP": {
+          "type": "collection",
+          "settings": {
+            "title": "Activity Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216278copy2.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "activity-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_GxF48G": {
+          "type": "collection",
+          "settings": {
+            "title": "Animal Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN453.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "animal-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_4xrGej": {
+          "type": "collection",
+          "settings": {
+            "title": "Food & Drink Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN392.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "food-drink-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_LHdymU": {
+          "type": "collection",
+          "settings": {
+            "title": "Nature Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN396.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "nature-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_PLzCyP": {
+          "type": "collection",
+          "settings": {
+            "title": "Profession Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216245.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "profession-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_dKKTci": {
+          "type": "collection",
+          "settings": {
+            "title": "State Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN362.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "state-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_PqzaQD": {
+          "type": "collection",
+          "settings": {
+            "title": "Symbol Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN192.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "symbol-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_rEALTR": {
+          "type": "collection",
+          "settings": {
+            "title": "Western Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/CN158.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "western-connectors",
+            "custom_label": ""
+          }
+        },
+        "collection_RtVj9H": {
+          "type": "collection",
+          "settings": {
+            "title": "Word / Letter / Number Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216262copy.jpg",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "word-letter-and-number-connectors",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_dYYzaP",
+        "collection_GxF48G",
+        "collection_4xrGej",
+        "collection_LHdymU",
+        "collection_PLzCyP",
+        "collection_dKKTci",
+        "collection_PqzaQD",
+        "collection_rEALTR",
+        "collection_RtVj9H"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Connectors by Theme",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h2",
+        "heading_alignment": "right",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 24,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 24
+      }
+    }
+  },
+  "order": [
+    "main",
+    "page_banner_B7mnAe",
+    "navigation_grid_FQBHkd",
+    "navigation_grid_eUmmq7",
+    "navigation_grid_EqPRVi",
+    "navigation_grid_bKLTfT",
+    "navigation_grid_r7Mc6M"
+  ]
+}
