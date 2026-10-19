@@ -114,14 +114,21 @@
                     {%- endunless -%}
                   </h2>
                 {%- when 'price' -%}
-                  <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
+                  <div
+                    id="price-{{ section.id }}"
+                    class="featured-product__price-row"
+                    role="status"
+                    {{ block.shopify_attributes }}
+                  >
                     {%- render 'price',
                       product: product,
                       placeholder: placeholder,
                       use_variant: true,
                       show_badges: true,
                       price_class: 'price--large'
-                    -%} {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
+                    -%}
+                    {% render 'customer-status-badge', class: 'status-badge--featured', show_tooltip: false %}
+                    {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
                   </div>
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -142,14 +149,6 @@
                       {%- endif -%}
                     </div>
                   {%- endif -%}
-                  {%- unless placeholder -%}
-                    <div {{ block.shopify_attributes }}>
-                      {%- form 'product', product -%}
-                        <input type="hidden" name="id" value="{{ product.selected_or_first_available_variant.id }}">
-                        {{ form | payment_terms }}
-                      {%- endform -%}
-                    </div>
-                  {%- endunless -%}
                 {%- when 'sku' -%}
                   <p
                     class="product__sku{% if block.settings.text_style == 'uppercase' %} caption-with-letter-spacing{% elsif block.settings.text_style == 'subtitle' %} subtitle{% endif %}{% if product.selected_or_first_available_variant.sku.size == 0 %} visibility-hidden{% endif %}"
@@ -364,7 +363,7 @@
                               {%- assign price = product.selected_or_first_available_variant.price
                                 | money_with_currency
                               -%}
-                              <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: variant_price }}" bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" >
+                              <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: variant_price }}" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" >
                                 {{ 'sections.quick_order_list.each' | t: money: price -}}
                               </span>
                             </li>
@@ -376,7 +375,7 @@
                                   <span aria-hidden="true">+</span></span
                                 >
                                 {%- assign price = price_break.price | money_with_currency -%}
-                                <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}" bss-b2b-product-id="{{ card_product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" >
+                                <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ product.selected_or_first_available_variant.id }}" bss-b2b-featured-product="true" >
                                   {{ 'sections.quick_order_list.each' | t: money: price -}}
                                 </span>
                               </li>
@@ -400,10 +399,7 @@
                     {%- endif -%}
                   </div>
                 {%- when 'share' -%}
-                  {% liquid
-                    assign share_url = product.selected_variant.url | default: product.url | prepend: request.origin
-                    render 'share-button', block: block, share_link: share_url
-                  %}
+                  {% continue %}
                 {%- when 'variant_picker' -%}
                   {% render 'product-variant-picker',
                     product: product,
@@ -415,7 +411,8 @@
                     block: block,
                     product: product,
                     product_form_id: product_form_id,
-                    section_id: section.id
+                    section_id: section.id,
+                    force_hide_dynamic_checkout: true
                   -%}
                 {%- when 'custom_liquid' -%}
                   {{ block.settings.custom_liquid }}
@@ -677,13 +674,6 @@
       "name": "t:sections.featured-product.blocks.buy_buttons.name",
       "limit": 1,
       "settings": [
-        {
-          "type": "checkbox",
-          "id": "show_dynamic_checkout",
-          "default": true,
-          "label": "t:sections.featured-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
-          "info": "t:sections.featured-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
-        },
         {
           "type": "checkbox",
           "id": "show_gift_card_recipient",
@@ -1519,9 +1509,6 @@
         },
         {
           "type": "buy_buttons"
-        },
-        {
-          "type": "share"
         }
       ]
     }

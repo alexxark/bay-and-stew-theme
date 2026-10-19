@@ -23,21 +23,89 @@
   padding: 2.5rem;
 }
 
-.featured-product .share-button:nth-last-child(2) {
-  display: inline-flex;
+.featured-product .product__info-wrapper {
+  min-width: 0;
 }
 
-.share-button + .product__view-details {
-  display: inline-flex;
-  float: right;
+.featured-product .product__info-container {
+  max-width: 44rem;
+  margin: 0 auto;
+}
+
+.featured-product .product__info-container > * + * {
+  margin: 1.2rem 0;
+}
+
+.featured-product .product__title {
+  margin: 0;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.featured-product .featured-product__price-row {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  min-height: 4.4rem;
+  column-gap: 1rem;
+  row-gap: 0.8rem;
 }
 
-.share-button + .product__view-details::after {
-  content: '';
-  clear: both;
-  display: table;
+.featured-product .featured-product__price-row .price {
+  margin: 0;
+  width: auto;
+}
+
+.featured-product .featured-product__price-row .bss-b2b-collection-item-vat {
+  width: 100%;
+}
+
+.featured-product .status-badge.status-badge--featured {
+  font-size: 1.1rem;
+  line-height: 1.2;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+}
+
+.featured-product .status-badge--featured.status-badge--out {
+  background: rgba(var(--color-foreground), 0.06);
+  color: rgba(var(--color-foreground), 0.75);
+  border-color: rgba(var(--color-foreground), 0.14);
+}
+
+.featured-product .product-form__input,
+.featured-product .product-form__quantity,
+.featured-product .price-per-item__container {
+  max-width: 100%;
+}
+
+.featured-product .product-form__buttons {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  width: 100%;
+  max-width: 100%;
+  align-items: stretch;
+}
+
+.featured-product .product-form__buttons > .product-form__submit {
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+}
+
+.featured-product .product-form__favorite {
+  width: 4.6rem;
+  min-width: 4.6rem;
+  border: 0.1rem solid rgba(var(--color-foreground), 0.16);
+  border-radius: var(--buttons-radius);
+}
+
+.featured-product .product__view-details {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3.6rem;
+  margin-top: 0.4rem;
+  color: rgba(var(--color-foreground), 0.75);
 }
 
 @media screen and (min-width: 750px) {
@@ -49,26 +117,60 @@
     padding: 5rem;
   }
 
-  .product--right .product__media-wrapper {
+  .featured-product.product--right .product__media-wrapper {
     order: 2;
   }
 }
 
 @media screen and (min-width: 990px) {
+  .featured-product.product--large:not(.product--no-media) .product__media-wrapper {
+    max-width: 60%;
+    width: calc(60% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
+  .featured-product.product--large:not(.product--no-media) .product__info-wrapper {
+    max-width: 40%;
+    width: calc(40% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
+  .featured-product.product--medium:not(.product--no-media) .product__media-wrapper {
+    max-width: 58%;
+    width: calc(58% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
+  .featured-product.product--medium:not(.product--no-media) .product__info-wrapper {
+    max-width: 42%;
+    width: calc(42% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
+  .featured-product.product--small:not(.product--no-media) .product__media-wrapper {
+    max-width: 52%;
+    width: calc(52% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
+  .featured-product.product--small:not(.product--no-media) .product__info-wrapper {
+    max-width: 48%;
+    width: calc(48% - var(--grid-desktop-horizontal-spacing) / 2);
+  }
+
   .background-secondary .featured-product:not(.product--no-media) > .product__info-wrapper {
-    padding: 0 0 0 5rem;
+    padding: 0 0 0 3.2rem;
   }
 
   .background-secondary .featured-product:not(.product--no-media).product--right > .product__info-wrapper {
-    padding: 0 5rem 0 0;
+    padding: 0 3.2rem 0 0;
   }
 
   .featured-product:not(.product--no-media) > .product__info-wrapper {
-    padding: 0 7rem;
+    padding: 0 0 0 3.2rem;
+  }
+
+  .featured-product:not(.product--no-media).product--right > .product__info-wrapper {
+    padding: 0 3.2rem 0 0;
   }
 
   .background-secondary .featured-product {
-    padding: 6rem 7rem;
+    padding: 5.2rem;
     position: relative;
     z-index: 1;
   }
