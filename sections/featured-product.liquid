@@ -127,7 +127,11 @@
                       show_badges: true,
                       price_class: 'price--large'
                     -%}
-                    {% render 'customer-status-badge', class: 'status-badge--featured', show_tooltip: false %}
+                    {% render 'customer-status-badge',
+                      class: 'status-inline--featured-product',
+                      presentation: 'featured',
+                      show_tooltip: false
+                    %}
                     {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
                   </div>
                   {%- if product.quantity_price_breaks_configured? -%}
@@ -674,6 +678,13 @@
       "name": "t:sections.featured-product.blocks.buy_buttons.name",
       "limit": 1,
       "settings": [
+        {
+          "type": "checkbox",
+          "id": "show_dynamic_checkout",
+          "default": true,
+          "label": "t:sections.featured-product.blocks.buy_buttons.settings.show_dynamic_checkout.label",
+          "info": "t:sections.featured-product.blocks.buy_buttons.settings.show_dynamic_checkout.info"
+        },
         {
           "type": "checkbox",
           "id": "show_gift_card_recipient",
