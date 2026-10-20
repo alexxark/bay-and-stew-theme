@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Shop By Category",
+        "title": "Shop By Material",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -40,7 +40,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "chains",
+            "collection": "gold-filled",
             "custom_label": ""
           }
         },
@@ -52,7 +52,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "charms",
+            "collection": "sterling-silver",
             "custom_label": ""
           }
         },
@@ -64,7 +64,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "connectors",
+            "collection": "mixed-metal",
             "custom_label": ""
           }
         },
@@ -76,7 +76,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "jump-rings",
+            "collection": "gold-pvd",
             "custom_label": ""
           }
         },
@@ -88,7 +88,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "findings",
+            "collection": "stainless-steel",
             "custom_label": ""
           }
         },
@@ -100,7 +100,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "blanks",
+            "collection": "gold-vermeil",
             "custom_label": ""
           }
         },
@@ -112,7 +112,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "beads",
+            "collection": "rose-gold-filled",
             "custom_label": ""
           }
         },
@@ -124,19 +124,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "ready-to-wear",
-            "custom_label": ""
-          }
-        },
-        "collection_eH3fCU": {
-          "type": "collection",
-          "settings": {
-            "title": "Tools & Accessories",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "welders-tools-accessories",
+            "collection": "gold-plated",
             "custom_label": ""
           }
         }
@@ -149,8 +137,7 @@
         "collection_fraYa4",
         "collection_kKJYi4",
         "collection_pLUBU4",
-        "collection_MVwgjd",
-        "collection_eH3fCU"
+        "collection_MVwgjd"
       ],
       "name": "Navigation Grid",
       "settings": {
@@ -182,14 +169,14 @@
     },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
-      "name": "Chains",
+      "name": "Gold Filled",
       "settings": {
-        "title": "Chains",
+        "title": "Gold Filled",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "chains",
-        "image": "shopify://shop_images/IMG_3063.jpg",
+        "collection": "gold-filled",
+        "image": "shopify://shop_images/MG_8330_3c70dd60-c15d-4c26-84d6-8e02fcc2be38.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
