@@ -59,22 +59,22 @@
         "collection_xJaHiG": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Patches",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "patches",
             "custom_label": ""
           }
         },
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
-            "title": "Ring Mandrels",
+            "title": "Organization & Display",
             "subtitle": "",
             "use_collection_image": true,
-            "link": "shopify://products/ring-sizer-ac022",
+            "link": "",
             "aria_label": "",
             "collection": "",
             "custom_label": ""
