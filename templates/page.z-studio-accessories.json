@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Jewelry Tools",
+        "title": "Studio Accessories",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -32,6 +32,42 @@
     "navigation_grid_8hxwQt": {
       "type": "navigation-grid",
       "blocks": {
+        "collection_i3aKqa": {
+          "type": "collection",
+          "settings": {
+            "title": "Polishing Cloths",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "polishing-cloths",
+            "custom_label": ""
+          }
+        },
+        "collection_fe8JGg": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_xJaHiG": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
         "collection_UpETm6": {
           "type": "collection",
           "settings": {
@@ -70,6 +106,9 @@
         }
       },
       "block_order": [
+        "collection_i3aKqa",
+        "collection_fe8JGg",
+        "collection_xJaHiG",
         "collection_UpETm6",
         "collection_rVtHG8",
         "collection_4ntbyB"
