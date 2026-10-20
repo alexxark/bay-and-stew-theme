@@ -246,11 +246,11 @@
       "type": "pj-collection-highlight",
       "name": "Grounding Pliers & Electrodesd Connectors",
       "settings": {
-        "title": "Grounding Pliers & Electrodes",
+        "title": "Pliers",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
-        "collection": "grounding-pliers-electrodes",
+        "collection": "pliers",
         "image": "shopify://shop_images/SunstoneCurvedHemostats8.jpg",
         "image_link": "",
         "columns_desktop": 6,
