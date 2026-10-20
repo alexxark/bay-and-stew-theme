@@ -259,19 +259,28 @@
 
   .featured-product:not(.product--no-media) > .product__media-wrapper {
     grid-area: media;
-    justify-content: flex-end;
+    justify-content: flex-start;
   }
 
   .featured-product:not(.product--no-media).product--right > .product__media-wrapper {
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
 
   .featured-product:not(.product--no-media) > .product__info-wrapper {
     grid-area: info;
-    justify-content: flex-start;
+    justify-content: flex-end;
   }
 
   .featured-product:not(.product--no-media).product--right > .product__info-wrapper {
+    justify-content: flex-start;
+  }
+
+  .featured-product:not(.product--no-media) .product__media-list .product__media-item {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .featured-product:not(.product--no-media).product--right .product__media-list .product__media-item {
     justify-content: flex-end;
   }
 
