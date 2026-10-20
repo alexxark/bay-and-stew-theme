@@ -1,0 +1,280 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "padding_top": 28,
+        "padding_bottom": 28
+      }
+    },
+    "page_banner_B7mnAe": {
+      "type": "page-banner",
+      "name": "Page banner",
+      "settings": {
+        "title": "Jewelry Tools",
+        "description": "",
+        "collapsible": true,
+        "title_font_size": 32,
+        "description_font_size": 13,
+        "color_scheme": ""
+      }
+    },
+    "navigation_grid_8hxwQt": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_UpETm6": {
+          "type": "collection",
+          "settings": {
+            "title": "Ring Mandrels",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://products/ring-sizer-ac022",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_rVtHG8": {
+          "type": "collection",
+          "settings": {
+            "title": "Calipers",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "shopify://products/digital-caliper-ac015",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_4ntbyB": {
+          "type": "collection",
+          "settings": {
+            "title": "Pliers",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "pliers",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_UpETm6",
+        "collection_rVtHG8",
+        "collection_4ntbyB"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Permanent Jewelry Tools",
+        "show_heading": false,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": false,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 0,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
+    },
+    "featured_product_8eYP6Q": {
+      "type": "featured-product",
+      "blocks": {
+        "text_KngfxM": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_hj4RTX": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_Hb789n": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_rYzgtm": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_BgtEJx": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_UKTKni": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_RRC6tt": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_KngfxM",
+        "title_hj4RTX",
+        "price_Hb789n",
+        "variant_picker_rYzgtm",
+        "quantity_selector_BgtEJx",
+        "buy_buttons_UKTKni",
+        "share_RRC6tt"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "ring-sizer-ac022",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "media_position": "left",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "featured_product_VKFDRm": {
+      "type": "featured-product",
+      "blocks": {
+        "text_8qPapD": {
+          "type": "text",
+          "settings": {
+            "text": "{{ section.settings.product.vendor }}",
+            "text_style": "uppercase"
+          }
+        },
+        "title_HggN3y": {
+          "type": "title",
+          "settings": {
+            "heading_size": "h1"
+          }
+        },
+        "price_zxHKAU": {
+          "type": "price",
+          "settings": {}
+        },
+        "variant_picker_V8DjrL": {
+          "type": "variant_picker",
+          "settings": {
+            "picker_type": "button",
+            "swatch_shape": "circle"
+          }
+        },
+        "quantity_selector_8xX4rU": {
+          "type": "quantity_selector",
+          "settings": {}
+        },
+        "buy_buttons_tagNgb": {
+          "type": "buy_buttons",
+          "settings": {
+            "show_dynamic_checkout": true,
+            "show_gift_card_recipient": true
+          }
+        },
+        "share_CE3qEm": {
+          "type": "share",
+          "settings": {
+            "share_label": "Share"
+          }
+        }
+      },
+      "block_order": [
+        "text_8qPapD",
+        "title_HggN3y",
+        "price_zxHKAU",
+        "variant_picker_V8DjrL",
+        "quantity_selector_8xX4rU",
+        "buy_buttons_tagNgb",
+        "share_CE3qEm"
+      ],
+      "name": "t:sections.featured-product.presets.name",
+      "settings": {
+        "product": "digital-caliper-ac015",
+        "color_scheme": "",
+        "secondary_background": false,
+        "media_size": "medium",
+        "constrain_to_viewport": true,
+        "media_fit": "cover",
+        "media_position": "right",
+        "image_zoom": "lightbox",
+        "hide_variants": false,
+        "enable_video_looping": false,
+        "padding_top": 12,
+        "padding_bottom": 12
+      }
+    },
+    "pj_collection_highlight_ge7fTB": {
+      "type": "pj-collection-highlight",
+      "name": "Grounding Pliers & Electrodesd Connectors",
+      "settings": {
+        "title": "Pliers",
+        "heading_size": "h2",
+        "subtitle": "",
+        "alignment": "left",
+        "collection": "pliers",
+        "image": "shopify://shop_images/SunstoneCurvedHemostats8.jpg",
+        "image_link": "",
+        "columns_desktop": 6,
+        "products_to_show": 4,
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "show_view_all": true,
+        "view_all_text": "View all",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": [
+    "main",
+    "page_banner_B7mnAe",
+    "navigation_grid_8hxwQt",
+    "featured_product_8eYP6Q",
+    "featured_product_VKFDRm",
+    "pj_collection_highlight_ge7fTB"
+  ]
+}
