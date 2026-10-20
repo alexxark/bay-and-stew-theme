@@ -233,7 +233,7 @@
         "secondary_background": false,
         "media_size": "medium",
         "constrain_to_viewport": true,
-        "media_fit": "contain",
+        "media_fit": "cover",
         "media_position": "right",
         "image_zoom": "lightbox",
         "hide_variants": false,
