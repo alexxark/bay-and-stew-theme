@@ -79,26 +79,13 @@
             "collection": "organization-display",
             "custom_label": ""
           }
-        },
-        "collection_4ntbyB": {
-          "type": "collection",
-          "settings": {
-            "title": "Pliers",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "pliers",
-            "custom_label": ""
-          }
         }
       },
       "block_order": [
         "collection_i3aKqa",
         "collection_fe8JGg",
         "collection_xJaHiG",
-        "collection_UpETm6",
-        "collection_4ntbyB"
+        "collection_UpETm6"
       ],
       "name": "Navigation Grid",
       "settings": {
