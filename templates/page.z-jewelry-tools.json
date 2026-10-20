@@ -38,9 +38,9 @@
             "title": "Ring Mandrels",
             "subtitle": "",
             "use_collection_image": true,
-            "link": "",
+            "link": "shopify://products/ring-sizer-ac022",
             "aria_label": "",
-            "collection": "welders",
+            "collection": "",
             "custom_label": ""
           }
         },
@@ -50,9 +50,9 @@
             "title": "Calipers",
             "subtitle": "",
             "use_collection_image": true,
-            "link": "",
+            "link": "shopify://products/digital-caliper-ac015",
             "aria_label": "",
-            "collection": "argon",
+            "collection": "",
             "custom_label": ""
           }
         },
@@ -64,7 +64,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "grounding-pliers-electrodes",
+            "collection": "pliers",
             "custom_label": ""
           }
         }
