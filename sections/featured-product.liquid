@@ -168,51 +168,8 @@
                     {% render 'customer-status-badge', class: 'status-badge--pdp' %}
                   </div>
                   {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
-                  {%- if product.quantity_price_breaks_configured? -%}
-                    <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
-                      <span>{{ 'products.product.volume_pricing.note' | t }}</span>
-                    </div>
-                    <volume-pricing class="parent-display" id="Volume-{{ section.id }}">
-                      {%- if featured_selected_variant.quantity_price_breaks.size > 0 -%}
-                        <span class="caption-large">{{ 'products.product.volume_pricing.title' | t }}</span>
-                        <ul class="list-unstyled">
-                          <li>
-                            <span>{{ featured_selected_variant.quantity_rule.min }}+</span>
-                            {%- assign price = featured_selected_variant.price | money_with_currency -%}
-                            <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price }}" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ featured_selected_variant.id }}" bss-b2b-featured-product="true" >
-                              {{ 'sections.quick_order_list.each' | t: money: price -}}
-                            </span>
-                          </li>
-                          {%- for price_break in featured_selected_variant.quantity_price_breaks -%}
-                            {%- assign price_break_price = price_break.price | money_with_currency -%}
-                            <li class="{%- if forloop.index >= 3 -%}show-more-item hidden{%- endif -%}">
-                              <span>
-                                {{- price_break.minimum_quantity -}}
-                                <span aria-hidden="true">+</span></span
-                              >
-                              {%- assign price = price_break.price | money_with_currency -%}
-                              <span data-text="{{ 'products.product.volume_pricing.price_at_each' | t: price: price_break_price }}" bss-b2b-product-id="{{ product.id }}" bss-b2b-product-price bss-b2b-variant-price bss-b2b-variant-id="{{ featured_selected_variant.id }}" bss-b2b-featured-product="true" >
-                                {{ 'sections.quick_order_list.each' | t: money: price -}}
-                              </span>
-                            </li>
-                          {%- endfor -%}
-                        </ul>
-                        {%- if featured_selected_variant.quantity_price_breaks.size >= 3 -%}
-                          <show-more-button>
-                            <button
-                              class="button-show-more link underlined-link"
-                              id="Show-More-{{ section.id }}"
-                              type="button"
-                            >
-                              <span class="label-show-more label-text"
-                                ><span aria-hidden="true">+ </span>{{ 'products.facets.show_more' | t }}
-                              </span>
-                            </button>
-                          </show-more-button>
-                        {%- endif -%}
-                      {%- endif -%}
-                    </volume-pricing>
-                  {%- endif -%}
+                  <div class="bss-qb-collection-table"></div>
+                  <div class="bss-b2b-qb-table"></div>
                   {%- if cart.taxes_included or cart.duties_included or shop.shipping_policy.body != blank -%}
                     <div class="product__tax caption rte">
                       {%- if cart.duties_included and cart.taxes_included -%}
