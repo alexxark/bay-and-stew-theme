@@ -47,12 +47,12 @@
         "collection_fe8JGg": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Meaning Cards",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
+            "collection": "meaning-cards",
             "custom_label": ""
           }
         },
