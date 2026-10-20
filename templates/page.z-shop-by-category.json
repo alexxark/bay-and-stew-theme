@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Featured",
+        "title": "Shop By Category",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -40,19 +40,19 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "shop-all",
+            "collection": "chains",
             "custom_label": ""
           }
         },
         "collection_VpafB3": {
           "type": "collection",
           "settings": {
-            "title": "New Arrivals",
+            "title": "",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "new",
+            "collection": "charms",
             "custom_label": ""
           }
         },
@@ -64,7 +64,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "best-sellers",
+            "collection": "connectors",
             "custom_label": ""
           }
         },
@@ -76,7 +76,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "starter-packs-bundles",
+            "collection": "jump-rings",
             "custom_label": ""
           }
         },
@@ -88,7 +88,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "mystery-packs",
+            "collection": "findings",
             "custom_label": ""
           }
         },
@@ -100,7 +100,43 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sale",
+            "collection": "blanks",
+            "custom_label": ""
+          }
+        },
+        "collection_pLUBU4": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "beads",
+            "custom_label": ""
+          }
+        },
+        "collection_MVwgjd": {
+          "type": "collection",
+          "settings": {
+            "title": "",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "ready-to-wear",
+            "custom_label": ""
+          }
+        },
+        "collection_eH3fCU": {
+          "type": "collection",
+          "settings": {
+            "title": "Tools & Accessories",
+            "subtitle": "",
+            "use_collection_image": true,
+            "link": "",
+            "aria_label": "",
+            "collection": "welders-tools-accessories",
             "custom_label": ""
           }
         }
@@ -111,7 +147,10 @@
         "collection_z4ChFD",
         "collection_hMzy7r",
         "collection_fraYa4",
-        "collection_kKJYi4"
+        "collection_kKJYi4",
+        "collection_pLUBU4",
+        "collection_MVwgjd",
+        "collection_eH3fCU"
       ],
       "name": "Navigation Grid",
       "settings": {
