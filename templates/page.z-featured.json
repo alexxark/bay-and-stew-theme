@@ -21,7 +21,7 @@
       "type": "page-banner",
       "name": "Page banner",
       "settings": {
-        "title": "Shop by Metal (Chains)",
+        "title": "Featured",
         "description": "",
         "collapsible": true,
         "title_font_size": 32,
@@ -40,19 +40,19 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "gold-filled-chains",
+            "collection": "shop-all",
             "custom_label": ""
           }
         },
         "collection_VpafB3": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "New Arrivals",
             "subtitle": "",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "mixed-metal-chains",
+            "collection": "new",
             "custom_label": ""
           }
         },
@@ -64,7 +64,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "sterling-silver-chains",
+            "collection": "best-sellers",
             "custom_label": ""
           }
         },
@@ -76,7 +76,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "champagne-chains",
+            "collection": "starter-packs-bundles",
             "custom_label": ""
           }
         },
@@ -88,7 +88,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "rose-gold-filled-chains",
+            "collection": "mystery-packs",
             "custom_label": ""
           }
         },
@@ -100,19 +100,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "gold-plated-chains",
-            "custom_label": ""
-          }
-        },
-        "collection_XHBfnW": {
-          "type": "collection",
-          "settings": {
-            "title": "",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "",
-            "aria_label": "",
-            "collection": "silver-plated-chains",
+            "collection": "sale",
             "custom_label": ""
           }
         }
@@ -123,8 +111,7 @@
         "collection_z4ChFD",
         "collection_hMzy7r",
         "collection_fraYa4",
-        "collection_kKJYi4",
-        "collection_XHBfnW"
+        "collection_kKJYi4"
       ],
       "name": "Navigation Grid",
       "settings": {
