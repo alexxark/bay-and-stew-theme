@@ -116,7 +116,7 @@
                 {%- when 'price' -%}
                   <div
                     id="price-{{ section.id }}"
-                    class="featured-product__price-row"
+                    class="product__price-row"
                     role="status"
                     {{ block.shopify_attributes }}
                   >
@@ -127,14 +127,10 @@
                       show_badges: true,
                       price_class: 'price--large'
                     -%}
-                    {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
-                    <div class="bss-b2b-qb-table"></div>
+                    {% render 'customer-status-badge', class: 'status-badge--pdp' %}
                   </div>
-                  {% render 'customer-status-badge',
-                    class: 'status-inline--featured-product',
-                    presentation: 'featured',
-                    show_tooltip: false
-                  %}
+                  {% render "bss-b2b-collection-item-vat", product: product, isFeatured: true %}
+                  <div class="bss-b2b-qb-table"></div>
                   {%- if product.quantity_price_breaks_configured? -%}
                     <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                       <span>{{ 'products.product.volume_pricing.note' | t }}</span>

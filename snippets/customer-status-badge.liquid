@@ -3,14 +3,11 @@
 
   Accepts:
     - class: {String} optional extra class name(s) to apply to the badge
-    - presentation: {String} optional, defaults to "badge". Pass "featured" to
-      render compact inline account messaging for Featured Product.
     - show_tooltip: {Boolean} optional, defaults to true. Pass false to render
       the signed-out state as a plain badge with no asterisk, no tooltip, and
       no hover/focus behavior (used in the cart). Has no effect when signed in.
 {%- endcomment -%}
 {%- liquid
-  assign presentation = presentation | default: 'badge'
   assign status_class = 'status-badge--out'
   assign status_text = 'Signed Out'
 
@@ -28,30 +25,7 @@
     endif
   endif
 -%}
-{%- if presentation == 'featured' -%}
-  {%- assign login_return_url = request.path -%}
-  {%- if request.query_string != blank -%}
-    {%- assign login_return_url = login_return_url | append: '?' | append: request.query_string -%}
-  {%- endif -%}
-  {%- assign login_href = routes.account_login_url | append: '?checkout_url=' | append: login_return_url | url_encode -%}
-  {%- if customer -%}
-    {%- if status_class == 'status-badge--wholesale' -%}
-      <p class="status-inline status-inline--featured status-inline--wholesale {{ class }}">Wholesale account</p>
-    {%- elsif status_class == 'status-badge--retail' -%}
-      <p class="status-inline status-inline--featured status-inline--retail {{ class }}">
-        Retail account
-        <span class="status-inline__sep" aria-hidden="true">·</span>
-        <a href="https://bayandstew.com/pages/apply-for-wholesale">Apply for wholesale</a>
-      </p>
-    {%- else -%}
-      <p class="status-inline status-inline--featured {{ class }}">{{ status_text }}</p>
-    {%- endif -%}
-  {%- else -%}
-    <p class="status-inline status-inline--featured status-inline--out {{ class }}">
-      <a href="{{ login_href }}">Sign in</a> to view account pricing
-    </p>
-  {%- endif -%}
-{%- elsif customer -%}
+{%- if customer -%}
   <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
 {%- elsif show_tooltip == false -%}
   <span class="status-badge {{ status_class }} {{ class }}">{{ status_text }}</span>
