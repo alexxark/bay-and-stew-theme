@@ -76,19 +76,7 @@
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_rVtHG8": {
-          "type": "collection",
-          "settings": {
-            "title": "Calipers",
-            "subtitle": "",
-            "use_collection_image": true,
-            "link": "shopify://products/digital-caliper-ac015",
-            "aria_label": "",
-            "collection": "",
+            "collection": "organization-display",
             "custom_label": ""
           }
         },
@@ -110,7 +98,6 @@
         "collection_fe8JGg",
         "collection_xJaHiG",
         "collection_UpETm6",
-        "collection_rVtHG8",
         "collection_4ntbyB"
       ],
       "name": "Navigation Grid",
