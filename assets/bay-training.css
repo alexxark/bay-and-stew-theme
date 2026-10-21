@@ -147,6 +147,7 @@
 .bay-training-course {
   background: var(--bay-training-course-bg, rgb(var(--color-background)));
   --bay-training-sidebar-offset: calc(var(--header-height, 0px) + 2rem);
+  --bay-training-sidebar-max-height: 60rem;
 }
 
 .bay-training-course__header {
@@ -172,7 +173,10 @@
 
 @media screen and (min-width: 990px) {
   .bay-training-course__layout {
-    grid-template-columns: minmax(0, 1.9fr) minmax(28rem, 1fr);
+    max-width: 122rem;
+    margin: 0 auto;
+    justify-content: center;
+    grid-template-columns: minmax(0, clamp(72rem, 60vw, 78rem)) minmax(34rem, clamp(34rem, 28vw, 37rem));
     gap: 2rem;
     align-items: start;
   }
@@ -293,7 +297,8 @@
   .bay-training-course__sidebar {
     position: sticky;
     top: var(--bay-training-sidebar-offset);
-    max-height: min(65rem, calc(100vh - var(--bay-training-sidebar-offset) - 2rem));
+    height: min(var(--bay-training-sidebar-max-height), calc(100vh - var(--bay-training-sidebar-offset) - 2rem));
+    max-height: var(--bay-training-sidebar-max-height);
   }
 
   .bay-training-course__nav-toggle {
@@ -347,6 +352,7 @@
 
 .bay-training-course__lesson-list-scroll {
   margin-top: 1rem;
+  outline: none;
 }
 
 .bay-training-course__lesson-list-scroll {
@@ -371,9 +377,17 @@
   .bay-training-course__lesson-list-scroll {
     flex: 1 1 auto;
     min-height: 0;
+    height: 100%;
     overflow-y: auto;
     padding-right: 0.4rem;
+    overscroll-behavior: contain;
   }
+}
+
+.bay-training-course__lesson-list-scroll:focus-visible {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.62);
+  outline-offset: 0.1rem;
+  border-radius: 0.8rem;
 }
 
 .bay-training-course__lesson-list {

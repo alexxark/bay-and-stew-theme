@@ -329,12 +329,16 @@
 
       const activeRect = activeButton.getBoundingClientRect();
       const containerRect = scrollContainer.getBoundingClientRect();
-      const offset = 8;
+      const inset = 8;
+      const elementTop = activeRect.top - containerRect.top + scrollContainer.scrollTop;
+      const elementBottom = elementTop + activeRect.height;
+      const viewTop = scrollContainer.scrollTop;
+      const viewBottom = viewTop + scrollContainer.clientHeight;
 
-      if (activeRect.top < containerRect.top + offset) {
-        scrollContainer.scrollTop -= containerRect.top + offset - activeRect.top;
-      } else if (activeRect.bottom > containerRect.bottom - offset) {
-        scrollContainer.scrollTop += activeRect.bottom - (containerRect.bottom - offset);
+      if (elementTop < viewTop + inset) {
+        scrollContainer.scrollTop = Math.max(0, elementTop - inset);
+      } else if (elementBottom > viewBottom - inset) {
+        scrollContainer.scrollTop = Math.max(0, elementBottom - scrollContainer.clientHeight + inset);
       }
     }
 

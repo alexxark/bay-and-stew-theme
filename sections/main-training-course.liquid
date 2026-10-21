@@ -189,7 +189,11 @@
                 Progress cannot be saved in this browser right now.
               </p>
 
-              <div class="bay-training-course__lesson-list-scroll js-bay-training-lesson-scroll">
+              <div
+                class="bay-training-course__lesson-list-scroll js-bay-training-lesson-scroll"
+                tabindex="0"
+                aria-label="Scrollable lesson list"
+              >
                 <ul class="bay-training-course__lesson-list list-unstyled" role="list">
                   {%- for lesson in lessons_source -%}
                     {%- liquid
