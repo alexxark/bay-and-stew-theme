@@ -32,7 +32,8 @@
         "course_access": "public",
         "is_free_course": true,
         "lessons": [
-          "module-1-welcome"
+          "module-1-welcome",
+          "module-2-what-permanent-jewelry-is"
         ],
         "empty_state_message": "Select lessons in the section settings after creating bs_training_lesson entries.",
         "locked_message": "This course is not publicly available yet. Paid course playback will be enabled through a verified backend.",
