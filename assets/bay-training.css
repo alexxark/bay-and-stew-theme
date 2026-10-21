@@ -146,10 +146,11 @@
 
 .bay-training-course {
   background: var(--bay-training-course-bg, rgb(var(--color-background)));
+  --bay-training-sidebar-offset: calc(var(--header-height, 0px) + 2rem);
 }
 
 .bay-training-course__header {
-  margin-bottom: 2.4rem;
+  margin-bottom: 2rem;
 }
 
 .bay-training-course__heading {
@@ -166,20 +167,20 @@
 
 .bay-training-course__layout {
   display: grid;
-  gap: 2rem;
+  gap: 1.8rem;
 }
 
 @media screen and (min-width: 990px) {
   .bay-training-course__layout {
-    grid-template-columns: minmax(0, 2.2fr) minmax(26rem, 1fr);
-    gap: 2.4rem;
+    grid-template-columns: minmax(0, 1.9fr) minmax(28rem, 1fr);
+    gap: 2rem;
     align-items: start;
   }
 }
 
 .bay-training-course__main {
   border: 0.1rem solid rgba(var(--color-foreground), 0.12);
-  border-radius: 1.2rem;
+  border-radius: 1rem;
   background: rgb(var(--color-background));
   overflow: hidden;
 }
@@ -209,7 +210,7 @@
 }
 
 .bay-training-course__lesson-content {
-  padding: 1.6rem;
+  padding: 1.4rem 1.6rem 1.2rem;
   border-top: 0.1rem solid rgba(var(--color-foreground), 0.1);
 }
 
@@ -217,24 +218,38 @@
   margin: 0;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: rgba(var(--color-foreground), 0.7);
 }
 
 .bay-training-course__lesson-title {
-  margin: 0.8rem 0;
+  margin: 0.6rem 0;
+  line-height: 1.25;
 }
 
 .bay-training-course__lesson-description {
   margin: 0;
+  font-size: 1.4rem;
+  line-height: 1.5;
   color: rgba(var(--color-foreground), 0.75);
 }
 
 .bay-training-course__pager {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.8rem;
-  padding: 0 1.6rem 1.6rem;
+  padding: 0 1.6rem 1.4rem;
+}
+
+@media screen and (max-width: 749px) {
+  .bay-training-course__pager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.bay-training-course__pager-button {
+  min-height: 4rem;
+  padding: 0.8rem 1.4rem;
 }
 
 .bay-training-course__pager-button[disabled] {
@@ -243,8 +258,9 @@
 }
 
 .bay-training-course__sidebar {
+  align-self: start;
   border: 0.1rem solid rgba(var(--color-foreground), 0.12);
-  border-radius: 1.2rem;
+  border-radius: 1rem;
   background: rgb(var(--color-background));
   overflow: hidden;
 }
@@ -266,7 +282,7 @@
 }
 
 .bay-training-course__sidebar-panel {
-  padding: 1.4rem 1.6rem 1.6rem;
+  padding: 1.2rem 1.4rem 1.4rem;
 }
 
 .bay-training-course__sidebar.is-collapsed .bay-training-course__sidebar-panel {
@@ -274,17 +290,26 @@
 }
 
 @media screen and (min-width: 990px) {
+  .bay-training-course__sidebar {
+    position: sticky;
+    top: var(--bay-training-sidebar-offset);
+    max-height: min(65rem, calc(100vh - var(--bay-training-sidebar-offset) - 2rem));
+  }
+
   .bay-training-course__nav-toggle {
     display: none;
   }
 
   .bay-training-course__sidebar-panel {
-    display: block;
+    height: 100%;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
   }
 }
 
 .bay-training-course__progress-text {
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.6rem;
   color: rgba(var(--color-foreground), 0.82);
 }
 
@@ -305,7 +330,7 @@
 
 .bay-training-course__complete-toggle {
   width: 100%;
-  margin-top: 1.2rem;
+  margin-top: 1rem;
 }
 
 .bay-training-course:not(.bay-training-course--progress-enabled) .bay-training-course__complete-toggle,
@@ -315,16 +340,47 @@
 }
 
 .bay-training-course__storage-note {
-  margin: 1rem 0 0;
+  margin: 0.6rem 0 0;
   font-size: 1.2rem;
   color: rgba(var(--color-foreground), 0.72);
 }
 
+.bay-training-course__lesson-list-scroll {
+  margin-top: 1rem;
+}
+
+.bay-training-course__lesson-list-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(var(--color-foreground), 0.24) transparent;
+}
+
+.bay-training-course__lesson-list-scroll::-webkit-scrollbar {
+  width: 0.6rem;
+}
+
+.bay-training-course__lesson-list-scroll::-webkit-scrollbar-thumb {
+  background-color: rgba(var(--color-foreground), 0.22);
+  border-radius: 999px;
+}
+
+.bay-training-course__lesson-list-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@media screen and (min-width: 990px) {
+  .bay-training-course__lesson-list-scroll {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    padding-right: 0.4rem;
+  }
+}
+
 .bay-training-course__lesson-list {
-  margin: 1.4rem 0 0;
+  margin: 0;
   padding: 0;
   display: grid;
-  gap: 0.8rem;
+  gap: 0.45rem;
 }
 
 .bay-training-course__lesson-item {
@@ -333,19 +389,27 @@
 
 .bay-training-course__lesson-button {
   width: 100%;
-  border: 0.1rem solid rgba(var(--color-foreground), 0.14);
+  border: 0.1rem solid transparent;
   border-radius: 0.8rem;
-  background: transparent;
-  padding: 1rem;
+  background: rgba(var(--color-foreground), 0.02);
+  padding: 0.8rem 1rem;
   text-align: left;
   color: inherit;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.8rem;
   cursor: pointer;
 }
 
-.bay-training-course__lesson-button.is-active,
 .bay-training-course__lesson-button:hover {
-  border-color: rgba(var(--color-foreground), 0.35);
-  background: rgba(var(--color-foreground), 0.04);
+  border-color: rgba(var(--color-foreground), 0.15);
+  background: rgba(var(--color-foreground), 0.05);
+}
+
+.bay-training-course__lesson-button.is-active {
+  border-color: rgba(var(--color-foreground), 0.28);
+  background: rgba(var(--color-foreground), 0.08);
 }
 
 .bay-training-course__lesson-button:focus-visible {
@@ -355,19 +419,39 @@
 
 .bay-training-course__lesson-main {
   display: flex;
-  gap: 0.8rem;
+  gap: 0.7rem;
   align-items: flex-start;
+  min-width: 0;
+}
+
+.bay-training-course__lesson-play,
+.bay-training-course__lesson-check {
+  width: 1.5rem;
+  min-width: 1.5rem;
+  margin-top: 0.1rem;
+  text-align: center;
+}
+
+.bay-training-course__lesson-play {
+  opacity: 0;
+  color: rgba(var(--color-foreground), 0.9);
+}
+
+.bay-training-course__lesson-item.is-active .bay-training-course__lesson-play {
+  opacity: 1;
 }
 
 .bay-training-course__lesson-check {
-  width: 1.6rem;
-  min-width: 1.6rem;
-  margin-top: 0.2rem;
   opacity: 0;
+  color: rgba(var(--color-foreground), 0.78);
 }
 
 .bay-training-course__lesson-item.is-complete .bay-training-course__lesson-check {
   opacity: 1;
+}
+
+.bay-training-course__lesson-item.is-active .bay-training-course__lesson-check {
+  opacity: 0;
 }
 
 .bay-training-course:not(.bay-training-course--progress-enabled) .bay-training-course__lesson-check {
@@ -381,11 +465,15 @@
 
 .bay-training-course__lesson-item-title {
   font-weight: 600;
+  font-size: 1.35rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
 }
 
 .bay-training-course__lesson-duration,
 .bay-training-course__lesson-warning {
-  font-size: 1.2rem;
+  font-size: 1.15rem;
+  line-height: 1.4;
   color: rgba(var(--color-foreground), 0.7);
 }
 

@@ -87,6 +87,7 @@
       this.previousButtonElement = this.section.querySelector('.js-bay-training-prev');
       this.nextButtonElement = this.section.querySelector('.js-bay-training-next');
       this.navToggleButtonElement = this.section.querySelector('.js-bay-training-nav-toggle');
+      this.lessonListScrollElement = this.section.querySelector('.js-bay-training-lesson-scroll');
       this.lessonButtons = Array.from(this.section.querySelectorAll('[data-lesson-select]'));
       this.lessonItems = Array.from(this.section.querySelectorAll('[data-lesson-item]'));
 
@@ -311,9 +312,29 @@
         item.classList.toggle('is-active', index === this.selectedIndex);
       });
 
+      this.ensureActiveLessonVisible();
+
       if (focusLesson) {
         const activeButton = this.lessonButtons[this.selectedIndex];
         if (activeButton) activeButton.focus();
+      }
+    }
+
+    ensureActiveLessonVisible() {
+      const activeButton = this.lessonButtons[this.selectedIndex];
+      const scrollContainer = this.lessonListScrollElement;
+
+      if (!activeButton || !scrollContainer) return;
+      if (scrollContainer.scrollHeight <= scrollContainer.clientHeight + 1) return;
+
+      const activeRect = activeButton.getBoundingClientRect();
+      const containerRect = scrollContainer.getBoundingClientRect();
+      const offset = 8;
+
+      if (activeRect.top < containerRect.top + offset) {
+        scrollContainer.scrollTop -= containerRect.top + offset - activeRect.top;
+      } else if (activeRect.bottom > containerRect.bottom - offset) {
+        scrollContainer.scrollTop += activeRect.bottom - (containerRect.bottom - offset);
       }
     }
 

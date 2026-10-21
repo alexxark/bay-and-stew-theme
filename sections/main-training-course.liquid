@@ -189,36 +189,43 @@
                 Progress cannot be saved in this browser right now.
               </p>
 
-              <ul class="bay-training-course__lesson-list list-unstyled" role="list">
-                {%- for lesson in lessons_source -%}
-                  {%- liquid
-                    assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
-                    assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
-                    assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
-                    assign lesson_duration_minutes = blank
-                    if lesson_duration_seconds != blank
-                      assign lesson_duration_minutes = lesson_duration_seconds | plus: 0 | divided_by: 60
-                    endif
-                    assign lesson_duration_label = blank
-                    if lesson_duration_minutes != blank and lesson_duration_minutes > 0
-                      assign lesson_duration_label = lesson_duration_minutes | append: ' min'
-                    endif
-                    assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
-                    assign has_playback = false
-                    if lesson_playback_id != blank
-                      assign has_playback = true
-                    endif
-                  -%}
-                  {% render 'training-lesson-item',
-                    lesson_index: forloop.index0,
-                    lesson_id: lesson_id,
-                    lesson_title: lesson_title,
-                    lesson_duration_label: lesson_duration_label,
-                    has_playback: has_playback,
-                    is_active: forloop.first
-                  %}
-                {%- endfor -%}
-              </ul>
+              <div class="bay-training-course__lesson-list-scroll js-bay-training-lesson-scroll">
+                <ul class="bay-training-course__lesson-list list-unstyled" role="list">
+                  {%- for lesson in lessons_source -%}
+                    {%- liquid
+                      assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
+                      assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+                      assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
+                      assign lesson_duration_label = blank
+
+                      if lesson_duration_seconds != blank
+                        assign lesson_total_seconds = lesson_duration_seconds | plus: 0
+                        assign lesson_duration_minutes = lesson_total_seconds | divided_by: 60
+                        assign lesson_duration_remainder = lesson_total_seconds | modulo: 60
+                        assign lesson_duration_remainder_display = lesson_duration_remainder
+                        if lesson_duration_remainder < 10
+                          assign lesson_duration_remainder_display = '0' | append: lesson_duration_remainder
+                        endif
+                        assign lesson_duration_label = lesson_duration_minutes | append: ':' | append: lesson_duration_remainder_display
+                      endif
+
+                      assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
+                      assign has_playback = false
+                      if lesson_playback_id != blank
+                        assign has_playback = true
+                      endif
+                    -%}
+                    {% render 'training-lesson-item',
+                      lesson_index: forloop.index0,
+                      lesson_id: lesson_id,
+                      lesson_title: lesson_title,
+                      lesson_duration_label: lesson_duration_label,
+                      has_playback: has_playback,
+                      is_active: forloop.first
+                    %}
+                  {%- endfor -%}
+                </ul>
+              </div>
             </div>
           </aside>
         </div>
@@ -233,13 +240,16 @@
                 assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
                 assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
                 assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
-                assign lesson_duration_minutes = blank
-                if lesson_duration_seconds != blank
-                  assign lesson_duration_minutes = lesson_duration_seconds | plus: 0 | divided_by: 60
-                endif
                 assign lesson_duration_label = blank
-                if lesson_duration_minutes != blank and lesson_duration_minutes > 0
-                  assign lesson_duration_label = lesson_duration_minutes | append: ' min'
+                if lesson_duration_seconds != blank
+                  assign lesson_total_seconds = lesson_duration_seconds | plus: 0
+                  assign lesson_duration_minutes = lesson_total_seconds | divided_by: 60
+                  assign lesson_duration_remainder = lesson_total_seconds | modulo: 60
+                  assign lesson_duration_remainder_display = lesson_duration_remainder
+                  if lesson_duration_remainder < 10
+                    assign lesson_duration_remainder_display = '0' | append: lesson_duration_remainder
+                  endif
+                  assign lesson_duration_label = lesson_duration_minutes | append: ':' | append: lesson_duration_remainder_display
                 endif
                 assign lesson_order = lesson.lesson_order.value | default: lesson.lesson_order
                 assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
