@@ -33,7 +33,19 @@
         "is_free_course": true,
         "lessons": [
           "module-1-welcome",
-          "module-2-what-permanent-jewelry-is"
+          "module-2-what-permanent-jewelry-is",
+          "module-3-tools-materials",
+          "module-4-station-setup",
+          "module-5-safety-overview",
+          "module-6-measuring-fitting",
+          "module-7-welding-basics",
+          "module-8-welding-demonstration-client-communication",
+          "module-9-final-polish-aftercare",
+          "module-10-full-client-experience",
+          "module-11-anklets-service-expansion",
+          "module-12-common-client-questions",
+          "module-13-before-charging-clients",
+          "module-14-course-completion"
         ],
         "empty_state_message": "Select lessons in the section settings after creating bs_training_lesson entries.",
         "locked_message": "This course is not publicly available yet. Paid course playback will be enabled through a verified backend.",
