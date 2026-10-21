@@ -31,7 +31,7 @@
             "access_badge": "free",
             "duration_label": "Duration: 20 minutes, 3 seconds",
             "lesson_count_label": "Lessons: 14",
-            "button_label": "Start Free Training",
+            "button_label": "Start Free raining",
             "button_link": "/pages/permanent-jewelry-basics",
             "featured": true,
             "coming_soon": false
@@ -58,7 +58,7 @@
       ],
       "name": "BS Training Academy",
       "settings": {
-        "heading": "Bay & Stew Training Videos",
+        "heading": "How-To’s by Bay & Stew",
         "description": "<p>Choose your training path and start learning with Bay & Stew.</p>",
         "layout_width": "page-width",
         "background_color": "#f8f6f3",
