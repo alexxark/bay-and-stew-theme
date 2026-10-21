@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-training-course",
+      "settings": {
+        "course_title": "Permanent Jewelry Basics",
+        "course_description": "Learn Bay & Stew's permanent jewelry foundations through step-by-step lessons.",
+        "course_key": "permanent-jewelry-basics",
+        "layout_width": "page-width",
+        "background_color": "#ffffff",
+        "course_access": "public",
+        "is_free_course": true,
+        "empty_state_message": "Select lessons in the section settings after creating bs_training_lesson entries.",
+        "locked_message": "This course is not publicly available yet.",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    }
+  },
+  "order": ["main"]
+}

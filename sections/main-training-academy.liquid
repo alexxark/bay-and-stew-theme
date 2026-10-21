@@ -1,0 +1,342 @@
+{{ 'bay-training.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign layout_width_class = section.settings.layout_width | default: 'page-width'
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .bay-training-academy {
+    --bay-training-academy-bg: {{ section.settings.background_color }};
+    --bay-training-academy-mobile-gap: {{ section.settings.mobile_spacing }}px;
+    --bay-training-academy-desktop-columns: {{ section.settings.desktop_columns }};
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .bay-training-academy {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section class="bay-training-academy">
+  <div class="{{ layout_width_class }}">
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <div class="bay-training-academy__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="bay-training-academy__heading title inline-richtext h1">{{ section.settings.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <div class="bay-training-academy__description rte">
+            {{ section.settings.description }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="bay-training-academy__grid" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign course_title = block.settings.course_title | default: 'Course title'
+          assign button_label = block.settings.button_label | default: 'View course'
+          assign has_button_link = false
+          if block.settings.button_link != blank
+            assign has_button_link = true
+          endif
+
+          assign access_badge_label = 'Free'
+          if block.settings.access_badge == 'premium'
+            assign access_badge_label = 'Premium'
+          endif
+        -%}
+        <article
+          class="bay-training-card{% if block.settings.featured %} bay-training-card--featured{% endif %}"
+          role="listitem"
+          {{ block.shopify_attributes }}
+        >
+          {%- if block.settings.course_image != blank -%}
+            <div class="bay-training-card__media">
+              {{
+                block.settings.course_image
+                | image_url: width: 1200
+                | image_tag:
+                  loading: 'lazy',
+                  widths: '320, 480, 640, 960, 1200',
+                  sizes: '(min-width: 990px) 33vw, (min-width: 750px) 50vw, 100vw',
+                  class: 'bay-training-card__image',
+                  alt: course_title
+              }}
+            </div>
+          {%- endif -%}
+
+          <div class="bay-training-card__content">
+            <div class="bay-training-card__badges">
+              <span class="bay-training-card__badge bay-training-card__badge--{{ block.settings.access_badge }}">
+                {{ access_badge_label }}
+              </span>
+              {%- if block.settings.coming_soon -%}
+                <span class="bay-training-card__badge bay-training-card__badge--coming-soon">Coming Soon</span>
+              {%- endif -%}
+            </div>
+
+            <h3 class="bay-training-card__title h3">{{ course_title | escape }}</h3>
+
+            {%- if block.settings.course_description != blank -%}
+              <p class="bay-training-card__description">{{ block.settings.course_description | escape }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.duration_label != blank or block.settings.lesson_count_label != blank -%}
+              <ul class="bay-training-card__meta list-unstyled" role="list">
+                {%- if block.settings.duration_label != blank -%}
+                  <li>{{ block.settings.duration_label | escape }}</li>
+                {%- endif -%}
+                {%- if block.settings.lesson_count_label != blank -%}
+                  <li>{{ block.settings.lesson_count_label | escape }}</li>
+                {%- endif -%}
+              </ul>
+            {%- endif -%}
+
+            <div class="bay-training-card__actions">
+              {%- if has_button_link -%}
+                <a class="button button--secondary" href="{{ block.settings.button_link }}">
+                  {{ button_label | escape }}
+                </a>
+              {%- else -%}
+                <span class="button button--secondary" aria-disabled="true" role="link">
+                  {{ button_label | escape }}
+                </span>
+              {%- endif -%}
+            </div>
+          </div>
+        </article>
+      {%- endfor -%}
+
+      {%- if section.blocks.size == 0 and request.design_mode -%}
+        <article class="bay-training-card bay-training-card--placeholder" role="listitem">
+          <div class="bay-training-card__content">
+            <h3 class="bay-training-card__title h3">Add course cards to build your academy dashboard</h3>
+            <p class="bay-training-card__description">
+              Use section blocks to add free and premium training cards.
+            </p>
+          </div>
+        </article>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bay & Stew Training Academy",
+  "tag": "section",
+  "class": "section section-main-training-academy",
+  "max_blocks": 24,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Bay & Stew Training Academy"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description",
+      "default": "<p>Choose your training path and start learning with Bay & Stew.</p>"
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout width",
+      "default": "page-width",
+      "options": [
+        {
+          "value": "page-width page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width",
+          "label": "Standard"
+        },
+        {
+          "value": "bay-training__full-width",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#f8f6f3"
+    },
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "default": "2",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "mobile_spacing",
+      "label": "Mobile spacing",
+      "min": 8,
+      "max": 32,
+      "step": 2,
+      "unit": "px",
+      "default": 16
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "course_card",
+      "name": "Course card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "course_image",
+          "label": "Course image"
+        },
+        {
+          "type": "text",
+          "id": "course_title",
+          "label": "Course title",
+          "default": "Course title"
+        },
+        {
+          "type": "textarea",
+          "id": "course_description",
+          "label": "Course description",
+          "default": "Add a short summary for this course."
+        },
+        {
+          "type": "select",
+          "id": "access_badge",
+          "label": "Access badge",
+          "default": "free",
+          "options": [
+            {
+              "value": "free",
+              "label": "Free"
+            },
+            {
+              "value": "premium",
+              "label": "Premium"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "duration_label",
+          "label": "Duration label",
+          "default": "Duration: 60 min"
+        },
+        {
+          "type": "text",
+          "id": "lesson_count_label",
+          "label": "Lesson count label",
+          "default": "Lessons: 14"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "View course"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "checkbox",
+          "id": "featured",
+          "label": "Featured styling",
+          "default": false
+        },
+        {
+          "type": "checkbox",
+          "id": "coming_soon",
+          "label": "Show coming soon badge",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bay & Stew Training Academy",
+      "blocks": [
+        {
+          "type": "course_card",
+          "settings": {
+            "course_title": "Permanent Jewelry Basics",
+            "course_description": "Start with Bay & Stew's free foundational lessons for permanent jewelry artists.",
+            "access_badge": "free",
+            "duration_label": "Duration: 14 lessons",
+            "lesson_count_label": "Lessons: 14",
+            "button_label": "Start free training",
+            "button_link": "/pages/training-course",
+            "featured": true
+          }
+        },
+        {
+          "type": "course_card",
+          "settings": {
+            "course_title": "Advanced Permanent Jewelry Training",
+            "course_description": "Premium curriculum is in development. Join the waitlist or check back soon.",
+            "access_badge": "premium",
+            "duration_label": "Premium course",
+            "lesson_count_label": "Coming soon",
+            "button_label": "Coming soon",
+            "coming_soon": true
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

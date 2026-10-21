@@ -1,0 +1,409 @@
+{{ 'bay-training.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'bay-training.js' | asset_url }}" defer="defer"></script>
+
+{%- liquid
+  assign layout_width_class = section.settings.layout_width | default: 'page-width'
+  assign lessons_source = section.settings.lessons
+  if lessons_source == blank and section.settings.lessons.value != blank
+    assign lessons_source = section.settings.lessons.value
+  endif
+
+  assign is_public_course = false
+  if section.settings.course_access == 'public'
+    assign is_public_course = true
+  endif
+
+  assign can_render_lessons = false
+  if is_public_course and section.settings.is_free_course
+    assign can_render_lessons = true
+  endif
+
+  assign enable_progress_tracking = false
+  if can_render_lessons
+    assign enable_progress_tracking = true
+  endif
+
+  assign lesson_count = 0
+  assign first_lesson_title = blank
+  assign first_lesson_description = blank
+  assign first_lesson_playback_id = blank
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .bay-training-course {
+    --bay-training-course-bg: {{ section.settings.background_color }};
+    padding-top: {{ section.settings.padding_top | times: 0.75 | round: 0 }}px;
+    padding-bottom: {{ section.settings.padding_bottom | times: 0.75 | round: 0 }}px;
+  }
+
+  @media screen and (min-width: 750px) {
+    #shopify-section-{{ section.id }} .bay-training-course {
+      padding-top: {{ section.settings.padding_top }}px;
+      padding-bottom: {{ section.settings.padding_bottom }}px;
+    }
+  }
+{%- endstyle -%}
+
+<section
+  class="bay-training-course js-bay-training-course{% if enable_progress_tracking %} bay-training-course--progress-enabled{% endif %}"
+  data-section-id="{{ section.id }}"
+  data-course-key="{{ section.settings.course_key | default: section.id | handleize }}"
+  data-access-mode="{{ section.settings.course_access }}"
+  data-enable-progress="{{ enable_progress_tracking }}"
+>
+  <div class="{{ layout_width_class }}">
+    <header class="bay-training-course__header">
+      {%- if section.settings.course_title != blank -%}
+        <h2 class="bay-training-course__heading title inline-richtext h1">{{ section.settings.course_title | escape }}</h2>
+      {%- endif -%}
+      {%- if section.settings.course_description != blank -%}
+        <div class="bay-training-course__description rte">
+          {{ section.settings.course_description }}
+        </div>
+      {%- endif -%}
+    </header>
+
+    {%- if can_render_lessons == false -%}
+      <div class="bay-training-course__locked-state" role="status">
+        <h3 class="h3">
+          {%- if section.settings.course_access == 'public' and section.settings.is_free_course == false -%}
+            Premium delivery is not enabled in Phase 1
+          {%- else -%}
+            Course access is not yet public
+          {%- endif -%}
+        </h3>
+        <p>{{ section.settings.locked_message | escape }}</p>
+      </div>
+    {%- else -%}
+      {%- for lesson in lessons_source -%}
+        {%- liquid
+          assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
+          assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
+          assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+          assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
+          assign lesson_duration_minutes = blank
+          if lesson_duration_seconds != blank
+            assign lesson_duration_minutes = lesson_duration_seconds | plus: 0 | divided_by: 60
+          endif
+          assign lesson_duration_label = blank
+          if lesson_duration_minutes != blank and lesson_duration_minutes > 0
+            assign lesson_duration_label = lesson_duration_minutes | append: ' min'
+          endif
+          assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
+        -%}
+
+        {%- if forloop.first -%}
+          {%- assign first_lesson_title = lesson_title -%}
+          {%- assign first_lesson_description = lesson_description -%}
+          {%- assign first_lesson_playback_id = lesson_playback_id -%}
+        {%- endif -%}
+
+        {%- assign lesson_count = lesson_count | plus: 1 -%}
+      {%- endfor -%}
+
+      {%- if lesson_count > 0 -%}
+        <div class="bay-training-course__layout">
+          <div class="bay-training-course__main">
+            <div class="bay-training-course__player-shell">
+              <mux-player
+                class="bay-training-course__player js-bay-training-player"
+                stream-type="on-demand"
+                loading="viewport"
+                controls
+                title="{{ first_lesson_title | default: section.settings.course_title | escape }}"
+                metadata-video-title="{{ first_lesson_title | default: section.settings.course_title | escape }}"
+                {% if first_lesson_playback_id != blank %}
+                  playback-id="{{ first_lesson_playback_id | escape }}"
+                {% endif %}
+                {% if first_lesson_playback_id == blank %}
+                  hidden
+                {% endif %}
+              ></mux-player>
+
+              <div
+                class="bay-training-course__player-state js-bay-training-player-state"
+                role="status"
+                {% if first_lesson_playback_id != blank %}
+                  hidden
+                {% endif %}
+              >
+                This lesson does not yet have a video playback ID.
+              </div>
+            </div>
+
+            <div class="bay-training-course__lesson-content">
+              <p class="bay-training-course__lesson-position js-bay-training-lesson-position">
+                Lesson 1 of {{ lesson_count }}
+              </p>
+              <h3 class="bay-training-course__lesson-title h2 js-bay-training-lesson-title">
+                {{ first_lesson_title | default: 'Lesson title' | escape }}
+              </h3>
+              <p class="bay-training-course__lesson-description js-bay-training-lesson-description">
+                {{ first_lesson_description | escape }}
+              </p>
+            </div>
+
+            <div class="bay-training-course__pager">
+              <button
+                type="button"
+                class="button button--secondary bay-training-course__pager-button js-bay-training-prev"
+                data-action="prev"
+              >
+                Previous Lesson
+              </button>
+              <button
+                type="button"
+                class="button button--secondary bay-training-course__pager-button js-bay-training-next"
+                data-action="next"
+              >
+                Next Lesson
+              </button>
+            </div>
+          </div>
+
+          <aside class="bay-training-course__sidebar js-bay-training-sidebar is-collapsed" aria-label="Lesson navigation">
+            <button
+              type="button"
+              class="bay-training-course__nav-toggle js-bay-training-nav-toggle"
+              aria-expanded="false"
+              aria-controls="BayTrainingLessons-{{ section.id }}"
+            >
+              Toggle lesson navigation
+            </button>
+
+            <div class="bay-training-course__sidebar-panel" id="BayTrainingLessons-{{ section.id }}">
+              <p class="bay-training-course__progress-text js-bay-training-progress-text" aria-live="polite">
+                0% complete
+              </p>
+              <div class="bay-training-course__progress-track" aria-hidden="true">
+                <span class="bay-training-course__progress-bar js-bay-training-progress-bar"></span>
+              </div>
+              <button
+                type="button"
+                class="button button--secondary bay-training-course__complete-toggle js-bay-training-complete-toggle"
+                aria-pressed="false"
+              >
+                Mark Complete
+              </button>
+              <p class="bay-training-course__storage-note js-bay-training-storage-note" hidden>
+                Progress cannot be saved in this browser right now.
+              </p>
+
+              <ul class="bay-training-course__lesson-list list-unstyled" role="list">
+                {%- for lesson in lessons_source -%}
+                  {%- liquid
+                    assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
+                    assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+                    assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
+                    assign lesson_duration_minutes = blank
+                    if lesson_duration_seconds != blank
+                      assign lesson_duration_minutes = lesson_duration_seconds | plus: 0 | divided_by: 60
+                    endif
+                    assign lesson_duration_label = blank
+                    if lesson_duration_minutes != blank and lesson_duration_minutes > 0
+                      assign lesson_duration_label = lesson_duration_minutes | append: ' min'
+                    endif
+                    assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
+                    assign has_playback = false
+                    if lesson_playback_id != blank
+                      assign has_playback = true
+                    endif
+                  -%}
+                  {% render 'training-lesson-item',
+                    lesson_index: forloop.index0,
+                    lesson_id: lesson_id,
+                    lesson_title: lesson_title,
+                    lesson_duration_label: lesson_duration_label,
+                    has_playback: has_playback,
+                    is_active: forloop.first
+                  %}
+                {%- endfor -%}
+              </ul>
+            </div>
+          </aside>
+        </div>
+
+        <p class="visually-hidden js-bay-training-live-region" aria-live="polite" aria-atomic="true"></p>
+
+        <script type="application/json" data-training-lessons>
+          [
+            {%- for lesson in lessons_source -%}
+              {%- liquid
+                assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
+                assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
+                assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+                assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
+                assign lesson_duration_minutes = blank
+                if lesson_duration_seconds != blank
+                  assign lesson_duration_minutes = lesson_duration_seconds | plus: 0 | divided_by: 60
+                endif
+                assign lesson_duration_label = blank
+                if lesson_duration_minutes != blank and lesson_duration_minutes > 0
+                  assign lesson_duration_label = lesson_duration_minutes | append: ' min'
+                endif
+                assign lesson_order = lesson.lesson_order.value | default: lesson.lesson_order
+                assign lesson_id = lesson.system.id | default: lesson.id | default: lesson.handle | default: forloop.index0
+              -%}
+              {
+                "id": {{ lesson_id | json }},
+                "title": {{ lesson_title | json }},
+                "description": {{ lesson_description | json }},
+                "playbackId": {{ lesson_playback_id | json }},
+                "durationLabel": {{ lesson_duration_label | json }},
+                "durationSeconds": {% if lesson_duration_seconds != blank %}{{ lesson_duration_seconds | plus: 0 }}{% else %}null{% endif %},
+                "order": {% if lesson_order != blank %}{{ lesson_order | plus: 0 }}{% else %}null{% endif %}
+              }{% unless forloop.last %},{% endunless %}
+            {%- endfor -%}
+          ]
+        </script>
+      {%- else -%}
+        <div class="bay-training-course__empty-state">
+          <h3 class="h3">No lessons configured yet</h3>
+          <p>{{ section.settings.empty_state_message | escape }}</p>
+          {%- if request.design_mode -%}
+            <p>
+              Add entries to the <strong>Lessons</strong> setting using the <strong>bs_training_lesson</strong> metaobject type.
+            </p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Bay & Stew Training Course",
+  "tag": "section",
+  "class": "section section-main-training-course",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "course_title",
+      "label": "Course title",
+      "default": "Permanent Jewelry Basics"
+    },
+    {
+      "type": "textarea",
+      "id": "course_description",
+      "label": "Course description",
+      "default": "Learn Bay & Stew's permanent jewelry foundations through step-by-step lessons."
+    },
+    {
+      "type": "text",
+      "id": "course_key",
+      "label": "Course key (for browser progress storage)",
+      "default": "permanent-jewelry-basics",
+      "info": "Use a unique key per course so progress does not overlap."
+    },
+    {
+      "type": "select",
+      "id": "layout_width",
+      "label": "Layout width",
+      "default": "page-width",
+      "options": [
+        {
+          "value": "page-width page-width--narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "page-width",
+          "label": "Standard"
+        },
+        {
+          "value": "bay-training__full-width",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "select",
+      "id": "course_access",
+      "label": "Course access mode",
+      "default": "public",
+      "options": [
+        {
+          "value": "public",
+          "label": "Public"
+        },
+        {
+          "value": "coming_soon",
+          "label": "Coming soon"
+        },
+        {
+          "value": "restricted",
+          "label": "Restricted"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "is_free_course",
+      "label": "Enable free-course progress tracking",
+      "default": true,
+      "info": "Enable only for publicly available free courses."
+    },
+    {
+      "type": "paragraph",
+      "content": "Lessons are loaded from bs_training_lesson metaobjects. Configure those definitions in Shopify Admin before selecting lessons."
+    },
+    {
+      "type": "metaobject_list",
+      "id": "lessons",
+      "metaobject_type": "bs_training_lesson",
+      "label": "Lessons",
+      "info": "Select and reorder lesson entries in the order you want students to watch them."
+    },
+    {
+      "type": "text",
+      "id": "empty_state_message",
+      "label": "Empty state message",
+      "default": "Select lessons in the section settings after creating bs_training_lesson entries."
+    },
+    {
+      "type": "text",
+      "id": "locked_message",
+      "label": "Locked/coming soon message",
+      "default": "This course is not publicly available yet. Paid course playback will be enabled through a verified backend."
+    },
+    {
+      "type": "header",
+      "content": "Section padding"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 36
+    }
+  ],
+  "presets": [
+    {
+      "name": "Bay & Stew Training Course"
+    }
+  ]
+}
+{% endschema %}

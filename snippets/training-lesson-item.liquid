@@ -1,0 +1,40 @@
+{%- liquid
+  assign resolved_title = lesson_title | default: 'Lesson'
+  assign resolved_index = lesson_index | default: 0
+  assign resolved_lesson_id = lesson_id | default: resolved_index
+  assign has_video = false
+  if has_playback
+    assign has_video = true
+  endif
+-%}
+
+<li
+  class="bay-training-course__lesson-item{% if is_active %} is-active{% endif %}"
+  data-lesson-item
+  data-lesson-id="{{ resolved_lesson_id | escape }}"
+>
+  <button
+    type="button"
+    class="bay-training-course__lesson-button{% if is_active %} is-active{% endif %}"
+    data-lesson-select
+    data-index="{{ resolved_index }}"
+    data-lesson-id="{{ resolved_lesson_id | escape }}"
+    data-has-playback="{{ has_video }}"
+    {% if is_active %}
+      aria-current="true"
+    {% endif %}
+  >
+    <span class="bay-training-course__lesson-main">
+      <span class="bay-training-course__lesson-check" aria-hidden="true">✓</span>
+      <span class="bay-training-course__lesson-text-group">
+        <span class="bay-training-course__lesson-item-title">{{ resolved_title | escape }}</span>
+        {%- if lesson_duration_label != blank -%}
+          <span class="bay-training-course__lesson-duration">{{ lesson_duration_label | escape }}</span>
+        {%- endif -%}
+      </span>
+    </span>
+    {%- unless has_video -%}
+      <span class="bay-training-course__lesson-warning">Video unavailable</span>
+    {%- endunless -%}
+  </button>
+</li>
