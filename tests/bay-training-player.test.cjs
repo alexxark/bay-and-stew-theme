@@ -9,9 +9,17 @@ const bayTrainingScript = fs.readFileSync(
   'utf8'
 );
 
-function createCourseHarness() {
+function createCourseHarness(options = {}) {
   const thumbnailOne = 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-1.jpg?v=1';
   const thumbnailTwo = 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-2.jpg?v=1';
+  const thumbnailThree = 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-3.jpg?v=1';
+  const lessons = options.lessons || [
+    { id: 'lesson-1', title: 'Lesson 1', description: 'One', playbackId: 'playback-1', thumbnailUrl: thumbnailOne, durationLabel: '1:00', durationSeconds: 60, order: 1 },
+    { id: 'lesson-2', title: 'Lesson 2', description: 'Two', playbackId: 'playback-2', thumbnailUrl: thumbnailTwo, durationLabel: '2:00', durationSeconds: 120, order: 2 },
+    { id: 'lesson-3', title: 'Lesson 3', description: 'Three', playbackId: 'playback-3', thumbnailUrl: '', durationLabel: '3:00', durationSeconds: 180, order: 3 },
+  ];
+  const lessonsJson = JSON.stringify(lessons);
+  const imageRequests = options.imageRequests || [];
 
   const dom = new JSDOM(
     `
@@ -49,13 +57,7 @@ function createCourseHarness() {
               </li>
             </ul>
           </div>
-          <script type="application/json" data-training-lessons>
-            [
-              {"id":"lesson-1","title":"Lesson 1","description":"One","playbackId":"playback-1","thumbnailUrl":"${thumbnailOne}","durationLabel":"1:00","durationSeconds":60,"order":1},
-              {"id":"lesson-2","title":"Lesson 2","description":"Two","playbackId":"playback-2","thumbnailUrl":"${thumbnailTwo}","durationLabel":"2:00","durationSeconds":120,"order":2},
-              {"id":"lesson-3","title":"Lesson 3","description":"Three","playbackId":"playback-3","thumbnailUrl":"","durationLabel":"3:00","durationSeconds":180,"order":3}
-            ]
-          </script>
+          <script type="application/json" data-training-lessons>${lessonsJson}</script>
         </section>
       </div>
     `,
@@ -74,6 +76,35 @@ function createCourseHarness() {
   };
   window.cancelAnimationFrame = () => {};
 
+  class MockImage {
+    constructor() {
+      this.onload = null;
+      this.onerror = null;
+      this.decoding = 'async';
+      this.fetchPriority = 'auto';
+      this._src = '';
+    }
+
+    set src(value) {
+      this._src = value;
+      imageRequests.push({
+        url: value,
+        fetchPriority: this.fetchPriority,
+      });
+      Promise.resolve().then(() => {
+        if (typeof this.onload === 'function') this.onload();
+      });
+    }
+
+    get src() {
+      return this._src;
+    }
+
+    decode() {
+      return Promise.resolve();
+    }
+  }
+
   class MockMuxPlayer extends window.HTMLElement {
     constructor() {
       super();
@@ -85,6 +116,7 @@ function createCourseHarness() {
     pause() {}
   }
 
+  window.Image = MockImage;
   window.customElements.define('mux-player', MockMuxPlayer);
   window.eval(bayTrainingScript);
   window.BayTrainingCourseManager.initAll(window.document);
@@ -99,6 +131,8 @@ function createCourseHarness() {
     player,
     thumbnailOne,
     thumbnailTwo,
+    thumbnailThree,
+    imageRequests,
   };
 }
 
@@ -126,5 +160,35 @@ test('training course keeps distinct posters per lesson and clears when missing'
   assert.equal(player.getAttribute('poster'), thumbnailOne);
 
   instance.destroy();
+  harness.dom.window.close();
+});
+
+test('training course preloads thumbnails with dedupe and low-priority background requests', async () => {
+  const imageRequests = [];
+  const harness = createCourseHarness({
+    imageRequests,
+    lessons: [
+      { id: 'lesson-1', title: 'Lesson 1', description: 'One', playbackId: 'playback-1', thumbnailUrl: 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-1.jpg?v=1', durationLabel: '1:00', durationSeconds: 60, order: 1 },
+      { id: 'lesson-2', title: 'Lesson 2', description: 'Two', playbackId: 'playback-2', thumbnailUrl: 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-2.jpg?v=1', durationLabel: '2:00', durationSeconds: 120, order: 2 },
+      { id: 'lesson-3', title: 'Lesson 3', description: 'Three', playbackId: 'playback-3', thumbnailUrl: 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-2.jpg?v=1', durationLabel: '3:00', durationSeconds: 180, order: 3 },
+      { id: 'lesson-4', title: 'Lesson 4', description: 'Four', playbackId: 'playback-4', thumbnailUrl: '', durationLabel: '4:00', durationSeconds: 240, order: 4 },
+      { id: 'lesson-5', title: 'Lesson 5', description: 'Five', playbackId: 'playback-5', thumbnailUrl: 'https://cdn.shopify.com/s/files/1/0000/0001/files/module-3.jpg?v=1', durationLabel: '5:00', durationSeconds: 300, order: 5 },
+    ],
+  });
+
+  await Promise.resolve();
+  await Promise.resolve();
+
+  const urls = imageRequests.map((entry) => entry.url);
+  assert.equal(urls[0], harness.thumbnailOne);
+  assert.deepEqual(
+    Array.from(new Set(urls)),
+    [harness.thumbnailOne, harness.thumbnailTwo, harness.thumbnailThree]
+  );
+
+  const lowPriorityRequests = imageRequests.filter((entry) => entry.fetchPriority === 'low');
+  assert.ok(lowPriorityRequests.length >= 1);
+
+  harness.instance.destroy();
   harness.dom.window.close();
 });

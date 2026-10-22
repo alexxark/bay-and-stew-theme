@@ -4,6 +4,7 @@
   const MUX_PLAYER_SCRIPT_ID = 'bay-training-mux-player-loader';
   const MUX_PLAYER_SCRIPT_SRC = 'https://cdn.jsdelivr.net/npm/@mux/mux-player';
   const RESUME_STATE_VERSION = 1;
+  const THUMBNAIL_PRELOAD_CONCURRENCY = 3;
 
   if (window.BayTrainingCourseManager) {
     window.BayTrainingCourseManager.initAll(document);
@@ -13,6 +14,20 @@
   const toBoolean = (value) => String(value) === 'true';
 
   const isFiniteNumber = (value) => Number.isFinite(value) && !Number.isNaN(value);
+
+  const normalizeThumbnailUrl = (value) => {
+    if (typeof value !== 'string') return '';
+    const trimmedValue = value.trim();
+    if (!trimmedValue) return '';
+
+    try {
+      const parsedUrl = new URL(trimmedValue, window.location.href);
+      if (parsedUrl.protocol !== 'http:' && parsedUrl.protocol !== 'https:') return '';
+      return parsedUrl.toString();
+    } catch (error) {
+      return '';
+    }
+  };
 
   const safeParseJSON = (jsonText, fallbackValue = []) => {
     try {
@@ -25,6 +40,58 @@
   };
 
   let muxScriptPromise;
+  const thumbnailPreloadRegistry = new Map();
+
+  const preloadThumbnailUrl = (url, priority = 'low') => {
+    const normalizedUrl = normalizeThumbnailUrl(url);
+    if (!normalizedUrl || typeof Image === 'undefined') return Promise.resolve(false);
+
+    const cachedEntry = thumbnailPreloadRegistry.get(normalizedUrl);
+    if (cachedEntry) return cachedEntry.promise;
+
+    const image = new Image();
+    if ('decoding' in image) image.decoding = 'async';
+    if ('fetchPriority' in image && priority) {
+      try {
+        image.fetchPriority = priority;
+      } catch (error) {
+        // no-op: unsupported by this runtime/browser
+      }
+    }
+
+    const promise = new Promise((resolve) => {
+      let settled = false;
+
+      const finalize = (success) => {
+        if (settled) return;
+        settled = true;
+        thumbnailPreloadRegistry.set(normalizedUrl, {
+          status: success ? 'loaded' : 'failed',
+          promise: Promise.resolve(success),
+        });
+        resolve(success);
+      };
+
+      image.onload = () => {
+        if (typeof image.decode === 'function') {
+          image.decode().catch(() => {}).finally(() => finalize(true));
+          return;
+        }
+
+        finalize(true);
+      };
+
+      image.onerror = () => finalize(false);
+      image.src = normalizedUrl;
+    });
+
+    thumbnailPreloadRegistry.set(normalizedUrl, {
+      status: 'loading',
+      promise,
+    });
+
+    return promise;
+  };
 
   const ensureMuxPlayerLoaded = () => {
     if (customElements.get('mux-player')) return Promise.resolve();
@@ -74,6 +141,7 @@
       this.resumeStateKey = `bs-training-resume-v${RESUME_STATE_VERSION}::${this.courseKey}`;
       this.resumeState = this.defaultResumeState();
       this.lastPositionWriteByLesson = new Map();
+      this.thumbnailPreloadRunId = 0;
       this.storageUnavailable = false;
       this.isDestroyed = false;
 
@@ -110,6 +178,7 @@
       this.updateSidebarForViewport(true);
       this.renderCurrentLesson({ announce: false, focusLesson: false });
       this.updateProgressUI();
+      this.startThumbnailPreloading();
     }
 
     parseLessons() {
@@ -124,8 +193,7 @@
           typeof lesson.description === 'string' ? lesson.description.trim() : '';
         const playbackId =
           typeof lesson.playbackId === 'string' ? lesson.playbackId.trim() : '';
-        const thumbnailUrl =
-          typeof lesson.thumbnailUrl === 'string' ? lesson.thumbnailUrl.trim() : '';
+        const thumbnailUrl = normalizeThumbnailUrl(lesson.thumbnailUrl);
         const durationLabel =
           typeof lesson.durationLabel === 'string' ? lesson.durationLabel.trim() : '';
         const lessonId = lesson.id != null ? String(lesson.id) : `lesson-${index}`;
@@ -503,9 +571,62 @@
       const thumbnailUrl = lesson && typeof lesson.thumbnailUrl === 'string' ? lesson.thumbnailUrl.trim() : '';
 
       if (thumbnailUrl) {
+        preloadThumbnailUrl(thumbnailUrl, 'auto');
         this.playerElement.setAttribute('poster', thumbnailUrl);
       } else {
         this.playerElement.removeAttribute('poster');
+      }
+    }
+
+    startThumbnailPreloading() {
+      const uniqueThumbnailUrls = [];
+      const seenUrls = new Set();
+
+      this.lessons.forEach((lesson) => {
+        const thumbnailUrl = normalizeThumbnailUrl(lesson.thumbnailUrl);
+        if (!thumbnailUrl || seenUrls.has(thumbnailUrl)) return;
+
+        seenUrls.add(thumbnailUrl);
+        uniqueThumbnailUrls.push(thumbnailUrl);
+      });
+
+      if (uniqueThumbnailUrls.length === 0) return;
+
+      const selectedLesson = this.lessons[this.selectedIndex];
+      const selectedThumbnailUrl = selectedLesson ? normalizeThumbnailUrl(selectedLesson.thumbnailUrl) : '';
+      const prioritizedQueue = [];
+
+      if (selectedThumbnailUrl) prioritizedQueue.push(selectedThumbnailUrl);
+      uniqueThumbnailUrls.forEach((url) => {
+        if (url !== selectedThumbnailUrl) prioritizedQueue.push(url);
+      });
+
+      const runId = (this.thumbnailPreloadRunId || 0) + 1;
+      this.thumbnailPreloadRunId = runId;
+
+      if (prioritizedQueue[0]) {
+        preloadThumbnailUrl(prioritizedQueue[0], 'auto');
+      }
+
+      const backgroundQueue = prioritizedQueue.slice(1);
+      if (backgroundQueue.length === 0) return;
+
+      let queueIndex = 0;
+      const workerCount = Math.min(THUMBNAIL_PRELOAD_CONCURRENCY, backgroundQueue.length);
+
+      const runWorker = async () => {
+        while (queueIndex < backgroundQueue.length) {
+          if (this.isDestroyed || this.thumbnailPreloadRunId !== runId) return;
+
+          const currentIndex = queueIndex;
+          queueIndex += 1;
+          const url = backgroundQueue[currentIndex];
+          await preloadThumbnailUrl(url, 'low');
+        }
+      };
+
+      for (let workerIndex = 0; workerIndex < workerCount; workerIndex += 1) {
+        runWorker();
       }
     }
 

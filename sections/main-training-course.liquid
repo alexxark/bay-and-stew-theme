@@ -84,7 +84,7 @@
           assign lesson_thumbnail = lesson.thumbnail.value
           assign lesson_thumbnail_url = blank
           if lesson_thumbnail != blank
-            assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+            assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1200
           endif
           assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
           assign lesson_duration_minutes = blank
@@ -212,7 +212,7 @@
                       assign lesson_thumbnail = lesson.thumbnail.value
                       assign lesson_thumbnail_url = blank
                       if lesson_thumbnail != blank
-                        assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+                        assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1200
                       endif
                       assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
                       assign lesson_duration_label = blank
@@ -261,7 +261,7 @@
                 assign lesson_thumbnail = lesson.thumbnail.value
                 assign lesson_thumbnail_url = blank
                 if lesson_thumbnail != blank
-                  assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+                  assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1200
                 endif
                 assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
                 assign lesson_duration_label = blank
