@@ -3,6 +3,7 @@
   const MOBILE_BREAKPOINT = 990;
   const MUX_PLAYER_SCRIPT_ID = 'bay-training-mux-player-loader';
   const MUX_PLAYER_SCRIPT_SRC = 'https://cdn.jsdelivr.net/npm/@mux/mux-player';
+  const RESUME_STATE_VERSION = 1;
 
   if (window.BayTrainingCourseManager) {
     window.BayTrainingCourseManager.initAll(document);
@@ -70,6 +71,9 @@
       this.selectedIndex = 0;
       this.completedLessons = new Set();
       this.storageKey = `bs-training-progress::${this.courseKey}`;
+      this.resumeStateKey = `bs-training-resume-v${RESUME_STATE_VERSION}::${this.courseKey}`;
+      this.resumeState = this.defaultResumeState();
+      this.lastPositionWriteByLesson = new Map();
       this.storageUnavailable = false;
       this.isDestroyed = false;
 
@@ -93,6 +97,8 @@
 
       if (this.lessons.length === 0) return;
 
+      this.loadResumeStateFromStorage();
+      this.selectedIndex = this.getInitialSelectedLessonIndex();
       if (this.progressEnabled) this.loadProgressFromStorage();
       this.bindEvents();
 
@@ -135,6 +141,211 @@
       });
     }
 
+    defaultResumeState() {
+      return {
+        version: RESUME_STATE_VERSION,
+        selectedLessonId: null,
+        positions: {},
+      };
+    }
+
+    normalizeResumeState(value) {
+      const fallback = this.defaultResumeState();
+      if (!value || typeof value !== 'object') return fallback;
+
+      const selectedLessonId =
+        value.selectedLessonId == null ? null : String(value.selectedLessonId);
+
+      const positions = {};
+      if (value.positions && typeof value.positions === 'object') {
+        Object.entries(value.positions).forEach(([lessonId, entry]) => {
+          if (!entry || typeof entry !== 'object') return;
+          const time = Number(entry.time);
+          const playbackId =
+            entry.playbackId == null ? '' : String(entry.playbackId).trim();
+
+          if (!Number.isFinite(time) || time < 0 || !playbackId) return;
+
+          positions[String(lessonId)] = {
+            time,
+            playbackId,
+            updatedAt: Number.isFinite(Number(entry.updatedAt))
+              ? Number(entry.updatedAt)
+              : Date.now(),
+          };
+          this.lastPositionWriteByLesson.set(String(lessonId), time);
+        });
+      }
+
+      return {
+        version: RESUME_STATE_VERSION,
+        selectedLessonId,
+        positions,
+      };
+    }
+
+    loadResumeStateFromStorage() {
+      try {
+        const rawValue = window.localStorage.getItem(this.resumeStateKey);
+        if (!rawValue) {
+          this.resumeState = this.defaultResumeState();
+          return;
+        }
+
+        const parsedValue = JSON.parse(rawValue);
+        this.resumeState = this.normalizeResumeState(parsedValue);
+      } catch (error) {
+        this.resumeState = this.defaultResumeState();
+        console.warn('[Bay Training] Unable to read resume state from localStorage.', error);
+      }
+    }
+
+    persistResumeStateToStorage() {
+      if (this.storageUnavailable) return;
+
+      try {
+        window.localStorage.setItem(this.resumeStateKey, JSON.stringify(this.resumeState));
+      } catch (error) {
+        this.storageUnavailable = true;
+        console.warn('[Bay Training] Unable to persist resume state to localStorage.', error);
+        if (this.progressEnabled) this.updateProgressUI();
+      }
+    }
+
+    getInitialSelectedLessonIndex() {
+      const savedLessonId = this.resumeState.selectedLessonId;
+      if (!savedLessonId) return 0;
+
+      const savedIndex = this.lessons.findIndex((lesson) => lesson.id === savedLessonId);
+      return savedIndex >= 0 ? savedIndex : 0;
+    }
+
+    persistSelectedLessonState() {
+      const lesson = this.lessons[this.selectedIndex];
+      if (!lesson) return;
+
+      this.resumeState.selectedLessonId = lesson.id;
+      this.persistResumeStateToStorage();
+    }
+
+    getSavedLessonPlaybackPosition(lesson) {
+      if (!lesson) return null;
+      const entry = this.resumeState.positions[lesson.id];
+      if (!entry) return null;
+      if (entry.playbackId !== lesson.playbackId) return null;
+      if (!Number.isFinite(entry.time) || entry.time < 0) return null;
+      return entry.time;
+    }
+
+    setSavedLessonPlaybackPosition(lesson, timeInSeconds, options = {}) {
+      if (!lesson || !lesson.playbackId) return false;
+      if (!Number.isFinite(timeInSeconds) || timeInSeconds < 0) return false;
+
+      const normalizedTime = Math.round(timeInSeconds * 1000) / 1000;
+      const existingEntry = this.resumeState.positions[lesson.id];
+
+      if (
+        !options.force &&
+        existingEntry &&
+        existingEntry.playbackId === lesson.playbackId &&
+        Math.abs(existingEntry.time - normalizedTime) < 0.25
+      ) {
+        return false;
+      }
+
+      this.resumeState.positions[lesson.id] = {
+        time: normalizedTime,
+        playbackId: lesson.playbackId,
+        updatedAt: Date.now(),
+      };
+      this.lastPositionWriteByLesson.set(lesson.id, normalizedTime);
+      this.persistResumeStateToStorage();
+      return true;
+    }
+
+    clearSavedLessonPlaybackPosition(lesson) {
+      if (!lesson) return false;
+      if (!this.resumeState.positions[lesson.id]) return false;
+
+      delete this.resumeState.positions[lesson.id];
+      this.lastPositionWriteByLesson.delete(lesson.id);
+      this.persistResumeStateToStorage();
+      return true;
+    }
+
+    saveCurrentLessonPlaybackPosition(options = {}) {
+      const lesson = this.lessons[this.selectedIndex];
+      if (!lesson || !lesson.playbackId || !this.playerElement || this.playerElement.hidden) return false;
+      if (this.playerElement.ended) return false;
+
+      const activePlaybackId = (this.playerElement.getAttribute('playback-id') || '').trim();
+      if (!activePlaybackId || activePlaybackId !== lesson.playbackId) return false;
+
+      const currentTime = Number(this.playerElement.currentTime);
+      if (!Number.isFinite(currentTime) || currentTime < 0) return false;
+
+      if (!options.force) {
+        const lastWrittenTime = this.lastPositionWriteByLesson.get(lesson.id);
+        if (Number.isFinite(lastWrittenTime) && Math.abs(currentTime - lastWrittenTime) < 5) {
+          return false;
+        }
+      }
+
+      return this.setSavedLessonPlaybackPosition(lesson, currentTime, {
+        force: options.force === true,
+      });
+    }
+
+    restoreCurrentLessonPlaybackPosition(lesson) {
+      if (!lesson || !lesson.playbackId || !this.playerElement) return;
+
+      const savedTime = this.getSavedLessonPlaybackPosition(lesson);
+      if (!Number.isFinite(savedTime)) return;
+
+      const expectedLessonId = lesson.id;
+      const expectedPlaybackId = lesson.playbackId;
+      const restoreAttemptId = (this.restoreAttemptId || 0) + 1;
+      this.restoreAttemptId = restoreAttemptId;
+
+      const attemptRestore = () => {
+        if (this.isDestroyed) return;
+        if (this.restoreAttemptId !== restoreAttemptId) return;
+
+        const currentLesson = this.lessons[this.selectedIndex];
+        if (!currentLesson || currentLesson.id !== expectedLessonId) return;
+
+        const activePlaybackId = (this.playerElement.getAttribute('playback-id') || '').trim();
+        if (!activePlaybackId || activePlaybackId !== expectedPlaybackId) return;
+
+        let targetTime = savedTime;
+        const duration = Number(this.playerElement.duration);
+        if (Number.isFinite(duration) && duration > 0) {
+          targetTime = Math.min(targetTime, Math.max(0, duration - 0.1));
+        }
+
+        if (!Number.isFinite(targetTime) || targetTime < 0) return;
+
+        try {
+          this.playerElement.currentTime = targetTime;
+          if (typeof this.playerElement.pause === 'function') this.playerElement.pause();
+        } catch (error) {
+          console.warn('[Bay Training] Unable to restore saved playback position.', error);
+        }
+      };
+
+      const duration = Number(this.playerElement.duration);
+      if (Number.isFinite(duration) && duration > 0) {
+        attemptRestore();
+        return;
+      }
+
+      this.pendingMetadataRestoreAttempt = restoreAttemptId;
+      window.setTimeout(() => {
+        if (this.pendingMetadataRestoreAttempt !== restoreAttemptId) return;
+        attemptRestore();
+      }, 1200);
+    }
+
     bindEvents() {
       this.boundLessonSelectHandler = (event) => {
         const button = event.target.closest('[data-lesson-select]');
@@ -162,6 +373,10 @@
       this.boundPlayerErrorHandler = () =>
         this.setPlayerState('Video playback failed for this lesson. Please verify the Mux playback ID.');
       this.boundPlayerEndedHandler = () => this.handlePlayerEnded();
+      this.boundPlayerTimeUpdateHandler = () => this.handlePlayerTimeUpdate();
+      this.boundPlayerPauseHandler = () => this.handlePlayerPause();
+      this.boundPlayerMetadataHandler = () => this.handlePlayerMetadataLoaded();
+      this.boundPageHideHandler = () => this.handlePageHide();
 
       this.section.addEventListener('click', this.boundLessonSelectHandler);
 
@@ -184,9 +399,13 @@
       if (this.playerElement) {
         this.playerElement.addEventListener('error', this.boundPlayerErrorHandler);
         this.playerElement.addEventListener('ended', this.boundPlayerEndedHandler);
+        this.playerElement.addEventListener('timeupdate', this.boundPlayerTimeUpdateHandler);
+        this.playerElement.addEventListener('pause', this.boundPlayerPauseHandler);
+        this.playerElement.addEventListener('loadedmetadata', this.boundPlayerMetadataHandler);
       }
 
       window.addEventListener('resize', this.boundResizeHandler);
+      window.addEventListener('pagehide', this.boundPageHideHandler);
     }
 
     updateSidebarForViewport(isInitialRender) {
@@ -216,8 +435,10 @@
       const clampedIndex = Math.min(Math.max(index, 0), this.lessons.length - 1);
       if (clampedIndex === this.selectedIndex && !options.force) return;
 
+      this.saveCurrentLessonPlaybackPosition({ force: true });
       this.stopCurrentPlayback();
       this.selectedIndex = clampedIndex;
+      this.persistSelectedLessonState();
       this.renderCurrentLesson({
         announce: options.announce !== false,
         focusLesson: options.focusLesson === true,
@@ -269,6 +490,7 @@
 
       this.playerElement.setAttribute('title', lesson.title);
       this.playerElement.setAttribute('metadata-video-title', lesson.title);
+      this.restoreCurrentLessonPlaybackPosition(lesson);
     }
 
     stopCurrentPlayback() {
@@ -426,7 +648,27 @@
       const activePlaybackId = (this.playerElement.getAttribute('playback-id') || '').trim();
       if (!activePlaybackId || activePlaybackId !== lesson.playbackId) return;
 
+      this.clearSavedLessonPlaybackPosition(lesson);
       this.markLessonComplete(lesson, { announce: true });
+    }
+
+    handlePlayerTimeUpdate() {
+      this.saveCurrentLessonPlaybackPosition();
+    }
+
+    handlePlayerPause() {
+      this.saveCurrentLessonPlaybackPosition({ force: true });
+    }
+
+    handlePlayerMetadataLoaded() {
+      const lesson = this.lessons[this.selectedIndex];
+      if (!lesson) return;
+      this.restoreCurrentLessonPlaybackPosition(lesson);
+    }
+
+    handlePageHide() {
+      this.saveCurrentLessonPlaybackPosition({ force: true });
+      this.persistSelectedLessonState();
     }
 
     updateProgressUI() {
@@ -502,7 +744,12 @@
       if (this.playerElement) {
         this.playerElement.removeEventListener('error', this.boundPlayerErrorHandler);
         this.playerElement.removeEventListener('ended', this.boundPlayerEndedHandler);
+        this.playerElement.removeEventListener('timeupdate', this.boundPlayerTimeUpdateHandler);
+        this.playerElement.removeEventListener('pause', this.boundPlayerPauseHandler);
+        this.playerElement.removeEventListener('loadedmetadata', this.boundPlayerMetadataHandler);
       }
+
+      window.removeEventListener('pagehide', this.boundPageHideHandler);
     }
   }
 
