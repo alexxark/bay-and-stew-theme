@@ -124,6 +124,8 @@
           typeof lesson.description === 'string' ? lesson.description.trim() : '';
         const playbackId =
           typeof lesson.playbackId === 'string' ? lesson.playbackId.trim() : '';
+        const thumbnailUrl =
+          typeof lesson.thumbnailUrl === 'string' ? lesson.thumbnailUrl.trim() : '';
         const durationLabel =
           typeof lesson.durationLabel === 'string' ? lesson.durationLabel.trim() : '';
         const lessonId = lesson.id != null ? String(lesson.id) : `lesson-${index}`;
@@ -133,6 +135,7 @@
           title,
           description,
           playbackId,
+          thumbnailUrl,
           durationLabel,
           durationSeconds: isFiniteNumber(Number(lesson.durationSeconds))
             ? Number(lesson.durationSeconds)
@@ -472,6 +475,7 @@
 
     updatePlayerForLesson(lesson) {
       if (!this.playerElement) return;
+      this.updatePlayerPosterForLesson(lesson);
 
       const playbackId = lesson.playbackId || '';
       if (!playbackId) {
@@ -491,6 +495,17 @@
       this.playerElement.setAttribute('title', lesson.title);
       this.playerElement.setAttribute('metadata-video-title', lesson.title);
       this.restoreCurrentLessonPlaybackPosition(lesson);
+    }
+
+    updatePlayerPosterForLesson(lesson) {
+      if (!this.playerElement) return;
+      const thumbnailUrl = lesson && typeof lesson.thumbnailUrl === 'string' ? lesson.thumbnailUrl.trim() : '';
+
+      if (thumbnailUrl) {
+        this.playerElement.setAttribute('poster', thumbnailUrl);
+      } else {
+        this.playerElement.removeAttribute('poster');
+      }
     }
 
     stopCurrentPlayback() {

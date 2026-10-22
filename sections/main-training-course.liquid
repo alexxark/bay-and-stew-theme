@@ -27,6 +27,7 @@
   assign first_lesson_title = blank
   assign first_lesson_description = blank
   assign first_lesson_playback_id = blank
+  assign first_lesson_thumbnail_url = blank
 -%}
 
 {%- style -%}
@@ -80,6 +81,11 @@
           assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
           assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
           assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+          assign lesson_thumbnail = lesson.thumbnail.value | default: lesson.thumbnail
+          assign lesson_thumbnail_url = blank
+          if lesson_thumbnail != blank
+            assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+          endif
           assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
           assign lesson_duration_minutes = blank
           if lesson_duration_seconds != blank
@@ -96,6 +102,7 @@
           {%- assign first_lesson_title = lesson_title -%}
           {%- assign first_lesson_description = lesson_description -%}
           {%- assign first_lesson_playback_id = lesson_playback_id -%}
+          {%- assign first_lesson_thumbnail_url = lesson_thumbnail_url -%}
         {%- endif -%}
 
         {%- assign lesson_count = lesson_count | plus: 1 -%}
@@ -112,6 +119,9 @@
                 controls
                 title="{{ first_lesson_title | default: section.settings.course_title | escape }}"
                 metadata-video-title="{{ first_lesson_title | default: section.settings.course_title | escape }}"
+                {% if first_lesson_thumbnail_url != blank %}
+                  poster="{{ first_lesson_thumbnail_url | escape }}"
+                {% endif %}
                 {% if first_lesson_playback_id != blank %}
                   playback-id="{{ first_lesson_playback_id | escape }}"
                 {% endif %}
@@ -199,6 +209,11 @@
                     {%- liquid
                       assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
                       assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+                      assign lesson_thumbnail = lesson.thumbnail.value | default: lesson.thumbnail
+                      assign lesson_thumbnail_url = blank
+                      if lesson_thumbnail != blank
+                        assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+                      endif
                       assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
                       assign lesson_duration_label = blank
 
@@ -263,6 +278,7 @@
                 "title": {{ lesson_title | json }},
                 "description": {{ lesson_description | json }},
                 "playbackId": {{ lesson_playback_id | json }},
+                "thumbnailUrl": {{ lesson_thumbnail_url | json }},
                 "durationLabel": {{ lesson_duration_label | json }},
                 "durationSeconds": {% if lesson_duration_seconds != blank %}{{ lesson_duration_seconds | plus: 0 }}{% else %}null{% endif %},
                 "order": {% if lesson_order != blank %}{{ lesson_order | plus: 0 }}{% else %}null{% endif %}
