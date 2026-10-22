@@ -161,6 +161,7 @@
       this.boundResizeHandler = () => this.updateSidebarForViewport(false);
       this.boundPlayerErrorHandler = () =>
         this.setPlayerState('Video playback failed for this lesson. Please verify the Mux playback ID.');
+      this.boundPlayerEndedHandler = () => this.handlePlayerEnded();
 
       this.section.addEventListener('click', this.boundLessonSelectHandler);
 
@@ -182,6 +183,7 @@
 
       if (this.playerElement) {
         this.playerElement.addEventListener('error', this.boundPlayerErrorHandler);
+        this.playerElement.addEventListener('ended', this.boundPlayerEndedHandler);
       }
 
       window.addEventListener('resize', this.boundResizeHandler);
@@ -392,13 +394,39 @@
       if (this.completedLessons.has(lesson.id)) {
         this.completedLessons.delete(lesson.id);
         this.announce(`Marked ${lesson.title} as incomplete.`);
-      } else {
-        this.completedLessons.add(lesson.id);
+        this.persistProgressToStorage();
+        this.updateProgressUI();
+        return;
+      }
+
+      this.markLessonComplete(lesson, { announce: true });
+    }
+
+    markLessonComplete(lesson, options = {}) {
+      if (!this.progressEnabled || !lesson) return false;
+      if (this.completedLessons.has(lesson.id)) return false;
+
+      this.completedLessons.add(lesson.id);
+      this.persistProgressToStorage();
+      this.updateProgressUI();
+
+      if (options.announce !== false) {
         this.announce(`Marked ${lesson.title} as complete.`);
       }
 
-      this.persistProgressToStorage();
-      this.updateProgressUI();
+      return true;
+    }
+
+    handlePlayerEnded() {
+      if (!this.progressEnabled || !this.playerElement) return;
+
+      const lesson = this.lessons[this.selectedIndex];
+      if (!lesson || !lesson.playbackId) return;
+
+      const activePlaybackId = (this.playerElement.getAttribute('playback-id') || '').trim();
+      if (!activePlaybackId || activePlaybackId !== lesson.playbackId) return;
+
+      this.markLessonComplete(lesson, { announce: true });
     }
 
     updateProgressUI() {
@@ -473,6 +501,7 @@
 
       if (this.playerElement) {
         this.playerElement.removeEventListener('error', this.boundPlayerErrorHandler);
+        this.playerElement.removeEventListener('ended', this.boundPlayerEndedHandler);
       }
     }
   }
