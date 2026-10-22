@@ -81,7 +81,7 @@
           assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
           assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
           assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
-          assign lesson_thumbnail = lesson.thumbnail.value | default: lesson.thumbnail
+          assign lesson_thumbnail = lesson.thumbnail.value
           assign lesson_thumbnail_url = blank
           if lesson_thumbnail != blank
             assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
@@ -209,7 +209,7 @@
                     {%- liquid
                       assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
                       assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
-                      assign lesson_thumbnail = lesson.thumbnail.value | default: lesson.thumbnail
+                      assign lesson_thumbnail = lesson.thumbnail.value
                       assign lesson_thumbnail_url = blank
                       if lesson_thumbnail != blank
                         assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
@@ -258,6 +258,11 @@
                 assign lesson_title = lesson.title.value | default: lesson.title | default: lesson.display_name | default: lesson.name | default: 'Lesson' | strip
                 assign lesson_description = lesson.description.value | default: lesson.description | default: '' | strip
                 assign lesson_playback_id = lesson.mux_playback_id.value | default: lesson.mux_playback_id | default: '' | strip
+                assign lesson_thumbnail = lesson.thumbnail.value
+                assign lesson_thumbnail_url = blank
+                if lesson_thumbnail != blank
+                  assign lesson_thumbnail_url = lesson_thumbnail | image_url: width: 1600
+                endif
                 assign lesson_duration_seconds = lesson.duration_seconds.value | default: lesson.duration_seconds
                 assign lesson_duration_label = blank
                 if lesson_duration_seconds != blank

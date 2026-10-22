@@ -475,10 +475,10 @@
 
     updatePlayerForLesson(lesson) {
       if (!this.playerElement) return;
-      this.updatePlayerPosterForLesson(lesson);
 
       const playbackId = lesson.playbackId || '';
       if (!playbackId) {
+        this.updatePlayerPosterForLesson(lesson);
         this.playerElement.hidden = true;
         this.playerElement.removeAttribute('playback-id');
         this.setPlayerState('This lesson does not yet have a video playback ID.');
@@ -492,6 +492,7 @@
         this.playerElement.setAttribute('playback-id', playbackId);
       }
 
+      this.updatePlayerPosterForLesson(lesson);
       this.playerElement.setAttribute('title', lesson.title);
       this.playerElement.setAttribute('metadata-video-title', lesson.title);
       this.restoreCurrentLessonPlaybackPosition(lesson);
