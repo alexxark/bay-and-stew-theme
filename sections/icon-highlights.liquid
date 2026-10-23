@@ -1,0 +1,1299 @@
+{{ 'section-icon-highlights.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign layout_max_width = settings.page_width
+  case section.settings.content_width
+    when 'narrow'
+      assign layout_max_width = 900
+    when 'standard'
+      assign layout_max_width = 1200
+    when 'wide'
+      assign layout_max_width = 1440
+    when 'full'
+      assign layout_max_width = 2400
+  endcase
+
+  assign desktop_columns = section.settings.desktop_columns
+  if section.settings.desktop_columns == 'auto'
+    assign desktop_columns = section.blocks.size
+    if desktop_columns < 1
+      assign desktop_columns = 3
+    endif
+  endif
+
+  assign mobile_padding_top = section.settings.padding_top | times: 0.75 | round: 0
+  assign mobile_padding_bottom = section.settings.padding_bottom | times: 0.75 | round: 0
+  if section.settings.use_mobile_padding
+    assign mobile_padding_top = section.settings.mobile_padding_top
+    assign mobile_padding_bottom = section.settings.mobile_padding_bottom
+  endif
+
+  assign heading_size_class = 'h1'
+  case section.settings.heading_size
+    when 'small'
+      assign heading_size_class = 'h2'
+    when 'large'
+      assign heading_size_class = 'h0'
+  endcase
+
+  assign show_header = false
+  if section.settings.show_heading and section.settings.heading != blank
+    assign show_header = true
+  endif
+  if section.settings.description != blank
+    assign show_header = true
+  endif
+-%}
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .icon-highlights {
+    --ih-layout-max-width: {{ layout_max_width }}px;
+    --ih-user-max-width: {{ section.settings.max_content_width }}px;
+    --ih-desktop-columns: {{ desktop_columns }};
+    --ih-tablet-columns: {{ section.settings.tablet_columns }};
+    --ih-mobile-columns: {{ section.settings.mobile_columns }};
+    --ih-horizontal-gap: {{ section.settings.horizontal_gap }}px;
+    --ih-vertical-gap: {{ section.settings.vertical_gap }}px;
+    --ih-padding-top-mobile: {{ mobile_padding_top }}px;
+    --ih-padding-bottom-mobile: {{ mobile_padding_bottom }}px;
+    --ih-padding-top-desktop: {{ section.settings.padding_top }}px;
+    --ih-padding-bottom-desktop: {{ section.settings.padding_bottom }}px;
+    --ih-heading-bottom-spacing: {{ section.settings.heading_bottom_spacing }}px;
+    --ih-section-heading-weight: {{ section.settings.heading_weight }};
+    --ih-section-border-color: {{ section.settings.section_border_color }};
+    --ih-section-border-width: {{ section.settings.section_border_width }}px;
+    --ih-separator-color: {{ section.settings.separator_color }};
+    --ih-separator-thickness: {{ section.settings.separator_thickness }}px;
+    --ih-card-background-color: {{ section.settings.card_background_color }};
+    --ih-alt-card-background-color: {{ section.settings.alternate_card_background_color }};
+    --ih-icon-size: {{ section.settings.icon_size }}px;
+    --ih-icon-container-size: {{ section.settings.icon_container_size }}px;
+    --ih-icon-color: {{ section.settings.icon_color }};
+    --ih-icon-background-color: {{ section.settings.icon_container_background_color }};
+    --ih-icon-border-color: {{ section.settings.icon_border_color }};
+    --ih-icon-border-width: {{ section.settings.icon_border_thickness }}px;
+    --ih-icon-corner-radius: {{ section.settings.icon_container_corner_radius }}px;
+    --ih-item-heading-size: {{ section.settings.block_heading_size }}px;
+    --ih-item-heading-weight: {{ section.settings.block_heading_weight }};
+    --ih-item-description-size: {{ section.settings.block_description_size }}px;
+    --ih-item-description-line-height: {{ section.settings.block_description_line_height | divided_by: 100.0 }};
+    --ih-icon-heading-spacing: {{ section.settings.icon_heading_spacing }}px;
+    --ih-heading-description-spacing: {{ section.settings.heading_description_spacing }}px;
+  }
+{%- endstyle -%}
+
+<section
+  class="icon-highlights color-{{ section.settings.color_scheme }} gradient icon-highlights--mobile-{{ section.settings.mobile_content_alignment }} icon-highlights--desktop-{{ section.settings.desktop_content_alignment }}{% if section.settings.equal_width_columns %} icon-highlights--equal-columns{% else %} icon-highlights--natural-columns{% endif %}{% if section.settings.enable_custom_background %} icon-highlights--custom-background{% endif %}{% if section.settings.show_section_border %} icon-highlights--section-border{% endif %}{% if section.settings.show_top_separator %} icon-highlights--separator-top{% endif %}{% if section.settings.show_bottom_separator %} icon-highlights--separator-bottom{% endif %}{% if section.settings.enable_card_background %} icon-highlights--card-background{% endif %}{% if section.settings.enable_alternate_card_background %} icon-highlights--alternate-card-background{% endif %}"
+  {% if section.settings.enable_custom_background %}
+    style="--ih-custom-background-color: {{ section.settings.custom_background_color }};"
+  {% endif %}
+>
+  <div class="icon-highlights__container{% if section.settings.content_width == 'full' %} icon-highlights__container--full{% endif %}">
+    <div class="icon-highlights__content">
+      {%- if show_header -%}
+        <header class="icon-highlights__header icon-highlights__header--{{ section.settings.heading_alignment }}">
+          {%- if section.settings.show_heading and section.settings.heading != blank -%}
+            <h2
+              class="icon-highlights__heading title inline-richtext {{ heading_size_class }}"
+              {% if section.settings.use_custom_heading_color %}
+                style="color: {{ section.settings.heading_color }};"
+              {% endif %}
+            >
+              {{ section.settings.heading }}
+            </h2>
+          {%- endif -%}
+
+          {%- if section.settings.description != blank -%}
+            <div
+              class="icon-highlights__description icon-highlights__description--{{ section.settings.description_size }} rte"
+              {% if section.settings.use_custom_description_color %}
+                style="color: {{ section.settings.description_color }};"
+              {% endif %}
+            >
+              {{ section.settings.description }}
+            </div>
+          {%- endif -%}
+        </header>
+      {%- endif -%}
+
+      {%- if request.design_mode and section.blocks.size < 3 -%}
+        <p class="icon-highlights__editor-note" role="note">
+          Add at least 3 Icon highlight blocks for the intended layout.
+        </p>
+      {%- endif -%}
+
+      <ul class="icon-highlights__grid" role="list">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign use_block_icon_styles = false
+            if block.settings.use_global_icon_style == false
+              assign use_block_icon_styles = true
+            endif
+
+            assign resolved_icon_size = section.settings.icon_size
+            assign resolved_icon_color = section.settings.icon_color
+            assign resolved_icon_background_enabled = section.settings.enable_icon_background
+            assign resolved_icon_background_color = section.settings.icon_container_background_color
+            assign resolved_icon_shape = section.settings.icon_container_shape
+            assign resolved_icon_border_enabled = section.settings.enable_icon_border
+            assign resolved_icon_border_color = section.settings.icon_border_color
+            assign resolved_icon_border_width = section.settings.icon_border_thickness
+            assign resolved_icon_corner_radius = section.settings.icon_container_corner_radius
+
+            if use_block_icon_styles
+              assign resolved_icon_size = block.settings.icon_size
+              assign resolved_icon_color = block.settings.svg_icon_color
+              assign resolved_icon_background_enabled = block.settings.icon_background_enabled
+              assign resolved_icon_background_color = block.settings.icon_container_background_color
+              assign resolved_icon_border_enabled = block.settings.icon_border_enabled
+              assign resolved_icon_border_color = block.settings.icon_border_color
+              assign resolved_icon_border_width = block.settings.icon_border_thickness
+              assign resolved_icon_corner_radius = block.settings.icon_container_corner_radius
+              if block.settings.icon_container_shape != 'inherit'
+                assign resolved_icon_shape = block.settings.icon_container_shape
+              endif
+            endif
+
+            assign resolved_container_size = section.settings.icon_container_size
+            if resolved_icon_shape != 'none' and resolved_icon_size > resolved_container_size
+              assign resolved_container_size = resolved_icon_size | plus: 12
+            endif
+
+            assign icon_heading_spacing = section.settings.icon_heading_spacing
+            assign heading_description_spacing = section.settings.heading_description_spacing
+            if block.settings.use_custom_spacing
+              assign icon_heading_spacing = block.settings.icon_heading_spacing
+              assign heading_description_spacing = block.settings.heading_description_spacing
+            endif
+
+            assign block_alignment_class = ''
+            if block.settings.text_alignment_override != 'inherit'
+              assign block_alignment_class = ' icon-highlights__grid-item--align-' | append: block.settings.text_alignment_override
+            endif
+
+            assign icon_image_width = resolved_icon_size | times: 2
+            if icon_image_width < 64
+              assign icon_image_width = 64
+            endif
+
+            assign use_icon_image = false
+            if block.settings.icon_source == 'image' and block.settings.icon_image != blank
+              assign use_icon_image = true
+            endif
+
+            assign has_link = false
+            if block.settings.link != blank
+              assign has_link = true
+            endif
+
+            assign open_whole_block_link = false
+            if has_link and block.settings.link_style == 'whole_block'
+              assign open_whole_block_link = true
+            endif
+
+            assign heading_color = blank
+            if block.settings.override_heading_color
+              assign heading_color = block.settings.heading_color
+            endif
+
+            assign description_color = blank
+            if block.settings.override_description_color
+              assign description_color = block.settings.description_color
+            endif
+
+            assign custom_card_background_enabled = false
+            if block.settings.custom_card_background_enabled
+              assign custom_card_background_enabled = true
+            endif
+
+            assign block_link_label = block.settings.link_label | strip
+            if block_link_label == blank
+              assign block_link_label = 'Learn more'
+            endif
+          -%}
+
+          <li
+            class="icon-highlights__grid-item{{ block_alignment_class }}{% if custom_card_background_enabled %} icon-highlights__grid-item--custom-card-background{% endif %}"
+            style="
+              --ih-block-icon-size: {{ resolved_icon_size }}px;
+              --ih-block-icon-container-size: {{ resolved_container_size }}px;
+              --ih-block-icon-color: {{ resolved_icon_color }};
+              --ih-block-icon-background-color: {{ resolved_icon_background_color }};
+              --ih-block-icon-border-color: {{ resolved_icon_border_color }};
+              --ih-block-icon-border-width: {{ resolved_icon_border_width }}px;
+              --ih-block-icon-corner-radius: {{ resolved_icon_corner_radius }}px;
+              --ih-block-icon-heading-spacing: {{ icon_heading_spacing }}px;
+              --ih-block-heading-description-spacing: {{ heading_description_spacing }}px;
+              {% if heading_color != blank %}--ih-item-heading-color: {{ heading_color }};{% endif %}
+              {% if description_color != blank %}--ih-item-description-color: {{ description_color }};{% endif %}
+              {% if custom_card_background_enabled %}--ih-item-custom-card-background: {{ block.settings.custom_card_background_color }};{% endif %}
+            "
+            {{ block.shopify_attributes }}
+          >
+            {%- if open_whole_block_link -%}
+              <a
+                class="icon-highlights__item icon-highlights__item-link"
+                href="{{ block.settings.link }}"
+                {% if block.settings.open_new_tab %}
+                  target="_blank" rel="noopener noreferrer"
+                {% endif %}
+              >
+            {%- else -%}
+              <div class="icon-highlights__item">
+            {%- endif -%}
+                <div class="icon-highlights__icon-wrapper">
+                  <span
+                    class="icon-highlights__icon-container icon-highlights__icon-container--{{ resolved_icon_shape | replace: '_', '-' }}{% if resolved_icon_background_enabled %} icon-highlights__icon-container--has-background{% endif %}{% if resolved_icon_border_enabled %} icon-highlights__icon-container--has-border{% endif %}"
+                  >
+                    {%- if use_icon_image -%}
+                      {%- assign icon_alt = block.settings.icon_image.alt | default: block.settings.heading | strip_html -%}
+                      {{
+                        block.settings.icon_image
+                        | image_url: width: icon_image_width
+                        | image_tag:
+                          loading: 'lazy',
+                          class: 'icon-highlights__icon-image',
+                          alt: icon_alt
+                      }}
+                    {%- else -%}
+                      {%- render 'icon-highlights-icon', icon: block.settings.builtin_icon, class: 'icon-highlights__icon-svg' -%}
+                    {%- endif -%}
+                  </span>
+                </div>
+
+                {%- if block.settings.heading != blank -%}
+                  <h3 class="icon-highlights__item-heading">
+                    {{ block.settings.heading }}
+                  </h3>
+                {%- endif -%}
+
+                {%- unless block.settings.hide_description -%}
+                  {%- if block.settings.description != blank -%}
+                    <div class="icon-highlights__item-description rte">
+                      {{ block.settings.description }}
+                    </div>
+                  {%- endif -%}
+                {%- endunless -%}
+
+                {%- if has_link and block.settings.link_style == 'text_link' -%}
+                  <a
+                    class="icon-highlights__text-link"
+                    href="{{ block.settings.link }}"
+                    {% if block.settings.open_new_tab %}
+                      target="_blank" rel="noopener noreferrer"
+                    {% endif %}
+                  >
+                    {{ block_link_label | escape }}
+                  </a>
+                {%- elsif open_whole_block_link and block.settings.link_label != blank -%}
+                  <span class="icon-highlights__link-label" aria-hidden="true">
+                    {{ block.settings.link_label | escape }}
+                  </span>
+                {%- endif -%}
+            {%- if open_whole_block_link -%}
+              </a>
+            {%- else -%}
+              </div>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+      </ul>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Icon Highlights",
+  "tag": "section",
+  "class": "section section-icon-highlights",
+  "max_blocks": 5,
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_heading",
+      "label": "Show section heading",
+      "default": true
+    },
+    {
+      "type": "inline_richtext",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Why choose us"
+    },
+    {
+      "type": "select",
+      "id": "heading_alignment",
+      "label": "Heading alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "heading_size",
+      "label": "Heading size",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "heading_weight",
+      "label": "Heading weight",
+      "min": 400,
+      "max": 800,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_heading_color",
+      "label": "Use custom heading color",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#1F1F1F"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "select",
+      "id": "description_size",
+      "label": "Description size",
+      "default": "medium",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "medium",
+          "label": "Medium"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "use_custom_description_color",
+      "label": "Use custom description color",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "description_color",
+      "label": "Description color",
+      "default": "#4A4A4A"
+    },
+    {
+      "type": "range",
+      "id": "heading_bottom_spacing",
+      "label": "Spacing below heading",
+      "min": 0,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "select",
+      "id": "content_width",
+      "label": "Content width",
+      "default": "theme_default",
+      "options": [
+        {
+          "value": "theme_default",
+          "label": "Theme default"
+        },
+        {
+          "value": "narrow",
+          "label": "Narrow"
+        },
+        {
+          "value": "standard",
+          "label": "Standard"
+        },
+        {
+          "value": "wide",
+          "label": "Wide"
+        },
+        {
+          "value": "full",
+          "label": "Full width"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "max_content_width",
+      "label": "Maximum content width",
+      "min": 600,
+      "max": 2400,
+      "step": 20,
+      "unit": "px",
+      "default": 2400
+    },
+    {
+      "type": "select",
+      "id": "desktop_columns",
+      "label": "Desktop columns",
+      "default": "auto",
+      "options": [
+        {
+          "value": "auto",
+          "label": "Auto based on icon count"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        },
+        {
+          "value": "4",
+          "label": "4"
+        },
+        {
+          "value": "5",
+          "label": "5"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "tablet_columns",
+      "label": "Tablet columns",
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": "2"
+        },
+        {
+          "value": "3",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_columns",
+      "label": "Mobile columns",
+      "default": "1",
+      "options": [
+        {
+          "value": "1",
+          "label": "1"
+        },
+        {
+          "value": "2",
+          "label": "2"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "equal_width_columns",
+      "label": "Equal-width columns",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "desktop_content_alignment",
+      "label": "Desktop content alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "mobile_content_alignment",
+      "label": "Mobile content alignment",
+      "default": "center",
+      "options": [
+        {
+          "value": "left",
+          "label": "Left"
+        },
+        {
+          "value": "center",
+          "label": "Center"
+        },
+        {
+          "value": "right",
+          "label": "Right"
+        }
+      ]
+    },
+    {
+      "type": "range",
+      "id": "horizontal_gap",
+      "label": "Horizontal gap",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "vertical_gap",
+      "label": "Vertical gap",
+      "min": 8,
+      "max": 80,
+      "step": 2,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Section spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Desktop top padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Desktop bottom padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "checkbox",
+      "id": "use_mobile_padding",
+      "label": "Use separate mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_top",
+      "label": "Mobile top padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "mobile_padding_bottom",
+      "label": "Mobile bottom padding",
+      "min": 0,
+      "max": 140,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Color scheme",
+      "default": "scheme-1"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_custom_background",
+      "label": "Use custom background color",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "custom_background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_section_border",
+      "label": "Show subtle section border",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "section_border_color",
+      "label": "Section border color",
+      "default": "#E3E0DB"
+    },
+    {
+      "type": "range",
+      "id": "section_border_width",
+      "label": "Section border thickness",
+      "min": 0,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_separator",
+      "label": "Show top separator",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_separator",
+      "label": "Show bottom separator",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "separator_color",
+      "label": "Separator color",
+      "default": "#E3E0DB"
+    },
+    {
+      "type": "range",
+      "id": "separator_thickness",
+      "label": "Separator thickness",
+      "min": 1,
+      "max": 4,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_card_background",
+      "label": "Enable card backgrounds",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "card_background_color",
+      "label": "Card background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_alternate_card_background",
+      "label": "Enable alternate card backgrounds",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "alternate_card_background_color",
+      "label": "Alternate card background color",
+      "default": "#F7F3EC"
+    },
+    {
+      "type": "header",
+      "content": "Icon style"
+    },
+    {
+      "type": "range",
+      "id": "icon_size",
+      "label": "Icon size",
+      "min": 20,
+      "max": 120,
+      "step": 2,
+      "unit": "px",
+      "default": 42
+    },
+    {
+      "type": "range",
+      "id": "icon_container_size",
+      "label": "Icon container size",
+      "min": 32,
+      "max": 160,
+      "step": 2,
+      "unit": "px",
+      "default": 76
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Built-in icon color",
+      "default": "#1F1F1F"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_icon_background",
+      "label": "Enable icon background",
+      "default": false
+    },
+    {
+      "type": "select",
+      "id": "icon_container_shape",
+      "label": "Icon container shape",
+      "default": "none",
+      "options": [
+        {
+          "value": "none",
+          "label": "None"
+        },
+        {
+          "value": "circle",
+          "label": "Circle"
+        },
+        {
+          "value": "rounded_square",
+          "label": "Rounded square"
+        },
+        {
+          "value": "square",
+          "label": "Square"
+        }
+      ]
+    },
+    {
+      "type": "color",
+      "id": "icon_container_background_color",
+      "label": "Icon container background color",
+      "default": "#F7F3EC"
+    },
+    {
+      "type": "checkbox",
+      "id": "enable_icon_border",
+      "label": "Enable icon container border",
+      "default": false
+    },
+    {
+      "type": "color",
+      "id": "icon_border_color",
+      "label": "Icon border color",
+      "default": "#D9D3C8"
+    },
+    {
+      "type": "range",
+      "id": "icon_border_thickness",
+      "label": "Icon border thickness",
+      "min": 0,
+      "max": 6,
+      "step": 1,
+      "unit": "px",
+      "default": 1
+    },
+    {
+      "type": "range",
+      "id": "icon_container_corner_radius",
+      "label": "Icon container corner radius",
+      "min": 0,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 12
+    },
+    {
+      "type": "header",
+      "content": "Typography and spacing"
+    },
+    {
+      "type": "range",
+      "id": "block_heading_size",
+      "label": "Icon heading size",
+      "min": 14,
+      "max": 34,
+      "step": 1,
+      "unit": "px",
+      "default": 20
+    },
+    {
+      "type": "range",
+      "id": "block_heading_weight",
+      "label": "Icon heading weight",
+      "min": 400,
+      "max": 800,
+      "step": 100,
+      "default": 600
+    },
+    {
+      "type": "range",
+      "id": "block_description_size",
+      "label": "Icon description size",
+      "min": 12,
+      "max": 24,
+      "step": 1,
+      "unit": "px",
+      "default": 15
+    },
+    {
+      "type": "range",
+      "id": "block_description_line_height",
+      "label": "Icon description line height",
+      "min": 120,
+      "max": 220,
+      "step": 5,
+      "unit": "%",
+      "default": 155
+    },
+    {
+      "type": "range",
+      "id": "icon_heading_spacing",
+      "label": "Icon to heading spacing",
+      "min": 4,
+      "max": 48,
+      "step": 1,
+      "unit": "px",
+      "default": 14
+    },
+    {
+      "type": "range",
+      "id": "heading_description_spacing",
+      "label": "Heading to description spacing",
+      "min": 2,
+      "max": 40,
+      "step": 1,
+      "unit": "px",
+      "default": 10
+    }
+  ],
+  "blocks": [
+    {
+      "type": "icon_highlight",
+      "name": "Icon highlight",
+      "settings": [
+        {
+          "type": "header",
+          "content": "Content"
+        },
+        {
+          "type": "select",
+          "id": "icon_source",
+          "label": "Icon source",
+          "default": "svg",
+          "options": [
+            {
+              "value": "image",
+              "label": "Uploaded icon image"
+            },
+            {
+              "value": "svg",
+              "label": "Built-in SVG icon"
+            }
+          ]
+        },
+        {
+          "type": "image_picker",
+          "id": "icon_image",
+          "label": "Uploaded icon image"
+        },
+        {
+          "type": "select",
+          "id": "builtin_icon",
+          "label": "Built-in icon",
+          "default": "shield_verified",
+          "options": [
+            {
+              "value": "shield_verified",
+              "label": "Shield / Verified"
+            },
+            {
+              "value": "star",
+              "label": "Star"
+            },
+            {
+              "value": "package",
+              "label": "Package"
+            },
+            {
+              "value": "shipping",
+              "label": "Shipping"
+            },
+            {
+              "value": "customer_support",
+              "label": "Customer support"
+            },
+            {
+              "value": "jewelry_chain",
+              "label": "Jewelry / Chain"
+            },
+            {
+              "value": "tools_pliers",
+              "label": "Tools / Pliers"
+            },
+            {
+              "value": "graduation_training",
+              "label": "Graduation / Training"
+            },
+            {
+              "value": "award",
+              "label": "Award"
+            },
+            {
+              "value": "heart",
+              "label": "Heart"
+            },
+            {
+              "value": "checkmark",
+              "label": "Checkmark"
+            },
+            {
+              "value": "users",
+              "label": "Users"
+            },
+            {
+              "value": "sparkles",
+              "label": "Sparkles"
+            },
+            {
+              "value": "gift",
+              "label": "Gift"
+            }
+          ]
+        },
+        {
+          "type": "inline_richtext",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Highlight title"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description",
+          "default": "<p>Add a short supporting description for this highlight.</p>"
+        },
+        {
+          "type": "checkbox",
+          "id": "hide_description",
+          "label": "Hide description",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Links"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link URL"
+        },
+        {
+          "type": "select",
+          "id": "link_style",
+          "label": "Link behavior",
+          "default": "text_link",
+          "options": [
+            {
+              "value": "whole_block",
+              "label": "Make entire block clickable"
+            },
+            {
+              "value": "text_link",
+              "label": "Show labeled text link"
+            }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label",
+          "default": "Learn more"
+        },
+        {
+          "type": "checkbox",
+          "id": "open_new_tab",
+          "label": "Open link in new tab",
+          "default": false
+        },
+        {
+          "type": "header",
+          "content": "Visual overrides"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_global_icon_style",
+          "label": "Use global icon style",
+          "default": true
+        },
+        {
+          "type": "range",
+          "id": "icon_size",
+          "label": "Override icon size",
+          "min": 20,
+          "max": 120,
+          "step": 2,
+          "unit": "px",
+          "default": 42
+        },
+        {
+          "type": "color",
+          "id": "svg_icon_color",
+          "label": "Override SVG icon color",
+          "default": "#1F1F1F"
+        },
+        {
+          "type": "checkbox",
+          "id": "icon_background_enabled",
+          "label": "Enable icon background",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "icon_container_background_color",
+          "label": "Override icon container background",
+          "default": "#F7F3EC"
+        },
+        {
+          "type": "select",
+          "id": "icon_container_shape",
+          "label": "Override icon container shape",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Use global shape"
+            },
+            {
+              "value": "none",
+              "label": "None"
+            },
+            {
+              "value": "circle",
+              "label": "Circle"
+            },
+            {
+              "value": "rounded_square",
+              "label": "Rounded square"
+            },
+            {
+              "value": "square",
+              "label": "Square"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "icon_border_enabled",
+          "label": "Enable icon border",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "icon_border_color",
+          "label": "Override icon border color",
+          "default": "#D9D3C8"
+        },
+        {
+          "type": "range",
+          "id": "icon_border_thickness",
+          "label": "Override icon border thickness",
+          "min": 0,
+          "max": 6,
+          "step": 1,
+          "unit": "px",
+          "default": 1
+        },
+        {
+          "type": "range",
+          "id": "icon_container_corner_radius",
+          "label": "Override icon corner radius",
+          "min": 0,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 12
+        },
+        {
+          "type": "checkbox",
+          "id": "override_heading_color",
+          "label": "Override heading color",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "heading_color",
+          "label": "Heading color",
+          "default": "#1F1F1F"
+        },
+        {
+          "type": "checkbox",
+          "id": "override_description_color",
+          "label": "Override description color",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "description_color",
+          "label": "Description color",
+          "default": "#4A4A4A"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment_override",
+          "label": "Text alignment override",
+          "default": "inherit",
+          "options": [
+            {
+              "value": "inherit",
+              "label": "Use section alignment"
+            },
+            {
+              "value": "left",
+              "label": "Left"
+            },
+            {
+              "value": "center",
+              "label": "Center"
+            },
+            {
+              "value": "right",
+              "label": "Right"
+            }
+          ]
+        },
+        {
+          "type": "checkbox",
+          "id": "custom_card_background_enabled",
+          "label": "Override card background",
+          "default": false
+        },
+        {
+          "type": "color",
+          "id": "custom_card_background_color",
+          "label": "Custom card background color",
+          "default": "#FFFFFF"
+        },
+        {
+          "type": "header",
+          "content": "Spacing overrides"
+        },
+        {
+          "type": "checkbox",
+          "id": "use_custom_spacing",
+          "label": "Use custom spacing",
+          "default": false
+        },
+        {
+          "type": "range",
+          "id": "icon_heading_spacing",
+          "label": "Icon to heading spacing",
+          "min": 4,
+          "max": 48,
+          "step": 1,
+          "unit": "px",
+          "default": 14
+        },
+        {
+          "type": "range",
+          "id": "heading_description_spacing",
+          "label": "Heading to description spacing",
+          "min": 2,
+          "max": 40,
+          "step": 1,
+          "unit": "px",
+          "default": 10
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Icon Highlights",
+      "blocks": [
+        {
+          "type": "icon_highlight",
+          "settings": {
+            "builtin_icon": "shield_verified",
+            "heading": "Trusted quality",
+            "description": "<p>Premium craftsmanship and consistent quality controls for every order.</p>"
+          }
+        },
+        {
+          "type": "icon_highlight",
+          "settings": {
+            "builtin_icon": "shipping",
+            "heading": "Fast dispatch",
+            "description": "<p>Reliable fulfillment workflows help get products out quickly.</p>"
+          }
+        },
+        {
+          "type": "icon_highlight",
+          "settings": {
+            "builtin_icon": "customer_support",
+            "heading": "Support when needed",
+            "description": "<p>Our team is available to help with orders, training, and product questions.</p>"
+          }
+        },
+        {
+          "type": "icon_highlight",
+          "settings": {
+            "builtin_icon": "graduation_training",
+            "heading": "Practical education",
+            "description": "<p>Training resources help teams build confidence and skills.</p>"
+          }
+        },
+        {
+          "type": "icon_highlight",
+          "settings": {
+            "builtin_icon": "award",
+            "heading": "Proven standards",
+            "description": "<p>Operational standards are designed for dependable long-term performance.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
