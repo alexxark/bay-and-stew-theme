@@ -102,6 +102,7 @@
         },
         "slide_3JP33a": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/Patches-GWPi-01.jpg",
             "image_mobile": "shopify://shop_images/Patches-GWPai-02.jpg",
