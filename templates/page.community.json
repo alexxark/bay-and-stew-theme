@@ -286,7 +286,7 @@
         "heading_DqgmxL": {
           "type": "heading",
           "settings": {
-            "heading": "<strong>PJ Patch Set On Us!</strong>",
+            "heading": "<strong>SOLD OUT - PJ Patch Set On Us!</strong>",
             "heading_size": "h1"
           }
         },
@@ -311,10 +311,12 @@
         "text_khN6Lz",
         "button_EMX98j"
       ],
-      "custom_css": [],
+      "custom_css": [
+        "h2 {color: red;}"
+      ],
       "name": "MEMORIAL SALE",
       "settings": {
-        "image": "shopify://shop_images/GWP_11801cc8-4978-4494-a94f-cb8725db1134.jpg",
+        "image": "shopify://shop_images/GWP-sold-out.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
