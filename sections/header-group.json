@@ -16,6 +16,7 @@
       "blocks": {
         "announcement_iihNqX": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "Receive a FREE 5-piece Permanent Jewelry Iron-On Patch Set when you spend $600+",
             "link": ""
