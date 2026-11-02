@@ -18,53 +18,52 @@
         "padding_bottom": 48
       }
     },
-    "image_banner_tNBAkf": {
-      "type": "image-banner",
+    "image_with_text_fxgJB4": {
+      "type": "image-with-text",
       "blocks": {
-        "heading_hXcq6c": {
+        "heading_N8xXCN": {
           "type": "heading",
           "settings": {
             "heading": "Custom Hand-Stamped Designs",
             "heading_size": "h1"
           }
         },
-        "text_DMAfQe": {
+        "text_yfWJUF": {
           "type": "text",
           "settings": {
-            "text": "Bring your custom designs to life with Bay & Stew Supplies! We offer custom hand-stamping on a selection of our existing jewelry blanks for personal projects, business collections and special events. <strong>No minimum order quantity required!</strong>",
+            "text": "<p>Bring your custom designs to life with Bay & Stew Supplies! We offer custom hand-stamping on a selection of our existing jewelry blanks for personal projects, business collections and special events. <strong>No minimum order quantity required!</strong></p>",
             "text_style": "body"
           }
         },
-        "buttons_dipA6r": {
-          "type": "buttons",
+        "button_N8KdhX": {
+          "type": "button",
           "settings": {
-            "button_label_1": "Apply Today",
-            "button_link_1": "https://bayandstew.com/pages/gf-connector-request",
-            "button_style_secondary_1": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": true
+            "button_label": "Apply Today",
+            "button_link": "",
+            "button_style_secondary": false
           }
         }
       },
       "block_order": [
-        "heading_hXcq6c",
-        "text_DMAfQe",
-        "buttons_dipA6r"
+        "heading_N8xXCN",
+        "text_yfWJUF",
+        "button_N8KdhX"
       ],
-      "name": "t:sections.image-banner.presets.name",
+      "name": "t:sections.image-with-text.presets.name",
       "settings": {
-        "image": "shopify://shop_images/Hero_Section-5.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "medium",
-        "desktop_content_position": "middle-center",
-        "show_text_box": true,
-        "desktop_content_alignment": "center",
-        "color_scheme": "scheme-1",
+        "image": "shopify://shop_images/ch05-Gold.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
         "image_behavior": "none",
-        "mobile_content_alignment": "center",
-        "stack_images_on_mobile": true,
-        "show_text_below": true
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
       }
     },
     "icon_highlights_kmRmhw": {
@@ -85,21 +84,21 @@
             "open_new_tab": false,
             "use_global_icon_style": true,
             "icon_size": 42,
-            "svg_icon_color": "#1F1F1F",
+            "svg_icon_color": "#1f1f1f",
             "icon_background_enabled": false,
-            "icon_container_background_color": "#F7F3EC",
+            "icon_container_background_color": "#f7f3ec",
             "icon_container_shape": "inherit",
             "icon_border_enabled": false,
-            "icon_border_color": "#D9D3C8",
+            "icon_border_color": "#d9d3c8",
             "icon_border_thickness": 1,
             "icon_container_corner_radius": 12,
             "override_heading_color": false,
-            "heading_color": "#1F1F1F",
+            "heading_color": "#1f1f1f",
             "override_description_color": false,
-            "description_color": "#4A4A4A",
+            "description_color": "#4a4a4a",
             "text_alignment_override": "inherit",
             "custom_card_background_enabled": false,
-            "custom_card_background_color": "#FFFFFF",
+            "custom_card_background_color": "#ffffff",
             "use_custom_spacing": false,
             "icon_heading_spacing": 14,
             "heading_description_spacing": 10
@@ -120,21 +119,21 @@
             "open_new_tab": false,
             "use_global_icon_style": true,
             "icon_size": 42,
-            "svg_icon_color": "#1F1F1F",
+            "svg_icon_color": "#1f1f1f",
             "icon_background_enabled": false,
-            "icon_container_background_color": "#F7F3EC",
+            "icon_container_background_color": "#f7f3ec",
             "icon_container_shape": "inherit",
             "icon_border_enabled": false,
-            "icon_border_color": "#D9D3C8",
+            "icon_border_color": "#d9d3c8",
             "icon_border_thickness": 1,
             "icon_container_corner_radius": 12,
             "override_heading_color": false,
-            "heading_color": "#1F1F1F",
+            "heading_color": "#1f1f1f",
             "override_description_color": false,
-            "description_color": "#4A4A4A",
+            "description_color": "#4a4a4a",
             "text_alignment_override": "inherit",
             "custom_card_background_enabled": false,
-            "custom_card_background_color": "#FFFFFF",
+            "custom_card_background_color": "#ffffff",
             "use_custom_spacing": false,
             "icon_heading_spacing": 14,
             "heading_description_spacing": 10
@@ -155,21 +154,21 @@
             "open_new_tab": false,
             "use_global_icon_style": true,
             "icon_size": 42,
-            "svg_icon_color": "#1F1F1F",
+            "svg_icon_color": "#1f1f1f",
             "icon_background_enabled": false,
-            "icon_container_background_color": "#F7F3EC",
+            "icon_container_background_color": "#f7f3ec",
             "icon_container_shape": "inherit",
             "icon_border_enabled": false,
-            "icon_border_color": "#D9D3C8",
+            "icon_border_color": "#d9d3c8",
             "icon_border_thickness": 1,
             "icon_container_corner_radius": 12,
             "override_heading_color": false,
-            "heading_color": "#1F1F1F",
+            "heading_color": "#1f1f1f",
             "override_description_color": false,
-            "description_color": "#4A4A4A",
+            "description_color": "#4a4a4a",
             "text_alignment_override": "inherit",
             "custom_card_background_enabled": false,
-            "custom_card_background_color": "#FFFFFF",
+            "custom_card_background_color": "#ffffff",
             "use_custom_spacing": false,
             "icon_heading_spacing": 14,
             "heading_description_spacing": 10
@@ -189,11 +188,11 @@
         "heading_size": "medium",
         "heading_weight": 600,
         "use_custom_heading_color": false,
-        "heading_color": "#1F1F1F",
+        "heading_color": "#1f1f1f",
         "description": "",
         "description_size": "medium",
         "use_custom_description_color": false,
-        "description_color": "#4A4A4A",
+        "description_color": "#4a4a4a",
         "heading_bottom_spacing": 24,
         "content_width": "theme_default",
         "max_content_width": 2400,
@@ -212,26 +211,26 @@
         "mobile_padding_bottom": 40,
         "color_scheme": "",
         "enable_custom_background": false,
-        "custom_background_color": "#FFFFFF",
+        "custom_background_color": "#ffffff",
         "show_section_border": false,
-        "section_border_color": "#E3E0DB",
+        "section_border_color": "#e3e0db",
         "section_border_width": 1,
         "show_top_separator": false,
         "show_bottom_separator": false,
-        "separator_color": "#E3E0DB",
+        "separator_color": "#e3e0db",
         "separator_thickness": 1,
         "enable_card_background": false,
-        "card_background_color": "#FFFFFF",
+        "card_background_color": "#ffffff",
         "enable_alternate_card_background": false,
-        "alternate_card_background_color": "#F7F3EC",
+        "alternate_card_background_color": "#f7f3ec",
         "icon_size": 42,
         "icon_container_size": 76,
-        "icon_color": "#1F1F1F",
+        "icon_color": "#1f1f1f",
         "enable_icon_background": false,
         "icon_container_shape": "none",
-        "icon_container_background_color": "#F7F3EC",
+        "icon_container_background_color": "#f7f3ec",
         "enable_icon_border": false,
-        "icon_border_color": "#D9D3C8",
+        "icon_border_color": "#d9d3c8",
         "icon_border_thickness": 1,
         "icon_container_corner_radius": 12,
         "block_heading_size": 20,
@@ -245,7 +244,7 @@
   },
   "order": [
     "main",
-    "image_banner_tNBAkf",
+    "image_with_text_fxgJB4",
     "icon_highlights_kmRmhw"
   ]
 }
