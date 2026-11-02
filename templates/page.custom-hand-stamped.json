@@ -209,7 +209,7 @@
         "use_mobile_padding": false,
         "mobile_padding_top": 40,
         "mobile_padding_bottom": 40,
-        "color_scheme": "",
+        "color_scheme": "scheme-5",
         "enable_custom_background": false,
         "custom_background_color": "#ffffff",
         "show_section_border": false,
@@ -535,6 +535,37 @@
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 0
       }
+    },
+    "rich_text_a7BXHi": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_V6zDUp": {
+          "type": "heading",
+          "settings": {
+            "heading": "No Minimum Order Quantity",
+            "heading_size": "h1"
+          }
+        },
+        "text_FaVyUD": {
+          "type": "text",
+          "settings": {
+            "text": "<p>There is no minimum quantity for custom hand-stamped orders. Submit a request whether you need a few items or a larger quantity.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_V6zDUp",
+        "text_FaVyUD"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-0d1ce79a-d1e0-42d0-bf13-29aaac9b54c9",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
+      }
     }
   },
   "order": [
@@ -543,6 +574,7 @@
     "icon_highlights_kmRmhw",
     "image_with_text_7MzdrY",
     "multicolumn_ghKC37",
-    "navigation_grid_NydW6m"
+    "navigation_grid_NydW6m",
+    "rich_text_a7BXHi"
   ]
 }
