@@ -240,11 +240,309 @@
         "icon_heading_spacing": 14,
         "heading_description_spacing": 10
       }
+    },
+    "image_with_text_7MzdrY": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_rihJpY": {
+          "type": "heading",
+          "settings": {
+            "heading": "All custom stamps start at $175",
+            "heading_size": "h1"
+          }
+        },
+        "text_LHrr9i": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each unique design requires its own custom stamp. The final setup fee depends on size and complexity, and larger designs may require larger, more expensive stamps. Our team will review the artwork and chosen blank and confirm your fee before proceeding.</p><p>Repeat orders using the same unchanged design generally do not require a new setup fee if the original stamp remains available and usable.</p>",
+            "text_style": "body"
+          }
+        }
+      },
+      "block_order": [
+        "heading_rihJpY",
+        "text_LHrr9i"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn_ghKC37": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_8VjR7w": {
+          "type": "column",
+          "settings": {
+            "title": "Production-ready artwork — <strong>FREE</strong>",
+            "text": "<p>If finalized artwork meets our stamp production requirements and needs no changes, there is no design fee.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_bwKmBN": {
+          "type": "column",
+          "settings": {
+            "title": "Simple artwork preparation — <strong>$35</strong>",
+            "text": "<p>For cleanup, minor modifications or formatting existing artwork for stamp production.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_CWrWgJ": {
+          "type": "column",
+          "settings": {
+            "title": "Complex custom design — <strong>$75</strong>",
+            "text": "<p>For original designs or recreating reference images, illustrations or concepts for stamping. Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_8VjR7w",
+        "column_bwKmBN",
+        "column_CWrWgJ"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Custom Design Pricing",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "navigation_grid_NydW6m": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_EPgxeF": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_jdMt3h": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_KANCgH": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_tkNd6R": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_JQQExX": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_BUKNJB": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_3zxDrj": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_Nyqzrb": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_CMNqTw": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_cEkg4F": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_kRAxpc": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_pqeQk8": {
+          "type": "collection",
+          "settings": {
+            "title": "B24",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
+            "use_collection_image": true,
+            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_EPgxeF",
+        "collection_jdMt3h",
+        "collection_KANCgH",
+        "collection_tkNd6R",
+        "collection_JQQExX",
+        "collection_BUKNJB",
+        "collection_3zxDrj",
+        "collection_Nyqzrb",
+        "collection_CMNqTw",
+        "collection_cEkg4F",
+        "collection_kRAxpc",
+        "collection_pqeQk8"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Available Hand-Stamped Blanks",
+        "show_heading": true,
+        "description": "<p>Custom stamping is offered on eligible items from our existing hand-stamped collection.&nbsp;</p><p>We do not offer custom blank shapes or cutout designs through this service.</p>",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#FFFFFF",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 24,
+        "desktop_spacing_bottom": 40,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
     }
   },
   "order": [
     "main",
     "image_with_text_fxgJB4",
-    "icon_highlights_kmRmhw"
+    "icon_highlights_kmRmhw",
+    "image_with_text_7MzdrY",
+    "multicolumn_ghKC37",
+    "navigation_grid_NydW6m"
   ]
 }
