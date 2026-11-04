@@ -357,7 +357,7 @@
         "separator_color": "#E3E0DB",
         "separator_thickness": 1,
         "enable_card_background": true,
-        "card_background_color": "#FBFBFB",
+        "card_background_color": "#FAFAFA",
         "enable_alternate_card_background": false,
         "alternate_card_background_color": "#F7F3EC",
         "icon_size": 42,
