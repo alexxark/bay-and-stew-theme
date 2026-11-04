@@ -109,7 +109,7 @@
         "column_P699Cc"
       ],
       "custom_css": [
-        ".content-container {background: #f9f9f4 !important;}"
+        ".content-container {background: #f7f7f5 !important;}"
       ],
       "name": "Welding Kits",
       "settings": {
@@ -120,7 +120,7 @@
         "columns_desktop": 3,
         "column_alignment": "left",
         "background_style": "primary",
-        "button_label": "Button label",
+        "button_label": "",
         "button_link": "",
         "swipe_on_desktop": false,
         "color_scheme": "",
