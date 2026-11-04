@@ -347,7 +347,7 @@
         "mobile_padding_bottom": 40,
         "color_scheme": "",
         "enable_custom_background": true,
-        "custom_background_color": "#FDFDF7",
+        "custom_background_color": "#FFFFFC",
         "show_section_border": false,
         "section_border_color": "#E3E0DB",
         "section_border_width": 1,
