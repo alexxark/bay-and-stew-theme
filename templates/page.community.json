@@ -311,7 +311,9 @@
         "button_C8XcVD"
       ],
       "disabled": true,
-      "custom_css": [],
+      "custom_css": [
+        ".color-scheme-9270d5c1-d33a-4906-b852-135e0c623d89 {background-color: #f7f7f5;}"
+      ],
       "name": "Special Savings",
       "settings": {
         "image": "shopify://shop_images/sale-offers-page.jpg",
@@ -364,7 +366,7 @@
       "custom_css": [],
       "name": "GWP",
       "settings": {
-        "image": "shopify://shop_images/EverlymadeBackyard250029.jpg",
+        "image": "shopify://shop_images/GWP2.jpg",
         "height": "small",
         "desktop_image_width": "small",
         "layout": "text_first",
