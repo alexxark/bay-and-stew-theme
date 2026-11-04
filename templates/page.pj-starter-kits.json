@@ -318,11 +318,70 @@
         "icon_heading_spacing": 14,
         "heading_description_spacing": 10
       }
+    },
+    "multicolumn_bUxHyQ": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_YGq4pi": {
+          "type": "column",
+          "settings": {
+            "title": "Launch Kit",
+            "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/>Comes with:<br/></p><ul><li>WelderName3330003</li><li>xx connectors</li><li>xx tools</li><li>xx other items</li></ul>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_eGcibU": {
+          "type": "column",
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_P699Cc": {
+          "type": "column",
+          "settings": {
+            "title": "Column",
+            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_YGq4pi",
+        "column_eGcibU",
+        "column_P699Cc"
+      ],
+      "custom_css": [
+        ".content-container {background: #f7f7f7 !important;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Multicolumn",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "Button label",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
     "image_banner_zizPyz",
-    "icon_highlights_jQGeBr"
+    "icon_highlights_jQGeBr",
+    "multicolumn_bUxHyQ"
   ]
 }
