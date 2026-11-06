@@ -380,12 +380,61 @@
         "icon_heading_spacing": 14,
         "heading_description_spacing": 10
       }
+    },
+    "image_with_text_EimK9q": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_7dLG4n": {
+          "type": "heading",
+          "settings": {
+            "heading": "One Trusted Source for Your Entire Business",
+            "heading_size": "h2"
+          }
+        },
+        "text_K4W4Ew": {
+          "type": "text",
+          "settings": {
+            "text": "<p>From your first welder to your first event, Bay & Stew has everything you need to launch and grow your permanent jewelry business.</p><p>Shop welders, premium supplies, and helpful resources all in one place. Backed by fast shipping, quality products, and exceptional customer support.</p>",
+            "text_style": "body"
+          }
+        },
+        "button_PfCaBy": {
+          "type": "button",
+          "settings": {
+            "button_label": "Shop Starter Kits",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_7dLG4n",
+        "text_K4W4Ew",
+        "button_PfCaBy"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/Rectangle_2-3.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "image_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
     "image_banner_zizPyz",
     "multicolumn_bUxHyQ",
-    "icon_highlights_jQGeBr"
+    "icon_highlights_jQGeBr",
+    "image_with_text_EimK9q"
   ]
 }
