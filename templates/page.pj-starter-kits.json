@@ -78,6 +78,7 @@
         "column_YGq4pi": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-03.jpg",
             "title": "<strong>Launch Kit</strong>",
             "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/>Recommended products:</p><ul><li>Zapp® Permanent Jewelry Welder™ for Beginners</li><li>0 Connectors</li><li>4 chains</li><li>10 additional tools</li><li>1 jump ring pack</li></ul>",
             "link_label": "",
@@ -87,6 +88,7 @@
         "column_eGcibU": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-02_5cc2ae84-918d-4201-8e47-9b6687284932.jpg",
             "title": "<strong>Growth Kit</strong>",
             "text": "<p>Intermediate artists looking to expand their business.<br/><br/>Recommended products:</p><ul><li>Zapp Plus® 2 Permanent Jewelry Welder™</li><li>5 Connectors</li><li>6 chains</li><li>10 additional tools</li><li>2 jump ring packs</li></ul>",
             "link_label": "",
@@ -96,6 +98,7 @@
         "column_P699Cc": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-01_baeb8031-ff6c-455a-a4a3-1c722c181acd.jpg",
             "title": "<strong>Studio Pro Kit</strong>",
             "text": "<p>Entrepreneur artists who want to hit the ground running.</p><p><br/>Recommended products:</p><ul><li>Orion mPulse® Permanent Jewelry Welder™&nbsp;</li><li>11 Connectors</li><li>10 chains</li><li>10 additional tools</li><li>5 jump ring pack</li></ul>",
             "link_label": "",
