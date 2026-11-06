@@ -72,6 +72,30 @@
         "show_text_below": false
       }
     },
+    "rich_text_89DVwy": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_t9Kbh9": {
+          "type": "heading",
+          "settings": {
+            "heading": "Take your business to the next level",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_t9Kbh9"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 24
+      }
+    },
     "multicolumn_bUxHyQ": {
       "type": "multicolumn",
       "blocks": {
@@ -117,7 +141,7 @@
       ],
       "name": "Welding Kits",
       "settings": {
-        "title": "Take your business to the next level",
+        "title": "",
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
@@ -130,7 +154,7 @@
         "color_scheme": "",
         "columns_mobile": "1",
         "swipe_on_mobile": false,
-        "padding_top": 44,
+        "padding_top": 20,
         "padding_bottom": 52
       }
     },
@@ -428,13 +452,110 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "rich_text_JBh8GF": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_TdXfNH": {
+          "type": "heading",
+          "settings": {
+            "heading": "Over 10,000 happy jewelry makers",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "heading_TdXfNH"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 24
+      }
+    },
+    "multicolumn_pbBmUd": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_LXBXj3": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>“I’ve been ordering from Bay & Stew for my business for about 2 years now and I won’t go with anyone else! &nbsp;Their product is the best, delivery is always made in a timely manner, and they have the best customer service! Highly Recommend!”</h3><h2></h2><h4><strong>BRIANNA K.&nbsp;</strong></h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_bxUDeN": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-birthstones.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_BziVzL": {
+          "type": "column",
+          "settings": {
+            "title": "★★★★★",
+            "text": "<h3>“Customer service is always excellent! I needed a large quantity order and they shipped it out so fast, I was honestly in shock with how fast it came. I love doing business with this company!”<br/></h3><h4>RACHEL F.</h4>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_itfw3m": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/bay-and-stew-shipping.jpg",
+            "title": "",
+            "text": "",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_LXBXj3",
+        "column_bxUDeN",
+        "column_BziVzL",
+        "column_itfw3m"
+      ],
+      "custom_css": [
+        "h3 {font-weight: bold; font-family: sans-serif; color: #806f65;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
     "image_banner_zizPyz",
+    "rich_text_89DVwy",
     "multicolumn_bUxHyQ",
     "icon_highlights_jQGeBr",
-    "image_with_text_EimK9q"
+    "image_with_text_EimK9q",
+    "rich_text_JBh8GF",
+    "multicolumn_pbBmUd"
   ]
 }
