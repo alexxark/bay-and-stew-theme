@@ -77,7 +77,7 @@
       ],
       "name": "t:sections.featured-blog.presets.name",
       "settings": {
-        "heading": "Helpful articles",
+        "heading": "Recent articles",
         "heading_size": "h1",
         "blog": "news",
         "post_limit": 3,
