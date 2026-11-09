@@ -41,6 +41,9 @@
         "text_Cc3yiV",
         "heading_k6kPxq"
       ],
+      "custom_css": [
+        ".color-scheme-1{background-color: #fdfbf6;}"
+      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -92,7 +95,7 @@
       ],
       "custom_css": [
         ".content-container {background: #f7f7f5 !important;}",
-        ".multicolumn__title {text-align: center !important;}"
+        ".multicolumn {background-color: #fdfbf6 !important;}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
