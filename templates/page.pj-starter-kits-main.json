@@ -278,7 +278,7 @@
         "use_collection_image_fallback": true,
         "card_text_alignment": "center",
         "color_scheme": "",
-        "section_background_color": "#F9F9F9",
+        "section_background_color": "#FFFFFF",
         "rectangle_background_color": "#FFFFFF",
         "rectangle_text_color": "#1F1F1F",
         "border_color": "#BCBAB7",
