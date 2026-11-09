@@ -26,6 +26,7 @@
         "course_card_TVB3AX": {
           "type": "course_card",
           "settings": {
+            "course_image": "shopify://shop_images/Frame_3-3.jpg",
             "course_title": "Permanent Jewelry Basics",
             "course_description": "Start with Bay & Stew's free foundational lessons for permanent jewelry artists.",
             "access_badge": "free",
@@ -40,6 +41,7 @@
         "course_card_PWV4rQ": {
           "type": "course_card",
           "settings": {
+            "course_image": "shopify://shop_images/Rectangle_1-2.jpg",
             "course_title": "Advanced Permanent Jewelry Training",
             "course_description": "Premium curriculum is in development. Join the waitlist or check back soon.",
             "access_badge": "premium",
