@@ -115,11 +115,187 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "multicolumn_xtYnix": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_8L3cYX": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/01.png",
+            "title": "Choose Your Setup",
+            "text": "<p>Choose your welder and stock your inventory.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_KrDjWN": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/02.png",
+            "title": "Learn & Practice",
+            "text": "<p>Use our resources to sharpen your skills.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_7TeMjt": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/03.png",
+            "title": "Get Booked",
+            "text": "<p>Book events and start sharing your services.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_k8XYDw": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/04.png",
+            "title": "Get Paid",
+            "text": "<p>Turn your new skills into<br/>a growing business.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_8L3cYX",
+        "column_KrDjWN",
+        "column_7TeMjt",
+        "column_k8XYDw"
+      ],
+      "disabled": true,
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Ready to Launch?",
+        "heading_size": "h1",
+        "image_width": "half",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "navigation_grid_YPBpjE": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_extkpG": {
+          "type": "collection",
+          "settings": {
+            "title": "Welders",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/welders",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_RaQYQh": {
+          "type": "collection",
+          "settings": {
+            "title": "Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-2.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/chains",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_WR3aat": {
+          "type": "collection",
+          "settings": {
+            "title": "Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-3.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/connectors",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_hqmVWj": {
+          "type": "collection",
+          "settings": {
+            "title": "Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-5.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/charms",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_RbBhiC": {
+          "type": "collection",
+          "settings": {
+            "title": "Findings",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-4.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/findings",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_extkpG",
+        "collection_RaQYQh",
+        "collection_WR3aat",
+        "collection_hqmVWj",
+        "collection_RbBhiC"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Permanent Jewelry Essentials",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1200,
+        "desktop_columns": "6",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#F9F9F9",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 40,
+        "desktop_spacing_bottom": 60,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 20
+      }
     }
   },
   "order": [
     "main",
     "rich_text_b8M8wf",
-    "multicolumn_W8Yiyr"
+    "multicolumn_W8Yiyr",
+    "multicolumn_xtYnix",
+    "navigation_grid_YPBpjE"
   ]
 }
