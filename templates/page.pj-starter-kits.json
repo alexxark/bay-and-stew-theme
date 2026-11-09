@@ -41,7 +41,7 @@
           "type": "buttons",
           "settings": {
             "button_label_1": "Start Your Business Today",
-            "button_link_1": "",
+            "button_link_1": "https://bayandstew.com/pages/pj-starter-kits",
             "button_style_secondary_1": false,
             "button_label_2": "",
             "button_link_2": "",
@@ -340,7 +340,7 @@
           "type": "button",
           "settings": {
             "button_label": "Shop Starter Kits",
-            "button_link": "",
+            "button_link": "https://bayandstew.com/pages/pj-starter-kits",
             "button_style_secondary": false
           }
         }
@@ -833,7 +833,7 @@
           "type": "button",
           "settings": {
             "button_label": "Shop Starter Kits",
-            "button_link": "",
+            "button_link": "https://bayandstew.com/pages/pj-starter-kits",
             "button_style_secondary": false
           }
         }
