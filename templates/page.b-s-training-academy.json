@@ -69,10 +69,32 @@
         "padding_top": 48,
         "padding_bottom": 48
       }
+    },
+    "featured_blog_zJyNDx": {
+      "type": "featured-blog",
+      "custom_css": [
+        ".article-card{background-color: #FAFAFA;}"
+      ],
+      "name": "t:sections.featured-blog.presets.name",
+      "settings": {
+        "heading": "Featured articles",
+        "heading_size": "h1",
+        "blog": "news",
+        "post_limit": 3,
+        "columns_desktop": 3,
+        "color_scheme": "",
+        "show_image": true,
+        "show_date": true,
+        "show_author": false,
+        "show_view_all": true,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
     "main",
-    "main_training_academy_fpYGpg"
+    "main_training_academy_fpYGpg",
+    "featured_blog_zJyNDx"
   ]
 }
