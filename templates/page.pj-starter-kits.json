@@ -626,6 +626,79 @@
         "padding_top": 20,
         "padding_bottom": 52
       }
+    },
+    "multicolumn_edNxFe": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_Gd3LmY": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_17.jpg",
+            "title": "Training",
+            "text": "<p>Follow our free training videos to gain skills.</p>",
+            "link_label": "Explore Training",
+            "link": "https://bayandstew.com/pages/how-tos-by-bay-stew"
+          }
+        },
+        "column_Qk474y": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_17-2.jpg",
+            "title": "Business Resources",
+            "text": "<p>Explore resources with tips and tricks for businesses.</p>",
+            "link_label": "View Resources",
+            "link": "https://bayandstew.com/blogs/news/7-ways-successful-permanent-jewelry-businesses-make-more-profit"
+          }
+        },
+        "column_nmCanT": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_17-3.jpg",
+            "title": "Get Booked",
+            "text": "<p>How to book, what to pack, & more tips for PJ events.</p>",
+            "link_label": "View Resources",
+            "link": "https://bayandstew.com/blogs/news/why-isnt-my-permanent-jewelry-business-growing-8-common-mistakes-and-how-to-fix-them"
+          }
+        },
+        "column_FLRVxk": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/Rectangle_17-4.jpg",
+            "title": "Pricing Guidance",
+            "text": "<p>How to calculate prices, tips, tricks, and calculators.</p>",
+            "link_label": "View Resources",
+            "link": "https://bayandstew.com/blogs/news/how-much-to-charge-for-permanent-jewelry-simple-pricing-formula?_pos=2&_sid=0f99877c1&_ss=r"
+          }
+        }
+      },
+      "block_order": [
+        "column_Gd3LmY",
+        "column_Qk474y",
+        "column_nmCanT",
+        "column_FLRVxk"
+      ],
+      "custom_css": [
+        ".multicolumn {background-color: #fdfbf6;}",
+        ".content-container {background: #fdfbf6; padding: 20px 0px 20px 5px;}"
+      ],
+      "name": "Resources",
+      "settings": {
+        "title": "Learn With Confidence",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "square",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -637,6 +710,7 @@
     "multicolumn_pbBmUd",
     "multicolumn_9XEEz7",
     "rich_text_89DVwy",
-    "multicolumn_bUxHyQ"
+    "multicolumn_bUxHyQ",
+    "multicolumn_edNxFe"
   ]
 }
