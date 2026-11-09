@@ -73,11 +73,11 @@
     "featured_blog_zJyNDx": {
       "type": "featured-blog",
       "custom_css": [
-        ".article-card{background-color: #FAFAFA;}"
+        ".article-card {background-color: #fafafa;}"
       ],
       "name": "t:sections.featured-blog.presets.name",
       "settings": {
-        "heading": "Featured articles",
+        "heading": "Helpful articles",
         "heading_size": "h1",
         "blog": "news",
         "post_limit": 3,
