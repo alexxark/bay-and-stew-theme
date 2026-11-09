@@ -699,6 +699,110 @@
         "padding_top": 52,
         "padding_bottom": 36
       }
+    },
+    "navigation_grid_C9x3KW": {
+      "type": "navigation-grid",
+      "blocks": {
+        "collection_EPfM8m": {
+          "type": "collection",
+          "settings": {
+            "title": "Welders",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/welders",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_i9YgYj": {
+          "type": "collection",
+          "settings": {
+            "title": "Chains",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-2.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/chains",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_eNqwVX": {
+          "type": "collection",
+          "settings": {
+            "title": "Connectors",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-3.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/connectors-permanent-jewelry",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_JPXKjz": {
+          "type": "collection",
+          "settings": {
+            "title": "Charms",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-5.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/charms",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        },
+        "collection_CcgUFR": {
+          "type": "collection",
+          "settings": {
+            "title": "Findings",
+            "subtitle": "",
+            "card_image": "shopify://shop_images/Nav_Section-4.jpg",
+            "use_collection_image": true,
+            "link": "shopify://collections/findings",
+            "aria_label": "",
+            "collection": "",
+            "custom_label": ""
+          }
+        }
+      },
+      "block_order": [
+        "collection_EPfM8m",
+        "collection_i9YgYj",
+        "collection_eNqwVX",
+        "collection_JPXKjz",
+        "collection_CcgUFR"
+      ],
+      "name": "Navigation Grid",
+      "settings": {
+        "heading": "Shop Permanent Jewelry Essentials",
+        "show_heading": true,
+        "description": "",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "max_content_width": 1460,
+        "desktop_columns": "5",
+        "tablet_columns": "3",
+        "mobile_columns": "2",
+        "card_style": "auto",
+        "image_ratio": "landscape",
+        "use_collection_image_fallback": true,
+        "card_text_alignment": "center",
+        "color_scheme": "",
+        "section_background_color": "#F9F9F9",
+        "rectangle_background_color": "#FFFFFF",
+        "rectangle_text_color": "#1F1F1F",
+        "border_color": "#BCBAB7",
+        "border_width": 1,
+        "corner_radius": 5,
+        "desktop_spacing_top": 40,
+        "desktop_spacing_bottom": 60,
+        "mobile_spacing_top": 20,
+        "mobile_spacing_bottom": 0
+      }
     }
   },
   "order": [
@@ -711,6 +815,7 @@
     "multicolumn_9XEEz7",
     "rich_text_89DVwy",
     "multicolumn_bUxHyQ",
-    "multicolumn_edNxFe"
+    "multicolumn_edNxFe",
+    "navigation_grid_C9x3KW"
   ]
 }
