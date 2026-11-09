@@ -546,6 +546,79 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "multicolumn_9XEEz7": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_c8QnPw": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/01.png",
+            "title": "Choose Your Setup",
+            "text": "<p>Choose your welder and stock your inventory.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_rrQVMi": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/02.png",
+            "title": "Learn & Practice",
+            "text": "<p>Use our resources to sharpen your skills.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_fJYJNz": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/03.png",
+            "title": "Get Booked",
+            "text": "<p>Book events and start sharing your services.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_Yx46H9": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/04.png",
+            "title": "Get Paid",
+            "text": "<p>Turn your new skills into<br/>a growing business.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_c8QnPw",
+        "column_rrQVMi",
+        "column_fJYJNz",
+        "column_Yx46H9"
+      ],
+      "custom_css": [
+        ".multicolumn {background-color: #fdfbf6;}",
+        ".content-container {background: #ffffff; padding: 20px 0px 20px 5px;}"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Ready to Launch?",
+        "heading_size": "h1",
+        "image_width": "half",
+        "image_ratio": "adapt",
+        "columns_desktop": 4,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "2",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -556,6 +629,7 @@
     "icon_highlights_jQGeBr",
     "image_with_text_EimK9q",
     "rich_text_JBh8GF",
-    "multicolumn_pbBmUd"
+    "multicolumn_pbBmUd",
+    "multicolumn_9XEEz7"
   ]
 }
