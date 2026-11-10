@@ -294,7 +294,7 @@
           "settings": {
             "title": "Animal Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH445_28c4f607-502f-4347-89bd-45f29bc8f91e.png",
+            "card_image": "shopify://shop_images/animal-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -307,7 +307,7 @@
           "settings": {
             "title": "Food & Drink Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH417.jpg",
+            "card_image": "shopify://shop_images/food-drink-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -346,7 +346,7 @@
           "settings": {
             "title": "Symbol Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH317.jpg",
+            "card_image": "shopify://shop_images/symbol-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -372,7 +372,7 @@
           "settings": {
             "title": "Word / Letter / Number Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/IMG_6792_0eaeecae-d94f-4d60-ad00-a74a82ff4031.jpg",
+            "card_image": "shopify://shop_images/letter-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
