@@ -149,7 +149,7 @@
           "settings": {
             "title": "Gold Filled Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/4_3f992a8c-3d94-40df-92a2-33b00e88df26.jpg",
+            "card_image": "shopify://shop_images/gold-filled-charms.png",
             "use_collection_image": false,
             "link": "",
             "aria_label": "",
@@ -162,7 +162,7 @@
           "settings": {
             "title": "Sterling Silver Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH02-silver.jpg",
+            "card_image": "shopify://shop_images/sterling-silver-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -175,7 +175,7 @@
           "settings": {
             "title": "Gold PVD Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH454.jpg",
+            "card_image": "shopify://shop_images/gold-pvd.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -201,7 +201,7 @@
           "settings": {
             "title": "Gold Vermeil Charms",
             "subtitle": "",
-            "card_image": "shopify://shop_images/CH277GV.jpg",
+            "card_image": "shopify://shop_images/gold-vermeil-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
