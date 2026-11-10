@@ -37,6 +37,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/shop_all.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -49,6 +50,7 @@
           "settings": {
             "title": "New Arrivals",
             "subtitle": "",
+            "card_image": "shopify://shop_images/pvd_charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -61,6 +63,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/sc.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -73,6 +76,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Corrected_Western-Gold-and_Silver.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -85,6 +89,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Chain_Samples_and_Mystery_Packs-03.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -97,6 +102,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/sale.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
