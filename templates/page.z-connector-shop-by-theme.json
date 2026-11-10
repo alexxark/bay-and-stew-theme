@@ -37,6 +37,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/activities-connector.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -49,6 +50,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/animal-connectors.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -61,6 +63,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/food_and_drink_connectors.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -73,6 +76,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/nature-connectors.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -85,6 +89,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/profession-connectors.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -97,6 +102,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/CN362.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
