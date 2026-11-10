@@ -115,6 +115,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/CN192.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -127,6 +128,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Western-Gold.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -139,6 +141,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/EverlyMade216262copy.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
