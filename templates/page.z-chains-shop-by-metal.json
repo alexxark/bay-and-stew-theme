@@ -37,6 +37,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-05.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -49,6 +50,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-06.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -61,6 +63,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-07.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -73,6 +76,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-08.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -85,6 +89,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-04.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -97,6 +102,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-09.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -109,6 +115,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Shop_By_Metal-10.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -133,8 +140,8 @@
         "description": "",
         "heading_size": "h1",
         "heading_alignment": "center",
-        "max_content_width": 1200,
-        "desktop_columns": "6",
+        "max_content_width": 1040,
+        "desktop_columns": "5",
         "tablet_columns": "3",
         "mobile_columns": "2",
         "card_style": "auto",
@@ -293,7 +300,7 @@
         "subtitle": "",
         "alignment": "right",
         "collection": "gold-plated-chains",
-        "image": "shopify://shop_images/2023-08-1213.20.53.jpg",
+        "image": "shopify://shop_images/Shop_By_Metal-09.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
@@ -319,7 +326,7 @@
         "subtitle": "",
         "alignment": "left",
         "collection": "silver-plated-chains",
-        "image": "shopify://shop_images/2024-03-2519.22.31.jpg",
+        "image": "shopify://shop_images/Shop_By_Metal-10.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
