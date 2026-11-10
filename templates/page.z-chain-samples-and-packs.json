@@ -35,10 +35,11 @@
         "collection_Ve3zcK": {
           "type": "collection",
           "settings": {
-            "title": "",
+            "title": "Chain Samples",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Chain_Samples_and_Mystery_Packs-01.jpg",
             "use_collection_image": true,
-            "link": "",
+            "link": "shopify://collections/samples",
             "aria_label": "",
             "collection": "samples",
             "custom_label": "Chain Samples"
@@ -49,6 +50,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Chain_Samples_and_Mystery_Packs-02.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -61,6 +63,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Chain_Samples_and_Mystery_Packs-03.jpg",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -111,7 +114,7 @@
         "subtitle": "",
         "alignment": "left",
         "collection": "samples",
-        "image": "shopify://shop_images/gold-filled-permanent-jewelry-chains_bay-and-stew.jpg",
+        "image": "shopify://shop_images/Chain_Samples_and_Mystery_Packs-01.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
