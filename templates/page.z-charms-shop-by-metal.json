@@ -50,7 +50,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
-            "card_image": "shopify://shop_images/Screenshot_2026-11-10_at_9.46.54_AM.png",
+            "card_image": "shopify://shop_images/sterling-silver-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -196,7 +196,7 @@
         "subtitle": "",
         "alignment": "right",
         "collection": "sterling-silver-charms",
-        "image": "shopify://shop_images/Screenshot_2026-11-10_at_9.46.54_AM.png",
+        "image": "shopify://shop_images/sterling-silver-charms.png",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
