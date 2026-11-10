@@ -141,7 +141,7 @@
         "heading_size": "h1",
         "heading_alignment": "center",
         "max_content_width": 1200,
-        "desktop_columns": "6",
+        "desktop_columns": "5",
         "tablet_columns": "3",
         "mobile_columns": "2",
         "card_style": "auto",
