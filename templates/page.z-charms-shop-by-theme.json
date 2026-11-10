@@ -37,6 +37,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/activities-charmsnconnectors.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -49,6 +50,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/animal-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -61,6 +63,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/food-drink-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -73,6 +76,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Screenshot_2026-11-10_at_10.26.23_AM.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -85,6 +89,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/Screenshot_2026-11-10_at_10.34.28_AM.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -97,6 +102,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/symbol-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -109,6 +115,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/western-charms-2.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -121,6 +128,7 @@
           "settings": {
             "title": "",
             "subtitle": "",
+            "card_image": "shopify://shop_images/letter-charms.png",
             "use_collection_image": true,
             "link": "",
             "aria_label": "",
@@ -228,7 +236,7 @@
         "subtitle": "",
         "alignment": "left",
         "collection": "food-drink-charms",
-        "image": "shopify://shop_images/CH417.jpg",
+        "image": "shopify://shop_images/food-drink-charms.png",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
@@ -306,7 +314,7 @@
         "subtitle": "",
         "alignment": "right",
         "collection": "symbol-charms",
-        "image": "shopify://shop_images/CH317.jpg",
+        "image": "shopify://shop_images/symbol-charms.png",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
