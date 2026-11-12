@@ -24,6 +24,7 @@
         },
         "announcement_yxMhRg": {
           "type": "announcement",
+          "disabled": true,
           "settings": {
             "text": "WE WILL BE CLOSED ON WEDNESDAY 11/11. ORDERS PLACED AFTER 12 PM PST TUESDAY 11/10 WILL BE SHIPPED ON THURSDAY 11/12.",
             "link": ""
