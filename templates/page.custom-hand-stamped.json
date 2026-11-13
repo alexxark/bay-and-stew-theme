@@ -271,49 +271,6 @@
         "padding_bottom": 36
       }
     },
-    "rich_text_en8dLH": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_xKYhhV": {
-          "type": "heading",
-          "settings": {
-            "heading": "Talk about your brand",
-            "heading_size": "h1"
-          }
-        },
-        "text_9gTWCB": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Hand-stamped products are charged at our regular website prices. Design and setup fees are additional.</p>"
-          }
-        },
-        "button_N9C9rd": {
-          "type": "button",
-          "settings": {
-            "button_label": "Button label",
-            "button_link": "",
-            "button_style_secondary": false,
-            "button_label_2": "",
-            "button_link_2": "",
-            "button_style_secondary_2": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_xKYhhV",
-        "text_9gTWCB",
-        "button_N9C9rd"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
     "multicolumn_ghKC37": {
       "type": "multicolumn",
       "blocks": {
@@ -329,7 +286,7 @@
         "column_bwKmBN": {
           "type": "column",
           "settings": {
-            "title": "Simple artwork preparation — <strong>$35</strong>",
+            "title": "Simple artwork preparation — <strong>Starting at $35</strong>",
             "text": "<p>For cleanup, minor modifications or formatting existing artwork for stamp production.</p>",
             "link_label": "",
             "link": ""
@@ -338,7 +295,7 @@
         "column_CWrWgJ": {
           "type": "column",
           "settings": {
-            "title": "Complex custom design — <strong>$75</strong>",
+            "title": "Complex custom design — <strong>Starting at $75</strong>",
             "text": "<p>For original designs or recreating reference images, illustrations or concepts for stamping. Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
             "link_label": "",
             "link": ""
@@ -524,7 +481,6 @@
     "image_with_text_fxgJB4",
     "icon_highlights_kmRmhw",
     "image_with_text_7MzdrY",
-    "rich_text_en8dLH",
     "multicolumn_ghKC37",
     "navigation_grid_NydW6m",
     "rich_text_a7BXHi"
