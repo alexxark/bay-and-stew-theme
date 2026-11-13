@@ -500,6 +500,15 @@
             "row_content": "<p>1. Submit the Custom Hand-Stamped Request Form, including your artwork or reference image, preferred blank, materials, quantity, and deadline.</p><p>2. Our team individually reviews the request and confirms feasibility and pricing.</p><p>3. If design work is needed, we prepare the artwork and send a PDF proof for your approval.</p><p>4. After final artwork approval and payment, custom stamp production begins.</p><p>5. Once the stamp is ready, we produce, inspect and ship your hand-stamped products.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_jNkyyB": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Important",
+            "icon": "check_mark",
+            "row_content": "<p>Every request is subject to approval. Design and setup fees are nonrefundable once the corresponding work has begun. Artwork changes after approval may require additional fees. Custom orders are final sale except for verified defects or production errors.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -508,7 +517,8 @@
         "collapsible_row_KeKhgy",
         "collapsible_row_mXVw6j",
         "collapsible_row_93iQMa",
-        "collapsible_row_DNmTPb"
+        "collapsible_row_DNmTPb",
+        "collapsible_row_jNkyyB"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
