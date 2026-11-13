@@ -482,13 +482,23 @@
             "row_content": "<p>Custom stamp production takes approximately 4 weeks after final artwork approval and payment. Additional time may be needed to create your hand-stamped items depending on quantity, material availability and production scheduling.&nbsp;</p><p>Please include any event deadline with your request. Production and delivery dates are estimates, not guarantees.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_93iQMa": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Design and Intellectual Property Requirements",
+            "icon": "check_mark",
+            "row_content": "<p>All designs are reviewed individually and require Bay & Stew approval. Fine details may need simplification; designs must fit the available stamp area.</p><p>We cannot reproduce trademarked designs, company or sports logos, characters, or other protected artwork without appropriate authorization and our approval. You must own the artwork or hold the necessary rights and permissions to reproduce it. We reserve the right to decline a design.</p><p>Slight variations in placement or impression depth are normal with hand-stamped products.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
         "collapsible_row_PawBpC",
         "collapsible_row_paRKL8",
         "collapsible_row_KeKhgy",
-        "collapsible_row_mXVw6j"
+        "collapsible_row_mXVw6j",
+        "collapsible_row_93iQMa"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
