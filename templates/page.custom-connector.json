@@ -28,7 +28,7 @@
           "settings": {
             "image": "shopify://shop_images/custom-connector-01.jpg",
             "title": "Cutout Jewelry Components - Starting at $100+",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text": "<ul><li><strong>Set Up Fee: </strong>$175</li><li><strong>Design Fees:</strong>&nbsp;May apply</li><li><strong>Minimum Order:</strong>&nbsp;None</li><li><strong>Requirements:</strong>&nbsp;Approved artwork + eligible blank</li><li><strong>Repeat Orders:</strong>&nbsp;No additional stamp setup fee</li><li><strong>Standard Timeline:</strong>&nbsp;Approximately 4-6 weeks</li></ul>",
             "link_label": "",
             "link": ""
           }
@@ -38,7 +38,7 @@
           "settings": {
             "image": "shopify://shop_images/custom-connector-02.jpg",
             "title": "Cutout Jewelry Components - Starting at $175+",
-            "text": "<p>Pair text with an image to focus on your chosen product, collection, or blog post. Add details on availability, style, or even provide a review.</p>",
+            "text": "<ul><li><strong>Set Up Fee: </strong>$175</li><li><strong>Design Fees:</strong>&nbsp;May apply</li><li><strong>Minimum Order:</strong>&nbsp;None</li><li><strong>Requirements:</strong>&nbsp;Approved artwork + eligible blank</li><li><strong>Repeat Orders:</strong>&nbsp;No additional stamp setup fee</li><li><strong>Standard Timeline:</strong>&nbsp;Approximately 4-6 weeks</li></ul>",
             "link_label": "",
             "link": ""
           }
