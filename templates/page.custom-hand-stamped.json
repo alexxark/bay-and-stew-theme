@@ -403,85 +403,7 @@
             "custom_label": ""
           }
         },
-        "collection_BUKNJB": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_3zxDrj": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_Nyqzrb": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
         "collection_CMNqTw": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_cEkg4F": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_kRAxpc": {
-          "type": "collection",
-          "settings": {
-            "title": "B24",
-            "subtitle": "",
-            "card_image": "shopify://shop_images/b24_fcfc32c1-eabe-4be9-8024-5109ca2036bc.jpg",
-            "use_collection_image": true,
-            "link": "shopify://products/10x6-4mm-mini-bar-connector-b24",
-            "aria_label": "",
-            "collection": "",
-            "custom_label": ""
-          }
-        },
-        "collection_pqeQk8": {
           "type": "collection",
           "settings": {
             "title": "B24",
@@ -501,13 +423,7 @@
         "collection_KANCgH",
         "collection_tkNd6R",
         "collection_JQQExX",
-        "collection_BUKNJB",
-        "collection_3zxDrj",
-        "collection_Nyqzrb",
-        "collection_CMNqTw",
-        "collection_cEkg4F",
-        "collection_kRAxpc",
-        "collection_pqeQk8"
+        "collection_CMNqTw"
       ],
       "name": "Navigation Grid",
       "settings": {
