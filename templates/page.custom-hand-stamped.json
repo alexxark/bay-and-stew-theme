@@ -311,7 +311,65 @@
       "settings": {
         "title": "Custom Design Pricing",
         "heading_size": "h1",
-        "image_width": "full",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "multicolumn_ybN8C4": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_487Uzb": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/01.png",
+            "title": "Production-ready artwork — <strong>FREE</strong>",
+            "text": "<p>If finalized artwork meets our stamp production requirements and needs no changes, there is no design fee.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_nHmynR": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/02.png",
+            "title": "Simple artwork preparation — <strong>Starting at $35</strong>",
+            "text": "<p>For cleanup, minor modifications or formatting existing artwork for stamp production.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_kqed4T": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/03.png",
+            "title": "Complex custom design — <strong>Starting at $75</strong>",
+            "text": "<p>For original designs or recreating reference images, illustrations or concepts for stamping. Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_487Uzb",
+        "column_nHmynR",
+        "column_kqed4T"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "Custom Design Pricing",
+        "heading_size": "h1",
+        "image_width": "third",
         "image_ratio": "adapt",
         "columns_desktop": 3,
         "column_alignment": "left",
@@ -465,6 +523,9 @@
         "heading_V6zDUp",
         "text_FaVyUD"
       ],
+      "custom_css": [
+        ".content-container {background-color: #fdfbf6;}"
+      ],
       "name": "t:sections.rich-text.presets.name",
       "settings": {
         "desktop_content_position": "center",
@@ -482,6 +543,7 @@
     "icon_highlights_kmRmhw",
     "image_with_text_7MzdrY",
     "multicolumn_ghKC37",
+    "multicolumn_ybN8C4",
     "navigation_grid_NydW6m",
     "rich_text_a7BXHi"
   ]
