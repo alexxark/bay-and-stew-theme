@@ -333,8 +333,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/01.png",
-            "title": "Production-ready artwork — <strong>FREE</strong>",
-            "text": "<p>If finalized artwork meets our stamp production requirements and needs no changes, there is no design fee.</p>",
+            "title": "<strong>Submit Your Request</strong>",
+            "text": "<p>Complete the request form with your artwork, preferred blank, materials, quantity, and deadline.</p>",
             "link_label": "",
             "link": ""
           }
@@ -343,8 +343,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/02.png",
-            "title": "Simple artwork preparation — <strong>Starting at $35</strong>",
-            "text": "<p>For cleanup, minor modifications or formatting existing artwork for stamp production.</p>",
+            "title": "<strong>Review & Approve</strong>",
+            "text": "<p>Our team reviews your design, confirms pricing, and sends a PDF proof for approval if design work is needed.</p>",
             "link_label": "",
             "link": ""
           }
@@ -353,8 +353,8 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/03.png",
-            "title": "Complex custom design — <strong>Starting at $75</strong>",
-            "text": "<p>For original designs or recreating reference images, illustrations or concepts for stamping. Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
+            "title": "<strong>Production & Shipping</strong>",
+            "text": "<p>Once your artwork is approved and payment is received, we create your custom stamp, produce your jewelry, and ship your finished order.</p>",
             "link_label": "",
             "link": ""
           }
@@ -367,7 +367,7 @@
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "Custom Design Pricing",
+        "title": "How it works",
         "heading_size": "h1",
         "image_width": "third",
         "image_ratio": "adapt",
