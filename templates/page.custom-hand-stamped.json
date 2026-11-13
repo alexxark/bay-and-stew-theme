@@ -40,7 +40,7 @@
         "heading_N8xXCN",
         "text_yfWJUF"
       ],
-      "name": "t:sections.image-with-text.presets.name",
+      "name": "Hero Section",
       "settings": {
         "image": "shopify://shop_images/custom-connector-03.jpg",
         "height": "adapt",
@@ -99,7 +99,7 @@
       "custom_css": [
         ".background-primary {background-color: #fdfbf6;}"
       ],
-      "name": "t:sections.multicolumn.presets.name",
+      "name": "How it works",
       "settings": {
         "title": "How it works",
         "heading_size": "h1",
@@ -140,7 +140,7 @@
         "heading_rihJpY",
         "text_LHrr9i"
       ],
-      "name": "t:sections.image-with-text.presets.name",
+      "name": "Set up fee",
       "settings": {
         "image": "shopify://shop_images/Rectangle_1.jpg",
         "height": "adapt",
@@ -193,7 +193,7 @@
         "column_bwKmBN",
         "column_CWrWgJ"
       ],
-      "name": "t:sections.multicolumn.presets.name",
+      "name": "Design pricing",
       "settings": {
         "title": "Custom Design Pricing",
         "heading_size": "h1",
@@ -477,7 +477,7 @@
         "collection_JQQExX",
         "collection_CMNqTw"
       ],
-      "name": "Navigation Grid",
+      "name": "Blanks",
       "settings": {
         "heading": "Available Hand-Stamped Blanks",
         "show_heading": true,
@@ -524,7 +524,7 @@
         "button_3hd6B8"
       ],
       "custom_css": [],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "Blanks button",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -610,7 +610,7 @@
         "collapsible_row_DNmTPb",
         "collapsible_row_jNkyyB"
       ],
-      "name": "t:sections.collapsible_content.presets.name",
+      "name": "Important policies",
       "settings": {
         "caption": "",
         "heading": "Important Policies",
@@ -625,6 +625,54 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
+    },
+    "image_with_text_QHFhGa": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_YANjLQ": {
+          "type": "heading",
+          "settings": {
+            "heading": "Ready to order?",
+            "heading_size": "h1"
+          }
+        },
+        "text_zpwzMC": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Get the process started today!</p>",
+            "text_style": "body"
+          }
+        },
+        "button_CX7pt8": {
+          "type": "button",
+          "settings": {
+            "button_label": "Submit Your Idea",
+            "button_link": "",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_YANjLQ",
+        "text_zpwzMC",
+        "button_CX7pt8"
+      ],
+      "name": "t:sections.image-with-text.presets.name",
+      "settings": {
+        "image": "shopify://shop_images/custom-connector-04.jpg",
+        "height": "adapt",
+        "desktop_image_width": "medium",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "",
+        "color_scheme": "",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -636,6 +684,7 @@
     "icon_highlights_kmRmhw",
     "navigation_grid_NydW6m",
     "rich_text_a7BXHi",
-    "collapsible_content_dxpwLt"
+    "collapsible_content_dxpwLt",
+    "image_with_text_QHFhGa"
   ]
 }
