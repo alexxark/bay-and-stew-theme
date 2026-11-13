@@ -326,64 +326,6 @@
         "padding_bottom": 36
       }
     },
-    "multicolumn_ybN8C4": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_487Uzb": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/01.png",
-            "title": "<strong>Submit Your Request</strong>",
-            "text": "<p>Complete the request form with your artwork, preferred blank, materials, quantity, and deadline.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_nHmynR": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/02.png",
-            "title": "<strong>Review & Approve</strong>",
-            "text": "<p>Our team reviews your design, confirms pricing, and sends a PDF proof for approval if design work is needed.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_kqed4T": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/03.png",
-            "title": "<strong>Production & Shipping</strong>",
-            "text": "<p>Once your artwork is approved and payment is received, we create your custom stamp, produce your jewelry, and ship your finished order.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column_487Uzb",
-        "column_nHmynR",
-        "column_kqed4T"
-      ],
-      "name": "t:sections.multicolumn.presets.name",
-      "settings": {
-        "title": "How it works",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "primary",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_desktop": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "navigation_grid_NydW6m": {
       "type": "navigation-grid",
       "blocks": {
@@ -502,6 +444,68 @@
         "mobile_spacing_bottom": 0
       }
     },
+    "collapsible_content_dxpwLt": {
+      "type": "collapsible-content",
+      "blocks": {
+        "collapsible_row_PawBpC": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Artwork Fees",
+            "icon": "check_mark",
+            "row_content": "<p>Production-ready artwork — FREE. If finalized artwork meets our stamp production requirements and needs no changes, there is no design fee.</p><p>Simple artwork preparation — $35. For cleanup, minor modifications or formatting existing artwork for stamp production.</p><p>Complex custom design — $75. For original designs or recreating reference images, illustrations or concepts for stamping.</p><p>Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_paRKL8": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Set Up Fee",
+            "icon": "check_mark",
+            "row_content": "<p>Custom stamp setup — starting at $175.&nbsp;</p><p>Each unique design requires its own custom stamp. The final setup fee depends on size and complexity, and larger designs may require larger, more expensive stamps. Our team will review the artwork and chosen blank and confirm your fee before proceeding.</p><p>Repeat orders using the same unchanged design generally do not require a new setup fee if the original stamp remains available and usable.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_KeKhgy": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Available Hand-Stamped Blanks",
+            "icon": "check_mark",
+            "row_content": "<p>Custom stamping is offered on eligible items from our existing hand-stamped collection.</p><p>We do not offer custom blank shapes or cutout designs through this service.</p>",
+            "page": ""
+          }
+        },
+        "collapsible_row_mXVw6j": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "Collapsible row",
+            "icon": "check_mark",
+            "row_content": "",
+            "page": ""
+          }
+        }
+      },
+      "block_order": [
+        "collapsible_row_PawBpC",
+        "collapsible_row_paRKL8",
+        "collapsible_row_KeKhgy",
+        "collapsible_row_mXVw6j"
+      ],
+      "name": "t:sections.collapsible_content.presets.name",
+      "settings": {
+        "caption": "",
+        "heading": "Important Policies",
+        "heading_size": "h1",
+        "heading_alignment": "center",
+        "layout": "none",
+        "color_scheme": "",
+        "container_color_scheme": "",
+        "open_first_collapsible_row": false,
+        "image_ratio": "adapt",
+        "desktop_layout": "image_second",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "rich_text_a7BXHi": {
       "type": "rich-text",
       "blocks": {
@@ -535,6 +539,64 @@
         "padding_top": 40,
         "padding_bottom": 52
       }
+    },
+    "multicolumn_ybN8C4": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_487Uzb": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/01.png",
+            "title": "<strong>Submit Your Request</strong>",
+            "text": "<p>Complete the request form with your artwork, preferred blank, materials, quantity, and deadline.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_nHmynR": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/02.png",
+            "title": "<strong>Review & Approve</strong>",
+            "text": "<p>Our team reviews your design, confirms pricing, and sends a PDF proof for approval if design work is needed.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_kqed4T": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/03.png",
+            "title": "<strong>Production & Shipping</strong>",
+            "text": "<p>Once your artwork is approved and payment is received, we create your custom stamp, produce your jewelry, and ship your finished order.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_487Uzb",
+        "column_nHmynR",
+        "column_kqed4T"
+      ],
+      "name": "t:sections.multicolumn.presets.name",
+      "settings": {
+        "title": "How it works",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
     }
   },
   "order": [
@@ -543,8 +605,9 @@
     "icon_highlights_kmRmhw",
     "image_with_text_7MzdrY",
     "multicolumn_ghKC37",
-    "multicolumn_ybN8C4",
     "navigation_grid_NydW6m",
-    "rich_text_a7BXHi"
+    "collapsible_content_dxpwLt",
+    "rich_text_a7BXHi",
+    "multicolumn_ybN8C4"
   ]
 }
