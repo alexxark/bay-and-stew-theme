@@ -491,6 +491,15 @@
             "row_content": "<p>All designs are reviewed individually and require Bay & Stew approval. Fine details may need simplification; designs must fit the available stamp area.</p><p>We cannot reproduce trademarked designs, company or sports logos, characters, or other protected artwork without appropriate authorization and our approval. You must own the artwork or hold the necessary rights and permissions to reproduce it. We reserve the right to decline a design.</p><p>Slight variations in placement or impression depth are normal with hand-stamped products.</p>",
             "page": ""
           }
+        },
+        "collapsible_row_DNmTPb": {
+          "type": "collapsible_row",
+          "settings": {
+            "heading": "How to Order",
+            "icon": "check_mark",
+            "row_content": "<p>1. Submit the Custom Hand-Stamped Request Form, including your artwork or reference image, preferred blank, materials, quantity, and deadline.</p><p>2. Our team individually reviews the request and confirms feasibility and pricing.</p><p>3. If design work is needed, we prepare the artwork and send a PDF proof for your approval.</p><p>4. After final artwork approval and payment, custom stamp production begins.</p><p>5. Once the stamp is ready, we produce, inspect and ship your hand-stamped products.</p>",
+            "page": ""
+          }
         }
       },
       "block_order": [
@@ -498,7 +507,8 @@
         "collapsible_row_paRKL8",
         "collapsible_row_KeKhgy",
         "collapsible_row_mXVw6j",
-        "collapsible_row_93iQMa"
+        "collapsible_row_93iQMa",
+        "collapsible_row_DNmTPb"
       ],
       "name": "t:sections.collapsible_content.presets.name",
       "settings": {
