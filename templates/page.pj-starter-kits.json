@@ -187,7 +187,7 @@
             "icon_image": "shopify://shop_images/Group-4.png",
             "builtin_icon": "graduation_training",
             "heading": "",
-            "description": "<p>Over 10,000+ 5 star reviews</p>",
+            "description": "<p>Over 10,000 Five-Star Reviews</p>",
             "hide_description": false,
             "link": "",
             "link_style": "text_link",
@@ -319,20 +319,136 @@
         "heading_description_spacing": 10
       }
     },
+    "rich_text_89DVwy": {
+      "type": "rich-text",
+      "blocks": {
+        "text_niabMG": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Discover our expert recommended starting kits</p>"
+          }
+        },
+        "heading_t9Kbh9": {
+          "type": "heading",
+          "settings": {
+            "heading": "Which Welder Kit Is Right for You?",
+            "heading_size": "h1"
+          }
+        }
+      },
+      "block_order": [
+        "text_niabMG",
+        "heading_t9Kbh9"
+      ],
+      "name": "Welding kits text",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 24
+      }
+    },
+    "multicolumn_bUxHyQ": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_YGq4pi": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/banner-03.jpg",
+            "title": "<strong>Launch Kit</strong>",
+            "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/>Recommended products:</p><ul><li>Zapp® Permanent Jewelry Welder™ for Beginners</li><li>0 Connectors</li><li>4 chains</li><li>21 additional tools</li><li>1 jump ring pack</li></ul>",
+            "link_label": "Shop Launch Kit",
+            "link": "shopify://collections/permanent-jewelry-starter-launch-kit"
+          }
+        },
+        "column_eGcibU": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/banner-02_5cc2ae84-918d-4201-8e47-9b6687284932.jpg",
+            "title": "<strong>Growth Kit</strong>",
+            "text": "<p>Intermediate artists looking to expand their business.<br/><br/>Recommended products:</p><ul><li>Zapp Plus® 2 Permanent Jewelry Welder™</li><li>5 Connectors</li><li>6 chains</li><li>21 additional tools</li><li>2 jump ring packs</li></ul>",
+            "link_label": "Shop Growth Kit",
+            "link": "shopify://collections/permanent-jewelry-growth-kit"
+          }
+        },
+        "column_P699Cc": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/banner-01_baeb8031-ff6c-455a-a4a3-1c722c181acd.jpg",
+            "title": "<strong>Studio Pro Kit</strong>",
+            "text": "<p>Entrepreneur artists who want to hit the ground running.</p><p><br/>Recommended products:</p><ul><li>Orion mPulse® Permanent Jewelry Welder™&nbsp;</li><li>11 Connectors</li><li>10 chains</li><li>21 additional tools</li><li>5 jump ring pack</li></ul>",
+            "link_label": "Shop Studio Pro",
+            "link": "shopify://collections/permanent-jewelry-studio-pro-kit"
+          }
+        }
+      },
+      "block_order": [
+        "column_YGq4pi",
+        "column_eGcibU",
+        "column_P699Cc"
+      ],
+      "custom_css": [
+        ".content-container {background: #f7f7f5 !important;}",
+        ".multicolumn__title {text-align: center !important;}"
+      ],
+      "name": "Welding Kits",
+      "settings": {
+        "title": "",
+        "heading_size": "h1",
+        "image_width": "full",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 20,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_WpnEgt": {
+      "type": "rich-text",
+      "blocks": {
+        "text_3JY3PA": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each kit features a curated selection of equipment and supplies to help you get started. <em><strong>Simply browse the collection and add the items you need to your cart.</strong></em></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_3JY3PA"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 0,
+        "padding_bottom": 52
+      }
+    },
     "image_with_text_EimK9q": {
       "type": "image-with-text",
       "blocks": {
         "heading_7dLG4n": {
           "type": "heading",
           "settings": {
-            "heading": "One Trusted Source for Your Entire Business",
+            "heading": "Your Welder Is Just the Beginning",
             "heading_size": "h2"
           }
         },
         "text_K4W4Ew": {
           "type": "text",
           "settings": {
-            "text": "<p>From your first welder to your first event, Bay & Stew has everything you need to launch and grow your permanent jewelry business.</p><p>Shop welders, premium supplies, and helpful resources all in one place. Backed by fast shipping, quality products, and exceptional customer support.</p>",
+            "text": "<p>Launching a permanent jewelry business takes more than a welder. At Bay & Stew, you can find the equipment, chains, connectors, jump rings, and tools you need to get started—all from one trusted source.&nbsp;</p><p>As your business grows, we're here to keep you stocked with quality supplies at wholesale prices.</p>",
             "text_style": "body"
           }
         },
@@ -532,99 +648,6 @@
         "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
-      }
-    },
-    "rich_text_89DVwy": {
-      "type": "rich-text",
-      "blocks": {
-        "text_niabMG": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Discover our expert recommended starting kits</p>"
-          }
-        },
-        "heading_t9Kbh9": {
-          "type": "heading",
-          "settings": {
-            "heading": "Which Welder Kit Is Right for You?",
-            "heading_size": "h1"
-          }
-        }
-      },
-      "block_order": [
-        "text_niabMG",
-        "heading_t9Kbh9"
-      ],
-      "name": "Welding kits text",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 36,
-        "padding_bottom": 24
-      }
-    },
-    "multicolumn_bUxHyQ": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_YGq4pi": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/banner-03.jpg",
-            "title": "<strong>Launch Kit</strong>",
-            "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/>Recommended products:</p><ul><li>Zapp® Permanent Jewelry Welder™ for Beginners</li><li>0 Connectors</li><li>4 chains</li><li>21 additional tools</li><li>1 jump ring pack</li></ul>",
-            "link_label": "Shop Launch Kit",
-            "link": "shopify://collections/permanent-jewelry-starter-launch-kit"
-          }
-        },
-        "column_eGcibU": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/banner-02_5cc2ae84-918d-4201-8e47-9b6687284932.jpg",
-            "title": "<strong>Growth Kit</strong>",
-            "text": "<p>Intermediate artists looking to expand their business.<br/><br/>Recommended products:</p><ul><li>Zapp Plus® 2 Permanent Jewelry Welder™</li><li>5 Connectors</li><li>6 chains</li><li>21 additional tools</li><li>2 jump ring packs</li></ul>",
-            "link_label": "Shop Growth Kit",
-            "link": "shopify://collections/permanent-jewelry-growth-kit"
-          }
-        },
-        "column_P699Cc": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/banner-01_baeb8031-ff6c-455a-a4a3-1c722c181acd.jpg",
-            "title": "<strong>Studio Pro Kit</strong>",
-            "text": "<p>Entrepreneur artists who want to hit the ground running.</p><p><br/>Recommended products:</p><ul><li>Orion mPulse® Permanent Jewelry Welder™&nbsp;</li><li>11 Connectors</li><li>10 chains</li><li>21 additional tools</li><li>5 jump ring pack</li></ul>",
-            "link_label": "Shop Studio Pro",
-            "link": "shopify://collections/permanent-jewelry-studio-pro-kit"
-          }
-        }
-      },
-      "block_order": [
-        "column_YGq4pi",
-        "column_eGcibU",
-        "column_P699Cc"
-      ],
-      "custom_css": [
-        ".content-container {background: #f7f7f5 !important;}",
-        ".multicolumn__title {text-align: center !important;}"
-      ],
-      "name": "Welding Kits",
-      "settings": {
-        "title": "",
-        "heading_size": "h1",
-        "image_width": "full",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "primary",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_desktop": false,
-        "color_scheme": "",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
-        "padding_top": 20,
-        "padding_bottom": 52
       }
     },
     "multicolumn_edNxFe": {
@@ -866,12 +889,13 @@
     "main",
     "image_banner_zizPyz",
     "icon_highlights_jQGeBr",
+    "rich_text_89DVwy",
+    "multicolumn_bUxHyQ",
+    "rich_text_WpnEgt",
     "image_with_text_EimK9q",
     "rich_text_JBh8GF",
     "multicolumn_pbBmUd",
     "multicolumn_9XEEz7",
-    "rich_text_89DVwy",
-    "multicolumn_bUxHyQ",
     "multicolumn_edNxFe",
     "navigation_grid_C9x3KW",
     "image_with_text_mEnK84"
