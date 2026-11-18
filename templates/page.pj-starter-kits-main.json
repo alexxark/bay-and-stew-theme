@@ -278,16 +278,42 @@
         "use_collection_image_fallback": true,
         "card_text_alignment": "center",
         "color_scheme": "",
-        "section_background_color": "#FFFFFF",
-        "rectangle_background_color": "#FFFFFF",
-        "rectangle_text_color": "#1F1F1F",
-        "border_color": "#BCBAB7",
+        "section_background_color": "#ffffff",
+        "rectangle_background_color": "#ffffff",
+        "rectangle_text_color": "#1f1f1f",
+        "border_color": "#bcbab7",
         "border_width": 1,
         "corner_radius": 5,
         "desktop_spacing_top": 40,
         "desktop_spacing_bottom": 60,
         "mobile_spacing_top": 20,
         "mobile_spacing_bottom": 20
+      }
+    },
+    "rich_text_efhxwd": {
+      "type": "rich-text",
+      "blocks": {
+        "text_pETVYh": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each kit features a curated selection of equipment and supplies to help you get started. <em><strong>Simply browse the collection and add the items you need to your cart.</strong></em></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_pETVYh"
+      ],
+      "custom_css": [
+        ".color-scheme-1 {background-color: #fdfbf6;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 28,
+        "padding_bottom": 52
       }
     }
   },
@@ -296,6 +322,7 @@
     "rich_text_b8M8wf",
     "multicolumn_W8Yiyr",
     "multicolumn_xtYnix",
-    "navigation_grid_YPBpjE"
+    "navigation_grid_YPBpjE",
+    "rich_text_efhxwd"
   ]
 }
