@@ -54,6 +54,32 @@
         "padding_bottom": 24
       }
     },
+    "rich_text_efhxwd": {
+      "type": "rich-text",
+      "blocks": {
+        "text_pETVYh": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Each kit features a curated selection of equipment and supplies to help you get started. <em><strong>Simply browse the collection and add the items you need to your cart.</strong></em></p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_pETVYh"
+      ],
+      "custom_css": [
+        ".color-scheme-1 {background-color: #fdfbf6;}"
+      ],
+      "name": "t:sections.rich-text.presets.name",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 28,
+        "padding_bottom": 52
+      }
+    },
     "multicolumn_W8Yiyr": {
       "type": "multicolumn",
       "blocks": {
@@ -186,32 +212,6 @@
         "padding_bottom": 36
       }
     },
-    "rich_text_efhxwd": {
-      "type": "rich-text",
-      "blocks": {
-        "text_pETVYh": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Each kit features a curated selection of equipment and supplies to help you get started. <em><strong>Simply browse the collection and add the items you need to your cart.</strong></em></p>"
-          }
-        }
-      },
-      "block_order": [
-        "text_pETVYh"
-      ],
-      "custom_css": [
-        ".color-scheme-1 {background-color: #fdfbf6;}"
-      ],
-      "name": "t:sections.rich-text.presets.name",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 28,
-        "padding_bottom": 52
-      }
-    },
     "navigation_grid_YPBpjE": {
       "type": "navigation-grid",
       "blocks": {
@@ -321,8 +321,8 @@
     "main",
     "rich_text_b8M8wf",
     "multicolumn_W8Yiyr",
-    "multicolumn_xtYnix",
     "rich_text_efhxwd",
+    "multicolumn_xtYnix",
     "navigation_grid_YPBpjE"
   ]
 }
