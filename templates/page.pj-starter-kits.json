@@ -358,7 +358,7 @@
           "settings": {
             "image": "shopify://shop_images/banner-03.jpg",
             "title": "<strong>Launch Kit</strong>",
-            "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/>Recommended products:</p><ul><li>Zapp® Permanent Jewelry Welder™ for Beginners</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>4 Chain Styles</li><li>1 Matching Jump Ring Pack</li></ul>",
+            "text": "<p>First-time artists looking for the most affordable path to launch.<br/><br/><strong>Recommended products:</strong></p><ul><li>Zapp® Permanent Jewelry Welder™ for Beginners</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>4 Chain Styles</li><li>1 Matching Jump Ring Pack</li></ul>",
             "link_label": "Shop Launch Kit",
             "link": "shopify://collections/permanent-jewelry-starter-launch-kit"
           }
@@ -368,7 +368,7 @@
           "settings": {
             "image": "shopify://shop_images/banner-02_5cc2ae84-918d-4201-8e47-9b6687284932.jpg",
             "title": "<strong>Growth Kit</strong>",
-            "text": "<p>Intermediate artists looking to expand their business.<br/><br/>Recommended products:</p><ul><li>Zapp Plus® 2 Permanent Jewelry Welder™</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>5 Best-Selling Connector Styles</li><li>6 Chain Styles</li><li>2 Matching Jump Ring Packs</li></ul>",
+            "text": "<p>Intermediate artists looking to expand their business.<br/><br/><strong>Recommended products:</strong></p><ul><li>Zapp Plus® 2 Permanent Jewelry Welder™</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>5 Best-Selling Connector Styles</li><li>6 Chain Styles</li><li>2 Matching Jump Ring Packs</li></ul>",
             "link_label": "Shop Growth Kit",
             "link": "shopify://collections/permanent-jewelry-growth-kit"
           }
@@ -378,7 +378,7 @@
           "settings": {
             "image": "shopify://shop_images/banner-01_baeb8031-ff6c-455a-a4a3-1c722c181acd.jpg",
             "title": "<strong>Studio Pro Kit</strong>",
-            "text": "<p>Entrepreneur artists who want to hit the ground running.</p><p><br/>Recommended products:</p><ul><li>Orion mPulse® Permanent Jewelry Welder™&nbsp;</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>10 &nbsp;Best-Selling Connector Styles</li><li>12 Pack of Birthstone Connectors</li><li>10 Chain Styles</li><li>5 Jump Ring Sizes</li></ul>",
+            "text": "<p>Entrepreneur artists who want to hit the ground running.</p><p><br/><strong>Recommended products:</strong></p><ul><li>Orion mPulse® Permanent Jewelry Welder™&nbsp;</li><li>Argon&nbsp;Mini® Tank</li><li>20 Essential Tools & Supplies</li><li>10 &nbsp;Best-Selling Connector Styles</li><li>12 Pack of Birthstone Connectors</li><li>10 Chain Styles</li><li>5 Jump Ring Sizes</li></ul>",
             "link_label": "Shop Studio Pro",
             "link": "shopify://collections/permanent-jewelry-studio-pro-kit"
           }
