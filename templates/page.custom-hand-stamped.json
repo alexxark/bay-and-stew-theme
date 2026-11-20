@@ -166,7 +166,7 @@
             "icon_source": "image",
             "icon_image": "shopify://shop_images/Icons-19.png",
             "builtin_icon": "shield_verified",
-            "heading": "No&nbsp;Minimum Purchase",
+            "heading": "No Minimum Order Quantity",
             "description": "",
             "hide_description": false,
             "link": "",
