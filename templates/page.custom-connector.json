@@ -27,9 +27,9 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/custom-connector-01.jpg",
-            "title": "Cutout Jewelry Components - Starting at $100+",
-            "text": "<ul><li><strong>Set Up Fee: </strong>$175</li><li><strong>Design Fees:</strong>&nbsp;May apply</li><li><strong>Minimum Order:</strong>&nbsp;None</li><li><strong>Requirements:</strong>&nbsp;Approved artwork + eligible blank</li><li><strong>Repeat Orders:</strong>&nbsp;No additional stamp setup fee</li><li><strong>Standard Timeline:</strong>&nbsp;Approximately 4-6 weeks</li></ul>",
-            "link_label": "",
+            "title": "Custom Cutout Jewelry Components",
+            "text": "<ul><li><strong>Setup & Design Fee:</strong> $45–$75+</li><li><strong>Minimum Order: </strong>30 pieces per design, per metal</li><li><strong>Requirements:</strong> Artwork submitted for review and final proof approval</li><li><strong>Repeat Orders</strong>: No additional setup fee for unchanged designs</li><li><strong>Standard Timeline: </strong>Approximately 6–8 weeks after final proof approval<br/><br/></li></ul><p>Setup and design fees are one-time charges and do not include the cost of individual jewelry components.</p>",
+            "link_label": "Explore Custom Cutouts",
             "link": ""
           }
         },
@@ -37,10 +37,10 @@
           "type": "column",
           "settings": {
             "image": "shopify://shop_images/custom-connector-02.jpg",
-            "title": "Custom Stamped Components - Starting at $175+",
-            "text": "<ul><li><strong>Set Up Fee: </strong>$175</li><li><strong>Design Fees:</strong>&nbsp;May apply</li><li><strong>Minimum Order:</strong>&nbsp;None</li><li><strong>Requirements:</strong>&nbsp;Approved artwork + eligible blank</li><li><strong>Repeat Orders:</strong>&nbsp;No additional stamp setup fee</li><li><strong>Standard Timeline:</strong>&nbsp;Approximately 4-6 weeks</li></ul>",
+            "title": "Custom Stamped Jewelry Components",
+            "text": "<ul><li><strong>Setup & Design Fee:</strong> $210–$250+</li><li><strong>Minimum Order:</strong> None</li><li><strong>Requirements:</strong> Approved artwork and eligible existing blank</li><li><strong>Repeat Orders: </strong>No additional stamp setup fee for unchanged designs</li><li><strong>Standard Timeline: </strong>Approximately 6–8 weeks after final proof approval<br/><br/></li></ul><p>Setup and design fees are one-time charges and do not include the cost of individual jewelry components.</p>",
             "link_label": "Explore Custom Stamping",
-            "link": "https://chttps://bayandstew.com/pages/custom-hand-stamped-designs"
+            "link": "https://chttps//bayandstew.com/pages/custom-hand-stamped-designs"
           }
         }
       },
@@ -50,7 +50,7 @@
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
-        "title": "Custom Jewelry Component",
+        "title": "Custom Jewelry Components",
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
