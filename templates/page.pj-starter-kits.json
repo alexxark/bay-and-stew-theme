@@ -656,6 +656,7 @@
         "column_ybkhRh": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-file-06.jpg",
             "title": "Zapp® Permanent Jewelry Welder™ for Beginners",
             "text": "<p><strong>For new artists starting their permanent jewelry business.</strong></p><ul><li>Beginner-friendly, affordable entry point</li><li>Simple power settings</li><li>Designed specifically for permanent jewelry</li><li>Argon-ready for cleaner welds</li><li>Multiple magnification options</li><li>Made in the USA</li><li>3-year warranty</li></ul>",
             "link_label": "Discover more",
@@ -665,6 +666,7 @@
         "column_XrYaYL": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-file-05.jpg",
             "title": "Zapp Plus® 2 Permanent Jewelry Welder™",
             "text": "<p><strong>For artists wanting more control and flexibility in a compact welder.</strong></p><ul><li>Easy-to-use dial controls</li><li>More power and flexibility as your skills grow</li><li>Lightweight and highly portable (1.9 lbs)</li><li>72\" Orion stylus for added reach</li><li>Choice of magnification options</li><li>Made in the USA</li><li>3-year warranty</li></ul>",
             "link_label": "Discover more",
@@ -674,6 +676,7 @@
         "column_8qrx8D": {
           "type": "column",
           "settings": {
+            "image": "shopify://shop_images/banner-file-04.jpg",
             "title": "Orion mPulse® Permanent Jewelry Welder™&nbsp;",
             "text": "<p><strong>For artists wanting advanced features, precision, and customization.</strong></p><ul><li>Advanced touchscreen controls</li><li>More precise power adjustments</li><li>Tru-Fire® technology for fewer misfires</li><li>72\" Orion stylus</li><li>Flexible horizontal or vertical placement</li><li>Customizable screen backgrounds and vinyl skins</li><li>Made in the USA</li><li>3-year warranty</li></ul>",
             "link_label": "Discover more",
@@ -685,6 +688,10 @@
         "column_ybkhRh",
         "column_XrYaYL",
         "column_8qrx8D"
+      ],
+      "custom_css": [
+        ".color-scheme-1 {background-color: #fafafa;}",
+        ".content-container {background: #ffffffff!important;}"
       ],
       "name": "t:sections.multicolumn.presets.name",
       "settings": {
