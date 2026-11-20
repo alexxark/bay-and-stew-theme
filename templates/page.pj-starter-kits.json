@@ -720,19 +720,9 @@
           "settings": {
             "image": "shopify://shop_images/Rectangle_17.jpg",
             "title": "Training",
-            "text": "<p>Follow our free training videos to gain skills.</p>",
-            "link_label": "Explore Training",
-            "link": "https://bayandstew.com/pages/how-tos-by-bay-stew"
-          }
-        },
-        "column_Qk474y": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/Rectangle_17-2.jpg",
-            "title": "Business Resources",
-            "text": "<p>Explore resources with tips and tricks for businesses.</p>",
-            "link_label": "View Resources",
-            "link": "https://bayandstew.com/blogs/news/7-ways-successful-permanent-jewelry-businesses-make-more-profit"
+            "text": "<p>Explore our free Permanent Jewelry Basics video lessons covering foundational skills to help you get started.</p>",
+            "link_label": "Watch Free Training",
+            "link": "https://bayandstew.com/pages/permanent-jewelry-basics"
           }
         },
         "column_nmCanT": {
@@ -758,7 +748,6 @@
       },
       "block_order": [
         "column_Gd3LmY",
-        "column_Qk474y",
         "column_nmCanT",
         "column_FLRVxk"
       ],
@@ -768,11 +757,11 @@
       ],
       "name": "Resources",
       "settings": {
-        "title": "Learn With Confidence",
+        "title": "New to Permanent Jewelry? Start Learning for Free",
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "square",
-        "columns_desktop": 4,
+        "columns_desktop": 3,
         "column_alignment": "left",
         "background_style": "primary",
         "button_label": "",
