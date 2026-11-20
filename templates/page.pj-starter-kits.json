@@ -650,6 +650,40 @@
         "padding_bottom": 36
       }
     },
+    "rich_text_agkVTe": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_eGE4wz": {
+          "type": "heading",
+          "settings": {
+            "heading": "A Closer Look at Your Welding Options",
+            "heading_size": "h1"
+          }
+        },
+        "text_a4GLNn": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Not sure which welder is right for you?</strong> Each is designed to help you create beautiful permanent jewelry, but differences in controls, features, and flexibility can help you find the best fit for your business.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_eGE4wz",
+        "text_a4GLNn"
+      ],
+      "custom_css": [
+        ".color-scheme-1 {background-color: #fafafa;}"
+      ],
+      "name": "Welder options text",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 36,
+        "padding_bottom": 24
+      }
+    },
     "multicolumn_WtxNJE": {
       "type": "multicolumn",
       "blocks": {
@@ -695,7 +729,7 @@
       ],
       "name": "Welder Options",
       "settings": {
-        "title": "A Closer Look at Your Welding Options",
+        "title": "",
         "heading_size": "h1",
         "image_width": "full",
         "image_ratio": "adapt",
@@ -752,8 +786,8 @@
         "column_FLRVxk"
       ],
       "custom_css": [
-        ".multicolumn {background-color: #fdfbf6;}",
-        ".content-container {background: #fdfbf6; padding: 20px 0px 20px 5px;}"
+        ".multicolumn {background-color: white;}",
+        ".content-container {background: white; padding: 20px 0px 20px 5px;}"
       ],
       "name": "Resources",
       "settings": {
@@ -850,6 +884,9 @@
         "collection_JPXKjz",
         "collection_CcgUFR"
       ],
+      "custom_css": [
+        ".color-scheme-1 {background-color: #fdfbf6;}"
+      ],
       "name": "Navigation Grid",
       "settings": {
         "heading": "Shop Permanent Jewelry Essentials",
@@ -944,9 +981,10 @@
     "multicolumn_bUxHyQ",
     "rich_text_WpnEgt",
     "image_with_text_EimK9q",
+    "multicolumn_9XEEz7",
     "rich_text_JBh8GF",
     "multicolumn_pbBmUd",
-    "multicolumn_9XEEz7",
+    "rich_text_agkVTe",
     "multicolumn_WtxNJE",
     "multicolumn_edNxFe",
     "navigation_grid_C9x3KW",
