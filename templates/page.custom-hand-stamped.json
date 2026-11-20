@@ -482,21 +482,12 @@
     "collapsible_content_dxpwLt": {
       "type": "collapsible-content",
       "blocks": {
-        "collapsible_row_PawBpC": {
-          "type": "collapsible_row",
-          "settings": {
-            "heading": "Artwork Fees",
-            "icon": "check_mark",
-            "row_content": "<p>Production-ready artwork — FREE. If finalized artwork meets our stamp production requirements and needs no changes, there is no design fee.</p><p>Simple artwork preparation — $35. For cleanup, minor modifications or formatting existing artwork for stamp production.</p><p>Complex custom design — $75. For original designs or recreating reference images, illustrations or concepts for stamping.</p><p>Paid design fees include up to two revision rounds. Additional revisions may incur extra fees.</p>",
-            "page": ""
-          }
-        },
         "collapsible_row_paRKL8": {
           "type": "collapsible_row",
           "settings": {
-            "heading": "Set Up Fee",
+            "heading": "Set Up & Design Fee",
             "icon": "check_mark",
-            "row_content": "<p>Custom stamp setup — starting at $175.&nbsp;</p><p>Each unique design requires its own custom stamp. The final setup fee depends on size and complexity, and larger designs may require larger, more expensive stamps. Our team will review the artwork and chosen blank and confirm your fee before proceeding.</p><p>Repeat orders using the same unchanged design generally do not require a new setup fee if the original stamp remains available and usable.</p>",
+            "row_content": "<p>Custom stamp setup & design — starting at $120-$250+&nbsp;</p><p>Each unique design requires its own custom stamp. The final setup fee depends on the size of the stamp and the complexity of the design. <strong>Our team will review the artwork and chosen blank and confirm your fee before proceeding.</strong></p><p>Setup and design fees are one-time charges. Jewelry components are priced separately based on the selected blank, material, and quantity.</p>",
             "page": ""
           }
         },
@@ -547,7 +538,6 @@
         }
       },
       "block_order": [
-        "collapsible_row_PawBpC",
         "collapsible_row_paRKL8",
         "collapsible_row_KeKhgy",
         "collapsible_row_mXVw6j",
