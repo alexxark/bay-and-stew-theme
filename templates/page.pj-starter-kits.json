@@ -693,7 +693,7 @@
         ".color-scheme-1 {background-color: #fafafa;}",
         ".content-container {background: #ffffffff !important;}"
       ],
-      "name": "t:sections.multicolumn.presets.name",
+      "name": "Welder Options",
       "settings": {
         "title": "A Closer Look at Your Welding Options",
         "heading_size": "h1",
@@ -702,7 +702,7 @@
         "columns_desktop": 3,
         "column_alignment": "left",
         "background_style": "primary",
-        "button_label": "Button label",
+        "button_label": "",
         "button_link": "",
         "swipe_on_desktop": false,
         "color_scheme": "",
