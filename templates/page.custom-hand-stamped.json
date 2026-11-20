@@ -582,7 +582,7 @@
           "type": "button",
           "settings": {
             "button_label": "Submit Your Idea",
-            "button_link": "",
+            "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSccWyxXeXuoaGmyVUsFedCt0G_0bgB6gU_a5cJJMNt5XLHtxQ/viewform?usp=header",
             "button_style_secondary": false
           }
         }
