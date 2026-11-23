@@ -34,11 +34,20 @@
             "text": "<p>Bring your custom designs to life with Bay & Stew Supplies! We offer custom hand-stamping on a selection of our existing jewelry blanks for personal projects, business collections and special events. <strong>No minimum order quantity required!</strong></p><p>Hand-stamped products are charged at our regular website prices. <em><strong>Design and setup fees are additional.</strong></em></p><p>Design and setup fee starting at $210-250+</p>",
             "text_style": "body"
           }
+        },
+        "button_3eQaPT": {
+          "type": "button",
+          "settings": {
+            "button_label": "Submit Application",
+            "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSccWyxXeXuoaGmyVUsFedCt0G_0bgB6gU_a5cJJMNt5XLHtxQ/viewform?usp=header",
+            "button_style_secondary": false
+          }
         }
       },
       "block_order": [
         "heading_N8xXCN",
-        "text_yfWJUF"
+        "text_yfWJUF",
+        "button_3eQaPT"
       ],
       "name": "Hero Section",
       "settings": {
@@ -53,67 +62,6 @@
         "color_scheme": "",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
-    "multicolumn_ybN8C4": {
-      "type": "multicolumn",
-      "blocks": {
-        "column_487Uzb": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/01.png",
-            "title": "<strong>Submit Your Request</strong>",
-            "text": "<p>Complete the request form with your artwork, preferred blank, materials, quantity, and deadline.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_nHmynR": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/02.png",
-            "title": "<strong>Review & Approve</strong>",
-            "text": "<p>Our team reviews your design, confirms pricing, and sends a PDF proof for approval if design work is needed.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        },
-        "column_kqed4T": {
-          "type": "column",
-          "settings": {
-            "image": "shopify://shop_images/03.png",
-            "title": "<strong>Production & Shipping</strong>",
-            "text": "<p>Once your artwork is approved and payment is received, we create your custom stamp, produce your jewelry, and ship your finished order.</p>",
-            "link_label": "",
-            "link": ""
-          }
-        }
-      },
-      "block_order": [
-        "column_487Uzb",
-        "column_nHmynR",
-        "column_kqed4T"
-      ],
-      "custom_css": [
-        ".background-primary {background-color: #fdfbf6;}"
-      ],
-      "name": "How it works",
-      "settings": {
-        "title": "How it works",
-        "heading_size": "h1",
-        "image_width": "third",
-        "image_ratio": "adapt",
-        "columns_desktop": 3,
-        "column_alignment": "left",
-        "background_style": "primary",
-        "button_label": "",
-        "button_link": "",
-        "swipe_on_desktop": false,
-        "color_scheme": "scheme-1",
-        "columns_mobile": "1",
-        "swipe_on_mobile": false,
         "padding_top": 36,
         "padding_bottom": 36
       }
@@ -480,6 +428,67 @@
         "padding_bottom": 52
       }
     },
+    "multicolumn_ybN8C4": {
+      "type": "multicolumn",
+      "blocks": {
+        "column_487Uzb": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/01.png",
+            "title": "<strong>Submit Your Request</strong>",
+            "text": "<p>Complete the request form with your artwork, preferred blank, materials, quantity, and deadline.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_nHmynR": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/02.png",
+            "title": "<strong>Review & Approve</strong>",
+            "text": "<p>Our team reviews your design, confirms pricing, and sends a PDF proof for approval if design work is needed.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        },
+        "column_kqed4T": {
+          "type": "column",
+          "settings": {
+            "image": "shopify://shop_images/03.png",
+            "title": "<strong>Production & Shipping</strong>",
+            "text": "<p>Once your artwork is approved and payment is received, we create your custom stamp, produce your jewelry, and ship your finished order.</p>",
+            "link_label": "",
+            "link": ""
+          }
+        }
+      },
+      "block_order": [
+        "column_487Uzb",
+        "column_nHmynR",
+        "column_kqed4T"
+      ],
+      "custom_css": [
+        ".background-primary {background-color: #fdfbf6;}"
+      ],
+      "name": "How it works",
+      "settings": {
+        "title": "How it works",
+        "heading_size": "h1",
+        "image_width": "third",
+        "image_ratio": "adapt",
+        "columns_desktop": 3,
+        "column_alignment": "left",
+        "background_style": "primary",
+        "button_label": "",
+        "button_link": "",
+        "swipe_on_desktop": false,
+        "color_scheme": "scheme-1",
+        "columns_mobile": "1",
+        "swipe_on_mobile": false,
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
     "collapsible_content_dxpwLt": {
       "type": "collapsible-content",
       "blocks": {
@@ -582,7 +591,7 @@
         "button_CX7pt8": {
           "type": "button",
           "settings": {
-            "button_label": "Submit Your Idea",
+            "button_label": "Submit Application",
             "button_link": "https://docs.google.com/forms/d/e/1FAIpQLSccWyxXeXuoaGmyVUsFedCt0G_0bgB6gU_a5cJJMNt5XLHtxQ/viewform?usp=header",
             "button_style_secondary": false
           }
