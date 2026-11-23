@@ -54,32 +54,6 @@
         "padding_bottom": 36
       }
     },
-    "pj_collection_highlight_aWibKH": {
-      "type": "pj-collection-highlight",
-      "name": "Chain Starter Packs",
-      "settings": {
-        "title": "Chain Starter Packs",
-        "heading_size": "h2",
-        "subtitle": "",
-        "alignment": "right",
-        "collection": "chain-starter-packs",
-        "image": "shopify://shop_images/94_53ad433c-97fa-47c8-9dd8-bf349cc23a36.jpg",
-        "image_link": "",
-        "columns_desktop": 6,
-        "products_to_show": 4,
-        "image_ratio": "square",
-        "image_shape": "default",
-        "show_secondary_image": false,
-        "show_vendor": false,
-        "show_rating": false,
-        "quick_add": "none",
-        "show_view_all": true,
-        "view_all_text": "View all",
-        "color_scheme": "",
-        "padding_top": 36,
-        "padding_bottom": 36
-      }
-    },
     "pj_collection_highlight_NMwNTG": {
       "type": "pj-collection-highlight",
       "name": "Mystery Chain Packs",
@@ -87,9 +61,8 @@
         "title": "Mystery Chain Packs",
         "heading_size": "h2",
         "subtitle": "",
-        "alignment": "left",
+        "alignment": "right",
         "collection": "mystery-packs",
-        "image": "shopify://shop_images/MG_6778.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
@@ -203,7 +176,6 @@
     "main",
     "page_banner_B7mnAe",
     "pj_collection_highlight_WVhzdn",
-    "pj_collection_highlight_aWibKH",
     "pj_collection_highlight_NMwNTG",
     "mega_collection_display_4mCxM7"
   ]
