@@ -31,7 +31,7 @@
         "text_yfWJUF": {
           "type": "text",
           "settings": {
-            "text": "<p>Bring your custom designs to life with Bay & Stew Supplies! We offer custom hand-stamping on a selection of our existing jewelry blanks for personal projects, business collections and special events. <strong>No minimum order quantity required!</strong></p><p>Hand-stamped products are charged at our regular website prices. <em><strong>Design and setup fees are additional.</strong></em></p>",
+            "text": "<p>Bring your custom designs to life with Bay & Stew Supplies! We offer custom hand-stamping on a selection of our existing jewelry blanks for personal projects, business collections and special events. <strong>No minimum order quantity required!</strong></p><p>Hand-stamped products are charged at our regular website prices. <em><strong>Design and setup fees are additional.</strong></em></p><p>Design and setup fee starting at $210-250+</p>",
             "text_style": "body"
           }
         }
@@ -140,6 +140,7 @@
         "heading_rihJpY",
         "text_LHrr9i"
       ],
+      "disabled": true,
       "name": "Set up fee",
       "settings": {
         "image": "shopify://shop_images/Rectangle_1.jpg",
@@ -613,11 +614,11 @@
   "order": [
     "main",
     "image_with_text_fxgJB4",
-    "multicolumn_ybN8C4",
     "image_with_text_7MzdrY",
     "icon_highlights_kmRmhw",
     "navigation_grid_NydW6m",
     "rich_text_a7BXHi",
+    "multicolumn_ybN8C4",
     "collapsible_content_dxpwLt",
     "image_with_text_QHFhGa"
   ]
