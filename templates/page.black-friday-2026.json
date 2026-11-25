@@ -29,6 +29,70 @@
         "color_scheme": ""
       }
     },
+    "slideshow_Xhzmcn": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_bfQqzA": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/Black_Friday_Banner-01.jpg",
+            "image_mobile": "shopify://shop_images/Black_Friday_Banner-02.jpg",
+            "allow_sound": true,
+            "heading": "10% OFF SITEWIDE",
+            "subheading": "",
+            "highlight_words": "",
+            "promo_note": "*exclusions apply",
+            "promo_link_label": "details",
+            "promo_details_text": "https://bayandstew.com/pages/offers",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 32,
+            "subheading_size_desktop": 15,
+            "subheading_size_mobile": 14,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 18,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": 0,
+            "button_1_text": "SHOP NOW",
+            "button_1_link": "https://bayandstew.com/collections/shop-all",
+            "button_1_style": "solid",
+            "button_1_background": "#000000",
+            "button_1_text_color": "#FFFFFF",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "mobile_box_align": "bottom-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
+            "text_alignment_mobile": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_bfQqzA"
+      ],
+      "name": "GWP",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "auto_rotate": false,
+        "show_pause_toggle": true,
+        "autoplay_pause_on_video": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "show_next_section_button": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
     "pj_collection_highlight_WVhzdn": {
       "type": "pj-collection-highlight",
       "name": "Black Friday Chain Specials",
@@ -38,6 +102,7 @@
         "subtitle": "",
         "alignment": "left",
         "collection": "black-friday-chains",
+        "image": "shopify://shop_images/banners-02.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
@@ -54,6 +119,70 @@
         "padding_bottom": 36
       }
     },
+    "slideshow_Tt6Eyk": {
+      "type": "slideshow",
+      "blocks": {
+        "slide_hGVkAe": {
+          "type": "slide",
+          "settings": {
+            "image": "shopify://shop_images/GWP-Black_Friday_Banner-01_8a1528c3-64a4-4da7-aa39-c9f09fa97289.jpg",
+            "image_mobile": "shopify://shop_images/GWP-Black_Friday_Banner-02.jpg",
+            "allow_sound": true,
+            "heading": "Gifts with Purchase",
+            "subheading": "Spend $300+ and receive a FREE measuring tape, or $550+ and receive&nbsp;a FREE measuring tape AND a Bay & Stew journal.",
+            "highlight_words": "",
+            "promo_note": "",
+            "promo_link_label": "details",
+            "promo_details_text": "",
+            "heading_size_desktop": 48,
+            "heading_size_mobile": 32,
+            "subheading_size_desktop": 15,
+            "subheading_size_mobile": 14,
+            "gap_before_subheading": 0,
+            "mobile_gap_before_subheading": 0,
+            "gap_after_subheading": 10,
+            "gap_after_title": 18,
+            "gap_after_promo_note": 12,
+            "gap_before_buttons": 0,
+            "button_1_text": "",
+            "button_1_link": "",
+            "button_1_style": "solid",
+            "button_1_background": "#ffffff",
+            "button_1_text_color": "#000000",
+            "button_2_text": "",
+            "button_2_link": "",
+            "button_2_style": "outline",
+            "button_2_background": "#ffffff",
+            "button_2_text_color": "#000000",
+            "box_align": "middle-left",
+            "show_text_box": false,
+            "text_alignment": "left",
+            "image_overlay_opacity": 0,
+            "color_scheme": "",
+            "mobile_box_align": "bottom-center",
+            "mobile_horizontal_padding": 12,
+            "mobile_button_size": 14,
+            "text_alignment_mobile": "center"
+          }
+        }
+      },
+      "block_order": [
+        "slide_hGVkAe"
+      ],
+      "name": "GWP",
+      "settings": {
+        "layout": "full_bleed",
+        "slide_height": "adapt_image",
+        "auto_rotate": false,
+        "show_pause_toggle": true,
+        "autoplay_pause_on_video": true,
+        "change_slides_speed": 5,
+        "image_behavior": "none",
+        "show_text_below": false,
+        "show_next_section_button": false,
+        "accessibility_info": "Slideshow about our brand"
+      }
+    },
     "pj_collection_highlight_NMwNTG": {
       "type": "pj-collection-highlight",
       "name": "Mystery Chain Packs",
@@ -63,6 +192,33 @@
         "subtitle": "",
         "alignment": "right",
         "collection": "mystery-packs",
+        "image": "shopify://shop_images/banners-01.jpg",
+        "image_link": "",
+        "columns_desktop": 6,
+        "products_to_show": 4,
+        "image_ratio": "square",
+        "image_shape": "default",
+        "show_secondary_image": false,
+        "show_vendor": false,
+        "show_rating": false,
+        "quick_add": "none",
+        "show_view_all": true,
+        "view_all_text": "View all",
+        "color_scheme": "",
+        "padding_top": 36,
+        "padding_bottom": 36
+      }
+    },
+    "pj_collection_highlight_HxRUbb": {
+      "type": "pj-collection-highlight",
+      "name": "Clearance",
+      "settings": {
+        "title": "50% OFF OF CLEARANCE",
+        "heading_size": "h2",
+        "subtitle": "",
+        "alignment": "left",
+        "collection": "sale",
+        "image": "shopify://shop_images/banners-03.jpg",
         "image_link": "",
         "columns_desktop": 6,
         "products_to_show": 4,
@@ -170,78 +326,16 @@
         "padding_top": 36,
         "padding_bottom": 36
       }
-    },
-    "slideshow_Tt6Eyk": {
-      "type": "slideshow",
-      "blocks": {
-        "slide_hGVkAe": {
-          "type": "slide",
-          "settings": {
-            "image": "shopify://shop_images/GWP-Black_Friday_Banner-01_8a1528c3-64a4-4da7-aa39-c9f09fa97289.jpg",
-            "image_mobile": "shopify://shop_images/GWP-Black_Friday_Banner-02.jpg",
-            "allow_sound": true,
-            "heading": "Gifts with Purchase",
-            "subheading": "Spend $300+ and receive a FREE measuring tape, or $550+ and receive&nbsp;a FREE measuring tape AND a Bay & Stew journal.",
-            "highlight_words": "",
-            "promo_note": "",
-            "promo_link_label": "details",
-            "promo_details_text": "",
-            "heading_size_desktop": 48,
-            "heading_size_mobile": 32,
-            "subheading_size_desktop": 15,
-            "subheading_size_mobile": 14,
-            "gap_before_subheading": 0,
-            "mobile_gap_before_subheading": 0,
-            "gap_after_subheading": 10,
-            "gap_after_title": 18,
-            "gap_after_promo_note": 12,
-            "gap_before_buttons": 0,
-            "button_1_text": "",
-            "button_1_link": "",
-            "button_1_style": "solid",
-            "button_1_background": "#ffffff",
-            "button_1_text_color": "#000000",
-            "button_2_text": "",
-            "button_2_link": "",
-            "button_2_style": "outline",
-            "button_2_background": "#ffffff",
-            "button_2_text_color": "#000000",
-            "box_align": "middle-left",
-            "show_text_box": false,
-            "text_alignment": "left",
-            "image_overlay_opacity": 0,
-            "color_scheme": "",
-            "mobile_box_align": "bottom-center",
-            "mobile_horizontal_padding": 12,
-            "mobile_button_size": 14,
-            "text_alignment_mobile": "center"
-          }
-        }
-      },
-      "block_order": [
-        "slide_hGVkAe"
-      ],
-      "name": "t:sections.slideshow.presets.name",
-      "settings": {
-        "layout": "full_bleed",
-        "slide_height": "adapt_image",
-        "auto_rotate": false,
-        "show_pause_toggle": true,
-        "autoplay_pause_on_video": true,
-        "change_slides_speed": 5,
-        "image_behavior": "none",
-        "show_text_below": false,
-        "show_next_section_button": false,
-        "accessibility_info": "Slideshow about our brand"
-      }
     }
   },
   "order": [
     "main",
     "page_banner_B7mnAe",
+    "slideshow_Xhzmcn",
     "pj_collection_highlight_WVhzdn",
+    "slideshow_Tt6Eyk",
     "pj_collection_highlight_NMwNTG",
-    "mega_collection_display_4mCxM7",
-    "slideshow_Tt6Eyk"
+    "pj_collection_highlight_HxRUbb",
+    "mega_collection_display_4mCxM7"
   ]
 }
