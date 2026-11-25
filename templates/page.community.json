@@ -9,54 +9,66 @@
  */
 {
   "sections": {
-    "image_banner_tayJNr": {
-      "type": "image-banner",
-      "blocks": {
-        "heading_wrbB7A": {
-          "type": "heading",
-          "settings": {
-            "heading": "It All Started with Two Little Sidekicks and A Big Dream",
-            "heading_size": "h2"
-          }
-        },
-        "text_YaDd33": {
-          "type": "text",
-          "settings": {
-            "text": "Supplying jewelry makers with premium materials crafted with care, passion, & heart.",
-            "text_style": "caption-with-letter-spacing"
-          }
-        }
-      },
-      "block_order": [
-        "heading_wrbB7A",
-        "text_YaDd33"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "@media screen and (min-width: 750px) {.banner, slideshow-component {display: none; }}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/mobile.jpg",
-        "image_overlay_opacity": 0,
-        "image_height": "adapt",
-        "desktop_content_position": "top-right",
-        "show_text_box": false,
-        "desktop_content_alignment": "right",
-        "color_scheme": "scheme-54fb6e74-e27e-414b-b204-74824a093fc8",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "stack_images_on_mobile": true,
-        "show_text_below": true
-      }
-    },
     "main": {
       "type": "main-page",
       "custom_css": [
         "h1 {font-size: 38px; font-family: Helvetica, Arial, sans-serif; text-align: center; text-transform: uppercase; letter-spacing: 3px;}"
       ],
+      "name": "Offers Header",
       "settings": {
         "padding_top": 36,
         "padding_bottom": 0
+      }
+    },
+    "image_with_text_Mxzftc": {
+      "type": "image-with-text",
+      "blocks": {
+        "heading_kK7gh8": {
+          "type": "heading",
+          "settings": {
+            "heading": "Free GWP",
+            "heading_size": "h1"
+          }
+        },
+        "text_mM6eQV": {
+          "type": "text",
+          "settings": {
+            "text": "<h3><strong>FREE DECK OF CARDS ON $xx.xx+ PURCHASE</strong></h3><p>As a thank-you for being part of the Bay & Stew community, enjoy a free deck of cards on purchases of $xx.xx+. The more you stock up for your studio, the more you'll take home!<br/><br/><strong>NO CODE NEEDED</strong>: Automatically applied in cart</p><h6><br/>Valid through [MM/DD/2026], while supplies last. Purchase thresholds are calculated after discounts and before taxes and shipping. One of each eligible gift per order. Offers and promotion details are subject to change at any time.</h6>",
+            "text_style": "body"
+          }
+        },
+        "button_6JhEHK": {
+          "type": "button",
+          "disabled": true,
+          "settings": {
+            "button_label": "Shop Sale",
+            "button_link": "shopify://collections/sale",
+            "button_style_secondary": false
+          }
+        }
+      },
+      "block_order": [
+        "heading_kK7gh8",
+        "text_mM6eQV",
+        "button_6JhEHK"
+      ],
+      "disabled": true,
+      "custom_css": [],
+      "name": "DEC GWP",
+      "settings": {
+        "image": "shopify://shop_images/GWP-cards.jpg",
+        "height": "small",
+        "desktop_image_width": "small",
+        "layout": "text_first",
+        "desktop_content_position": "top",
+        "desktop_content_alignment": "left",
+        "content_layout": "no-overlap",
+        "section_color_scheme": "scheme-1",
+        "color_scheme": "scheme-1",
+        "image_behavior": "none",
+        "mobile_content_alignment": "left",
+        "padding_top": 36,
+        "padding_bottom": 60
       }
     },
     "image_with_text_8qBzHE": {
@@ -94,7 +106,7 @@
       "custom_css": [
         "h2 {color: red;}"
       ],
-      "name": "MEMORIAL SALE",
+      "name": "SOLD OUT template",
       "settings": {
         "image": "shopify://shop_images/GWP-sold-out.jpg",
         "height": "small",
@@ -105,58 +117,6 @@
         "content_layout": "no-overlap",
         "section_color_scheme": "scheme-1",
         "color_scheme": "scheme-1",
-        "image_behavior": "none",
-        "mobile_content_alignment": "left",
-        "padding_top": 36,
-        "padding_bottom": 60
-      }
-    },
-    "image_with_text_aiRX6U": {
-      "type": "image-with-text",
-      "blocks": {
-        "heading_jV6mPR": {
-          "type": "heading",
-          "settings": {
-            "heading": "BAY & STEW TOTE BAG",
-            "heading_size": "h1"
-          }
-        },
-        "text_AfDa6P": {
-          "type": "text",
-          "settings": {
-            "text": "<h3>SOLD OUT - PROMOTION NOW ENDED<br/></h3><p>Receive a complimentary <strong>Bay & Stew tote bag</strong> with $350+ qualifying purchases throughout June. Featuring a convenient pocket and spacious inside space, perfect for carrying jewelry supplies in. Available while supplies last and automatically added to eligible carts.<br/><br/><strong>NO CODE NEEDED:</strong> Automatically applied in cart</p><h6><br/>TERMS: Valid through 06/30/2026 at 11:59pm PST while supplies last. Free gifts are final sale and not eligible for return, exchange, or cash value. Free gifts may be substituted or removed at any time and are available while supplies last. If an order is returned or partially refunded, all free gift items must be returned; otherwise, the retail value of the gift will be deducted from the refund. Bay & Stew reserves the right to modify or end this promotion at any time.</h6>",
-            "text_style": "body"
-          }
-        },
-        "button_8cbpjb": {
-          "type": "button",
-          "disabled": true,
-          "settings": {
-            "button_label": "Shop All",
-            "button_link": "shopify://collections/shop-all",
-            "button_style_secondary": false
-          }
-        }
-      },
-      "block_order": [
-        "heading_jV6mPR",
-        "text_AfDa6P",
-        "button_8cbpjb"
-      ],
-      "disabled": true,
-      "custom_css": [
-        "h3 {color: red;}"
-      ],
-      "settings": {
-        "image": "shopify://shop_images/card-size_V3-tote-sold-out.jpg",
-        "height": "small",
-        "desktop_image_width": "small",
-        "layout": "text_first",
-        "desktop_content_position": "top",
-        "desktop_content_alignment": "left",
-        "content_layout": "no-overlap",
-        "section_color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
-        "color_scheme": "scheme-9270d5c1-d33a-4906-b852-135e0c623d89",
         "image_behavior": "none",
         "mobile_content_alignment": "left",
         "padding_top": 36,
@@ -176,7 +136,7 @@
       "block_order": [
         "text_Crmewi"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "nothing active",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -188,7 +148,7 @@
     },
     "rich_text_dXNmG6": {
       "type": "rich-text",
-      "name": "t:sections.rich-text.presets.name",
+      "name": "divider",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -219,7 +179,7 @@
         "heading_XNzwh3",
         "text_XQ9Wm8"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "Upcoming",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -314,7 +274,7 @@
       "custom_css": [
         ".color-scheme-9270d5c1-d33a-4906-b852-135e0c623d89 {background-color: #fdfbf6;}"
       ],
-      "name": "Special Savings",
+      "name": "Black Friday Special Savings",
       "settings": {
         "image": "shopify://shop_images/sale-offers-page.jpg",
         "height": "small",
@@ -364,7 +324,7 @@
         "button_pJgAky"
       ],
       "custom_css": [],
-      "name": "GWP",
+      "name": "Black Friday GWP",
       "settings": {
         "image": "shopify://shop_images/GWP2.jpg",
         "height": "small",
@@ -395,7 +355,7 @@
       "block_order": [
         "heading_VgmHgV"
       ],
-      "name": "t:sections.rich-text.presets.name",
+      "name": "Why B&S",
       "settings": {
         "desktop_content_position": "center",
         "content_alignment": "center",
@@ -444,7 +404,7 @@
         "column_99mPYz",
         "column_dqc3E4"
       ],
-      "name": "t:sections.multicolumn.presets.name",
+      "name": "Icon benefits",
       "settings": {
         "title": "",
         "heading_size": "h1",
@@ -465,10 +425,9 @@
     }
   },
   "order": [
-    "image_banner_tayJNr",
     "main",
+    "image_with_text_Mxzftc",
     "image_with_text_8qBzHE",
-    "image_with_text_aiRX6U",
     "rich_text_QUKJQ8",
     "rich_text_dXNmG6",
     "rich_text_RxzLeU",
