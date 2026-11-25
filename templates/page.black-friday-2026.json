@@ -36,7 +36,7 @@
           "type": "slide",
           "settings": {
             "image": "shopify://shop_images/Black_Friday_Banner-01.jpg",
-            "image_mobile": "shopify://shop_images/Black_Friday_Banner-02.jpg",
+            "image_mobile": "shopify://shop_images/Black_Friday_Banner-02_7069f923-85ef-49b9-a657-c1d4546d6b45.jpg",
             "allow_sound": true,
             "heading": "10% OFF SITEWIDE",
             "subheading": "",
@@ -213,7 +213,7 @@
       "type": "pj-collection-highlight",
       "name": "Clearance",
       "settings": {
-        "title": "50% OFF OF CLEARANCE",
+        "title": "50% Off Clearance",
         "heading_size": "h2",
         "subtitle": "",
         "alignment": "left",
