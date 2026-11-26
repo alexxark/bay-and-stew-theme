@@ -123,72 +123,6 @@
         "padding_bottom": 60
       }
     },
-    "rich_text_QUKJQ8": {
-      "type": "rich-text",
-      "blocks": {
-        "text_Crmewi": {
-          "type": "text",
-          "settings": {
-            "text": "<p>Nothing active right now, come back later for future offers!</p>"
-          }
-        }
-      },
-      "block_order": [
-        "text_Crmewi"
-      ],
-      "name": "nothing active",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "",
-        "full_width": true,
-        "padding_top": 12,
-        "padding_bottom": 52
-      }
-    },
-    "rich_text_dXNmG6": {
-      "type": "rich-text",
-      "name": "divider",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
-        "full_width": true,
-        "padding_top": 4,
-        "padding_bottom": 0
-      }
-    },
-    "rich_text_RxzLeU": {
-      "type": "rich-text",
-      "blocks": {
-        "heading_XNzwh3": {
-          "type": "heading",
-          "settings": {
-            "heading": "UPCOMING",
-            "heading_size": "h1"
-          }
-        },
-        "text_XQ9Wm8": {
-          "type": "text",
-          "settings": {
-            "text": "<p><strong>Check out our upcoming deals and</strong><em><strong> limited-time promotions</strong></em><strong>—made for makers, by makers.</strong></p>"
-          }
-        }
-      },
-      "block_order": [
-        "heading_XNzwh3",
-        "text_XQ9Wm8"
-      ],
-      "name": "Upcoming",
-      "settings": {
-        "desktop_content_position": "center",
-        "content_alignment": "center",
-        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
-        "full_width": true,
-        "padding_top": 40,
-        "padding_bottom": 52
-      }
-    },
     "image_with_text_yziiii": {
       "type": "image-with-text",
       "blocks": {
@@ -237,6 +171,75 @@
         "mobile_content_alignment": "left",
         "padding_top": 36,
         "padding_bottom": 60
+      }
+    },
+    "rich_text_QUKJQ8": {
+      "type": "rich-text",
+      "blocks": {
+        "text_Crmewi": {
+          "type": "text",
+          "settings": {
+            "text": "<p>Nothing active right now, come back later for future offers!</p>"
+          }
+        }
+      },
+      "block_order": [
+        "text_Crmewi"
+      ],
+      "disabled": true,
+      "name": "nothing active",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "",
+        "full_width": true,
+        "padding_top": 12,
+        "padding_bottom": 52
+      }
+    },
+    "rich_text_dXNmG6": {
+      "type": "rich-text",
+      "disabled": true,
+      "name": "divider",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-66088878-c374-4ee0-8923-dd3d510af463",
+        "full_width": true,
+        "padding_top": 4,
+        "padding_bottom": 0
+      }
+    },
+    "rich_text_RxzLeU": {
+      "type": "rich-text",
+      "blocks": {
+        "heading_XNzwh3": {
+          "type": "heading",
+          "settings": {
+            "heading": "UPCOMING",
+            "heading_size": "h1"
+          }
+        },
+        "text_XQ9Wm8": {
+          "type": "text",
+          "settings": {
+            "text": "<p><strong>Check out our upcoming deals and</strong><em><strong> limited-time promotions</strong></em><strong>—made for makers, by makers.</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "heading_XNzwh3",
+        "text_XQ9Wm8"
+      ],
+      "disabled": true,
+      "name": "Upcoming",
+      "settings": {
+        "desktop_content_position": "center",
+        "content_alignment": "center",
+        "color_scheme": "scheme-33e077ce-be67-493d-ab69-6688695edc41",
+        "full_width": true,
+        "padding_top": 40,
+        "padding_bottom": 52
       }
     },
     "image_with_text_btPUQR": {
@@ -428,12 +431,12 @@
     "main",
     "image_with_text_Mxzftc",
     "image_with_text_8qBzHE",
-    "rich_text_QUKJQ8",
-    "rich_text_dXNmG6",
-    "rich_text_RxzLeU",
     "image_with_text_yziiii",
     "image_with_text_btPUQR",
     "image_with_text_YztMxr",
+    "rich_text_QUKJQ8",
+    "rich_text_dXNmG6",
+    "rich_text_RxzLeU",
     "rich_text_zU3mja",
     "multicolumn_BJB7wL"
   ]
