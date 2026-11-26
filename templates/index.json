@@ -14,13 +14,14 @@
       "blocks": {
         "slide_QLwpGt": {
           "type": "slide",
+          "name": "Black Friday Sale",
           "disabled": true,
           "settings": {
             "image": "shopify://shop_images/11_-_Memorial_Day_Sale-02_c4bbf157-a90f-49bd-90e2-6d7790b022c5.jpg",
             "image_mobile": "shopify://shop_images/11_-_Memorial_Day_Sale-01.jpg",
             "allow_sound": true,
             "heading": "10% Off Sitewide",
-            "subheading": "<strong>One Day Only Memorial Day Sale</strong>",
+            "subheading": "<strong>Plus clearance chains, 50% off clearance, & more</strong>",
             "highlight_words": "",
             "promo_note": "",
             "promo_link_label": "",
@@ -35,7 +36,7 @@
             "gap_after_title": 4,
             "gap_after_promo_note": 12,
             "gap_before_buttons": -8,
-            "button_1_text": "Shop Now",
+            "button_1_text": "Explore Black Friday Deals",
             "button_1_link": "https://bayandstew.com/pages/permanent-jewelry",
             "button_1_style": "solid",
             "button_1_background": "#cfebfb",
