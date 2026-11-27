@@ -132,8 +132,10 @@
     "reward_2_label": "Free rush shipping!",
     "reward_3_threshold": "300",
     "reward_3_label": "B&S Measuring Tape",
-    "reward_3_message": "",
+    "reward_3_message": "Spend [amount_left] more to receive [reward]!",
     "reward_3_product": "black-friday-special-b-s-retractable-60-inch-tape-measure-ac024",
+    "reward_4_threshold": "550",
+    "reward_4_product": "bay-stew-journal",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
