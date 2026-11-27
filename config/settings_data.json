@@ -130,10 +130,10 @@
     "reward_1_label": "Free standard shipping!",
     "reward_2_threshold": "500",
     "reward_2_label": "Free rush shipping!",
-    "reward_3_threshold": "",
-    "reward_3_label": "Permanent Jewelry Iron-On Patch Set",
+    "reward_3_threshold": "300",
+    "reward_3_label": "B&S Measuring Tape",
     "reward_3_message": "",
-    "reward_3_product": "",
+    "reward_3_product": "black-friday-special-b-s-retractable-60-inch-tape-measure-ac024",
     "sections": {
       "main-password-header": {
         "type": "main-password-header",
