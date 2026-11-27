@@ -15,7 +15,6 @@
         "slide_QLwpGt": {
           "type": "slide",
           "name": "Black Friday Sale",
-          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/11_-_Memorial_Day_Sale-02_c4bbf157-a90f-49bd-90e2-6d7790b022c5.jpg",
             "image_mobile": "shopify://shop_images/11_-_Memorial_Day_Sale-01.jpg",
@@ -147,6 +146,7 @@
         },
         "slide_yJEEjD": {
           "type": "slide",
+          "disabled": true,
           "settings": {
             "image": "shopify://shop_images/MM-Chains-Banner2.jpg",
             "image_mobile": "shopify://shop_images/MMChain-Banner-Mobile.jpg",
